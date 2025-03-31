@@ -1,7 +1,6 @@
 ﻿@using Snorehammer.Web.FrontendModels
 @* Needs a color and image file  *@
 @*Temporarily just using a text result*@
-<h2>DIE RESULT</h2>
 <p style="color=@colorCode">@value</p>
 @code {
     [Parameter]
@@ -13,6 +12,18 @@
     {
         value = die.Result;
         success = die.Success;
+        colorCode = SetColorCode(success);
         return base.OnInitializedAsync();
+    }
+    private string SetColorCode(bool success)
+    {
+        if (success)
+        {
+            return "#0F0";
+        }
+        else
+        {
+            return "#F00";
+        }
     }
 }
