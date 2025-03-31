@@ -2,10 +2,10 @@
 {
     public class Dice
     {
-        public Dice(int max)
+        public Dice(int target)
         {
-            Target = 1;
-            Result = new Random().Next(1,max);
+            Target = target;
+            Result = new Random().Next(1,6);
             Success = Target <= Result;
         }
         public int Target { get; set; }
