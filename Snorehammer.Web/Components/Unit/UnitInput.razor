@@ -15,26 +15,26 @@
                     <th>Damage</th>
                 </tr>
                 <tr>
-<td>
+                    <td>
 
-            <InputNumber @bind-Value="attack.Attacks"></InputNumber>
-</td>
-<td>
+                        <InputNumber @bind-Value="attack.Attacks"></InputNumber>
+                    </td>
+                    <td>
 
-            <InputNumber @bind-Value="attack.Skill"></InputNumber>
-</td>
-<td>
+                        <InputNumber @bind-Value="attack.Skill"></InputNumber>
+                    </td>
+                    <td>
 
-            <InputNumber @bind-Value="attack.Strength"></InputNumber>
-</td>
-<td>
+                        <InputNumber @bind-Value="attack.Strength"></InputNumber>
+                    </td>
+                    <td>
 
-            <InputNumber @bind-Value="attack.ArmorPenetration"></InputNumber>
-</td>
-<td>
+                        <InputNumber @bind-Value="attack.ArmorPenetration"></InputNumber>
+                    </td>
+                    <td>
 
-            <InputNumber @bind-Value="attack.Damage"></InputNumber>
-</td>
+                        <InputNumber @bind-Value="attack.Damage"></InputNumber>
+                    </td>
                 </tr>
             </table>
         </EditForm>   
@@ -74,7 +74,10 @@
 }
 @code {
     private UnitProfile unit;
-    private AttackProfile attack;
+    [Parameter]
+    public AttackProfile attack { get; set; }
+    [Parameter]
+    public EventCallback<AttackProfile> AttackChanged { get; set; }
     private bool loaded = false;
     [Parameter] public bool Attacker { get; set; }
     protected override Task OnInitializedAsync()
@@ -87,15 +90,7 @@
                 Wounds = 14,
                 Name = "Maleceptor"
             };
-        attack = new AttackProfile()
-        {
-            ArmorPenetration = -1,
-Attacks = 1,
-Damage = 1,
-Skill = 4,
-Strength = 4
-
-        };
+        
         loaded = true;
         return base.OnInitializedAsync();
     }

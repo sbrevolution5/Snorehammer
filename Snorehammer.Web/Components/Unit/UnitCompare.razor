@@ -1,9 +1,11 @@
 ﻿@page "/unitcompare"
+@using Snorehammer.Web.Components.Simulation.DiceRoller
 @using Snorehammer.Web.FrontendModels
+@using Snorehammer.Web.Services
 @rendermode InteractiveServer
 <h3>UnitCompare</h3>
 <h4>Attacker</h4>
-<UnitInput Attacker=true></UnitInput>
+<UnitInput @bind-attack="attacker" Attacker=true></UnitInput>
 <h4>Defender</h4>
 <UnitInput Attacker=false></UnitInput>
 <button @onclick="FightUnits">Fight</button>
@@ -11,6 +13,13 @@
 {
 
     <h4>results</h4>
+    <div class="row">
+        @foreach (var die in AttackDice)
+        {
+
+            <DieDisplay die="@die"></DieDisplay>
+        }
+    </div>
     <h2>Attack Results</h2>
     <h2>Strength vs toughness</h2>
     <h2>Armor rolls</h2>
@@ -21,13 +30,28 @@
 <button @onclick="FightUnits">Go again?</button>
 @code {
     private bool FightComplete { get; set; } = false;
-    private List<Dice> AttackDice { get; set; }
+    private List<Dice> AttackDice { get; set; } 
     private List<Dice> StrengthDice { get; set; }
     private List<Dice> ArmorDice { get; set; }
     private List<Dice> WoundDice { get; set; }
+    private AttackProfile attacker { get; set; }
+    private FightSimulationService fightSimulationService = new FightSimulationService();
+    protected override Task OnInitializedAsync()
+    {
+        attacker = new AttackProfile()
+            {
+                ArmorPenetration = -1,
+                Attacks = 1,
+                Damage = 1,
+                Skill = 4,
+                Strength = 4
+
+            };
+        return base.OnInitializedAsync();
+    }
     private void FightUnits()
     {
-        
+        AttackDice = fightSimulationService.SimulateToHitRoll(attacker);
         FightComplete = true;
     }
 }

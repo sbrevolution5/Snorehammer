@@ -5,6 +5,15 @@ namespace Snorehammer.Web.Services
     public class FightSimulationService
     {
         public FightSimulationService() { }
+        public List<Dice> SimulateToHitRoll(AttackProfile attack)
+        {
+            var res = new List<Dice>();
+            for (int i = 0; i < attack.Attacks; i++)
+            {
+                res.Add(new Dice(6));
+            }
+            return res;
+        }
         public void SimulateSimpleFight(UnitProfile defender, AttackProfile attack)
         {
             int dicePool = attack.Attacks;
