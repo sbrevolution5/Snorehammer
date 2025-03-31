@@ -1,21 +1,33 @@
 ﻿@page "/unitcompare"
+@using Snorehammer.Web.FrontendModels
+@rendermode InteractiveServer
 <h3>UnitCompare</h3>
 <h4>Attacker</h4>
 <UnitInput Attacker=true></UnitInput>
 <h4>Defender</h4>
 <UnitInput Attacker=false></UnitInput>
 <button @onclick="FightUnits">Fight</button>
-<h4>results</h4>
-<h2>Attack Results</h2>
-<h2>Strength vs toughness</h2>
-<h2>Armor rolls</h2>
-<h2>Wound Rolls</h2>
-<h2>Feel No Pain Rolls</h2>
-<h3>Winner:</h3>
+@if (FightComplete)
+{
+
+    <h4>results</h4>
+    <h2>Attack Results</h2>
+    <h2>Strength vs toughness</h2>
+    <h2>Armor rolls</h2>
+    <h2>Wound Rolls</h2>
+    <h2>Feel No Pain Rolls</h2>
+    <h3>Winner:</h3>
+}
 <button @onclick="FightUnits">Go again?</button>
 @code {
+    private bool FightComplete { get; set; } = false;
+    private List<Dice> AttackDice { get; set; }
+    private List<Dice> StrengthDice { get; set; }
+    private List<Dice> ArmorDice { get; set; }
+    private List<Dice> WoundDice { get; set; }
     private void FightUnits()
     {
         
+        FightComplete = true;
     }
 }
