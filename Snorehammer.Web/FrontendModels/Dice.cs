@@ -4,7 +4,9 @@
     {
         public Dice(int max)
         {
-            Result = new Random().Next(1,max); 
+            Target = 1;
+            Result = new Random().Next(1,max);
+            Success = Target <= Result;
         }
         public int Target { get; set; }
         public int Sides { get; set; } = 6;

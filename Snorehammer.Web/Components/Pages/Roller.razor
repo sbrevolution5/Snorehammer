@@ -1,27 +1,29 @@
 ﻿@page "/roller"
 @using Snorehammer.Web.Components.Simulation.DiceRoller
 @using Snorehammer.Web.FrontendModels;
+@rendermode InteractiveServer
 
 <PageTitle>Roller</PageTitle>
 
-<h1>Counter</h1>
+<h1>Roller</h1>
 
 <p role="status">Current count: @currentCount</p>
 
 <button class="btn btn-primary" @onclick="RollDie">Click me</button>
-<ul>
+<div>
     @foreach (var die in DiceList)
     {
-        <li>
-        <DieDisplay die="die"></DieDisplay>
-        </li>
+        <p>
+            <DieDisplay die="die"></DieDisplay>
+        </p>
     }
-</ul>
+</div>
 @code {
     private int currentCount = 0;
     private List<Dice> DiceList = new List<Dice>();
-    private void RollDie()
+    private async Task RollDie()
     {
+        currentCount++;
         DiceList.Add(new Dice(6));
     }
 }

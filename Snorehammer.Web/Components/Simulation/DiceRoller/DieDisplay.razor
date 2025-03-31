@@ -1,16 +1,18 @@
 ﻿@using Snorehammer.Web.FrontendModels
 @* Needs a color and image file  *@
 @*Temporarily just using a text result*@
+<h2>DIE RESULT</h2>
 <p style="color=@colorCode">@value</p>
 @code {
-    [Parameter]public Dice die { get; set; }
+    [Parameter]
+    public Dice die { get; set; }
     public int value { get; set; }
     private string colorCode { get; set; } = "#000";
     private bool success = true;
     protected override Task OnInitializedAsync()
     {
         value = die.Result;
-        success = die.Result >= die.Target;
+        success = die.Success;
         return base.OnInitializedAsync();
     }
 }
