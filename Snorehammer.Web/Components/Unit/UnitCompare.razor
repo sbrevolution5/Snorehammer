@@ -1,0 +1,21 @@
+﻿@page "/unitcompare"
+<h3>UnitCompare</h3>
+<h4>Attacker</h4>
+<UnitInput Attacker=true></UnitInput>
+<h4>Defender</h4>
+<UnitInput Attacker=false></UnitInput>
+<button @onclick="FightUnits">Fight</button>
+<h4>results</h4>
+<h2>Attack Results</h2>
+<h2>Strength vs toughness</h2>
+<h2>Armor rolls</h2>
+<h2>Wound Rolls</h2>
+<h2>Feel No Pain Rolls</h2>
+<h3>Winner:</h3>
+<button @onclick="FightUnits">Go again?</button>
+@code {
+    private void FightUnits()
+    {
+        
+    }
+}
