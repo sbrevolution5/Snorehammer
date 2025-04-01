@@ -19,11 +19,11 @@ namespace Snorehammer.Web.Services
             var roller = new Random();
             var res = new List<Dice>();
             var targetValue = DetermineWoundTarget(defender.Toughness, attack.Strength);
-            
             res.AddRange(DicePool);
             foreach (var die in DicePool)
             {
-
+                die.Target = targetValue;
+                die.Result = roller.Next(die.Sides);
             }
             return res;
         }
@@ -36,11 +36,11 @@ namespace Snorehammer.Web.Services
             }
             else if (toughness > strength)
             {
-                
-            if (toughness >= strength*2)
-            {
+
+                if (toughness >= strength * 2)
+                {
                     return 6;
-            }
+                }
                 return 5;
             }
             else
@@ -62,7 +62,7 @@ namespace Snorehammer.Web.Services
             {
                 dice.Add(roller.Next(1, 6));
             }
-            var remaining =dice.Where(i => i >= attack.Skill);
+            var remaining = dice.Where(i => i >= attack.Skill);
             Console.WriteLine("%s attacks connected", remaining.Count());
             for (int i = 0; i < remaining.Count(); i++)
             {
@@ -76,6 +76,6 @@ namespace Snorehammer.Web.Services
             // subtract wounds
             //determine killer
         }
-        
+
     }
 }

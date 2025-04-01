@@ -5,7 +5,7 @@
 @rendermode InteractiveServer
 <h3>UnitCompare</h3>
 <h4>Attacker</h4>
-<AttackInput @bind-attack="attacker" Attacker=true></AttackInput>
+<AttackInput @bind-attack="attacker"></AttackInput>
 <h4>Defender</h4>
 <UnitInput @bind-Unit="defender" Attacker=false></UnitInput>
 <button @onclick="FightUnits">Fight</button>
@@ -13,6 +13,7 @@
 {
 
     <h4>results</h4>
+    //target number for each row?
     <h2>Attack Results</h2>
     <div class="row">
         @foreach (var die in AttackDice)
@@ -22,6 +23,11 @@
         }
     </div>
     <h2>Strength vs toughness</h2>
+    @foreach (var die in StrengthDice)
+    {
+
+        <DieDisplay die="@die"></DieDisplay>
+    }
     <h2>Armor rolls</h2>
     <h2>Wound Rolls</h2>
     <h2>Feel No Pain Rolls</h2>
@@ -39,6 +45,14 @@
     private FightSimulationService fightSimulationService = new FightSimulationService();
     protected override Task OnInitializedAsync()
     {
+        defender = new UnitProfile()
+            {
+                InvulnerableSave = 4,
+                MinimumSave = 3,
+                Toughness = 11,
+                Wounds = 14,
+                Name = "Maleceptor"
+            };
         attacker = new AttackProfile()
             {
                 ArmorPenetration = -1,
@@ -53,6 +67,7 @@
     private void FightUnits()
     {
         AttackDice = fightSimulationService.SimulateToHitRoll(attacker);
+        StrengthDice = fightSimulationService.RollStrengthStep(defender, attacker, AttackDice);
         FightComplete = true;
     }
 }

@@ -7,10 +7,10 @@
         <table>
             <tr>
                 <th>Saving Throw</th>
-                <th>Skill</th>
-                <th>Strength</th>
-                <th>Armor Penetration</th>
-                <th>Damage</th>
+                <th>Invulnerable Save</th>
+                <th>Toughness</th>
+                <th>Total Wounds</th>
+                <th>Name</th>
             </tr>
             <tr>
                 <td>
@@ -22,7 +22,6 @@
                 </td>
                 <td>
                     <InputNumber @bind-Value="Unit.Toughness"></InputNumber>
-
                 </td>
                 <td>
                     <InputNumber @bind-Value="Unit.Wounds"></InputNumber>
@@ -38,19 +37,13 @@
 @code {
     [Parameter]
     public UnitProfile Unit { get; set; }
+    [Parameter]
     public EventCallback<UnitProfile> UnitChanged { get; set; }
     private bool loaded = false;
     [Parameter] public bool Attacker { get; set; }
     protected override Task OnInitializedAsync()
     {
-        Unit = new UnitProfile()
-            {
-                InvulnerableSave = 4,
-                MinimumSave = 3,
-                Toughness = 11,
-                Wounds = 14,
-                Name = "Maleceptor"
-            };
+        
         
         loaded = true;
         return base.OnInitializedAsync();
