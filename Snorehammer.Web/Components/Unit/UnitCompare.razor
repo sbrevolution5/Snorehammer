@@ -8,7 +8,7 @@
 <AttackInput @bind-attack="attacker"></AttackInput>
 <h4>Defender</h4>
 <UnitInput @bind-Unit="defender" Attacker=false></UnitInput>
-<button @onclick="FightUnits">Fight</button>
+<button @onclick="FightUnits">Fight</button><button @onclick="ResetDice">Reset</button>
 @if (FightComplete)
 {
 
@@ -16,6 +16,14 @@
     //target number for each row?
     <h2>Attack Results</h2>
     <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <h3>Needs: @attacker.Skill</h3>
+            </div>
+            <div class="col-6">
+                <h3>Rolling: @attacker.Attacks</h3>
+            </div>
+        </div>
         <div class="row">
             @foreach (var die in AttackDice)
             {
@@ -29,6 +37,14 @@
     <h2>Strength vs toughness</h2>
     <div class="container">
         <div class="row">
+            <div class="col-6">
+                <h3>Needs: @fightSimulationService.DetermineWoundTarget(defender.Toughness,attacker.Strength)</h3>
+            </div>
+            <div class="col-6">
+                <h3>Rolling: @AttackDice.Where(d=>d.Success).Count()</h3>
+            </div>
+        </div>
+        <div class="row">
             @foreach (var die in StrengthDice)
             {
                 <div class="col-1">
@@ -40,6 +56,12 @@
     </div>
     <h2>Armor rolls</h2>
     <div class="container">
+        <div class="col-6">
+            <h3>Needs: @fightSimulationService.DetermineArmorSave(defender, attacker)</h3>
+        </div>
+        <div class="col-6">
+            <h3>Rolling: @StrengthDice.Where(d => d.Success).Count()</h3>
+        </div>
         <div class="row">
             @foreach (var die in ArmorDice)
             {
@@ -87,9 +109,16 @@
     }
     private void FightUnits()
     {
+        ResetDice();
         AttackDice = fightSimulationService.SimulateToHitRoll(attacker);
         StrengthDice = fightSimulationService.RollStrengthStep(defender, attacker, AttackDice);
         ArmorDice = fightSimulationService.RollArmorSaves(defender, attacker, StrengthDice);
         FightComplete = true;
+    }
+    private void ResetDice()
+    {
+        AttackDice = new List<Dice>();
+        StrengthDice = new List<Dice>();
+        ArmorDice = new List<Dice>();
     }
 }

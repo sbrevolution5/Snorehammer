@@ -4,24 +4,27 @@ namespace Snorehammer.Web.Services
 {
     public class FightSimulationService
     {
-        public FightSimulationService() { }
+        private readonly Random _random;
+        public FightSimulationService()
+        {
+            _random = new Random();
+        }
         public List<Dice> SimulateToHitRoll(AttackProfile attack)
         {
             var res = new List<Dice>();
             for (int i = 0; i < attack.Attacks; i++)
             {
-                res.Add(new Dice(attack.Skill));
+                res.Add(new Dice(attack.Skill,_random));
             }
             return res;
         }
         public List<Dice> RollStrengthStep(UnitProfile defender, AttackProfile attack, List<Dice> dicePool)
         {
-            var roller = new Random();
             var res = new List<Dice>();
             var targetValue = DetermineWoundTarget(defender.Toughness, attack.Strength);
             for (int i = 0; i < dicePool.Where(d => d.Success).Count(); i++)
             {
-                res.Add(new Dice(targetValue));
+                res.Add(new Dice(targetValue,_random));
             }
             return res;
         }
@@ -32,12 +35,12 @@ namespace Snorehammer.Web.Services
             var roller = new Random();
             for (int i = 0; i < dicePool.Where(d => d.Success).Count(); i++)
             {
-                res.Add(new Dice(targetValue));
+                res.Add(new Dice(targetValue, _random));
             }
             return res;
         }
 
-        private int DetermineArmorSave(UnitProfile defender, AttackProfile attack)
+        public int DetermineArmorSave(UnitProfile defender, AttackProfile attack)
         {
             int moddedSave = defender.MinimumSave + attack.ArmorPenetration;
             if (moddedSave < defender.InvulnerableSave)
@@ -47,7 +50,7 @@ namespace Snorehammer.Web.Services
             return defender.InvulnerableSave;
         }
 
-        private int DetermineWoundTarget(int toughness, int strength)
+        public int DetermineWoundTarget(int toughness, int strength)
         {
             if (toughness == strength)
             {
