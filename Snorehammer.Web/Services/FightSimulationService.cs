@@ -14,6 +14,45 @@ namespace Snorehammer.Web.Services
             }
             return res;
         }
+        public List<Dice> RollStrengthStep(UnitProfile defender, AttackProfile attack, List<Dice> DicePool)
+        {
+            var roller = new Random();
+            var res = new List<Dice>();
+            var targetValue = DetermineWoundTarget(defender.Toughness, attack.Strength);
+            
+            res.AddRange(DicePool);
+            foreach (var die in DicePool)
+            {
+
+            }
+            return res;
+        }
+
+        private int DetermineWoundTarget(int toughness, int strength)
+        {
+            if (toughness == strength)
+            {
+                return 4;
+            }
+            else if (toughness > strength)
+            {
+                
+            if (toughness >= strength*2)
+            {
+                    return 6;
+            }
+                return 5;
+            }
+            else
+            {
+                if (strength >= toughness * 2)
+                {
+                    return 2;
+                }
+                return 3;
+            }
+        }
+
         public void SimulateSimpleFight(UnitProfile defender, AttackProfile attack)
         {
             int dicePool = attack.Attacks;
@@ -37,38 +76,6 @@ namespace Snorehammer.Web.Services
             // subtract wounds
             //determine killer
         }
-        //public List<Dice> RollAttackStep(UnitProfile defender, AttackProfile attack, List<int> DicePool)
-        //{
-        //    var roller = new Random();
-        //    var res = new List<int>();
-        //    foreach (var die in DicePool)
-        //    {
-        //        if (die == 0)
-        //        {
-        //            res.Add(0);
-        //        }
-        //        else {
-        //            res.Add(roller.Next(1, 6));
-        //        }
-        //    }
-        //    return res;
-        //}
-        public List<int> RollStrengthStep(UnitProfile defender, AttackProfile attack, List<int> DicePool)
-        {
-            var roller = new Random();
-            var res = new List<int>();
-            foreach (var die in DicePool)
-            {
-                //check threshold
-                if (die == 0)
-                {
-                    res.Add(0);
-                }
-                else {
-                    res.Add(roller.Next(1, 6));
-                }
-            }
-            return res;
-        }
+        
     }
 }

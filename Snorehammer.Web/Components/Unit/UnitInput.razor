@@ -3,45 +3,47 @@
 @if (loaded == true)
 {
 
-        <EditForm Model="@unit">
-            <table>
-                <tr>
-                    <th>Saving Throw</th>
-                    <th>Skill</th>
-                    <th>Strength</th>
-                    <th>Armor Penetration</th>
-                    <th>Damage</th>
-                </tr>
-                <tr>
-                    <td>
-                        <InputNumber @bind-Value="unit.MinimumSave"></InputNumber>
+    <EditForm Model="@Unit">
+        <table>
+            <tr>
+                <th>Saving Throw</th>
+                <th>Skill</th>
+                <th>Strength</th>
+                <th>Armor Penetration</th>
+                <th>Damage</th>
+            </tr>
+            <tr>
+                <td>
+                    <InputNumber @bind-Value="Unit.MinimumSave"></InputNumber>
 
-                    </td>
-                    <td>
-                        <InputNumber @bind-Value="unit.InvulnerableSave"></InputNumber>
-                    </td>
-                    <td>
-                        <InputNumber @bind-Value="unit.Toughness"></InputNumber>
+                </td>
+                <td>
+                    <InputNumber @bind-Value="Unit.InvulnerableSave"></InputNumber>
+                </td>
+                <td>
+                    <InputNumber @bind-Value="Unit.Toughness"></InputNumber>
 
-                    </td>
-                    <td>
-                        <InputNumber @bind-Value="unit.Wounds"></InputNumber>
-                    </td>
-                    <td>
-                        <InputText @bind-Value="unit.Name"></InputText>
-                    </td>
-                </tr>
-            </table>
-        </EditForm>
-    }
+                </td>
+                <td>
+                    <InputNumber @bind-Value="Unit.Wounds"></InputNumber>
+                </td>
+                <td>
+                    <InputText @bind-Value="Unit.Name"></InputText>
+                </td>
+            </tr>
+        </table>
+    </EditForm>
+}
 
 @code {
-    private UnitProfile unit;
+    [Parameter]
+    public UnitProfile Unit { get; set; }
+    public EventCallback<UnitProfile> UnitChanged { get; set; }
     private bool loaded = false;
     [Parameter] public bool Attacker { get; set; }
     protected override Task OnInitializedAsync()
     {
-        unit = new UnitProfile()
+        Unit = new UnitProfile()
             {
                 InvulnerableSave = 4,
                 MinimumSave = 3,
