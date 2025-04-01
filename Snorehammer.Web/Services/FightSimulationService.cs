@@ -14,18 +14,41 @@ namespace Snorehammer.Web.Services
             }
             return res;
         }
-        public List<Dice> RollStrengthStep(UnitProfile defender, AttackProfile attack, List<Dice> DicePool)
+        public List<Dice> RollStrengthStep(UnitProfile defender, AttackProfile attack, List<Dice> dicePool)
         {
             var roller = new Random();
             var res = new List<Dice>();
             var targetValue = DetermineWoundTarget(defender.Toughness, attack.Strength);
-            res.AddRange(DicePool);
-            foreach (var die in DicePool)
+            res.AddRange(dicePool.Where(d => d.Success));
+            foreach (var die in dicePool)
             {
                 die.Target = targetValue;
-                die.Result = roller.Next(die.Sides);
+                die.Result = roller.Next(1,die.Sides);
             }
             return res;
+        }
+        public List<Dice> RollArmorSaves(UnitProfile defender, AttackProfile attack, List<Dice> dicePool)
+        {
+            var res = new List<Dice>();
+            var targetValue = DetermineArmorSave(defender, attack);
+            var roller = new Random();
+            res.AddRange(dicePool.Where(d=>d.Success));
+            foreach (var die in dicePool)
+            {
+                die.Target = targetValue;
+                die.Result = roller.Next(1,die.Sides);
+            }
+            return res;
+        }
+
+        private int DetermineArmorSave(UnitProfile defender, AttackProfile attack)
+        {
+            int moddedSave = defender.MinimumSave + attack.ArmorPenetration;
+            if (moddedSave < defender.InvulnerableSave)
+            {
+                return moddedSave;
+            }
+            return defender.InvulnerableSave;
         }
 
         private int DetermineWoundTarget(int toughness, int strength)

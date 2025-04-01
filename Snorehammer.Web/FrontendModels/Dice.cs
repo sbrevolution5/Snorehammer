@@ -6,11 +6,10 @@
         {
             Target = target;
             Result = new Random().Next(1,6);
-            Success = Target <= Result;
         }
         public int Target { get; set; }
         public int Sides { get; set; } = 6;
-        public bool Success { get; set; }
+        public bool Success { get { return Target >= Result; } }
         public int Result { get; set; }
     }
 }
