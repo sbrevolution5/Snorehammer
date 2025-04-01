@@ -10,7 +10,7 @@ namespace Snorehammer.Web.Services
             var res = new List<Dice>();
             for (int i = 0; i < attack.Attacks; i++)
             {
-                res.Add(new Dice(6));
+                res.Add(new Dice(attack.Skill));
             }
             return res;
         }
@@ -19,11 +19,9 @@ namespace Snorehammer.Web.Services
             var roller = new Random();
             var res = new List<Dice>();
             var targetValue = DetermineWoundTarget(defender.Toughness, attack.Strength);
-            res.AddRange(dicePool.Where(d => d.Success));
-            foreach (var die in dicePool)
+            for (int i = 0; i < dicePool.Where(d => d.Success).Count(); i++)
             {
-                die.Target = targetValue;
-                die.Result = roller.Next(1,die.Sides);
+                res.Add(new Dice(targetValue));
             }
             return res;
         }
@@ -32,11 +30,9 @@ namespace Snorehammer.Web.Services
             var res = new List<Dice>();
             var targetValue = DetermineArmorSave(defender, attack);
             var roller = new Random();
-            res.AddRange(dicePool.Where(d=>d.Success));
-            foreach (var die in dicePool)
+            for (int i = 0; i < dicePool.Where(d => d.Success).Count(); i++)
             {
-                die.Target = targetValue;
-                die.Result = roller.Next(1,die.Sides);
+                res.Add(new Dice(targetValue));
             }
             return res;
         }

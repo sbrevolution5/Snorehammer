@@ -11,13 +11,18 @@
 <InputNumber @bind-Value="DiceNum"></InputNumber>
 
 <button class="btn btn-primary" @onclick="RollDie">Click me</button>
-<div>
+<div class="container">
+    <div class="row">
+
     @foreach (var die in DiceList)
     {
-        <p>
+        <div class="col-sm">
+
             <DieDisplay die="die"></DieDisplay>
-        </p>
+        </div>        
+        
     }
+    </div>
 </div>
 @code {
     private int DiceNum = 0;

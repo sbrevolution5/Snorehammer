@@ -15,20 +15,41 @@
     <h4>results</h4>
     //target number for each row?
     <h2>Attack Results</h2>
-    <div class="row">
-        @foreach (var die in AttackDice)
-        {
+    <div class="container">
+        <div class="row">
+            @foreach (var die in AttackDice)
+            {
+                <div class="col-1">
 
-            <DieDisplay die="@die"></DieDisplay>
-        }
+                    <DieDisplay die="@die"></DieDisplay>
+                </div>
+            }
+        </div>
     </div>
     <h2>Strength vs toughness</h2>
-    @foreach (var die in StrengthDice)
-    {
+    <div class="container">
+        <div class="row">
+            @foreach (var die in StrengthDice)
+            {
+                <div class="col-1">
 
-        <DieDisplay die="@die"></DieDisplay>
-    }
+                    <DieDisplay die="@die"></DieDisplay>
+                </div>
+            }
+        </div>
+    </div>
     <h2>Armor rolls</h2>
+    <div class="container">
+        <div class="row">
+            @foreach (var die in ArmorDice)
+            {
+                <div class="col-1">
+
+                    <DieDisplay die="@die"></DieDisplay>
+                </div>
+            }
+        </div>
+    </div>
     <h2>Wound Rolls</h2>
     <h2>Feel No Pain Rolls</h2>
     <h3>Winner:</h3>
@@ -37,7 +58,7 @@
 @code {
     private UnitProfile defender { get; set; }
     private bool FightComplete { get; set; } = false;
-    private List<Dice> AttackDice { get; set; } 
+    private List<Dice> AttackDice { get; set; }
     private List<Dice> StrengthDice { get; set; }
     private List<Dice> ArmorDice { get; set; }
     private List<Dice> WoundDice { get; set; }
@@ -68,6 +89,7 @@
     {
         AttackDice = fightSimulationService.SimulateToHitRoll(attacker);
         StrengthDice = fightSimulationService.RollStrengthStep(defender, attacker, AttackDice);
+        ArmorDice = fightSimulationService.RollArmorSaves(defender, attacker, StrengthDice);
         FightComplete = true;
     }
 }

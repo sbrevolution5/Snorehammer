@@ -9,7 +9,7 @@
         }
         public int Target { get; set; }
         public int Sides { get; set; } = 6;
-        public bool Success { get { return Target >= Result; } }
+        public bool Success { get { return Target <= Result; } }
         public int Result { get; set; }
     }
 }
