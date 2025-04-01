@@ -1,0 +1,41 @@
+﻿@using Snorehammer.Web.FrontendModels
+<h3>AttackInput</h3>
+<EditForm Model="@attack">
+    <table>
+        <tr>
+            <th>Attacks</th>
+            <th>Skill</th>
+            <th>Strength</th>
+            <th>Armor Penetration</th>
+            <th>Damage</th>
+        </tr>
+        <tr>
+            <td>
+
+                <InputNumber @bind-Value="attack.Attacks"></InputNumber>
+            </td>
+            <td>
+
+                <InputNumber @bind-Value="attack.Skill"></InputNumber>
+            </td>
+            <td>
+
+                <InputNumber @bind-Value="attack.Strength"></InputNumber>
+            </td>
+            <td>
+
+                <InputNumber @bind-Value="attack.ArmorPenetration"></InputNumber>
+            </td>
+            <td>
+
+                <InputNumber @bind-Value="attack.Damage"></InputNumber>
+            </td>
+        </tr>
+    </table>
+</EditForm>
+@code {
+    [Parameter]
+    public AttackProfile attack { get; set; }
+    [Parameter]
+    public EventCallback<AttackProfile> AttackChanged { get; set; }
+}

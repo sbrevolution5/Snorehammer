@@ -3,43 +3,6 @@
 @if (loaded == true)
 {
 
-    @if (Attacker == true)
-    {
-        <EditForm Model="@attack">
-            <table>
-                <tr>
-                    <th>Attacks</th>
-                    <th>Skill</th>
-                    <th>Strength</th>
-                    <th>Armor Penetration</th>
-                    <th>Damage</th>
-                </tr>
-                <tr>
-                    <td>
-
-                        <InputNumber @bind-Value="attack.Attacks"></InputNumber>
-                    </td>
-                    <td>
-
-                        <InputNumber @bind-Value="attack.Skill"></InputNumber>
-                    </td>
-                    <td>
-
-                        <InputNumber @bind-Value="attack.Strength"></InputNumber>
-                    </td>
-                    <td>
-
-                        <InputNumber @bind-Value="attack.ArmorPenetration"></InputNumber>
-                    </td>
-                    <td>
-
-                        <InputNumber @bind-Value="attack.Damage"></InputNumber>
-                    </td>
-                </tr>
-            </table>
-        </EditForm>   
-    }
-    else{
         <EditForm Model="@unit">
             <table>
                 <tr>
@@ -71,13 +34,9 @@
             </table>
         </EditForm>
     }
-}
+
 @code {
     private UnitProfile unit;
-    [Parameter]
-    public AttackProfile attack { get; set; }
-    [Parameter]
-    public EventCallback<AttackProfile> AttackChanged { get; set; }
     private bool loaded = false;
     [Parameter] public bool Attacker { get; set; }
     protected override Task OnInitializedAsync()
