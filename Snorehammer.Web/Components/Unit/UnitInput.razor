@@ -6,13 +6,16 @@
     <EditForm Model="@Unit">
         <table>
             <tr>
+                <th>Name</th>
                 <th>Saving Throw</th>
                 <th>Invulnerable Save</th>
                 <th>Toughness</th>
                 <th>Total Wounds</th>
-                <th>Name</th>
             </tr>
             <tr>
+                <td>
+                    <InputText @bind-Value="Unit.Name"></InputText>
+                </td>
                 <td>
                     <InputNumber @bind-Value="Unit.MinimumSave"></InputNumber>
 
@@ -25,9 +28,6 @@
                 </td>
                 <td>
                     <InputNumber @bind-Value="Unit.Wounds"></InputNumber>
-                </td>
-                <td>
-                    <InputText @bind-Value="Unit.Name"></InputText>
                 </td>
             </tr>
         </table>

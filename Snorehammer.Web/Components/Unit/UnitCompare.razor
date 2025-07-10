@@ -4,6 +4,9 @@
 @using Snorehammer.Web.Services
 @rendermode InteractiveServer
 <h3>UnitCompare</h3>
+<div class="container">
+    <div class="col-6">
+
 <h4>Attacker</h4>
 <AttackInput @bind-attack="attacker"></AttackInput>
 <h4>Defender</h4>
@@ -18,7 +21,7 @@
     <div class="container">
         <div class="row">
             <div class="col-6">
-                <h3>Needs: @attacker.Skill</h3>
+                <h3>Target: @attacker.Skill</h3>
             </div>
             <div class="col-6">
                 <h3>Rolling: @attacker.Attacks</h3>
@@ -38,7 +41,7 @@
     <div class="container">
         <div class="row">
             <div class="col-6">
-                <h3>Needs: @fightSimulationService.DetermineWoundTarget(defender.Toughness,attacker.Strength)</h3>
+                <h3>Target: @fightSimulationService.DetermineWoundTarget(defender.Toughness,attacker.Strength)</h3>
             </div>
             <div class="col-6">
                 <h3>Rolling: @AttackDice.Where(d=>d.Success).Count()</h3>
@@ -57,7 +60,7 @@
     <h2>Armor rolls</h2>
     <div class="container">
         <div class="col-6">
-            <h3>Needs: @fightSimulationService.DetermineArmorSave(defender, attacker)</h3>
+            <h3>Target: @fightSimulationService.DetermineArmorSave(defender, attacker)</h3>
         </div>
         <div class="col-6">
             <h3>Rolling: @StrengthDice.Where(d => d.Success).Count()</h3>
@@ -76,6 +79,11 @@
     <h2>Feel No Pain Rolls</h2>
     <h3>Winner:</h3>
 }
+    </div>
+    <div class="col-6">
+
+    </div>
+</div>
 <button @onclick="FightUnits">Go again?</button>
 @code {
     private UnitProfile defender { get; set; }
@@ -90,18 +98,18 @@
     {
         defender = new UnitProfile()
             {
-                InvulnerableSave = 4,
+                InvulnerableSave = 0,
                 MinimumSave = 3,
-                Toughness = 11,
-                Wounds = 14,
-                Name = "Maleceptor"
+                Toughness = 4,
+                Wounds = 2,
+                Name = "intercessor"
             };
         attacker = new AttackProfile()
             {
                 ArmorPenetration = -1,
-                Attacks = 1,
+                Attacks = 2,
                 Damage = 1,
-                Skill = 4,
+                Skill = 3,
                 Strength = 4
 
             };
