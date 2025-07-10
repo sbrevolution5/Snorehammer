@@ -47,27 +47,96 @@ namespace Snorehammer.Web.Services.Tests
         [Test]
         public void WinnerMessageUnitKilled()
         {
-            throw new NotImplementedException(); 
+            //arrange
+            A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(6))).Returns(2);
+            attacker.Attacks = 20;
+            for (int i = 0; i < 20; i++)
+            {
+                diceList.Add(new Dice(unitProfile.MinimumSave, random));
+            }
+            //act
+            var res = service.GenerateWinnerMessage(unitProfile, attacker, diceList);
+            //assert
+            res.Should().Contain("20 out of 20 attacks broke through armor.");
+            res.Should().Contain("20 wounds inflicted to defender.");
+            res.Should().Contain("The entire unit was destroyed");
         }
         [Test]
         public void WinnerMessageHalfUnit()
         {
-            throw new NotImplementedException(); 
+            //arrange
+            var sequence = new List<int>();
+            for( int i =0; i<10; i++)
+            {
+                sequence.Add(2);
+                sequence.Add(3);
+            }
+            A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(6))).ReturnsNextFromSequence(sequence.ToArray());
+            attacker.Attacks = 20;
+            for (int i = 0; i < 20; i++)
+            {
+                diceList.Add(new Dice(unitProfile.MinimumSave, random));
+            }
+            //act
+            var res = service.GenerateWinnerMessage(unitProfile, attacker, diceList);
+            //assert
+            res.Should().Contain("10 out of 20 attacks broke through armor.");
+            res.Should().Contain("10 wounds inflicted to defender.");
+            res.Should().Contain("5 out of 10 models were destroyed");
         }
         [Test]
         public void WinnerMessageDamageButNoModelDestroyed()
         {
-            throw new NotImplementedException(); 
+            //arrange
+            
+            A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(6))).Returns(3);
+            A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(6))).ReturnsNextFromSequence(1);
+            attacker.Attacks = 20;
+            for (int i = 0; i < 20; i++)
+            {
+                diceList.Add(new Dice(unitProfile.MinimumSave, random));
+            }
+            //act
+            var res = service.GenerateWinnerMessage(unitProfile, attacker, diceList);
+            //assert
+            res.Should().Contain("1 out of 20 attacks broke through armor.");
+            res.Should().Contain("1 wounds inflicted to defender.");
+            res.Should().Contain("0 out of 10 models were destroyed");
+            res.Should().Contain("A remaining model was inflicted 1 wounds, leaving it with 1 remaining");
         }
         [Test]
         public void WinnerMessageDamagedSingleModel ()
         {
-            throw new NotImplementedException(); 
+            //arrange
+
+            A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(6))).Returns(2);
+            attacker.Attacks = 1;
+            unitProfile.ModelCount = 1;
+            diceList.Add(new Dice(unitProfile.MinimumSave, random));
+            //act
+            var res = service.GenerateWinnerMessage(unitProfile, attacker, diceList);
+            //assert
+            res.Should().Contain("1 out of 1 attacks broke through armor.");
+            res.Should().Contain("1 wounds inflicted to defender.");
+            res.Should().Contain("leaving it with 1 remaining");
         }
         [Test]
         public void WinnerMessageDestroyedSingleModel ()
         {
-            throw new NotImplementedException(); 
+            //arrange
+            A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(6))).Returns(1);
+            attacker.Attacks = 20;
+            unitProfile.ModelCount = 1;
+            for (int i = 0; i < 20; i++)
+            {
+                diceList.Add(new Dice(unitProfile.MinimumSave, random));
+            }
+            //act
+            var res = service.GenerateWinnerMessage(unitProfile, attacker, diceList);
+            //assert
+            res.Should().Contain("20 out of 20 attacks broke through armor.");
+            res.Should().Contain("20 wounds inflicted to defender.");
+            res.Should().Contain("The entire unit was destroyed");
         }
         [Test]
         public void WinnerMessage0Damage()

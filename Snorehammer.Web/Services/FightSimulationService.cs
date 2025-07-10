@@ -89,7 +89,7 @@ namespace Snorehammer.Web.Services
                 {
 
                     int totalWounds = defender.Wounds * defender.ModelCount;
-                    var destroyedModels = totalWounds / inflictedWounds;
+                    var destroyedModels = inflictedWounds / defender.Wounds;
                     if (destroyedModels >= defender.ModelCount)
                     {
                         res.Append("The entire unit was destroyed");
