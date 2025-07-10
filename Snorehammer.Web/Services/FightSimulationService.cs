@@ -81,15 +81,15 @@ namespace Snorehammer.Web.Services
             var res = new StringBuilder();
             var successful = armorSaves.Where(d => !d.Success).Count();
             res.Append($"{successful} out of {attack.Attacks} attacks broke through armor.");
-            int wounds = successful * attack.Damage;
-            if (wounds > 0)
+            int inflictedWounds = successful * attack.Damage;
+            if (inflictedWounds > 0)
             {
-                res.Append($"{wounds} wounds inflicted to defender.");
+                res.Append($"{inflictedWounds} wounds inflicted to defender.");
                 if (defender.ModelCount > 1)
                 {
 
                     int totalWounds = defender.Wounds * defender.ModelCount;
-                    var destroyedModels = totalWounds / wounds;
+                    var destroyedModels = totalWounds / inflictedWounds;
                     if (destroyedModels >= defender.ModelCount)
                     {
                         res.Append("The entire unit was destroyed");
@@ -97,9 +97,9 @@ namespace Snorehammer.Web.Services
                     else
                     {
                         res.Append($"{destroyedModels} out of {defender.ModelCount} models were destroyed");
-                        if (totalWounds % wounds != 0)
+                        if (inflictedWounds % defender.Wounds != 0)
                         {
-                            res.Append($"A remaining model was inflicted {totalWounds % wounds} wounds, leaving it with {defender.Wounds} remaining");
+                            res.Append($"A remaining model was inflicted {inflictedWounds % defender.Wounds} wounds, leaving it with {defender.Wounds} remaining");
                         }
                     }
                     return res.ToString();
