@@ -42,7 +42,7 @@ namespace Snorehammer.Web.Services
 
         public int DetermineArmorSave(UnitProfile defender, AttackProfile attack)
         {
-            int moddedSave = defender.MinimumSave + attack.ArmorPenetration;
+            int moddedSave = defender.MinimumSave - attack.ArmorPenetration;
             if (moddedSave < defender.InvulnerableSave || defender.InvulnerableSave == 0)
             {
                 return moddedSave;

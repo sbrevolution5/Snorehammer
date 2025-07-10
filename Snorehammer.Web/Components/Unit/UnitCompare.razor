@@ -7,78 +7,77 @@
 <div class="container">
     <div class="col-6">
 
-<h4>Attacker</h4>
-<AttackInput @bind-attack="attacker"></AttackInput>
-<h4>Defender</h4>
-<UnitInput @bind-Unit="defender" Attacker=false></UnitInput>
-<button @onclick="FightUnits">Fight</button><button @onclick="ResetDice">Reset</button>
-@if (FightComplete)
-{
+        <h4>Attacker</h4>
+        <AttackInput @bind-attack="attacker"></AttackInput>
+        <h4>Defender</h4>
+        <UnitInput @bind-Unit="defender" Attacker=false></UnitInput>
+        <button @onclick="FightUnits">Fight</button><button @onclick="ResetDice">Reset</button>
+        @if (FightComplete)
+        {
 
-    <h4>results</h4>
-    //target number for each row?
-    <h2>Attack Results</h2>
-    <div class="container">
-        <div class="row">
-            <div class="col-6">
-                <h3>Target: @attacker.Skill</h3>
-            </div>
-            <div class="col-6">
-                <h3>Rolling: @attacker.Attacks</h3>
-            </div>
-        </div>
-        <div class="row">
-            @foreach (var die in AttackDice)
-            {
-                <div class="col-1">
-
-                    <DieDisplay die="@die"></DieDisplay>
+            <h4>results</h4>
+            <h2>Attack Results</h2>
+            <div class="container">
+                <div class="row">
+                    <div class="col-6">
+                        <h3>Target: @attacker.Skill</h3>
+                    </div>
+                    <div class="col-6">
+                        <h3>Rolling: @attacker.Attacks</h3>
+                    </div>
                 </div>
-            }
-        </div>
-    </div>
-    <h2>Strength vs toughness</h2>
-    <div class="container">
-        <div class="row">
-            <div class="col-6">
-                <h3>Target: @fightSimulationService.DetermineWoundTarget(defender.Toughness,attacker.Strength)</h3>
-            </div>
-            <div class="col-6">
-                <h3>Rolling: @AttackDice.Where(d=>d.Success).Count()</h3>
-            </div>
-        </div>
-        <div class="row">
-            @foreach (var die in StrengthDice)
-            {
-                <div class="col-1">
+                <div class="row">
+                    @foreach (var die in AttackDice)
+                    {
+                        <div class="col-1">
 
-                    <DieDisplay die="@die"></DieDisplay>
+                            <DieDisplay die="@die"></DieDisplay>
+                        </div>
+                    }
                 </div>
-            }
-        </div>
-    </div>
-    <h2>Armor rolls</h2>
-    <div class="container">
-        <div class="col-6">
-            <h3>Target: @fightSimulationService.DetermineArmorSave(defender, attacker)</h3>
-        </div>
-        <div class="col-6">
-            <h3>Rolling: @StrengthDice.Where(d => d.Success).Count()</h3>
-        </div>
-        <div class="row">
-            @foreach (var die in ArmorDice)
-            {
-                <div class="col-1">
+            </div>
+            <h2>Strength vs toughness</h2>
+            <div class="container">
+                <div class="row">
+                    <div class="col-6">
+                        <h3>Target: @fightSimulationService.DetermineWoundTarget(defender.Toughness,attacker.Strength)</h3>
+                    </div>
+                    <div class="col-6">
+                        <h3>Rolling: @AttackDice.Where(d=>d.Success).Count()</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    @foreach (var die in StrengthDice)
+                    {
+                        <div class="col-1">
 
-                    <DieDisplay die="@die"></DieDisplay>
+                            <DieDisplay die="@die"></DieDisplay>
+                        </div>
+                    }
                 </div>
-            }
-        </div>
-    </div>
-    <h2>Wound Rolls</h2>
-    <h2>Feel No Pain Rolls</h2>
-    <h3>Winner:</h3>
-}
+            </div>
+            <h2>Armor rolls</h2>
+            <div class="container">
+                <div class="col-6">
+                    <h3>Target: @fightSimulationService.DetermineArmorSave(defender, attacker)</h3>
+                </div>
+                <div class="col-6">
+                    <h3>Rolling: @StrengthDice.Where(d => d.Success).Count()</h3>
+                </div>
+                <div class="row">
+                    @foreach (var die in ArmorDice)
+                    {
+                        <div class="col-1">
+
+                            <DieDisplay die="@die"></DieDisplay>
+                        </div>
+                    }
+                </div>
+            </div>
+            <h2>Wound Rolls</h2>
+            <h2>Feel No Pain Rolls</h2>
+            <h3>Winner:</h3>
+        }
     </div>
     <div class="col-6">
 
@@ -117,7 +116,9 @@
     }
     private void FightUnits()
     {
+        FightComplete = false;
         ResetDice();
+        fightSimulationService = new FightSimulationService();
         AttackDice = fightSimulationService.SimulateToHitRoll(attacker);
         StrengthDice = fightSimulationService.RollStrengthStep(defender, attacker, AttackDice);
         ArmorDice = fightSimulationService.RollArmorSaves(defender, attacker, StrengthDice);
