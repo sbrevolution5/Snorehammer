@@ -1,4 +1,5 @@
 ﻿using Snorehammer.Web.FrontendModels;
+using System.Text;
 
 namespace Snorehammer.Web.Services
 {
@@ -73,6 +74,13 @@ namespace Snorehammer.Web.Services
                 }
                 return 3;
             }
+        }
+        public string GenerateWinnerMessage(UnitProfile defender, AttackProfile attack, List<Dice> armorSaves)
+        {
+            var res = new StringBuilder();
+            var successful = armorSaves.Where(d => d.Success).Count();
+            res.Append($"{successful} out of {attack.Attacks} attacks broke through armor.  {successful * attack.Damage} wounds inflicted to defender.");
+            return res.ToString();
         }
 
         public void SimulateSimpleFight(UnitProfile defender, AttackProfile attack)

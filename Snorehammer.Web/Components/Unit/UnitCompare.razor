@@ -77,6 +77,7 @@
             @* <h2>Wound Rolls</h2>
             <h2>Feel No Pain Rolls</h2> *@
             <h3>Winner:</h3>
+            <p>@WinnerMessage</p>
         }
     </div>
     <div class="col-6">
@@ -91,6 +92,7 @@
     private List<Dice> StrengthDice { get; set; }
     private List<Dice> ArmorDice { get; set; }
     private List<Dice> WoundDice { get; set; }
+    private string WinnerMessage { get; set; } = "";
     private AttackProfile attacker { get; set; }
     private FightSimulationService fightSimulationService = new FightSimulationService();
     protected override Task OnInitializedAsync()
@@ -122,6 +124,7 @@
         AttackDice = fightSimulationService.SimulateToHitRoll(attacker);
         StrengthDice = fightSimulationService.RollStrengthStep(defender, attacker, AttackDice);
         ArmorDice = fightSimulationService.RollArmorSaves(defender, attacker, StrengthDice);
+        WinnerMessage = fightSimulationService.GenerateWinnerMessage(defender, attacker, ArmorDice);
         FightComplete = true;
     }
     private void ResetDice()
