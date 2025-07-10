@@ -11,6 +11,7 @@
                 <th>Invulnerable Save</th>
                 <th>Toughness</th>
                 <th>Total Wounds</th>
+                <th>Number of Models</th>
             </tr>
             <tr>
                 <td>
@@ -28,6 +29,9 @@
                 </td>
                 <td>
                     <InputNumber @bind-Value="Unit.Wounds"></InputNumber>
+                </td>
+                <td>
+                    <InputNumber @bind-Value="Unit.ModelCount"></InputNumber>
                 </td>
             </tr>
         </table>

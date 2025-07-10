@@ -1,4 +1,5 @@
-﻿using Snorehammer.Web.FrontendModels;
+﻿using Microsoft.Extensions.Primitives;
+using Snorehammer.Web.FrontendModels;
 using System.Text;
 
 namespace Snorehammer.Web.Services
@@ -15,7 +16,7 @@ namespace Snorehammer.Web.Services
             var res = new List<Dice>();
             for (int i = 0; i < attack.Attacks; i++)
             {
-                res.Add(new Dice(attack.Skill,_random));
+                res.Add(new Dice(attack.Skill, _random));
             }
             return res;
         }
@@ -25,7 +26,7 @@ namespace Snorehammer.Web.Services
             var targetValue = DetermineWoundTarget(defender.Toughness, attack.Strength);
             for (int i = 0; i < dicePool.Where(d => d.Success).Count(); i++)
             {
-                res.Add(new Dice(targetValue,_random));
+                res.Add(new Dice(targetValue, _random));
             }
             return res;
         }
@@ -79,7 +80,31 @@ namespace Snorehammer.Web.Services
         {
             var res = new StringBuilder();
             var successful = armorSaves.Where(d => d.Success).Count();
-            res.Append($"{successful} out of {attack.Attacks} attacks broke through armor.  {successful * attack.Damage} wounds inflicted to defender.");
+            res.Append($"{successful} out of {attack.Attacks} attacks broke through armor.");
+            int wounds = successful * attack.Damage;
+            if (wounds > 0)
+            {
+                res.Append($"{wounds} wounds inflicted to defender.");
+                if (defender.ModelCount > 1)
+                {
+
+                    int totalWounds = defender.Wounds * defender.ModelCount;
+                    var destroyedModels = totalWounds / wounds;
+                    if (destroyedModels >= defender.ModelCount)
+                    {
+                        res.Append("The entire unit was destroyed");
+                    }
+                    else
+                    {
+                        res.Append($"{destroyedModels} out of {defender.ModelCount} models were destroyed");
+                        if (totalWounds % wounds != 0)
+                        {
+                            res.Append($"A remaining model was inflicted {totalWounds % wounds} wounds, leaving it with {defender.Wounds} remaining");
+                        }
+                    }
+                    return res.ToString();
+                }
+            }
             return res.ToString();
         }
 
