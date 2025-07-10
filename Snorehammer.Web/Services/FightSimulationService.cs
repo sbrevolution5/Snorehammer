@@ -79,7 +79,7 @@ namespace Snorehammer.Web.Services
         public string GenerateWinnerMessage(UnitProfile defender, AttackProfile attack, List<Dice> armorSaves)
         {
             var res = new StringBuilder();
-            var successful = armorSaves.Where(d => d.Success).Count();
+            var successful = armorSaves.Where(d => !d.Success).Count();
             res.Append($"{successful} out of {attack.Attacks} attacks broke through armor.");
             int wounds = successful * attack.Damage;
             if (wounds > 0)
