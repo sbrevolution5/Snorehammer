@@ -5,6 +5,8 @@
 @code {
     [Parameter]
     public Dice die { get; set; }
+    [Parameter]
+    public bool CriticalMatters { get; set; } = false;
     public int value { get; set; }
     private string colorCode { get; set; } = "#000";
     protected override Task OnInitializedAsync()
@@ -15,9 +17,13 @@
     }
     private string SetColorCode()
     {
-        if (die.Critical)
+        if (die.Result > die.Sides)
         {
-            colorCode = "#00F";
+            return "DDD";
+        }
+        else if (die.Critical && CriticalMatters)
+        {
+            return "#00F";
         }
         else if (die.Success)
         {
