@@ -7,17 +7,19 @@
     public Dice die { get; set; }
     public int value { get; set; }
     private string colorCode { get; set; } = "#000";
-    private bool success = true;
     protected override Task OnInitializedAsync()
     {
         value = die.Result;
-        success = die.Success;
-        colorCode = SetColorCode(success);
+        colorCode = SetColorCode();
         return base.OnInitializedAsync();
     }
-    private string SetColorCode(bool success)
+    private string SetColorCode()
     {
-        if (success)
+        if (die.Critical)
+        {
+            colorCode = "#00F";
+        }
+        else if (die.Success)
         {
             return "#0F0";
         }
