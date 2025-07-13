@@ -77,7 +77,7 @@
             @* <h2>Wound Rolls</h2>
             <h2>Feel No Pain Rolls</h2> *@
             <h3>Winner:</h3>
-            <p>@WinnerMessage</p>
+            <p>@sim.WinnerMessage</p>
         }
     </div>
     <div class="col-6">
@@ -89,7 +89,6 @@
     private FightSimulation sim { get; set; } = new FightSimulation();
     private UnitProfile defender { get; set; }
     private bool FightComplete { get; set; } = false;
-    private string WinnerMessage { get; set; } = "";
     private AttackProfile attacker { get; set; }
     private FightSimulationService fightSimulationService = new FightSimulationService();
     protected override Task OnInitializedAsync()

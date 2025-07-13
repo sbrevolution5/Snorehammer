@@ -6,5 +6,6 @@
         public List<Dice> StrengthDice { get; set; } = new List<Dice>();
         public List<Dice> ArmorDice { get; set; } = new List<Dice>();
         public List<Dice> WoundDice { get; set; } = new List<Dice>();
+        public string WinnerMessage { get; set; } = "";
     }
 }
