@@ -5,27 +5,19 @@
 @code {
     [Parameter]
     public Dice die { get; set; }
-    [Parameter]
-    public bool CriticalMatters { get; set; } = false;
     public int value { get; set; }
     private string colorCode { get; set; } = "#000";
+    private bool success = true;
     protected override Task OnInitializedAsync()
     {
         value = die.Result;
-        colorCode = SetColorCode();
+        success = die.Success;
+        colorCode = SetColorCode(success);
         return base.OnInitializedAsync();
     }
-    private string SetColorCode()
+    private string SetColorCode(bool success)
     {
-        if (die.Result > die.Sides)
-        {
-            return "DDD";
-        }
-        else if (die.Critical && CriticalMatters)
-        {
-            return "#00F";
-        }
-        else if (die.Success)
+        if (success)
         {
             return "#0F0";
         }
