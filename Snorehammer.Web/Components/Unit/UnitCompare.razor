@@ -31,7 +31,7 @@
                     {
                         <div class="col-1">
 
-                            <DieDisplay die="@die" CriticalMatters="@attacker.Sustained"></DieDisplay>
+                            <DieDisplay die="@die" CriticalMatters="@(attacker.Sustained || attacker.Lethal)"></DieDisplay>
                         </div>
                     }
                 </div>

@@ -32,6 +32,20 @@ namespace Snorehammer.Web.Services
                     res.Add(new Dice(targetValue, _random));
                 }
             }
+            if (attack.Lethal)
+            {
+
+                for (int i = 0; i < dicePool.Where(d => d.Critical).Count(); i++)
+                {
+                    //skips rolling and sets result to a 7
+                    res.Add(new Dice(true));
+                }
+                for (int i = 0; i < dicePool.Where(d => d.Success && !d.Critical).Count(); i++)
+                {
+                    res.Add(new Dice(targetValue, _random));
+                }
+                return res;
+            }
             for (int i = 0; i < dicePool.Where(d => d.Success).Count(); i++)
             {
                 res.Add(new Dice(targetValue, _random));
@@ -41,6 +55,7 @@ namespace Snorehammer.Web.Services
         public List<Dice> RollArmorSaves(UnitProfile defender, AttackProfile attack, List<Dice> dicePool)
         {
             var res = new List<Dice>();
+            var targetValue = DetermineArmorSave(defender, attack);
             if (attack.Devastating)
             {
                 for (int i = 0; i < dicePool.Where(d => d.Critical).Count(); i++)
@@ -48,13 +63,18 @@ namespace Snorehammer.Web.Services
                     //skips rolling and sets result to a 7
                     res.Add(new Dice(true));
                 }
+                for (int i = 0; i < dicePool.Where(d => d.Success && !d.Critical).Count(); i++)
+                {
+                    res.Add(new Dice(targetValue, _random));
+                }
+                return res;
             }
-            var targetValue = DetermineArmorSave(defender, attack);
-            for (int i = 0; i < dicePool.Where(d => d.Success && !d.Critical).Count(); i++)
+            for (int i = 0; i < dicePool.Where(d => d.Success).Count(); i++)
             {
                 res.Add(new Dice(targetValue, _random));
             }
             return res;
+
         }
 
         public int DetermineArmorSave(UnitProfile defender, AttackProfile attack)
