@@ -118,7 +118,7 @@ namespace Snorehammer.Web.Services.Tests
             //assert
             res.Should().Contain("1 out of 1 attacks broke through armor.");
             res.Should().Contain("1 wounds inflicted to defender.");
-            res.Should().Contain("leaving it with 1 remaining");
+            res.Should().Contain("The model has 1 wound(s) remaining");
         }
         [Test]
         public void WinnerMessageDestroyedSingleModel ()

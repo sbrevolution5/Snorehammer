@@ -85,25 +85,25 @@ namespace Snorehammer.Web.Services
             if (inflictedWounds > 0)
             {
                 res.Append($"{inflictedWounds} wounds inflicted to defender.");
+
+                int totalWounds = defender.Wounds * defender.ModelCount;
+                var destroyedModels = inflictedWounds / defender.Wounds;
+                if (destroyedModels >= defender.ModelCount)
+                {
+                    res.Append("The entire unit was destroyed");
+                    return res.ToString();
+                }
                 if (defender.ModelCount > 1)
                 {
-
-                    int totalWounds = defender.Wounds * defender.ModelCount;
-                    var destroyedModels = inflictedWounds / defender.Wounds;
-                    if (destroyedModels >= defender.ModelCount)
+                    res.Append($"{destroyedModels} out of {defender.ModelCount} models were destroyed");
+                    int woundRemainder = inflictedWounds % defender.Wounds;
+                    if (woundRemainder != 0)
                     {
-                        res.Append("The entire unit was destroyed");
-                    }
-                    else
-                    {
-                        res.Append($"{destroyedModels} out of {defender.ModelCount} models were destroyed");
-                        if (inflictedWounds % defender.Wounds != 0)
-                        {
-                            res.Append($"A remaining model was inflicted {inflictedWounds % defender.Wounds} wounds, leaving it with {defender.Wounds} remaining");
-                        }
+                        res.Append($"A remaining model was inflicted {woundRemainder} wounds, leaving it with {defender.Wounds - woundRemainder} remaining");
                     }
                     return res.ToString();
                 }
+                res.Append($"The model has {defender.Wounds - inflictedWounds} wound(s) remaining");
             }
             return res.ToString();
         }
