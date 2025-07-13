@@ -11,5 +11,6 @@
         public int Damage { get; set; }
         public bool Devastating { get; set; } = false;
         public bool Sustained { get; set; } = false;
+        public bool Lethal { get; set; } = false;
     }
 }
