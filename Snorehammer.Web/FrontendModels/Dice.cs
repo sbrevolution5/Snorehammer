@@ -22,5 +22,9 @@
         public int Result { get; set; }
         public bool Critical { get; set; }
         public int CriticalThreshold { get; set; }
+        public void Reroll(Random random)
+        {
+            Result = random.Next(1, Sides+1);
+        }
     }
 }
