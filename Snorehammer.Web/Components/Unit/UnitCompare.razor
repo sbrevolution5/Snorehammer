@@ -79,6 +79,9 @@
             <h3>Winner:</h3>
             <p>@sim.WinnerMessage</p>
         }
+        else{
+            <h1>LOADING</h1>
+        }
     </div>
     <div class="col-6">
 
@@ -113,10 +116,12 @@
             };
         return base.OnInitializedAsync();
     }
-    private void FightUnits()
+    private async Task FightUnits()
     {
         FightComplete = false;
         ResetDice();
+        StateHasChanged();
+        await Task.Yield();
         fightSimulationService = new FightSimulationService();
         sim.AttackDice = fightSimulationService.SimulateToHitRoll(attacker);
         sim.StrengthDice = fightSimulationService.RollStrengthStep(defender, attacker, sim.AttackDice);

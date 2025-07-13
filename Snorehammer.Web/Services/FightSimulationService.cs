@@ -13,7 +13,7 @@ namespace Snorehammer.Web.Services
         }
         public List<Dice> SimulateToHitRoll(AttackProfile attack)
         {
-            _random = new Random();
+            _random = new Random(Guid.NewGuid().GetHashCode());
             var res = new List<Dice>();
             for (int i = 0; i < attack.Attacks; i++)
             {

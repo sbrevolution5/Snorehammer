@@ -2,11 +2,6 @@
 {
     public class Dice
     {
-        public Dice(int target)
-        {
-            Target = target;
-            Result = new Random().Next(1, Sides);
-        }
         public Dice (int target, Random random)
         {
             Target = target;
