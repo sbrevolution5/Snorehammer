@@ -10,6 +10,12 @@
             Success = Target <= Result;
             Critical = CriticalThreshold == Result;
         }
+        public Dice(bool success)
+        {
+            Success = success;
+            Critical = success;
+            Result = Sides + 1;
+        }
         public int Target { get; set; }
         public int Sides { get; set; } = 6;
         public bool Success { get; set; }

@@ -34,9 +34,15 @@ namespace Snorehammer.Web.Services
         public List<Dice> RollArmorSaves(UnitProfile defender, AttackProfile attack, List<Dice> dicePool)
         {
             var res = new List<Dice>();
+            if (attack.Devastating) {
+                for (int i = 0; i < dicePool.Where(d=>d.Critical).Count(); i++)
+                {
+                    //skips rolling and sets result to a 7
+                    res.Add(new Dice(true));
+                }
+            }
             var targetValue = DetermineArmorSave(defender, attack);
-            var roller = new Random();
-            for (int i = 0; i < dicePool.Where(d => d.Success).Count(); i++)
+            for (int i = 0; i < dicePool.Where(d => d.Success && !d.Critical).Count(); i++)
             {
                 res.Add(new Dice(targetValue, _random));
             }
