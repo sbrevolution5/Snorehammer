@@ -10,6 +10,6 @@
         public int MinimumSave { get; set; }
         public int InvulnerableSave { get; set; }
         public int ModelCount { get; set; }
-
+        public bool ArmorReroll { get; set; }
     }
 }
