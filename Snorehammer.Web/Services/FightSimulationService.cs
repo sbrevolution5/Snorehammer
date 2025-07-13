@@ -19,6 +19,16 @@ namespace Snorehammer.Web.Services
             {
                 res.Add(new Dice(attack.Skill, _random));
             }
+            if (attack.RerollHit) {
+                
+                var failed = res.Where(d => !d.Success);
+                res = res.Where(d=> d.Success).ToList();
+                foreach (var die in failed)
+                {
+                    die.Reroll(_random);
+                    res.Add(die);
+                }
+            }
             return res;
         }
         public List<Dice> RollStrengthStep(UnitProfile defender, AttackProfile attack, List<Dice> dicePool)
@@ -50,6 +60,16 @@ namespace Snorehammer.Web.Services
             {
                 res.Add(new Dice(targetValue, _random));
             }
+            if (attack.RerollWound)
+            {
+                var failed = res.Where(d => !d.Success);
+                res = res.Where(d => d.Success).ToList();
+                foreach (var die in failed)
+                {
+                    die.Reroll(_random);
+                    res.Add(die);
+                }
+            }
             return res;
         }
         public List<Dice> RollArmorSaves(UnitProfile defender, AttackProfile attack, List<Dice> dicePool)
@@ -67,11 +87,31 @@ namespace Snorehammer.Web.Services
                 {
                     res.Add(new Dice(targetValue, _random));
                 }
+                if (attack.RerollWound)
+                {
+                    var failed = res.Where(d => !d.Success);
+                    res = res.Where(d => d.Success).ToList();
+                    foreach (var die in failed)
+                    {
+                        die.Reroll(_random);
+                        res.Add(die);
+                    }
+                }
                 return res;
             }
             for (int i = 0; i < dicePool.Where(d => d.Success).Count(); i++)
             {
                 res.Add(new Dice(targetValue, _random));
+            }
+            if (attack.RerollWound)
+            {
+                var failed = res.Where(d => !d.Success);
+                res = res.Where(d => d.Success).ToList();
+                foreach (var die in failed)
+                {
+                    die.Reroll(_random);
+                    res.Add(die);
+                }
             }
             return res;
 
