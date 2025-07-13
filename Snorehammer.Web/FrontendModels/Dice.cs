@@ -2,7 +2,7 @@
 {
     public class Dice
     {
-        public Dice (int target, Random random,int criticalThreshold = 6)
+        public Dice (int target, Random random, int criticalThreshold = 6)
         {
             Target = target;
             CriticalThreshold = criticalThreshold;
