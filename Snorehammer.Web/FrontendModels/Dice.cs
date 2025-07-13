@@ -6,7 +6,7 @@
         {
             Target = target;
             CriticalThreshold = criticalThreshold;
-            Result = random.Next(1, Sides);
+            Result = random.Next(1, Sides+1);
             Success = Target <= Result;
             Critical = CriticalThreshold == Result;
         }
