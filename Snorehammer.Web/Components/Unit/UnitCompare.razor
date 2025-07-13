@@ -27,7 +27,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    @foreach (var die in AttackDice)
+                    @foreach (var die in sim.AttackDice)
                     {
                         <div class="col-1">
 
@@ -43,11 +43,11 @@
                         <h3>Target: @fightSimulationService.DetermineWoundTarget(defender.Toughness,attacker.Strength)</h3>
                     </div>
                     <div class="col-6">
-                        <h3>Rolling: @AttackDice.Where(d=>d.Success).Count()</h3>
+                        <h3>Rolling: @sim.AttackDice.Where(d=>d.Success).Count()</h3>
                     </div>
                 </div>
                 <div class="row">
-                    @foreach (var die in StrengthDice)
+                    @foreach (var die in sim.StrengthDice)
                     {
                         <div class="col-1">
 
@@ -62,10 +62,10 @@
                     <h3>Target: @fightSimulationService.DetermineArmorSave(defender, attacker)</h3>
                 </div>
                 <div class="col-6">
-                    <h3>Rolling: @StrengthDice.Where(d => d.Success).Count()</h3>
+                    <h3>Rolling: @sim.StrengthDice.Where(d => d.Success).Count()</h3>
                 </div>
                 <div class="row">
-                    @foreach (var die in ArmorDice)
+                    @foreach (var die in sim.ArmorDice)
                     {
                         <div class="col-1">
 
@@ -86,12 +86,9 @@
 </div>
 <button @onclick="FightUnits">Go again?</button>
 @code {
+    private FightSimulation sim { get; set; } = new FightSimulation();
     private UnitProfile defender { get; set; }
     private bool FightComplete { get; set; } = false;
-    private List<Dice> AttackDice { get; set; }
-    private List<Dice> StrengthDice { get; set; }
-    private List<Dice> ArmorDice { get; set; }
-    private List<Dice> WoundDice { get; set; }
     private string WinnerMessage { get; set; } = "";
     private AttackProfile attacker { get; set; }
     private FightSimulationService fightSimulationService = new FightSimulationService();
@@ -122,16 +119,14 @@
         FightComplete = false;
         ResetDice();
         fightSimulationService = new FightSimulationService();
-        AttackDice = fightSimulationService.SimulateToHitRoll(attacker);
-        StrengthDice = fightSimulationService.RollStrengthStep(defender, attacker, AttackDice);
-        ArmorDice = fightSimulationService.RollArmorSaves(defender, attacker, StrengthDice);
-        WinnerMessage = fightSimulationService.GenerateWinnerMessage(defender, attacker, ArmorDice);
+        sim.AttackDice = fightSimulationService.SimulateToHitRoll(attacker);
+        sim.StrengthDice = fightSimulationService.RollStrengthStep(defender, attacker, sim.AttackDice);
+        sim.ArmorDice = fightSimulationService.RollArmorSaves(defender, attacker, sim.StrengthDice);
+        WinnerMessage = fightSimulationService.GenerateWinnerMessage(defender, attacker, sim.ArmorDice);
         FightComplete = true;
     }
     private void ResetDice()
     {
-        AttackDice = new List<Dice>();
-        StrengthDice = new List<Dice>();
-        ArmorDice = new List<Dice>();
+        sim = new FightSimulation();
     }
 }
