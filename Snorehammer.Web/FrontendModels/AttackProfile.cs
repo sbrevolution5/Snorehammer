@@ -9,5 +9,6 @@
         public int Strength { get; set; }
         public int ArmorPenetration { get; set; }
         public int Damage { get; set; }
+        public bool Devastating { get; set; } = false;
     }
 }
