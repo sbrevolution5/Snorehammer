@@ -50,6 +50,20 @@
             <InputCheckbox @bind-Value="attack.Lethal" />
         </label>
     </div>
+    <div>
+        <label>
+            Reroll all (i.e. oath of moment)
+        </label>
+        <label>Hits
+            <InputCheckbox @bind-Value="attack.RerollHit" />
+        </label>
+        <label>Wounds
+            <InputCheckbox @bind-Value="attack.RerollWound" />
+        </label>
+        <label>Damage
+            <InputCheckbox @bind-Value="attack.RerollDamage" />
+        </label>
+    </div>
 </EditForm>
 @code {
     [Parameter]

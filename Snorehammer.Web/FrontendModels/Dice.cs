@@ -25,6 +25,8 @@
         public void Reroll(Random random)
         {
             Result = random.Next(1, Sides+1);
+            Success = Target <= Result;
+            Critical = CriticalThreshold == Result;
         }
     }
 }
