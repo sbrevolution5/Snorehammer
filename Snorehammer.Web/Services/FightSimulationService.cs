@@ -6,13 +6,14 @@ namespace Snorehammer.Web.Services
 {
     public class FightSimulationService
     {
-        private readonly Random _random;
+        private Random _random;
         public FightSimulationService()
         {
             _random = new Random();
         }
         public List<Dice> SimulateToHitRoll(AttackProfile attack)
         {
+            _random = new Random();
             var res = new List<Dice>();
             for (int i = 0; i < attack.Attacks; i++)
             {
@@ -90,20 +91,20 @@ namespace Snorehammer.Web.Services
                 var destroyedModels = inflictedWounds / defender.Wounds;
                 if (destroyedModels >= defender.ModelCount)
                 {
-                    res.Append("The entire unit was destroyed");
+                    res.Append("The entire unit was destroyed.\n");
                     return res.ToString();
                 }
                 if (defender.ModelCount > 1)
                 {
-                    res.Append($"{destroyedModels} out of {defender.ModelCount} models were destroyed");
+                    res.Append($"{destroyedModels} out of {defender.ModelCount} models were destroyed.\n");
                     int woundRemainder = inflictedWounds % defender.Wounds;
                     if (woundRemainder != 0)
                     {
-                        res.Append($"A remaining model was inflicted {woundRemainder} wounds, leaving it with {defender.Wounds - woundRemainder} remaining");
+                        res.Append($"A remaining model was inflicted {woundRemainder} wounds, leaving it with {defender.Wounds - woundRemainder} remaining.\n");
                     }
                     return res.ToString();
                 }
-                res.Append($"The model has {defender.Wounds - inflictedWounds} wound(s) remaining");
+                res.Append($"The model has {defender.Wounds - inflictedWounds} wound(s) remaining.\n");
             }
             return res.ToString();
         }
