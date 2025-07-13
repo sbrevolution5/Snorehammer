@@ -12,5 +12,8 @@
         public bool Devastating { get; set; } = false;
         public bool Sustained { get; set; } = false;
         public bool Lethal { get; set; } = false;
+        public bool RerollHit { get; set; } = false;
+        public bool RerollWound { get; set; } = false;
+        public bool RerollDamage { get; set; } = false;
     }
 }
