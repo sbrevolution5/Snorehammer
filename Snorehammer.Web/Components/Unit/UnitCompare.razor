@@ -43,7 +43,16 @@
                         <h3>Target: @fightSimulationService.DetermineWoundTarget(defender.Toughness,attacker.Strength)</h3>
                     </div>
                     <div class="col-6">
-                        <h3>Rolling: @sim.AttackDice.Where(d=>d.Success).Count()</h3>
+                        <h3>Rolling:
+                            @sim.AttackDice.Where(d => d.Success).Count() 
+                            @{
+                                var sustainedDice = sim.AttackDice.Where(d => d.Critical).Count() > 0;
+                            }
+                            @if (attacker.Sustained && sustainedDice)
+                            {
+                                <span> + @sim.AttackDice.Where(d=>d.Critical).Count() (sustained)</span>
+                            }
+                        </h3>
                     </div>
                 </div>
                 <div class="row">
