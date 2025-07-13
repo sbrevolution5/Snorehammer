@@ -60,6 +60,16 @@ namespace Snorehammer.Web.Services
             {
                 res.Add(new Dice(targetValue, _random));
             }
+            if (attack.RerollWound)
+            {
+                var failed = res.Where(d => !d.Success);
+                res = res.Where(d => d.Success).ToList();
+                foreach (var die in failed)
+                {
+                    die.Reroll(_random);
+                    res.Add(die);
+                }
+            }
             return res;
         }
         public List<Dice> RollArmorSaves(UnitProfile defender, AttackProfile attack, List<Dice> dicePool)
