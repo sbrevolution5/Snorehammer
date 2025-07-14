@@ -2,52 +2,60 @@
 <h3>UnitInput</h3>
 @if (loaded == true)
 {
-
     <EditForm Model="@Unit">
-        <table>
-            <tr>
-                <th>Name</th>
-                <th>Saving Throw</th>
-                <th>Invulnerable Save</th>
-                <th>Toughness</th>
-                <th>Model Wounds</th>
-                <th>Number of Models</th>
-            </tr>
-            <tr>
-                <td>
-                    <InputText @bind-Value="Unit.Name"></InputText>
-                </td>
-                <td>
-                    <InputNumber @bind-Value="Unit.MinimumSave"></InputNumber>
+        <RadzenRow AlignItems="AlignItems.End" Wrap="FlexWrap.Wrap" Gap="1rem" class="rz-p-sm-12">
+            <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+                <RadzenFormField Text="Name" Variant="Variant.Flat">
 
-                </td>
-                <td>
-                    <InputNumber @bind-Value="Unit.InvulnerableSave"></InputNumber>
-                </td>
-                <td>
-                    <InputNumber @bind-Value="Unit.Toughness"></InputNumber>
-                </td>
-                <td>
-                    <InputNumber @bind-Value="Unit.Wounds"></InputNumber>
-                </td>
-                <td>
-                    <InputNumber @bind-Value="Unit.ModelCount"></InputNumber>
-                </td>
-            </tr>
-        </table>
-        <label>
-            <InputCheckbox @bind-Value="Unit.ArmorReroll" />
-            Reroll all failed armor saves
-        </label>
-        <label>
-            <InputCheckbox @bind-Value="Unit.FeelNoPain" />
-            Feel No Pain
-            <InputNumber @bind-Value ="Unit.FeelNoPainTarget" disabled="@(!Unit.FeelNoPain)"/>
-        </label>
-        <label>
-            <InputCheckbox @bind-Value="Unit.HasCover" />
-            Has Cover
-        </label>
+                    <RadzenTextBox @bind-Value="Unit.Name" />
+                </RadzenFormField>
+            </RadzenColumn>
+            <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+                <RadzenFormField Text="Saving Throw" Variant="Variant.Flat">
+
+                    <RadzenNumeric @bind-Value="Unit.MinimumSave" />
+                </RadzenFormField>
+            </RadzenColumn>
+            <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+                <RadzenFormField Text="Invulnerable Save" Variant="Variant.Flat">
+
+                    <RadzenNumeric @bind-Value="Unit.InvulnerableSave" />
+                </RadzenFormField>
+            </RadzenColumn>
+            <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+                <RadzenFormField Text="Toughness" Variant="Variant.Flat">
+
+                    <RadzenNumeric @bind-Value="Unit.Toughness" />
+                </RadzenFormField>
+            </RadzenColumn>
+            <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+                <RadzenFormField Text="Model Wounds" Variant="Variant.Flat">
+
+                    <RadzenNumeric @bind-Value="Unit.Wounds" />
+                </RadzenFormField>
+            </RadzenColumn>
+            <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+                <RadzenFormField Text="Number of Models" Variant="Variant.Flat">
+
+                    <RadzenNumeric @bind-Value="Unit.ModelCount" />
+                </RadzenFormField>
+            </RadzenColumn>
+        </RadzenRow>
+        <div class="rz-p-12 rz-text-align-center">
+            <RadzenCheckBox @bind-Value=@Unit.ArmorReroll Name="ArmorReroll" />
+            <RadzenLabel Text="Reroll all failed armor saves" Component="ArmorReroll" class="rz-ms-2" />
+        </div>
+        <div class="rz-p-12 rz-text-align-center">
+            <RadzenCheckBox @bind-Value=@Unit.FeelNoPain Name="FeelNoPain" />
+            <RadzenLabel Text="Feel No Pain" Component="FeelNoPain" class="rz-ms-2" />
+            <RadzenFormField Text="Outlined/Default" Style="width: 100%;">
+                <RadzenNumeric @bind-Value="@Unit.FeelNoPainTarget" Disabled=!Unit.FeelNoPain />
+            </RadzenFormField>
+        </div>
+        <div class="rz-p-12 rz-text-align-center">
+            <RadzenCheckBox @bind-Value=@Unit.HasCover Name="HasCover" />
+            <RadzenLabel Text="Has Cover" Component="HasCover" class="rz-ms-2" />
+        </div>
     </EditForm>
 }
 
@@ -60,8 +68,8 @@
     [Parameter] public bool Attacker { get; set; }
     protected override Task OnInitializedAsync()
     {
-        
-        
+
+
         loaded = true;
         return base.OnInitializedAsync();
     }
