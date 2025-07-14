@@ -1,111 +1,84 @@
 ﻿@using Snorehammer.Web.FrontendModels
 <h3>AttackInput</h3>
 <EditForm Model="@attack">
-    <div>
-        <label>
-            Rolls Number of attacks
-            <InputCheckbox @bind-Value="attack.IsVariableAttacks" />
-        </label>
+    <div class="rz-p-12 rz-text-align-center">
+        <RadzenCheckBox @bind-Value=@attack.IsVariableAttacks Name="Variable" />
+        <RadzenLabel Text="Roll for # of attacks" Component="Variable" class="rz-ms-2" />
     </div>
-    <table>
-        <tr>
+    <RadzenRow AlignItems="AlignItems.End" Wrap="FlexWrap.Wrap" Gap="1rem" class="rz-p-sm-12">
+            <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
             @if (attack.IsVariableAttacks)
             {
-                <th>X*(y) + z (variable attacks)</th>
+                <RadzenFormField Text="X * y + z" Variant="Variant.Flat">
+
+                    <RadzenNumeric @bind-Value="attack.VariableDiceNumber" />
+                    <RadzenNumeric @bind-Value="attack.VariableDiceSides" />
+                    <RadzenNumeric @bind-Value="attack.VariableDiceConstant" />
+                </RadzenFormField>
             }
             else
             {
-                <th>Attacks</th>
+                
+            <RadzenFormField Text="Number of attacks" Variant="Variant.Flat">
+
+                    <RadzenNumeric @bind-Value="attack.Attacks" />
+                </RadzenFormField>
             }
-            <th>Skill</th>
-            <th>Strength</th>
-            <th>Armor Penetration</th>
-            <th>Damage</th>
-        </tr>
-        <tr>
-            <td>
-                @if (attack.IsVariableAttacks)
-                {
-                    <row>
+            </RadzenColumn>
+            <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+                <RadzenFormField Text="To hit" Variant="Variant.Flat">
 
-                        <InputNumber @bind-Value="attack.VariableDiceNumber"></InputNumber>
-                        <InputNumber @bind-Value="attack.VariableDiceSides"></InputNumber>
-                        <span>+</span>
-                        <InputNumber @bind-Value="attack.VariableDiceConstant"></InputNumber>
-                    </row>
+                    <RadzenNumeric @bind-Value="attack.Skill" />
+                </RadzenFormField>
+            </RadzenColumn>
+            <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+                <RadzenFormField Text="Strength" Variant="Variant.Flat">
 
-                }
-                else
-                {
+                    <RadzenNumeric @bind-Value="attack.Strength" />
+                </RadzenFormField>
+            </RadzenColumn>
+            <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+                <RadzenFormField Text="Damage" Variant="Variant.Flat">
 
-                    <InputNumber @bind-Value="attack.Attacks"></InputNumber>
-                }
-            </td>
-            <td>
+                    <RadzenNumeric @bind-Value="attack.Damage" />
+                </RadzenFormField>
+            </RadzenColumn>
+            </RadzenRow>
+    <RadzenRow AlignItems="AlignItems.End" Wrap="FlexWrap.Wrap" Gap="1rem" class="rz-p-sm-12">
 
-                <InputNumber @bind-Value="attack.Skill"></InputNumber>
-            </td>
-            <td>
-
-                <InputNumber @bind-Value="attack.Strength"></InputNumber>
-            </td>
-            <td>
-
-                <InputNumber @bind-Value="attack.ArmorPenetration"></InputNumber>
-            </td>
-            <td>
-
-                <InputNumber @bind-Value="attack.Damage"></InputNumber>
-            </td>
-        </tr>
-    </table>
-    <div>
-        <label>
-            Devastating Wounds
-            <InputCheckbox @bind-Value="attack.Devastating" />
-        </label>
+    <div class="rz-p-12 rz-text-align-center">
+        <RadzenCheckBox @bind-Value=@attack.Devastating Name="Devastating" />
+        <RadzenLabel Text="Devastating Wounds" Component="Devastating" class="rz-ms-2" />
     </div>
-    <div>
-        <label>
-            Sustained Hits
-            <InputCheckbox @bind-Value="attack.Sustained" />
-        </label>
+    <div class="rz-p-12 rz-text-align-center">
+        <RadzenCheckBox @bind-Value=@attack.Sustained Name="Sustained" />
+        <RadzenLabel Text="Sustained Hits" Component="Sustained" class="rz-ms-2" />
     </div>
-    <div>
-        <label>
-            Lethal Hits
-            <InputCheckbox @bind-Value="attack.Lethal" />
-        </label>
+    <div class="rz-p-12 rz-text-align-center">
+        <RadzenCheckBox @bind-Value=@attack.Lethal Name="Lethal" />
+        <RadzenLabel Text="Lethal" Component="Lethal" class="rz-ms-2" />
     </div>
-    <div>
-        <label>
-            Torrent
-            <InputCheckbox @bind-Value="attack.Torrent" />
-        </label>
+    <div class="rz-p-12 rz-text-align-center">
+        <RadzenCheckBox @bind-Value=@attack.Torrent Name="Torrent" />
+        <RadzenLabel Text="Torrent" Component="Torrent" class="rz-ms-2" />
     </div>
-    <div>
-        <label>
-            Blast
-            <InputCheckbox @bind-Value="attack.Blast" />
-        </label>
+    <div class="rz-p-12 rz-text-align-center">
+        <RadzenCheckBox @bind-Value=@attack.Blast Name="Blast" />
+        <RadzenLabel Text="Blast" Component="Blast" class="rz-ms-2" />
     </div>
-    <div>
-        <label>
-            Reroll all (i.e. oath of moment):
-        </label>
-        <label>
-            <InputCheckbox @bind-Value="attack.RerollHit" />
-            Hits
-        </label>
-        <label>
-            <InputCheckbox @bind-Value="attack.RerollWound" />
-            Wounds
-        </label>
-        <label>
-            <InputCheckbox @bind-Value="attack.RerollDamage" />
-            Damage
-        </label>
+    <div class="rz-p-12 rz-text-align-center">
+        <RadzenCheckBox @bind-Value=@attack.RerollHit Name="RerollHit" />
+        <RadzenLabel Text="Reroll Hit" Component="RerollHit" class="rz-ms-2" />
     </div>
+    <div class="rz-p-12 rz-text-align-center">
+        <RadzenCheckBox @bind-Value=@attack.RerollWound Name="RerollWound" />
+        <RadzenLabel Text="Reroll Wounds" Component="RerollWound" class="rz-ms-2" />
+    </div>
+    <div class="rz-p-12 rz-text-align-center">
+        <RadzenCheckBox @bind-Value=@attack.RerollDamage Name="RerollDamage" />
+        <RadzenLabel Text="Reroll Damage" Component="RerollDamage" class="rz-ms-2" />
+    </div>
+    </RadzenRow>
 </EditForm>
 @code {
     [Parameter]
