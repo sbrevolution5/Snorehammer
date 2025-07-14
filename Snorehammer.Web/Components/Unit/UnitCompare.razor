@@ -4,9 +4,6 @@
 @using Snorehammer.Web.Services
 @rendermode InteractiveServer
 <h3>UnitCompare</h3>
-<div class="container">
-    <div class="col-6">
-
         <h4>Attacker</h4>
         <AttackInput @bind-attack="attacker"></AttackInput>
         <h4>Defender</h4>
@@ -147,11 +144,6 @@
         else{
             <h1>LOADING</h1>
         }
-    </div>
-    <div class="col-6">
-
-    </div>
-</div>
 <button @onclick="FightUnits">Go again?</button>
 @code {
     private FightSimulation sim { get; set; } = new FightSimulation();
