@@ -135,7 +135,7 @@
         sim.AttackDice = fightSimulationService.SimulateToHitRoll(attacker);
         sim.StrengthDice = fightSimulationService.RollStrengthStep(defender, attacker, sim.AttackDice);
         sim.ArmorDice = fightSimulationService.RollArmorSaves(defender, attacker, sim.StrengthDice);
-        sim.WinnerMessage = fightSimulationService.GenerateWinnerMessage(defender, attacker, sim.ArmorDice);
+        sim.WinnerMessage = fightSimulationService.GenerateWinnerMessage(defender, attacker, sim);
         FightComplete = true;
     }
     private void ResetDice()

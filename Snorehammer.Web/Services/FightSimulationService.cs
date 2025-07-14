@@ -164,12 +164,16 @@ namespace Snorehammer.Web.Services
             }
             return res;
         }
-        public string GenerateWinnerMessage(UnitProfile defender, AttackProfile attack, List<Dice> armorSaves)
+        public string GenerateWinnerMessage(UnitProfile defender, AttackProfile attack, FightSimulation sim)
         {
             var res = new StringBuilder();
-            var successful = armorSaves.Where(d => !d.Success).Count();
+            var successful = sim.ArmorDice.Where(d => !d.Success).Count();
             res.Append($"{successful} out of {attack.Attacks} attacks broke through armor.");
             int inflictedWounds = successful * attack.Damage;
+            if (defender.FeelNoPain)
+            {
+                res.Append($"x wounds were avoided by Feel No Pain");
+            }
             if (inflictedWounds > 0)
             {
                 res.Append($"{inflictedWounds} wounds inflicted to defender.");
