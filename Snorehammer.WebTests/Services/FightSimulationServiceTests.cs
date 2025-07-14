@@ -17,6 +17,7 @@ namespace Snorehammer.Web.Services.Tests
         private AttackProfile attacker;
         private UnitProfile unitProfile;
         private List<Dice> diceList;
+        private FightSimulation sim;
         private Random random = A.Fake<Random>();
         [SetUp]
         public void Setup()
@@ -43,7 +44,12 @@ namespace Snorehammer.Web.Services.Tests
                 Wounds = 2
             };
             diceList = new List<Dice>();
-            sim = new FightSimulation
+            sim = new FightSimulation();
+        }
+        [TearDown]
+        public void cleanup()
+        {
+            diceList = null;
         }
         [Test]
         public void WinnerMessageFNPBlocksNone()
@@ -55,8 +61,9 @@ namespace Snorehammer.Web.Services.Tests
             {
                 diceList.Add(new Dice(unitProfile.MinimumSave, random));
             }
+            sim.ArmorDice = diceList;
             //act
-            var res = service.GenerateWinnerMessage(unitProfile, attacker, diceList);
+            var res = service.GenerateWinnerMessage(unitProfile, attacker, sim);
             //assert
             res.Should().Contain("0 out of 20 wounds blocked by feel no pain.");
             res.Should().Contain("20 wounds inflicted to defender.");
@@ -72,8 +79,9 @@ namespace Snorehammer.Web.Services.Tests
             {
                 diceList.Add(new Dice(unitProfile.MinimumSave, random));
             }
+            sim.ArmorDice = diceList;
             //act
-            var res = service.GenerateWinnerMessage(unitProfile, attacker, diceList);
+            var res = service.GenerateWinnerMessage(unitProfile, attacker, sim);
             //assert
             res.Should().Contain("20 out of 20 attacks broke through armor.");
             res.Should().Contain("20 wounds inflicted to defender.");
@@ -89,8 +97,9 @@ namespace Snorehammer.Web.Services.Tests
             {
                 diceList.Add(new Dice(unitProfile.MinimumSave, random));
             }
+            sim.ArmorDice = diceList;
             //act
-            var res = service.GenerateWinnerMessage(unitProfile, attacker, diceList);
+            var res = service.GenerateWinnerMessage(unitProfile, attacker, sim);
             //assert
             res.Should().Contain("20 out of 20 attacks broke through armor.");
             res.Should().Contain("20 wounds inflicted to defender.");
@@ -106,8 +115,9 @@ namespace Snorehammer.Web.Services.Tests
             {
                 diceList.Add(new Dice(unitProfile.MinimumSave, random));
             }
+            sim.ArmorDice = diceList;
             //act
-            var res = service.GenerateWinnerMessage(unitProfile, attacker, diceList);
+            var res = service.GenerateWinnerMessage(unitProfile, attacker, sim);
             //assert
             res.Should().Contain("20 out of 20 attacks broke through armor.");
             res.Should().Contain("20 wounds inflicted to defender.");
@@ -129,8 +139,9 @@ namespace Snorehammer.Web.Services.Tests
             {
                 diceList.Add(new Dice(unitProfile.MinimumSave, random));
             }
+            sim.ArmorDice = diceList;
             //act
-            var res = service.GenerateWinnerMessage(unitProfile, attacker, diceList);
+            var res = service.GenerateWinnerMessage(unitProfile, attacker, sim);
             //assert
             res.Should().Contain("10 out of 20 attacks broke through armor.");
             res.Should().Contain("10 wounds inflicted to defender.");
@@ -148,8 +159,9 @@ namespace Snorehammer.Web.Services.Tests
             {
                 diceList.Add(new Dice(unitProfile.MinimumSave, random));
             }
+            sim.ArmorDice = diceList;
             //act
-            var res = service.GenerateWinnerMessage(unitProfile, attacker, diceList);
+            var res = service.GenerateWinnerMessage(unitProfile, attacker,  sim);
             //assert
             res.Should().Contain("1 out of 20 attacks broke through armor.");
             res.Should().Contain("1 wounds inflicted to defender.");
@@ -165,8 +177,9 @@ namespace Snorehammer.Web.Services.Tests
             attacker.Attacks = 1;
             unitProfile.ModelCount = 1;
             diceList.Add(new Dice(unitProfile.MinimumSave, random));
+            sim.ArmorDice = diceList;
             //act
-            var res = service.GenerateWinnerMessage(unitProfile, attacker, diceList);
+            var res = service.GenerateWinnerMessage(unitProfile, attacker, sim);
             //assert
             res.Should().Contain("1 out of 1 attacks broke through armor.");
             res.Should().Contain("1 wounds inflicted to defender.");
@@ -183,8 +196,9 @@ namespace Snorehammer.Web.Services.Tests
             {
                 diceList.Add(new Dice(unitProfile.MinimumSave, random));
             }
+            sim.ArmorDice = diceList;
             //act
-            var res = service.GenerateWinnerMessage(unitProfile, attacker, diceList);
+            var res = service.GenerateWinnerMessage(unitProfile, attacker, sim);
             //assert
             res.Should().Contain("20 out of 20 attacks broke through armor.");
             res.Should().Contain("20 wounds inflicted to defender.");
@@ -199,8 +213,9 @@ namespace Snorehammer.Web.Services.Tests
             {
                 diceList.Add(new Dice(unitProfile.MinimumSave, random));
             }
+            sim.ArmorDice = diceList;
             //act
-            var res = service.GenerateWinnerMessage(unitProfile, attacker, diceList);
+            var res = service.GenerateWinnerMessage(unitProfile, attacker, sim);
             //assert
             res.Should().Contain("0 out of 2 attacks broke through armor.");
 
