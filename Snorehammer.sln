@@ -10,8 +10,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snorehammer.ApiService", "S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snorehammer.Web", "Snorehammer.Web\Snorehammer.Web.csproj", "{6EF3C70E-FC85-CC84-5580-2BB83D07F60C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snorehammer.Tests", "Snorehammer.Tests\Snorehammer.Tests.csproj", "{A6AEA8E8-DAC9-E953-9BEC-8F49818D2934}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snorehammer.WebTests", "Snorehammer.WebTests\Snorehammer.WebTests.csproj", "{194308FE-A457-4464-B14C-78FAF43A0320}"
 EndProject
 Global
@@ -36,10 +34,6 @@ Global
 		{6EF3C70E-FC85-CC84-5580-2BB83D07F60C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6EF3C70E-FC85-CC84-5580-2BB83D07F60C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6EF3C70E-FC85-CC84-5580-2BB83D07F60C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A6AEA8E8-DAC9-E953-9BEC-8F49818D2934}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A6AEA8E8-DAC9-E953-9BEC-8F49818D2934}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A6AEA8E8-DAC9-E953-9BEC-8F49818D2934}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A6AEA8E8-DAC9-E953-9BEC-8F49818D2934}.Release|Any CPU.Build.0 = Release|Any CPU
 		{194308FE-A457-4464-B14C-78FAF43A0320}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{194308FE-A457-4464-B14C-78FAF43A0320}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{194308FE-A457-4464-B14C-78FAF43A0320}.Release|Any CPU.ActiveCfg = Release|Any CPU

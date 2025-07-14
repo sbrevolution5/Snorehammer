@@ -2,7 +2,7 @@
 {
     public class Dice
     {
-        public Dice (int target, Random random, int criticalThreshold = 6)
+        public Dice (int target, Random random, int sides= 6,int criticalThreshold = 6)
         {
             Target = target;
             CriticalThreshold = criticalThreshold;
@@ -14,13 +14,23 @@
         {
             Success = success;
             Critical = success;
-            Result = Sides + 1;
+            Result = success? Sides + 1 : 0;
+            if (!success) {
+                AutoFailed = true;
+            }
         }
         public int Target { get; set; }
         public int Sides { get; set; } = 6;
         public bool Success { get; set; }
         public int Result { get; set; }
         public bool Critical { get; set; }
+        public bool AutoFailed { get; set; } = false;
         public int CriticalThreshold { get; set; }
+        public void Reroll(Random random)
+        {
+            Result = random.Next(1, Sides+1);
+            Success = Target <= Result;
+            Critical = CriticalThreshold == Result;
+        }
     }
 }

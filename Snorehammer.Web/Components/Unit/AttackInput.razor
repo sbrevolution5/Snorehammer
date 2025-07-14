@@ -1,9 +1,22 @@
 ﻿@using Snorehammer.Web.FrontendModels
 <h3>AttackInput</h3>
 <EditForm Model="@attack">
+    <div>
+        <label>
+            Rolls Number of attacks
+            <InputCheckbox @bind-Value="attack.IsVariableAttacks" />
+        </label>
+    </div>
     <table>
         <tr>
-            <th>Attacks</th>
+            @if (attack.IsVariableAttacks)
+            {
+                <th>X*(y) + z (variable attacks)</th>
+            }
+            else
+            {
+                <th>Attacks</th>
+            }
             <th>Skill</th>
             <th>Strength</th>
             <th>Armor Penetration</th>
@@ -11,8 +24,22 @@
         </tr>
         <tr>
             <td>
+                @if (attack.IsVariableAttacks)
+                {
+                    <row>
 
-                <InputNumber @bind-Value="attack.Attacks"></InputNumber>
+                        <InputNumber @bind-Value="attack.VariableDiceNumber"></InputNumber>
+                        <InputNumber @bind-Value="attack.VariableDiceSides"></InputNumber>
+                        <span>+</span>
+                        <InputNumber @bind-Value="attack.VariableDiceConstant"></InputNumber>
+                    </row>
+
+                }
+                else
+                {
+
+                    <InputNumber @bind-Value="attack.Attacks"></InputNumber>
+                }
             </td>
             <td>
 
@@ -42,6 +69,41 @@
         <label>
             Sustained Hits
             <InputCheckbox @bind-Value="attack.Sustained" />
+        </label>
+    </div>
+    <div>
+        <label>
+            Lethal Hits
+            <InputCheckbox @bind-Value="attack.Lethal" />
+        </label>
+    </div>
+    <div>
+        <label>
+            Torrent
+            <InputCheckbox @bind-Value="attack.Torrent" />
+        </label>
+    </div>
+    <div>
+        <label>
+            Blast
+            <InputCheckbox @bind-Value="attack.Blast" />
+        </label>
+    </div>
+    <div>
+        <label>
+            Reroll all (i.e. oath of moment):
+        </label>
+        <label>
+            <InputCheckbox @bind-Value="attack.RerollHit" />
+            Hits
+        </label>
+        <label>
+            <InputCheckbox @bind-Value="attack.RerollWound" />
+            Wounds
+        </label>
+        <label>
+            <InputCheckbox @bind-Value="attack.RerollDamage" />
+            Damage
         </label>
     </div>
 </EditForm>
