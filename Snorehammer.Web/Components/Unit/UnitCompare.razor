@@ -152,11 +152,11 @@
     {
         await ResetDice();
         fightSimulationService.SimulateToHitRoll(sim);
-        sim.StrengthDice = fightSimulationService.RollStrengthStep(sim);
-        sim.ArmorDice = fightSimulationService.RollArmorSaves(sim);
+        fightSimulationService.RollStrengthStep(sim);
+        fightSimulationService.RollArmorSaves(sim);
         if (defender.FeelNoPain)
         {
-            sim.FeelNoPainDice = fightSimulationService.RollFeelNoPain(sim);
+            fightSimulationService.RollFeelNoPain(sim);
         }
         sim.WinnerMessage = fightSimulationService.GenerateWinnerMessage(sim);
         FightComplete = true;

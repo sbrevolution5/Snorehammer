@@ -40,15 +40,14 @@ namespace Snorehammer.Web.Services
                 }
             }
         }
-        public List<Dice> RollStrengthStep(FightSimulation sim)
+        public void RollStrengthStep(FightSimulation sim)
         {
-            var res = new List<Dice>();
             var targetValue = DetermineWoundTarget(sim.Defender.Toughness, sim.AttackProfile.Strength);
             if (sim.AttackProfile.Sustained)
             {
                 for (int i = 0; i < sim.AttackDice.Where(d => d.Critical).Count(); i++)
                 {
-                    res.Add(new Dice(targetValue, _random));
+                    sim.StrengthDice.Add(new Dice(targetValue, _random));
                 }
             }
             if (sim.AttackProfile.Lethal)
@@ -57,44 +56,42 @@ namespace Snorehammer.Web.Services
                 for (int i = 0; i < sim.AttackDice.Where(d => d.Critical).Count(); i++)
                 {
                     //skips rolling and sets result to a 7
-                    res.Add(new Dice(true));
+                    sim.StrengthDice.Add(new Dice(true));
                 }
                 for (int i = 0; i < sim.AttackDice.Where(d => d.Success && !d.Critical).Count(); i++)
                 {
-                    res.Add(new Dice(targetValue, _random));
+                    sim.StrengthDice.Add(new Dice(targetValue, _random));
                 }
-                return res;
             }
             for (int i = 0; i < sim.AttackDice.Where(d => d.Success).Count(); i++)
             {
-                res.Add(new Dice(targetValue, _random));
+                sim.StrengthDice.Add(new Dice(targetValue, _random));
             }
             if (sim.AttackProfile.RerollWound)
             {
-                var failed = res.Where(d => !d.Success);
-                res = res.Where(d => d.Success).ToList();
+                var failed = sim.StrengthDice.Where(d => !d.Success);
+                sim.StrengthDice = sim.StrengthDice.Where(d => d.Success).ToList();
                 foreach (var die in failed)
                 {
                     die.Reroll(_random);
-                    res.Add(die);
+                    sim.StrengthDice.Add(die);
                 }
             }
-            return res;
         }
-        public List<Dice> RollArmorSaves(FightSimulation sim)
+        public void RollArmorSaves(FightSimulation sim)
         {
-            var res = new List<Dice>();
+
             var targetValue = DetermineArmorSave(sim);
             if (sim.AttackProfile.Devastating)
             {
                 for (int i = 0; i < sim.StrengthDice.Where(d => d.Critical).Count(); i++)
                 {
                     //skips rolling and sets result to an automatic failure
-                    res.Add(new Dice(false));
+                    sim.ArmorDice.Add(new Dice(false));
                 }
                 for (int i = 0; i < sim.StrengthDice.Where(d => d.Success && !d.Critical).Count(); i++)
                 {
-                    res.Add(new Dice(targetValue, _random));
+                    sim.ArmorDice.Add(new Dice(targetValue, _random));
                 }
             }
             else
@@ -102,20 +99,19 @@ namespace Snorehammer.Web.Services
 
                 for (int i = 0; i < sim.StrengthDice.Where(d => d.Success).Count(); i++)
                 {
-                    res.Add(new Dice(targetValue, _random));
+                    sim.ArmorDice.Add(new Dice(targetValue, _random));
                 }
             }
             if (sim.AttackProfile.RerollWound)
             {
-                var failed = res.Where(d => !d.Success);
-                res = res.Where(d => d.Success).ToList();
+                var failed = sim.ArmorDice.Where(d => !d.Success);
+                sim.ArmorDice = sim.ArmorDice.Where(d => d.Success).ToList();
                 foreach (var die in failed)
                 {
                     die.Reroll(_random);
-                    res.Add(die);
+                    sim.ArmorDice.Add(die);
                 }
             }
-            return res;
 
         }
 
@@ -182,18 +178,17 @@ namespace Snorehammer.Web.Services
                 return 3;
             }
         }
-        public List<Dice> RollFeelNoPain(FightSimulation sim)
+        public void RollFeelNoPain(FightSimulation sim)
         {
             if (!sim.Defender.FeelNoPain)
             {
                 throw new InvalidOperationException("Defender has no Feel no pain save, and attempted to roll one");
             }
-            var res = new List<Dice>();
             for (int i = 0; i < sim.ArmorDice.Where(d=>!d.Success).Count()*sim.AttackProfile.Damage; i++)
             {
-                res.Add(new Dice(sim.Defender.FeelNoPainTarget, _random));
+                sim.FeelNoPainDice.Add(new Dice(sim.Defender.FeelNoPainTarget, _random));
             }
-            return res;
+
         }
         public string GenerateWinnerMessage(FightSimulation sim)
         {
