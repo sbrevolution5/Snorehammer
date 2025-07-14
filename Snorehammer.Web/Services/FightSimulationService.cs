@@ -11,45 +11,47 @@ namespace Snorehammer.Web.Services
         {
             _random = new Random();
         }
-        public List<Dice> SimulateToHitRoll(FightSimulation sim)
+        public void SimulateToHitRoll(FightSimulation sim)
         {
             _random = new Random(Guid.NewGuid().GetHashCode());
-            var res = new List<Dice>();
+            sim.AttackDice = new List<Dice>();
             if (sim.AttackProfile.Torrent)
             {
                 for (int i = 0; i<sim.AttackProfile.Attacks; i++)
                 {
-                    res.Add(new Dice(true));
+                    sim.AttackDice.Add(new Dice(true));
                 }
+                //torrent attacks don't count as criticals, incase there are lethal hits or sustained involved
+                sim.AttackDice.Select(d => d.Critical = false);
+                return;
             }
             for (int i = 0; i < sim.AttackProfile.Attacks; i++)
             {
-                res.Add(new Dice(sim.AttackProfile.Skill, _random));
+                sim.AttackDice.Add(new Dice(sim.AttackProfile.Skill, _random));
             }
             if (sim.AttackProfile.RerollHit) {
                 
-                var failed = res.Where(d => !d.Success);
-                res = res.Where(d=> d.Success).ToList();
+                var failed = sim.AttackDice.Where(d => !d.Success);
+                sim.AttackDice = sim.AttackDice.Where(d=> d.Success).ToList();
                 foreach (var die in failed)
                 {
                     die.Reroll(_random);
-                    res.Add(die);
+                    sim.AttackDice.Add(die);
                 }
             }
-            return res;
         }
         public List<Dice> RollStrengthStep(FightSimulation sim)
         {
             var res = new List<Dice>();
             var targetValue = DetermineWoundTarget(sim.Defender.Toughness, sim.AttackProfile.Strength);
-            if (sim.AttackProfile.Sustained && !sim.AttackProfile.Torrent)
+            if (sim.AttackProfile.Sustained)
             {
                 for (int i = 0; i < sim.AttackDice.Where(d => d.Critical).Count(); i++)
                 {
                     res.Add(new Dice(targetValue, _random));
                 }
             }
-            if (sim.AttackProfile.Lethal && !sim.AttackProfile.Torrent)
+            if (sim.AttackProfile.Lethal)
             {
 
                 for (int i = 0; i < sim.AttackDice.Where(d => d.Critical).Count(); i++)
