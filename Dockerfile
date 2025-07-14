@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 # Copy csproj and restore dependencies
@@ -11,7 +11,7 @@ RUN dotnet build "Snorehammer.Web/Snorehammer.Web.csproj" -c Release -o /app/bui
 RUN dotnet publish "Snorehammer.Web/Snorehammer.Web.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 # Final stage/image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+FROM mcr.microsoft.com/dotnet/sdk:8.0
 WORKDIR /app
 COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "Snorehammer.Web.dll"]
