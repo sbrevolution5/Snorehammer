@@ -14,13 +14,17 @@
         {
             Success = success;
             Critical = success;
-            Result = Sides + 1;
+            Result = success? Sides + 1 : 0;
+            if (!success) {
+                AutoFailed = true;
+            }
         }
         public int Target { get; set; }
         public int Sides { get; set; } = 6;
         public bool Success { get; set; }
         public int Result { get; set; }
         public bool Critical { get; set; }
+        public bool AutoFailed { get; set; } = false;
         public int CriticalThreshold { get; set; }
         public void Reroll(Random random)
         {

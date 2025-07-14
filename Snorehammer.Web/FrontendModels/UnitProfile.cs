@@ -13,5 +13,6 @@
         public bool ArmorReroll { get; set; }
         public bool FeelNoPain { get; set; }
         public int FeelNoPainTarget { get; set; } = 6;
+        public bool HasCover { get; set; }
     }
 }

@@ -9,6 +9,8 @@
         public List<Dice> ArmorDice { get; set; } = new List<Dice>();
         public List<Dice> WoundDice { get; set; } = new List<Dice>();
         public List<Dice> FeelNoPainDice { get; set; } = new List<Dice>();
+        public int ArmorSave { get; set; } = 0;
+        public bool CoverIgnored { get; set; } = false;
         public string WinnerMessage { get; set; } = "";
     }
 }

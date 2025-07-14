@@ -75,13 +75,13 @@ namespace Snorehammer.Web.Services
         public List<Dice> RollArmorSaves(FightSimulation sim)
         {
             var res = new List<Dice>();
-            var targetValue = DetermineArmorSave(sim.Defender, sim.AttackProfile);
+            var targetValue = DetermineArmorSave(sim);
             if (sim.AttackProfile.Devastating)
             {
                 for (int i = 0; i < sim.StrengthDice.Where(d => d.Critical).Count(); i++)
                 {
-                    //skips rolling and sets result to a 7
-                    res.Add(new Dice(true));
+                    //skips rolling and sets result to an automatic failure
+                    res.Add(new Dice(false));
                 }
                 for (int i = 0; i < sim.StrengthDice.Where(d => d.Success && !d.Critical).Count(); i++)
                 {
@@ -110,14 +110,43 @@ namespace Snorehammer.Web.Services
 
         }
 
-        public int DetermineArmorSave(UnitProfile defender, AttackProfile attack)
+        public int DetermineArmorSave(FightSimulation sim)
         {
-            int moddedSave = defender.MinimumSave - attack.ArmorPenetration;
-            if (moddedSave < defender.InvulnerableSave || defender.InvulnerableSave == 0)
+            int moddedSave = sim.Defender.MinimumSave + sim.AttackProfile.ArmorPenetration;
+
+            if (sim.Defender.HasCover)
             {
+                if ((sim.Defender.MinimumSave > 4 && sim.AttackProfile.ArmorPenetration == 0) || sim.AttackProfile.ArmorPenetration > 0)
+                {
+                    moddedSave--;
+                }
+                else
+                {
+                    sim.CoverIgnored = true;
+                }
+
+            }
+            if (moddedSave < 2)
+            {
+                moddedSave = 2;
+            }
+            if (moddedSave < sim.Defender.InvulnerableSave || sim.Defender.InvulnerableSave == 0)
+            {
+                if (moddedSave < 3 && sim.Defender.MinimumSave <=3)
+                {
+                    sim.CoverIgnored = true;
+                    sim.ArmorSave = sim.Defender.MinimumSave;
+                    return sim.Defender.MinimumSave;
+                }
+                sim.ArmorSave = moddedSave;
                 return moddedSave;
             }
-            return defender.InvulnerableSave;
+            if (sim.Defender.HasCover)
+            {
+                sim.CoverIgnored = true;
+            }
+            sim.ArmorSave = sim.Defender.InvulnerableSave;
+            return sim.Defender.InvulnerableSave;
         }
 
         public int DetermineWoundTarget(int toughness, int strength)
@@ -199,30 +228,5 @@ namespace Snorehammer.Web.Services
             }
             return res.ToString();
         }
-
-        public void SimulateSimpleFight(UnitProfile defender, AttackProfile attack)
-        {
-            int dicePool = attack.Attacks;
-            Random roller = new Random();
-            List<int> dice = new List<int>();
-            for (int i = 0; i < dicePool; i++)
-            {
-                dice.Add(roller.Next(1, 6));
-            }
-            var remaining = dice.Where(i => i >= attack.Skill);
-            Console.WriteLine("%s attacks connected", remaining.Count());
-            for (int i = 0; i < remaining.Count(); i++)
-            {
-                //remaining number of dice get rolled, need result based on strength vs tough.
-
-            }
-            for (int i = 0; i < dicePool; i++)
-            {
-                //Check AP
-            }
-            // subtract wounds
-            //determine killer
-        }
-
     }
 }
