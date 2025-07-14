@@ -15,6 +15,13 @@ namespace Snorehammer.Web.Services
         {
             _random = new Random(Guid.NewGuid().GetHashCode());
             var res = new List<Dice>();
+            if (sim.AttackProfile.Torrent)
+            {
+                for (int i = 0; i<sim.AttackProfile.Attacks; i++)
+                {
+                    res.Add(new Dice(true));
+                }
+            }
             for (int i = 0; i < sim.AttackProfile.Attacks; i++)
             {
                 res.Add(new Dice(sim.AttackProfile.Skill, _random));
@@ -35,14 +42,14 @@ namespace Snorehammer.Web.Services
         {
             var res = new List<Dice>();
             var targetValue = DetermineWoundTarget(sim.Defender.Toughness, sim.AttackProfile.Strength);
-            if (sim.AttackProfile.Sustained)
+            if (sim.AttackProfile.Sustained && !sim.AttackProfile.Torrent)
             {
                 for (int i = 0; i < sim.AttackDice.Where(d => d.Critical).Count(); i++)
                 {
                     res.Add(new Dice(targetValue, _random));
                 }
             }
-            if (sim.AttackProfile.Lethal)
+            if (sim.AttackProfile.Lethal && !sim.AttackProfile.Torrent)
             {
 
                 for (int i = 0; i < sim.AttackDice.Where(d => d.Critical).Count(); i++)
