@@ -17,8 +17,10 @@ namespace Snorehammer.Web.Services.Tests
         private AttackProfile attacker;
         private UnitProfile unitProfile;
         private List<Dice> diceList;
+        private List<Dice> fnpDiceList;
         private FightSimulation sim;
         private Random random = A.Fake<Random>();
+        private Random fnpRandom = A.Fake<Random>();
         [SetUp]
         public void Setup()
         {
@@ -45,23 +47,33 @@ namespace Snorehammer.Web.Services.Tests
             };
             diceList = new List<Dice>();
             sim = new FightSimulation();
+            fnpDiceList = new List<Dice>();
+
         }
         [TearDown]
         public void cleanup()
         {
+            sim = null;
+            attacker = null;
+            unitProfile = null;
+            service = null;
             diceList = null;
         }
         [Test]
         public void WinnerMessageFNPBlocksNone()
         {
             //arrange
-            A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(6))).Returns(2);
+            A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(2);
+            unitProfile.FeelNoPain = true;
+            A.CallTo(() => fnpRandom.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(1);
             attacker.Attacks = 20;
             for (int i = 0; i < 20; i++)
             {
                 diceList.Add(new Dice(unitProfile.MinimumSave, random));
+                fnpDiceList.Add(new Dice(unitProfile.FeelNoPainTarget, fnpRandom));
             }
             sim.ArmorDice = diceList;
+            sim.FeelNoPainDice = fnpDiceList;
             //act
             var res = service.GenerateWinnerMessage(unitProfile, attacker, sim);
             //assert
@@ -73,7 +85,7 @@ namespace Snorehammer.Web.Services.Tests
         public void WinnerMessageFNPBlocksOne()
         {
             //arrange
-            A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(6))).Returns(2);
+            A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(2);
             attacker.Attacks = 20;
             for (int i = 0; i < 20; i++)
             {
@@ -91,7 +103,7 @@ namespace Snorehammer.Web.Services.Tests
         public void WinnerMessageFNPBlocksAll()
         {
             //arrange
-            A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(6))).Returns(2);
+            A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(2);
             attacker.Attacks = 20;
             for (int i = 0; i < 20; i++)
             {
@@ -109,7 +121,7 @@ namespace Snorehammer.Web.Services.Tests
         public void WinnerMessageUnitKilled()
         {
             //arrange
-            A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(6))).Returns(2);
+            A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(2);
             attacker.Attacks = 20;
             for (int i = 0; i < 20; i++)
             {
@@ -133,7 +145,7 @@ namespace Snorehammer.Web.Services.Tests
                 sequence.Add(2);
                 sequence.Add(3);
             }
-            A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(6))).ReturnsNextFromSequence(sequence.ToArray());
+            A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).ReturnsNextFromSequence(sequence.ToArray());
             attacker.Attacks = 20;
             for (int i = 0; i < 20; i++)
             {
@@ -152,8 +164,8 @@ namespace Snorehammer.Web.Services.Tests
         {
             //arrange
             
-            A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(6))).Returns(3);
-            A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(6))).ReturnsNextFromSequence(1);
+            A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(3);
+            A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).ReturnsNextFromSequence(1);
             attacker.Attacks = 20;
             for (int i = 0; i < 20; i++)
             {
@@ -173,7 +185,7 @@ namespace Snorehammer.Web.Services.Tests
         {
             //arrange
 
-            A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(6))).Returns(2);
+            A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(2);
             attacker.Attacks = 1;
             unitProfile.ModelCount = 1;
             diceList.Add(new Dice(unitProfile.MinimumSave, random));
@@ -189,7 +201,7 @@ namespace Snorehammer.Web.Services.Tests
         public void WinnerMessageDestroyedSingleModel ()
         {
             //arrange
-            A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(6))).Returns(1);
+            A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(1);
             attacker.Attacks = 20;
             unitProfile.ModelCount = 1;
             for (int i = 0; i < 20; i++)
@@ -208,7 +220,7 @@ namespace Snorehammer.Web.Services.Tests
         public void WinnerMessage0Damage()
         {
             //arrange
-            A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1),A<int>.That.IsEqualTo(6))).Returns(3);
+            A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1),A<int>.That.IsEqualTo(7))).Returns(3);
             for (int i = 0; i < 2; i++)
             {
                 diceList.Add(new Dice(unitProfile.MinimumSave, random));
