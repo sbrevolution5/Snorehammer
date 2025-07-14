@@ -23,10 +23,15 @@ namespace Snorehammer.Web.Services
         public void RollToHit(FightSimulation sim)
         {
             sim.ToHitDice = new List<Dice>();
+            sim.BlastBonus = sim.Defender.ModelCount / 5;
             sim.AttackNumber = sim.AttackProfile.Attacks;
             if (sim.AttackDice.Count != 0)
             {
                 sim.AttackNumber = sim.AttackDice.Sum(d => d.Result) + sim.AttackProfile.VariableDiceConstant;
+                if (sim.AttackProfile.Blast)
+                {
+                    sim.AttackNumber += sim.BlastBonus;
+                }
             }
             if (sim.AttackProfile.Torrent)
             {

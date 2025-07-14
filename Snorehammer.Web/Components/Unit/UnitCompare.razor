@@ -16,7 +16,7 @@
         {
 
             <h1>Results</h1>
-            </br>
+            <br/>
             @if (sim.AttackProfile.IsVariableAttacks)
             {
                 
@@ -24,7 +24,14 @@
             <div class="container">
                 <div class="row">
                     <div class="col-6">
-                        <h3>Rolling: @attacker.VariableDiceNumber d @attacker.VariableDiceSides + @attacker.VariableDiceConstant</h3>
+                            <h3>Rolling: @attacker.VariableDiceNumber
+                                d @attacker.VariableDiceSides
+                                + @attacker.VariableDiceConstant
+                                @if (sim.BlastBonus >0)
+                                {
+                                    <span> + @sim.BlastBonus</span>
+                                }
+                            </h3>
                     </div>
                     <div class="col-6">
                         <h3> Total: @sim.AttackNumber</h3>
