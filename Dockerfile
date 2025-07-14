@@ -1,5 +1,5 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /src/Snorehammer.Web
+WORKDIR /Snorehammer.Web
 
 # Copy csproj and restore dependencies
 COPY ["Snorehammer.Web.csproj", "./"]
