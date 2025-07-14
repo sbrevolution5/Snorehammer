@@ -23,14 +23,14 @@ namespace Snorehammer.Web.Services
         public void RollToHit(FightSimulation sim)
         {
             sim.ToHitDice = new List<Dice>();
-            var attackNumber = sim.AttackProfile.Attacks;
+            sim.AttackNumber = sim.AttackProfile.Attacks;
             if (sim.AttackDice.Count != 0)
             {
-                attackNumber = sim.AttackDice.Sum(d => d.Result) + sim.AttackProfile.VariableDiceConstant;
+                sim.AttackNumber = sim.AttackDice.Sum(d => d.Result) + sim.AttackProfile.VariableDiceConstant;
             }
             if (sim.AttackProfile.Torrent)
             {
-                for (int i = 0; i < attackNumber; i++)
+                for (int i = 0; i < sim.AttackNumber; i++)
                 {
                     sim.ToHitDice.Add(new Dice(true));
                 }
@@ -38,7 +38,7 @@ namespace Snorehammer.Web.Services
                 sim.ToHitDice.ForEach(d => d.Critical = false);
                 return;
             }
-            for (int i = 0; i < attackNumber; i++)
+            for (int i = 0; i < sim.AttackNumber; i++)
             {
                 sim.ToHitDice.Add(new Dice(sim.AttackProfile.Skill, _random));
             }

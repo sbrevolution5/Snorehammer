@@ -16,7 +16,31 @@
         {
 
             <h4>results</h4>
-            <h2>Attack Results</h2>
+            @if (sim.AttackProfile.IsVariableAttacks)
+            {
+                
+            <h2>Number Of Attacks</h2>
+            <div class="container">
+                <div class="row">
+                    <div class="col-6">
+                        <h3>Rolling: @attacker.VariableDiceNumber d @attacker.VariableDiceSides + @attacker.VariableDiceConstant</h3>
+                    </div>
+                    <div class="col-6">
+                        <h3> Total: @sim.AttackNumber</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    @foreach (var die in sim.AttackDice)
+                    {
+                        <div class="col-1">
+
+                            <DieDisplay die="@die"></DieDisplay>
+                        </div>
+                    }
+                </div>
+            </div>
+            }
+            <h2>To Hit Results</h2>
             <div class="container">
                 <div class="row">
                     <div class="col-6">
@@ -151,6 +175,10 @@
     private async Task FightUnits()
     {
         await ResetDice();
+        if (sim.AttackProfile.IsVariableAttacks)
+        {
+            fightSimulationService.RollAttackDice(sim);
+        }
         fightSimulationService.RollToHit(sim);
         fightSimulationService.RollStrengthStep(sim);
         fightSimulationService.RollArmorSaves(sim);
