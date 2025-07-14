@@ -158,7 +158,7 @@ namespace Snorehammer.Web.Services
                 throw new InvalidOperationException("Defender has no Feel no pain save, and attempted to roll one");
             }
             var res = new List<Dice>();
-            for (int i = 0; i < sim.ArmorDice.Where(d=>d.Success).Count(); i++)
+            for (int i = 0; i < sim.ArmorDice.Where(d=>d.Success).Count()*attack.Damage; i++)
             {
                 res.Add(new Dice(defender.FeelNoPainTarget, _random));
             }
@@ -170,9 +170,16 @@ namespace Snorehammer.Web.Services
             var successful = sim.ArmorDice.Where(d => !d.Success).Count();
             res.Append($"{successful} out of {attack.Attacks} attacks broke through armor.");
             int inflictedWounds = successful * attack.Damage;
-            if (defender.FeelNoPain)
+            if (defender.FeelNoPain && sim.FeelNoPainDice.Where(d => d.Success).Any())
             {
-                res.Append($"x wounds were avoided by Feel No Pain");
+                var fnpBlockedWounds = sim.FeelNoPainDice.Where(d => d.Success ).Count();
+                if(fnpBlockedWounds == inflictedWounds)
+                {
+                    res.Append("All wounds blocked by feel no pain");
+                    return res.ToString();
+                }
+                res.Append($"x of {inflictedWounds} wounds were avoided by Feel No Pain");
+                inflictedWounds -= fnpBlockedWounds;
             }
             if (inflictedWounds > 0)
             {
