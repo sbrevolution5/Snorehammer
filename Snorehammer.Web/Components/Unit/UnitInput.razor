@@ -42,7 +42,7 @@
         <label>
             <InputCheckbox @bind-Value="Unit.FeelNoPain" />
             Feel No Pain
-            <InputNumber @bind-Value ="Unit.FeelNoPainTarget" />
+            <InputNumber @bind-Value ="Unit.FeelNoPainTarget" disabled="@(!Unit.FeelNoPain)"/>
         </label>
     </EditForm>
 }
