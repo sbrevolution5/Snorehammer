@@ -199,30 +199,5 @@ namespace Snorehammer.Web.Services
             }
             return res.ToString();
         }
-
-        public void SimulateSimpleFight(UnitProfile defender, AttackProfile attack)
-        {
-            int dicePool = attack.Attacks;
-            Random roller = new Random();
-            List<int> dice = new List<int>();
-            for (int i = 0; i < dicePool; i++)
-            {
-                dice.Add(roller.Next(1, 6));
-            }
-            var remaining = dice.Where(i => i >= attack.Skill);
-            Console.WriteLine("%s attacks connected", remaining.Count());
-            for (int i = 0; i < remaining.Count(); i++)
-            {
-                //remaining number of dice get rolled, need result based on strength vs tough.
-
-            }
-            for (int i = 0; i < dicePool; i++)
-            {
-                //Check AP
-            }
-            // subtract wounds
-            //determine killer
-        }
-
     }
 }
