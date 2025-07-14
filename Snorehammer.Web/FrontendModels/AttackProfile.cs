@@ -17,5 +17,8 @@
         public bool RerollDamage { get; set; } = false;
         public bool Torrent { get; set; } = false;
         public bool Blast { get; set; } = false;
+        public bool IsVariableAttacks { get; set; } = false;
+        public int VariableDiceNumber { get; set; }
+        public int VariableDiceSides { get; set; }
     }
 }
