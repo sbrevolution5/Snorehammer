@@ -11,7 +11,8 @@
         <AttackInput @bind-attack="attacker"></AttackInput>
         <h4>Defender</h4>
         <UnitInput @bind-Unit="defender" Attacker=false></UnitInput>
-        <button @onclick="FightUnits">Fight</button><button @onclick="ResetDice">Reset</button>
+        <RadzenButton Click=@(()=>FightUnits()) Text="Fight Units" ButtonStyle="ButtonStyle.Primary" />
+        <RadzenButton Click=@(()=>ResetDice()) Text="Reset" ButtonStyle="ButtonStyle.Danger" />
         @if (FightComplete)
         {
 
