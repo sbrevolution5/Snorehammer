@@ -9,34 +9,53 @@ namespace Snorehammer.Web.Services
         private Random _random;
         public FightSimulationService()
         {
-            _random = new Random();
-        }
-        public void SimulateToHitRoll(FightSimulation sim)
-        {
             _random = new Random(Guid.NewGuid().GetHashCode());
+        }
+        public void RollAttackDice(FightSimulation sim)
+        {
             sim.AttackDice = new List<Dice>();
+            for (int i = 0; i < sim.AttackProfile.VariableDiceNumber; i++)
+            {
+                //0 because target doesn't matter here
+                sim.AttackDice.Add(new Dice(7, _random,sim.AttackProfile.VariableDiceSides));
+            }
+        }
+        public void RollToHit(FightSimulation sim)
+        {
+            sim.ToHitDice = new List<Dice>();
+            sim.BlastBonus = sim.Defender.ModelCount / 5;
+            sim.AttackNumber = sim.AttackProfile.Attacks;
+            if (sim.AttackDice.Count != 0)
+            {
+                sim.AttackNumber = sim.AttackDice.Sum(d => d.Result) + sim.AttackProfile.VariableDiceConstant;
+                if (sim.AttackProfile.Blast)
+                {
+                    sim.AttackNumber += sim.BlastBonus;
+                }
+            }
             if (sim.AttackProfile.Torrent)
             {
-                for (int i = 0; i<sim.AttackProfile.Attacks; i++)
+                for (int i = 0; i < sim.AttackNumber; i++)
                 {
-                    sim.AttackDice.Add(new Dice(true));
+                    sim.ToHitDice.Add(new Dice(true));
                 }
                 //torrent attacks don't count as criticals, incase there are lethal hits or sustained involved
-                sim.AttackDice.Select(d => d.Critical = false);
+                sim.ToHitDice.ForEach(d => d.Critical = false);
                 return;
             }
-            for (int i = 0; i < sim.AttackProfile.Attacks; i++)
+            for (int i = 0; i < sim.AttackNumber; i++)
             {
-                sim.AttackDice.Add(new Dice(sim.AttackProfile.Skill, _random));
+                sim.ToHitDice.Add(new Dice(sim.AttackProfile.Skill, _random));
             }
-            if (sim.AttackProfile.RerollHit) {
-                
-                var failed = sim.AttackDice.Where(d => !d.Success);
-                sim.AttackDice = sim.AttackDice.Where(d=> d.Success).ToList();
+            if (sim.AttackProfile.RerollHit)
+            {
+
+                var failed = sim.ToHitDice.Where(d => !d.Success);
+                sim.ToHitDice = sim.ToHitDice.Where(d => d.Success).ToList();
                 foreach (var die in failed)
                 {
                     die.Reroll(_random);
-                    sim.AttackDice.Add(die);
+                    sim.ToHitDice.Add(die);
                 }
             }
         }
@@ -45,7 +64,7 @@ namespace Snorehammer.Web.Services
             var targetValue = DetermineWoundTarget(sim.Defender.Toughness, sim.AttackProfile.Strength);
             if (sim.AttackProfile.Sustained)
             {
-                for (int i = 0; i < sim.AttackDice.Where(d => d.Critical).Count(); i++)
+                for (int i = 0; i < sim.ToHitDice.Where(d => d.Critical).Count(); i++)
                 {
                     sim.StrengthDice.Add(new Dice(targetValue, _random));
                 }
@@ -53,17 +72,17 @@ namespace Snorehammer.Web.Services
             if (sim.AttackProfile.Lethal)
             {
 
-                for (int i = 0; i < sim.AttackDice.Where(d => d.Critical).Count(); i++)
+                for (int i = 0; i < sim.ToHitDice.Where(d => d.Critical).Count(); i++)
                 {
                     //skips rolling and sets result to a 7
                     sim.StrengthDice.Add(new Dice(true));
                 }
-                for (int i = 0; i < sim.AttackDice.Where(d => d.Success && !d.Critical).Count(); i++)
+                for (int i = 0; i < sim.ToHitDice.Where(d => d.Success && !d.Critical).Count(); i++)
                 {
                     sim.StrengthDice.Add(new Dice(targetValue, _random));
                 }
             }
-            for (int i = 0; i < sim.AttackDice.Where(d => d.Success).Count(); i++)
+            for (int i = 0; i < sim.ToHitDice.Where(d => d.Success).Count(); i++)
             {
                 sim.StrengthDice.Add(new Dice(targetValue, _random));
             }
@@ -137,7 +156,7 @@ namespace Snorehammer.Web.Services
             }
             if (moddedSave < sim.Defender.InvulnerableSave || sim.Defender.InvulnerableSave == 0)
             {
-                if (moddedSave < 3 && sim.Defender.MinimumSave <=3)
+                if (moddedSave < 3 && sim.Defender.MinimumSave <= 3)
                 {
                     sim.CoverIgnored = true;
                     sim.ArmorSave = sim.Defender.MinimumSave;
@@ -184,7 +203,7 @@ namespace Snorehammer.Web.Services
             {
                 throw new InvalidOperationException("Defender has no Feel no pain save, and attempted to roll one");
             }
-            for (int i = 0; i < sim.ArmorDice.Where(d=>!d.Success).Count()*sim.AttackProfile.Damage; i++)
+            for (int i = 0; i < sim.ArmorDice.Where(d => !d.Success).Count() * sim.AttackProfile.Damage; i++)
             {
                 sim.FeelNoPainDice.Add(new Dice(sim.Defender.FeelNoPainTarget, _random));
             }
@@ -198,8 +217,8 @@ namespace Snorehammer.Web.Services
             int inflictedWounds = successful * sim.AttackProfile.Damage;
             if (sim.Defender.FeelNoPain && inflictedWounds != 0)
             {
-                var fnpBlockedWounds = sim.FeelNoPainDice.Where(d => d.Success ).Count();
-                if(fnpBlockedWounds == inflictedWounds)
+                var fnpBlockedWounds = sim.FeelNoPainDice.Where(d => d.Success).Count();
+                if (fnpBlockedWounds == inflictedWounds)
                 {
                     res.Append("All wounds blocked by feel no pain. \n");
                     return res.ToString();
