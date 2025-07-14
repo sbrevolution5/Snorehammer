@@ -92,7 +92,7 @@
                         <h3>Target: @defender.FeelNoPainTarget</h3>
                     </div>
                     <div class="col-6">
-                        <h3>Rolling: @sim.ArmorDice.Where(d => !d.Success).Count()*@attacker.Damage</h3>
+                        <h3>Rolling: @(sim.ArmorDice.Where(d => !d.Success).Count()*attacker.Damage)</h3>
                     </div>
                     <div class="row">
                         @foreach (var die in sim.FeelNoPainDice)
@@ -136,7 +136,7 @@
         attacker = new AttackProfile()
             {
                 ArmorPenetration = -1,
-                Attacks = 2,
+                Attacks = 20,
                 Damage = 1,
                 Skill = 3,
                 Strength = 4

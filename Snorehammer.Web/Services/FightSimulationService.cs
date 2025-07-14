@@ -158,7 +158,7 @@ namespace Snorehammer.Web.Services
                 throw new InvalidOperationException("Defender has no Feel no pain save, and attempted to roll one");
             }
             var res = new List<Dice>();
-            for (int i = 0; i < sim.ArmorDice.Where(d=>d.Success).Count()*attack.Damage; i++)
+            for (int i = 0; i < sim.ArmorDice.Where(d=>!d.Success).Count()*attack.Damage; i++)
             {
                 res.Add(new Dice(defender.FeelNoPainTarget, _random));
             }
@@ -168,22 +168,22 @@ namespace Snorehammer.Web.Services
         {
             var res = new StringBuilder();
             var successful = sim.ArmorDice.Where(d => !d.Success).Count();
-            res.Append($"{successful} out of {attack.Attacks} attacks broke through armor.");
+            res.Append($"{successful} out of {attack.Attacks} attacks broke through armor.\n");
             int inflictedWounds = successful * attack.Damage;
-            if (defender.FeelNoPain && sim.FeelNoPainDice.Where(d => d.Success).Any())
+            if (defender.FeelNoPain && inflictedWounds != 0)
             {
                 var fnpBlockedWounds = sim.FeelNoPainDice.Where(d => d.Success ).Count();
                 if(fnpBlockedWounds == inflictedWounds)
                 {
-                    res.Append("All wounds blocked by feel no pain");
+                    res.Append("All wounds blocked by feel no pain. \n");
                     return res.ToString();
                 }
-                res.Append($"x of {inflictedWounds} wounds were avoided by Feel No Pain");
+                res.Append($"x of {inflictedWounds} wounds were avoided by Feel No Pain. \n");
                 inflictedWounds -= fnpBlockedWounds;
             }
             if (inflictedWounds > 0)
             {
-                res.Append($"{inflictedWounds} wounds inflicted to defender.");
+                res.Append($"{inflictedWounds} wounds inflicted to defender.\n");
 
                 int totalWounds = defender.Wounds * defender.ModelCount;
                 var destroyedModels = inflictedWounds / defender.Wounds;
