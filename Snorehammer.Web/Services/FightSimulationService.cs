@@ -151,6 +151,19 @@ namespace Snorehammer.Web.Services
                 return 3;
             }
         }
+        public List<Dice> RollFeelNoPain(UnitProfile defender, AttackProfile attack, int damageInflicted)
+        {
+            if (!defender.FeelNoPain)
+            {
+                throw new InvalidOperationException("Defender has no Feel no pain save, and attempted to roll one");
+            }
+            var res = new List<Dice>();
+            for (int i = 0; i < damageInflicted; i++)
+            {
+                res.Add(new Dice(defender.FeelNoPainTarget, _random));
+            }
+            return res;
+        }
         public string GenerateWinnerMessage(UnitProfile defender, AttackProfile attack, List<Dice> armorSaves)
         {
             var res = new StringBuilder();
