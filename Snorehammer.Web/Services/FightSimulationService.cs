@@ -13,37 +13,11 @@ namespace Snorehammer.Web.Services
         }
         public void RollAttackDice(FightSimulation sim)
         {
-            sim.ToHitDice = new List<Dice>();
-            var attackNumber = sim.AttackProfile.Attacks;
-            if (sim.AttackDice.Count != 0)
+            sim.AttackDice = new List<Dice>();
+            for (int i = 0; i < sim.AttackProfile.VariableDiceNumber; i++)
             {
-                attackNumber = sim.AttackDice.Sum(d => d.Result) + sim.AttackProfile.VariableDiceConstant;
-            }
-            if (sim.AttackProfile.Torrent)
-            {
-
-                for (int i = 0; i < attackNumber; i++)
-                {
-                    sim.ToHitDice.Add(new Dice(true));
-                }
-                //torrent attacks don't count as criticals, incase there are lethal hits or sustained involved
-                sim.ToHitDice.ForEach(d => d.Critical = false);
-                return;
-            }
-            for (int i = 0; i < attackNumber; i++)
-            {
-                sim.ToHitDice.Add(new Dice(sim.AttackProfile.Skill, _random));
-            }
-            if (sim.AttackProfile.RerollHit)
-            {
-
-                var failed = sim.ToHitDice.Where(d => !d.Success);
-                sim.ToHitDice = sim.ToHitDice.Where(d => d.Success).ToList();
-                foreach (var die in failed)
-                {
-                    die.Reroll(_random);
-                    sim.ToHitDice.Add(die);
-                }
+                //0 because target doesn't matter here
+                sim.AttackDice.Add(new Dice(7, _random,sim.AttackProfile.VariableDiceSides));
             }
         }
         public void RollToHit(FightSimulation sim)
@@ -56,7 +30,6 @@ namespace Snorehammer.Web.Services
             }
             if (sim.AttackProfile.Torrent)
             {
-
                 for (int i = 0; i < attackNumber; i++)
                 {
                     sim.ToHitDice.Add(new Dice(true));
