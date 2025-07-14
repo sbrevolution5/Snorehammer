@@ -77,7 +77,7 @@ namespace Snorehammer.Web.Services.Tests
             //act
             var res = service.GenerateWinnerMessage(unitProfile, attacker, sim);
             //assert
-            res.Should().Contain("0 out of 20 wounds blocked by feel no pain.");
+            res.Should().Contain("0 of 20 wounds blocked by Feel No Pain.");
             res.Should().Contain("20 wounds inflicted to defender.");
             res.Should().Contain("The entire unit was destroyed");
         }
@@ -86,36 +86,46 @@ namespace Snorehammer.Web.Services.Tests
         {
             //arrange
             A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(2);
+            unitProfile.FeelNoPain = true;
+            A.CallTo(() => fnpRandom.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(1);
+            A.CallTo(()=> fnpRandom.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).ReturnsNextFromSequence(6);
             attacker.Attacks = 20;
             for (int i = 0; i < 20; i++)
             {
                 diceList.Add(new Dice(unitProfile.MinimumSave, random));
+                fnpDiceList.Add(new Dice(unitProfile.MinimumSave, fnpRandom));
             }
             sim.ArmorDice = diceList;
+            sim.FeelNoPainDice = fnpDiceList;
             //act
             var res = service.GenerateWinnerMessage(unitProfile, attacker, sim);
             //assert
             res.Should().Contain("20 out of 20 attacks broke through armor.");
-            res.Should().Contain("20 wounds inflicted to defender.");
-            res.Should().Contain("The entire unit was destroyed");
+            res.Should().Contain("1 of 20 wounds blocked by Feel No Pain.");
+            res.Should().Contain("19 wounds inflicted to defender.");
         }
         [Test]
         public void WinnerMessageFNPBlocksAll()
         {
             //arrange
             A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(2);
+            unitProfile.FeelNoPain = true;
+            A.CallTo(() => fnpRandom.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(6);
             attacker.Attacks = 20;
             for (int i = 0; i < 20; i++)
             {
                 diceList.Add(new Dice(unitProfile.MinimumSave, random));
+                fnpDiceList.Add(new Dice(unitProfile.FeelNoPainTarget, fnpRandom));
             }
             sim.ArmorDice = diceList;
+            sim.FeelNoPainDice = fnpDiceList;
             //act
             var res = service.GenerateWinnerMessage(unitProfile, attacker, sim);
             //assert
             res.Should().Contain("20 out of 20 attacks broke through armor.");
-            res.Should().Contain("20 wounds inflicted to defender.");
-            res.Should().Contain("The entire unit was destroyed");
+            res.Should().Contain("All wounds blocked by feel no pain. ");
+            res.Should().NotContain("20 wounds inflicted to defender.");
+            res.Should().NotContain("The entire unit was destroyed");
         }
         [Test]
         public void WinnerMessageUnitKilled()

@@ -178,7 +178,7 @@ namespace Snorehammer.Web.Services
                     res.Append("All wounds blocked by feel no pain. \n");
                     return res.ToString();
                 }
-                res.Append($"x of {inflictedWounds} wounds were avoided by Feel No Pain. \n");
+                res.Append($"{fnpBlockedWounds} of {inflictedWounds} wounds blocked by Feel No Pain. \n");
                 inflictedWounds -= fnpBlockedWounds;
             }
             if (inflictedWounds > 0)
