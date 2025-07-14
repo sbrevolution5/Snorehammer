@@ -15,5 +15,6 @@
         public bool RerollHit { get; set; } = false;
         public bool RerollWound { get; set; } = false;
         public bool RerollDamage { get; set; } = false;
+        public bool Torrent { get; set; } = false;
     }
 }
