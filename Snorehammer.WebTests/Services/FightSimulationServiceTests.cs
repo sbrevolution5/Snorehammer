@@ -109,10 +109,10 @@ namespace Snorehammer.Web.Services.Tests
                 sim.AttackProfile.ArmorPenetration = 1;
                 sim.Defender.HasCover = true;
                 //act
-                service.DetermineArmorSave(sim);
+                var res = service.DetermineArmorSave(sim);
                 //assert
                 sim.CoverIgnored.Should().BeFalse();
-                sim.ArmorSave.Should().Be(3);
+                res.Should().Be(3);
             }
             [Test]
             public void CalculateArmorSaveCoverDoesNotReduceTo2()
@@ -121,10 +121,11 @@ namespace Snorehammer.Web.Services.Tests
                 sim.AttackProfile.ArmorPenetration = 0;
                 sim.Defender.HasCover = true;
                 //act
-                service.DetermineArmorSave(sim);
+                var res = service.DetermineArmorSave(sim);
                 //assert
                 sim.CoverIgnored.Should().BeTrue();
                 sim.ArmorSave.Should().Be(3);
+                res.Should().Be(3);
             }
             [Test]
             public void CalculateArmorSaveIgnoresCoverBecauseInvulnerable()
