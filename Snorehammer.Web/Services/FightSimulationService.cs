@@ -151,14 +151,14 @@ namespace Snorehammer.Web.Services
                 return 3;
             }
         }
-        public List<Dice> RollFeelNoPain(UnitProfile defender, AttackProfile attack, int damageInflicted)
+        public List<Dice> RollFeelNoPain(UnitProfile defender, AttackProfile attack, FightSimulation sim)
         {
             if (!defender.FeelNoPain)
             {
                 throw new InvalidOperationException("Defender has no Feel no pain save, and attempted to roll one");
             }
             var res = new List<Dice>();
-            for (int i = 0; i < damageInflicted; i++)
+            for (int i = 0; i < sim.ArmorDice.Where(d=>d.Success).Count(); i++)
             {
                 res.Add(new Dice(defender.FeelNoPainTarget, _random));
             }
