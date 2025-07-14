@@ -11,15 +11,15 @@ namespace Snorehammer.Web.Services
         {
             _random = new Random();
         }
-        public List<Dice> SimulateToHitRoll(AttackProfile attack)
+        public List<Dice> SimulateToHitRoll(FightSimulation sim)
         {
             _random = new Random(Guid.NewGuid().GetHashCode());
             var res = new List<Dice>();
-            for (int i = 0; i < attack.Attacks; i++)
+            for (int i = 0; i < sim.AttackProfile.Attacks; i++)
             {
-                res.Add(new Dice(attack.Skill, _random));
+                res.Add(new Dice(sim.AttackProfile.Skill, _random));
             }
-            if (attack.RerollHit) {
+            if (sim.AttackProfile.RerollHit) {
                 
                 var failed = res.Where(d => !d.Success);
                 res = res.Where(d=> d.Success).ToList();
@@ -31,36 +31,36 @@ namespace Snorehammer.Web.Services
             }
             return res;
         }
-        public List<Dice> RollStrengthStep(UnitProfile defender, AttackProfile attack, List<Dice> dicePool)
+        public List<Dice> RollStrengthStep(FightSimulation sim)
         {
             var res = new List<Dice>();
-            var targetValue = DetermineWoundTarget(defender.Toughness, attack.Strength);
-            if (attack.Sustained)
+            var targetValue = DetermineWoundTarget(sim.Defender.Toughness, sim.AttackProfile.Strength);
+            if (sim.AttackProfile.Sustained)
             {
-                for (int i = 0; i < dicePool.Where(d => d.Critical).Count(); i++)
+                for (int i = 0; i < sim.AttackDice.Where(d => d.Critical).Count(); i++)
                 {
                     res.Add(new Dice(targetValue, _random));
                 }
             }
-            if (attack.Lethal)
+            if (sim.AttackProfile.Lethal)
             {
 
-                for (int i = 0; i < dicePool.Where(d => d.Critical).Count(); i++)
+                for (int i = 0; i < sim.AttackDice.Where(d => d.Critical).Count(); i++)
                 {
                     //skips rolling and sets result to a 7
                     res.Add(new Dice(true));
                 }
-                for (int i = 0; i < dicePool.Where(d => d.Success && !d.Critical).Count(); i++)
+                for (int i = 0; i < sim.AttackDice.Where(d => d.Success && !d.Critical).Count(); i++)
                 {
                     res.Add(new Dice(targetValue, _random));
                 }
                 return res;
             }
-            for (int i = 0; i < dicePool.Where(d => d.Success).Count(); i++)
+            for (int i = 0; i < sim.AttackDice.Where(d => d.Success).Count(); i++)
             {
                 res.Add(new Dice(targetValue, _random));
             }
-            if (attack.RerollWound)
+            if (sim.AttackProfile.RerollWound)
             {
                 var failed = res.Where(d => !d.Success);
                 res = res.Where(d => d.Success).ToList();
@@ -72,38 +72,31 @@ namespace Snorehammer.Web.Services
             }
             return res;
         }
-        public List<Dice> RollArmorSaves(UnitProfile defender, AttackProfile attack, List<Dice> dicePool)
+        public List<Dice> RollArmorSaves(FightSimulation sim)
         {
             var res = new List<Dice>();
-            var targetValue = DetermineArmorSave(defender, attack);
-            if (attack.Devastating)
+            var targetValue = DetermineArmorSave(sim.Defender, sim.AttackProfile);
+            if (sim.AttackProfile.Devastating)
             {
-                for (int i = 0; i < dicePool.Where(d => d.Critical).Count(); i++)
+                for (int i = 0; i < sim.StrengthDice.Where(d => d.Critical).Count(); i++)
                 {
                     //skips rolling and sets result to a 7
                     res.Add(new Dice(true));
                 }
-                for (int i = 0; i < dicePool.Where(d => d.Success && !d.Critical).Count(); i++)
+                for (int i = 0; i < sim.StrengthDice.Where(d => d.Success && !d.Critical).Count(); i++)
                 {
                     res.Add(new Dice(targetValue, _random));
                 }
-                if (attack.RerollWound)
-                {
-                    var failed = res.Where(d => !d.Success);
-                    res = res.Where(d => d.Success).ToList();
-                    foreach (var die in failed)
-                    {
-                        die.Reroll(_random);
-                        res.Add(die);
-                    }
-                }
-                return res;
             }
-            for (int i = 0; i < dicePool.Where(d => d.Success).Count(); i++)
+            else
             {
-                res.Add(new Dice(targetValue, _random));
+
+                for (int i = 0; i < sim.StrengthDice.Where(d => d.Success).Count(); i++)
+                {
+                    res.Add(new Dice(targetValue, _random));
+                }
             }
-            if (attack.RerollWound)
+            if (sim.AttackProfile.RerollWound)
             {
                 var failed = res.Where(d => !d.Success);
                 res = res.Where(d => d.Success).ToList();
@@ -151,26 +144,26 @@ namespace Snorehammer.Web.Services
                 return 3;
             }
         }
-        public List<Dice> RollFeelNoPain(UnitProfile defender, AttackProfile attack, FightSimulation sim)
+        public List<Dice> RollFeelNoPain(FightSimulation sim)
         {
-            if (!defender.FeelNoPain)
+            if (!sim.Defender.FeelNoPain)
             {
                 throw new InvalidOperationException("Defender has no Feel no pain save, and attempted to roll one");
             }
             var res = new List<Dice>();
-            for (int i = 0; i < sim.ArmorDice.Where(d=>!d.Success).Count()*attack.Damage; i++)
+            for (int i = 0; i < sim.ArmorDice.Where(d=>!d.Success).Count()*sim.AttackProfile.Damage; i++)
             {
-                res.Add(new Dice(defender.FeelNoPainTarget, _random));
+                res.Add(new Dice(sim.Defender.FeelNoPainTarget, _random));
             }
             return res;
         }
-        public string GenerateWinnerMessage(UnitProfile defender, AttackProfile attack, FightSimulation sim)
+        public string GenerateWinnerMessage(FightSimulation sim)
         {
             var res = new StringBuilder();
             var successful = sim.ArmorDice.Where(d => !d.Success).Count();
-            res.Append($"{successful} out of {attack.Attacks} attacks broke through armor.\n");
-            int inflictedWounds = successful * attack.Damage;
-            if (defender.FeelNoPain && inflictedWounds != 0)
+            res.Append($"{successful} out of {sim.AttackProfile.Attacks} attacks broke through armor.\n");
+            int inflictedWounds = successful * sim.AttackProfile.Damage;
+            if (sim.Defender.FeelNoPain && inflictedWounds != 0)
             {
                 var fnpBlockedWounds = sim.FeelNoPainDice.Where(d => d.Success ).Count();
                 if(fnpBlockedWounds == inflictedWounds)
@@ -185,24 +178,24 @@ namespace Snorehammer.Web.Services
             {
                 res.Append($"{inflictedWounds} wounds inflicted to defender.\n");
 
-                int totalWounds = defender.Wounds * defender.ModelCount;
-                var destroyedModels = inflictedWounds / defender.Wounds;
-                if (destroyedModels >= defender.ModelCount)
+                int totalWounds = sim.Defender.Wounds * sim.Defender.ModelCount;
+                var destroyedModels = inflictedWounds / sim.Defender.Wounds;
+                if (destroyedModels >= sim.Defender.ModelCount)
                 {
                     res.Append("The entire unit was destroyed.\n");
                     return res.ToString();
                 }
-                if (defender.ModelCount > 1)
+                if (sim.Defender.ModelCount > 1)
                 {
-                    res.Append($"{destroyedModels} out of {defender.ModelCount} models were destroyed.\n");
-                    int woundRemainder = inflictedWounds % defender.Wounds;
+                    res.Append($"{destroyedModels} out of {sim.Defender.ModelCount} models were destroyed.\n");
+                    int woundRemainder = inflictedWounds % sim.Defender.Wounds;
                     if (woundRemainder != 0)
                     {
-                        res.Append($"A remaining model was inflicted {woundRemainder} wounds, leaving it with {defender.Wounds - woundRemainder} remaining.\n");
+                        res.Append($"A remaining model was inflicted {woundRemainder} wounds, leaving it with {sim.Defender.Wounds - woundRemainder} remaining.\n");
                     }
                     return res.ToString();
                 }
-                res.Append($"The model has {defender.Wounds - inflictedWounds} wound(s) remaining.\n");
+                res.Append($"The model has {sim.Defender.Wounds - inflictedWounds} wound(s) remaining.\n");
             }
             return res.ToString();
         }
