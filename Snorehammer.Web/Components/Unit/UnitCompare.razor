@@ -27,7 +27,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    @foreach (var die in sim.AttackDice)
+                    @foreach (var die in sim.ToHitDice)
                     {
                         <div class="col-1">
 
@@ -44,13 +44,13 @@
                     </div>
                     <div class="col-6">
                         <h3>Rolling:
-                            @sim.AttackDice.Where(d => d.Success).Count() 
+                            @sim.ToHitDice.Where(d => d.Success).Count() 
                             @{
-                                var sustainedDice = sim.AttackDice.Where(d => d.Critical).Count() > 0;
+                                var sustainedDice = sim.ToHitDice.Where(d => d.Critical).Count() > 0;
                             }
                             @if (attacker.Sustained && sustainedDice)
                             {
-                                <span> + @sim.AttackDice.Where(d=>d.Critical).Count() (sustained)</span>
+                                <span> + @sim.ToHitDice.Where(d=>d.Critical).Count() (sustained)</span>
                             }
                         </h3>
                     </div>
@@ -151,7 +151,7 @@
     private async Task FightUnits()
     {
         await ResetDice();
-        fightSimulationService.SimulateToHitRoll(sim);
+        fightSimulationService.RollToHit(sim);
         fightSimulationService.RollStrengthStep(sim);
         fightSimulationService.RollArmorSaves(sim);
         if (defender.FeelNoPain)

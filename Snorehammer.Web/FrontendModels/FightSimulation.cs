@@ -4,7 +4,7 @@
     {
         public AttackProfile AttackProfile { get; set; }
         public UnitProfile Defender { get; set; }
-        public List<Dice> AttackDice { get; set; } = new List<Dice>();
+        public List<Dice> ToHitDice { get; set; } = new List<Dice>();
         public List<Dice> StrengthDice { get; set; } = new List<Dice>();
         public List<Dice> ArmorDice { get; set; } = new List<Dice>();
         public List<Dice> WoundDice { get; set; } = new List<Dice>();
