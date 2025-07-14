@@ -4,9 +4,9 @@
 @using Snorehammer.Web.Services
 @rendermode InteractiveServer
 <h3>UnitCompare</h3>
-        <h4>Attacker</h4>
+        <h1>Attacker</h1>
         <AttackInput @bind-attack="attacker"></AttackInput>
-        <h4>Defender</h4>
+        <h1>Defender</h1>
         <UnitInput @bind-Unit="defender" Attacker=false></UnitInput>
         <RadzenButton Click=@(()=>FightUnits()) Text="Fight Units" ButtonStyle="ButtonStyle.Primary" />
         <RadzenButton Click=@(()=>ResetDice()) Text="Reset" ButtonStyle="ButtonStyle.Danger" />
@@ -138,7 +138,7 @@
                     </div>
                 </div>
             }
-            <h3>Winner:</h3>
+            <h1>Winner:</h1>
             <p>@sim.WinnerMessage</p>
         }
         else{
