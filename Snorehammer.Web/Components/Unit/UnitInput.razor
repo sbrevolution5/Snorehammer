@@ -39,6 +39,11 @@
             <InputCheckbox @bind-Value="Unit.ArmorReroll" />
             Reroll all failed armor saves
         </label>
+        <label>
+            <InputCheckbox @bind-Value="Unit.FeelNoPain" />
+            Feel No Pain
+            <InputNumber @bind-Value ="Unit.FeelNoPainTarget" disabled="@(!Unit.FeelNoPain)"/>
+        </label>
     </EditForm>
 }
 

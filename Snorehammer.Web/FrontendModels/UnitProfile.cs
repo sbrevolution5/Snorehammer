@@ -11,5 +11,7 @@
         public int InvulnerableSave { get; set; }
         public int ModelCount { get; set; }
         public bool ArmorReroll { get; set; }
+        public bool FeelNoPain { get; set; }
+        public int FeelNoPainTarget { get; set; } = 6;
     }
 }

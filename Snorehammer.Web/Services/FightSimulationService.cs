@@ -151,15 +151,39 @@ namespace Snorehammer.Web.Services
                 return 3;
             }
         }
-        public string GenerateWinnerMessage(UnitProfile defender, AttackProfile attack, List<Dice> armorSaves)
+        public List<Dice> RollFeelNoPain(UnitProfile defender, AttackProfile attack, FightSimulation sim)
+        {
+            if (!defender.FeelNoPain)
+            {
+                throw new InvalidOperationException("Defender has no Feel no pain save, and attempted to roll one");
+            }
+            var res = new List<Dice>();
+            for (int i = 0; i < sim.ArmorDice.Where(d=>!d.Success).Count()*attack.Damage; i++)
+            {
+                res.Add(new Dice(defender.FeelNoPainTarget, _random));
+            }
+            return res;
+        }
+        public string GenerateWinnerMessage(UnitProfile defender, AttackProfile attack, FightSimulation sim)
         {
             var res = new StringBuilder();
-            var successful = armorSaves.Where(d => !d.Success).Count();
-            res.Append($"{successful} out of {attack.Attacks} attacks broke through armor.");
+            var successful = sim.ArmorDice.Where(d => !d.Success).Count();
+            res.Append($"{successful} out of {attack.Attacks} attacks broke through armor.\n");
             int inflictedWounds = successful * attack.Damage;
+            if (defender.FeelNoPain && inflictedWounds != 0)
+            {
+                var fnpBlockedWounds = sim.FeelNoPainDice.Where(d => d.Success ).Count();
+                if(fnpBlockedWounds == inflictedWounds)
+                {
+                    res.Append("All wounds blocked by feel no pain. \n");
+                    return res.ToString();
+                }
+                res.Append($"{fnpBlockedWounds} of {inflictedWounds} wounds blocked by Feel No Pain. \n");
+                inflictedWounds -= fnpBlockedWounds;
+            }
             if (inflictedWounds > 0)
             {
-                res.Append($"{inflictedWounds} wounds inflicted to defender.");
+                res.Append($"{inflictedWounds} wounds inflicted to defender.\n");
 
                 int totalWounds = defender.Wounds * defender.ModelCount;
                 var destroyedModels = inflictedWounds / defender.Wounds;

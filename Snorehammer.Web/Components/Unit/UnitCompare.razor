@@ -83,8 +83,27 @@
                     }
                 </div>
             </div>
-            @* <h2>Wound Rolls</h2>
-            <h2>Feel No Pain Rolls</h2> *@
+            @* <h2>Wound Rolls</h2> *@
+            @if (defender.FeelNoPain)
+            {
+                <h2>Feel No Pain Rolls</h2>
+                <div class="container">
+                    <div class="col-6">
+                        <h3>Target: @defender.FeelNoPainTarget</h3>
+                    </div>
+                    <div class="col-6">
+                        <h3>Rolling: @(sim.ArmorDice.Where(d => !d.Success).Count()*attacker.Damage)</h3>
+                    </div>
+                    <div class="row">
+                        @foreach (var die in sim.FeelNoPainDice)
+                        {
+                            <div class="col-1">
+                                <DieDisplay die="@die"></DieDisplay>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
             <h3>Winner:</h3>
             <p>@sim.WinnerMessage</p>
         }
@@ -117,7 +136,7 @@
         attacker = new AttackProfile()
             {
                 ArmorPenetration = -1,
-                Attacks = 2,
+                Attacks = 20,
                 Damage = 1,
                 Skill = 3,
                 Strength = 4
@@ -135,7 +154,11 @@
         sim.AttackDice = fightSimulationService.SimulateToHitRoll(attacker);
         sim.StrengthDice = fightSimulationService.RollStrengthStep(defender, attacker, sim.AttackDice);
         sim.ArmorDice = fightSimulationService.RollArmorSaves(defender, attacker, sim.StrengthDice);
-        sim.WinnerMessage = fightSimulationService.GenerateWinnerMessage(defender, attacker, sim.ArmorDice);
+        if (defender.FeelNoPain)
+        {
+            sim.FeelNoPainDice = fightSimulationService.RollFeelNoPain(defender, attacker, sim);
+        }
+        sim.WinnerMessage = fightSimulationService.GenerateWinnerMessage(defender, attacker, sim);
         FightComplete = true;
     }
     private void ResetDice()
