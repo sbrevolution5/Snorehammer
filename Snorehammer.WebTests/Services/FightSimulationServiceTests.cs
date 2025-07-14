@@ -43,6 +43,58 @@ namespace Snorehammer.Web.Services.Tests
                 Wounds = 2
             };
             diceList = new List<Dice>();
+            sim = new FightSimulation
+        }
+        [Test]
+        public void WinnerMessageFNPBlocksNone()
+        {
+            //arrange
+            A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(6))).Returns(2);
+            attacker.Attacks = 20;
+            for (int i = 0; i < 20; i++)
+            {
+                diceList.Add(new Dice(unitProfile.MinimumSave, random));
+            }
+            //act
+            var res = service.GenerateWinnerMessage(unitProfile, attacker, diceList);
+            //assert
+            res.Should().Contain("0 out of 20 wounds blocked by feel no pain.");
+            res.Should().Contain("20 wounds inflicted to defender.");
+            res.Should().Contain("The entire unit was destroyed");
+        }
+        [Test]
+        public void WinnerMessageFNPBlocksOne()
+        {
+            //arrange
+            A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(6))).Returns(2);
+            attacker.Attacks = 20;
+            for (int i = 0; i < 20; i++)
+            {
+                diceList.Add(new Dice(unitProfile.MinimumSave, random));
+            }
+            //act
+            var res = service.GenerateWinnerMessage(unitProfile, attacker, diceList);
+            //assert
+            res.Should().Contain("20 out of 20 attacks broke through armor.");
+            res.Should().Contain("20 wounds inflicted to defender.");
+            res.Should().Contain("The entire unit was destroyed");
+        }
+        [Test]
+        public void WinnerMessageFNPBlocksAll()
+        {
+            //arrange
+            A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(6))).Returns(2);
+            attacker.Attacks = 20;
+            for (int i = 0; i < 20; i++)
+            {
+                diceList.Add(new Dice(unitProfile.MinimumSave, random));
+            }
+            //act
+            var res = service.GenerateWinnerMessage(unitProfile, attacker, diceList);
+            //assert
+            res.Should().Contain("20 out of 20 attacks broke through armor.");
+            res.Should().Contain("20 wounds inflicted to defender.");
+            res.Should().Contain("The entire unit was destroyed");
         }
         [Test]
         public void WinnerMessageUnitKilled()
