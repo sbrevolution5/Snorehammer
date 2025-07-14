@@ -68,7 +68,11 @@
             <h2>Armor rolls</h2>
             <div class="container">
                 <div class="col-6">
-                    <h3>Target: @fightSimulationService.DetermineArmorSave(defender, attacker)</h3>
+                    <h3>Target: @fightSimulationService.DetermineArmorSave(sim)</h3>
+                    @if (sim.CoverIgnored)
+                    {
+                        <h4>Cover did not matter</h4>
+                    }
                 </div>
                 <div class="col-6">
                     <h3>Rolling: @sim.StrengthDice.Where(d => d.Success).Count()</h3>

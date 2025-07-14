@@ -75,7 +75,7 @@ namespace Snorehammer.Web.Services
         public List<Dice> RollArmorSaves(FightSimulation sim)
         {
             var res = new List<Dice>();
-            var targetValue = DetermineArmorSave(sim.Defender, sim.AttackProfile);
+            var targetValue = DetermineArmorSave(sim);
             if (sim.AttackProfile.Devastating)
             {
                 for (int i = 0; i < sim.StrengthDice.Where(d => d.Critical).Count(); i++)
@@ -110,21 +110,43 @@ namespace Snorehammer.Web.Services
 
         }
 
-        public int DetermineArmorSave(UnitProfile defender, AttackProfile attack)
+        public int DetermineArmorSave(FightSimulation sim)
         {
-            int moddedSave = defender.MinimumSave - attack.ArmorPenetration;
-            if (defender.HasCover)
+            int moddedSave = sim.Defender.MinimumSave + sim.AttackProfile.ArmorPenetration;
+
+            if (sim.Defender.HasCover)
             {
-                if((defender.MinimumSave>4 && attack.ArmorPenetration == 0)||attack.ArmorPenetration > 0)
+                if ((sim.Defender.MinimumSave > 4 && sim.AttackProfile.ArmorPenetration == 0) || sim.AttackProfile.ArmorPenetration > 0)
                 {
-                    moddedSave--; 
+                    moddedSave--;
                 }
+                else
+                {
+                    sim.CoverIgnored = true;
+                }
+
             }
-            if (moddedSave < defender.InvulnerableSave || defender.InvulnerableSave == 0)
+            if (moddedSave < 2)
             {
+                moddedSave = 2;
+            }
+            if (moddedSave < sim.Defender.InvulnerableSave || sim.Defender.InvulnerableSave == 0)
+            {
+                if (moddedSave < 3 && sim.Defender.MinimumSave <=3)
+                {
+                    sim.CoverIgnored = true;
+                    sim.ArmorSave = sim.Defender.MinimumSave;
+                    return sim.Defender.MinimumSave;
+                }
+                sim.ArmorSave = moddedSave;
                 return moddedSave;
             }
-            return defender.InvulnerableSave;
+            if (sim.Defender.HasCover)
+            {
+                sim.CoverIgnored = true;
+            }
+            sim.ArmorSave = sim.Defender.InvulnerableSave;
+            return sim.Defender.InvulnerableSave;
         }
 
         public int DetermineWoundTarget(int toughness, int strength)

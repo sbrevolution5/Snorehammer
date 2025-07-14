@@ -63,8 +63,6 @@ namespace Snorehammer.Web.Services.Tests
             public override void Setup()
             {
                 base.Setup();
-
-
             }
             [TearDown]
             public void TearDown()
@@ -76,8 +74,72 @@ namespace Snorehammer.Web.Services.Tests
             {
                 //arrange
                 //act
+                service.DetermineArmorSave(sim);
                 //assert
+                sim.CoverIgnored.Should().BeFalse();
+                sim.ArmorSave.Should().Be(3);
             }
+            [Test]
+            public void CalculateArmorSaveMinusOne()
+            {
+                //arrange
+                sim.AttackProfile.ArmorPenetration = 1;
+                //act
+                service.DetermineArmorSave(sim);
+                //assert
+                sim.CoverIgnored.Should().BeFalse();
+                sim.ArmorSave.Should().Be(4);
+            }
+            [Test]
+            public void CalculateArmorSaveUsesInvulnerable()
+            {
+                //arrange
+                sim.AttackProfile.ArmorPenetration = 4;
+                sim.Defender.InvulnerableSave = 4;
+                //act
+                service.DetermineArmorSave(sim);
+                //assert
+                sim.CoverIgnored.Should().BeFalse();
+                sim.ArmorSave.Should().Be(4);
+            }
+            [Test]
+            public void CalculateArmorSaveUsesCover()
+            {
+                //arrange
+                sim.AttackProfile.ArmorPenetration = 1;
+                sim.Defender.HasCover = true;
+                //act
+                service.DetermineArmorSave(sim);
+                //assert
+                sim.CoverIgnored.Should().BeFalse();
+                sim.ArmorSave.Should().Be(3);
+            }
+            [Test]
+            public void CalculateArmorSaveCoverDoesNotReduceTo2()
+            {
+                //arrange
+                sim.AttackProfile.ArmorPenetration = 0;
+                sim.Defender.HasCover = true;
+                //act
+                service.DetermineArmorSave(sim);
+                //assert
+                sim.CoverIgnored.Should().BeTrue();
+                sim.ArmorSave.Should().Be(3);
+            }
+            [Test]
+            public void CalculateArmorSaveIgnoresCoverBecauseInvulnerable()
+            {
+                //arrange
+                sim.AttackProfile.ArmorPenetration = 3;
+                sim.Defender.InvulnerableSave = 4;
+                sim.Defender.HasCover = true;
+                //act
+                service.DetermineArmorSave(sim);
+                //assert
+                sim.CoverIgnored.Should().BeTrue();
+                sim.ArmorSave.Should().Be(4);
+            }
+
             [TestClass]
             public class FightSimulationWinnerTests : FightSimulationServiceTests
             {
