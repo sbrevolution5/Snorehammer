@@ -1,3 +1,4 @@
+using Radzen;
 using Snorehammer.Web;
 using Snorehammer.Web.Components;
 
@@ -9,7 +10,7 @@ builder.AddServiceDefaults();
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
-
+builder.Services.AddRadzenComponents();
 builder.Services.AddOutputCache();
 
 var app = builder.Build();
