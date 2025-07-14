@@ -146,11 +146,7 @@
     }
     private async Task FightUnits()
     {
-        FightComplete = false;
-        ResetDice();
-        StateHasChanged();
-        await Task.Yield();
-        fightSimulationService = new FightSimulationService();
+        await ResetDice();
         sim.AttackDice = fightSimulationService.SimulateToHitRoll(attacker);
         sim.StrengthDice = fightSimulationService.RollStrengthStep(defender, attacker, sim.AttackDice);
         sim.ArmorDice = fightSimulationService.RollArmorSaves(defender, attacker, sim.StrengthDice);
@@ -161,8 +157,15 @@
         sim.WinnerMessage = fightSimulationService.GenerateWinnerMessage(defender, attacker, sim);
         FightComplete = true;
     }
-    private void ResetDice()
+    private async Task ResetDice()
     {
-        sim = new FightSimulation();
+        FightComplete = false;
+        sim = new FightSimulation()
+        {
+            AttackProfile = attacker,
+            Defender = defender
+        };
+        StateHasChanged();
+        await Task.Yield();
     }
 }
