@@ -35,19 +35,21 @@
                 </td>
             </tr>
         </table>
-        <label>
-            <InputCheckbox @bind-Value="Unit.ArmorReroll" />
-            Reroll all failed armor saves
-        </label>
-        <label>
-            <InputCheckbox @bind-Value="Unit.FeelNoPain" />
-            Feel No Pain
-            <InputNumber @bind-Value ="Unit.FeelNoPainTarget" disabled="@(!Unit.FeelNoPain)"/>
-        </label>
-        <label>
-            <InputCheckbox @bind-Value="Unit.HasCover" />
-            Has Cover
-        </label>
+        <div class="rz-p-12 rz-text-align-center">
+            <RadzenCheckBox @bind-Value=@Unit.ArmorReroll Name="ArmorReroll" />
+            <RadzenLabel Text="Reroll all failed armor saves" Component="ArmorReroll" class="rz-ms-2" />
+        </div>
+        <div class="rz-p-12 rz-text-align-center">
+            <RadzenCheckBox @bind-Value=@Unit.FeelNoPain Name="FeelNoPain" />
+            <RadzenLabel Text="Feel No Pain" Component="FeelNoPain" class="rz-ms-2" />
+            <RadzenFormField Text="Outlined/Default" Style="width: 100%;">
+                <RadzenNumeric @bind-Value="@Unit.FeelNoPainTarget"  Disabled=!Unit.FeelNoPain/>
+            </RadzenFormField>
+        </div>
+        <div class="rz-p-12 rz-text-align-center">
+            <RadzenCheckBox @bind-Value=@Unit.HasCover Name="HasCover" />
+            <RadzenLabel Text="Has Cover" Component="HasCover" class="rz-ms-2" />
+            </div>
     </EditForm>
 }
 
