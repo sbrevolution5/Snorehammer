@@ -80,8 +80,8 @@ namespace Snorehammer.Web.Services
             {
                 for (int i = 0; i < sim.StrengthDice.Where(d => d.Critical).Count(); i++)
                 {
-                    //skips rolling and sets result to a 7
-                    res.Add(new Dice(true));
+                    //skips rolling and sets result to an automatic failure
+                    res.Add(new Dice(false));
                 }
                 for (int i = 0; i < sim.StrengthDice.Where(d => d.Success && !d.Critical).Count(); i++)
                 {
