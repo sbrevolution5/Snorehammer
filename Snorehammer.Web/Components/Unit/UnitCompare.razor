@@ -4,10 +4,13 @@
 @using Snorehammer.Web.Services
 @rendermode InteractiveServer
 <h3>UnitCompare</h3>
+<RadzenCard Variant="Variant.Text">
+
         <h1>Attacker</h1>
         <AttackInput @bind-attack="attacker"></AttackInput>
         <h1>Defender</h1>
         <UnitInput @bind-Unit="defender" Attacker=false></UnitInput>
+</RadzenCard>
         <RadzenButton Click=@(()=>FightUnits()) Text="Fight Units" ButtonStyle="ButtonStyle.Primary" />
         <RadzenButton Click=@(()=>ResetDice()) Text="Reset" ButtonStyle="ButtonStyle.Danger" />
         @if (FightComplete)
@@ -144,7 +147,8 @@
         else{
             <h1>LOADING</h1>
         }
-<button @onclick="FightUnits">Go again?</button>
+<RadzenButton Click=@(() => FightUnits()) Text="Fight Again" ButtonStyle="ButtonStyle.Base" />
+
 @code {
     private FightSimulation sim { get; set; } = new FightSimulation();
     private UnitProfile defender { get; set; }
