@@ -47,38 +47,38 @@
         </RadzenRow>
         <RadzenRow AlignItems="AlignItems.End" Wrap="FlexWrap.Wrap" Gap="1rem" class="rz-p-sm-12">
 
-            <div class="rz-p-12 rz-text-align-center">
+            <RadzenColumn Size="2" class="rz-p-12 rz-text-align-center">
                 <RadzenCheckBox @bind-Value=@attack.Devastating Name="Devastating" />
                 <RadzenLabel Text="Devastating Wounds" Component="Devastating" class="rz-ms-2" />
-            </div>
-            <div class="rz-p-12 rz-text-align-center">
+            </RadzenColumn>
+            <RadzenColumn Size="2"class="rz-p-12 rz-text-align-center">
                 <RadzenCheckBox @bind-Value=@attack.Sustained Name="Sustained" />
                 <RadzenLabel Text="Sustained Hits" Component="Sustained" class="rz-ms-2" />
-            </div>
-            <div class="rz-p-12 rz-text-align-center">
+            </RadzenColumn>>
+            <RadzenColumn Size="2" class="rz-p-12 rz-text-align-center">
                 <RadzenCheckBox @bind-Value=@attack.Lethal Name="Lethal" />
                 <RadzenLabel Text="Lethal" Component="Lethal" class="rz-ms-2" />
-            </div>
-            <div class="rz-p-12 rz-text-align-center">
+            </RadzenColumn>>
+            <RadzenColumn Size="2" class="rz-p-12 rz-text-align-center">
                 <RadzenCheckBox @bind-Value=@attack.Torrent Name="Torrent" />
                 <RadzenLabel Text="Torrent" Component="Torrent" class="rz-ms-2" />
-            </div>
-            <div class="rz-p-12 rz-text-align-center">
+            </RadzenColumn>
+            <RadzenColumn Size="2" class="rz-p-12 rz-text-align-center">
                 <RadzenCheckBox @bind-Value=@attack.Blast Name="Blast" />
                 <RadzenLabel Text="Blast" Component="Blast" class="rz-ms-2" />
-            </div>
-            <div class="rz-p-12 rz-text-align-center">
+            </RadzenColumn>
+            <RadzenColumn Size="2" class="rz-p-12 rz-text-align-center">
                 <RadzenCheckBox @bind-Value=@attack.RerollHit Name="RerollHit" />
                 <RadzenLabel Text="Reroll Hit" Component="RerollHit" class="rz-ms-2" />
-            </div>
-            <div class="rz-p-12 rz-text-align-center">
+            </RadzenColumn>
+            <RadzenColumn Size="2" class="rz-p-12 rz-text-align-center">
                 <RadzenCheckBox @bind-Value=@attack.RerollWound Name="RerollWound" />
                 <RadzenLabel Text="Reroll Wounds" Component="RerollWound" class="rz-ms-2" />
-            </div>
-            <div class="rz-p-12 rz-text-align-center">
+            </RadzenColumn>
+            <RadzenColumn Size="2" class="rz-p-12 rz-text-align-center">
                 <RadzenCheckBox @bind-Value=@attack.RerollDamage Name="RerollDamage" />
                 <RadzenLabel Text="Reroll Damage" Component="RerollDamage" class="rz-ms-2" />
-            </div>
+            </RadzenColumn>
         </RadzenRow>
     </EditForm>
 </RadzenCard>
