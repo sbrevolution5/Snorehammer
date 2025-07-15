@@ -151,7 +151,7 @@
         <p>@sim.WinnerMessage</p>
     </RadzenCard>
 }
-else if (!FightComplete && simulating)
+else if (!FightComplete && !simulating)
 {
     <h1>LOADING</h1>
 }
@@ -188,8 +188,8 @@ else if (!FightComplete && simulating)
     }
     private async Task FightUnits()
     {
-        simulating = true;
         await ResetDice();
+        simulating = true;
         if (sim.AttackProfile.IsVariableAttacks)
         {
             fightSimulationService.RollAttackDice(sim);
@@ -213,6 +213,7 @@ else if (!FightComplete && simulating)
             AttackProfile = attacker,
             Defender = defender
         };
+        simulating = false;
         StateHasChanged();
         await Task.Yield();
     }
