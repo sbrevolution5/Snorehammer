@@ -144,7 +144,7 @@
             <h1>Winner:</h1>
             <p>@sim.WinnerMessage</p>
         }
-        else{
+        else if(!FightComplete && simulating ){
             <h1>LOADING</h1>
         }
 <RadzenButton Click=@(() => FightUnits()) Text="Fight Again" ButtonStyle="ButtonStyle.Base" />
@@ -153,6 +153,7 @@
     private FightSimulation sim { get; set; } = new FightSimulation();
     private UnitProfile defender { get; set; }
     private bool FightComplete { get; set; } = false;
+    private bool simulating { get; set; } = true;
     private AttackProfile attacker { get; set; }
     private FightSimulationService fightSimulationService = new FightSimulationService();
     protected override Task OnInitializedAsync()
@@ -179,6 +180,7 @@
     }
     private async Task FightUnits()
     {
+        simulating = true;
         await ResetDice();
         if (sim.AttackProfile.IsVariableAttacks)
         {
@@ -193,6 +195,7 @@
         }
         sim.WinnerMessage = fightSimulationService.GenerateWinnerMessage(sim);
         FightComplete = true;
+        simulating = false;
     }
     private async Task ResetDice()
     {
