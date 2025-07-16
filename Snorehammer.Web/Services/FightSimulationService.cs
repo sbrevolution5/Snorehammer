@@ -78,7 +78,10 @@ namespace Snorehammer.Web.Services
             {
                 for (int i = 0; i < sim.ToHitDice.Where(d => d.Critical).Count(); i++)
                 {
-                    sim.StrengthDice.Add(new Dice(targetValue, _random));
+                    for(int j = 0; j < sim.AttackProfile.SustainAmount; j++)
+                    {
+                        sim.StrengthDice.Add(new Dice(targetValue, _random));
+                    }
                 }
             }
             if (sim.AttackProfile.Lethal)
