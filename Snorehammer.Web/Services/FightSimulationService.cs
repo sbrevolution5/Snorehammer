@@ -14,10 +14,10 @@ namespace Snorehammer.Web.Services
         public void RollAttackDice(FightSimulation sim)
         {
             sim.AttackDice = new List<Dice>();
-            for (int i = 0; i < sim.AttackProfile.VariableDiceNumber; i++)
+            for (int i = 0; i < sim.AttackProfile.VariableAttackDiceNumber; i++)
             {
                 //0 because target doesn't matter here
-                sim.AttackDice.Add(new Dice(7, _random,sim.AttackProfile.VariableDiceSides));
+                sim.AttackDice.Add(new Dice(7, _random,sim.AttackProfile.VariableAttackDiceSides));
             }
         }
         public void RollToHit(FightSimulation sim)
@@ -27,7 +27,7 @@ namespace Snorehammer.Web.Services
             sim.AttackNumber = sim.AttackProfile.Attacks;
             if (sim.AttackDice.Count != 0)
             {
-                sim.AttackNumber = sim.AttackDice.Sum(d => d.Result) + sim.AttackProfile.VariableDiceConstant;
+                sim.AttackNumber = sim.AttackDice.Sum(d => d.Result) + sim.AttackProfile.VariableAttackDiceConstant;
                 if (sim.AttackProfile.Blast)
                 {
                     sim.AttackNumber += sim.BlastBonus;
