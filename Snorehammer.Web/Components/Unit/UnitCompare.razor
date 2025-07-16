@@ -63,7 +63,7 @@
                                 <h3>Target: @attacker.Skill</h3>
                             </div>
                             <div class="col-6">
-                                <h3>Rolling: @attacker.Attacks</h3>
+                                <h3>Rolling: @sim.AttackNumber</h3>
                             </div>
                         </div>
                         <div class="row">
@@ -147,7 +147,7 @@
                                 </h3>
                             </div>
                             <div class="col-6">
-                                <h3> Total: @sim.AttackProfile.Damage</h3>
+                                <h3> Total: @sim.DamageNumber</h3>
                             </div>
                             <div class="row">
                                 @foreach (var die in sim.WoundDice)
