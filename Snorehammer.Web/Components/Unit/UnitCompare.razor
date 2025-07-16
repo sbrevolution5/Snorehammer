@@ -25,15 +25,15 @@
 
                 @if (sim.AttackProfile.IsVariableAttacks)
                 {
-                    <RadzenAccordionItem Text="Number Of Attacks">
+                    <RadzenAccordionItem Selected="true" Text="Number Of Attacks">
 
                         <div class="container">
                             <div class="row">
                                 <div class="col-6">
                                     <h3>
-                                        Rolling: @attacker.VariableDiceNumber
-                                        d @attacker.VariableDiceSides
-                                        + @attacker.VariableDiceConstant
+                                        Rolling: @attacker.VariableAttackDiceNumber
+                                        d @attacker.VariableAttackDiceSides
+                                        + @attacker.VariableAttackDiceConstant
                                         @if (sim.BlastBonus > 0)
                                         {
                                             <span> + @sim.BlastBonus</span>
@@ -56,14 +56,14 @@
                         </div>
                     </RadzenAccordionItem>
                 }
-                <RadzenAccordionItem Text="To Hit Results">
+                <RadzenAccordionItem Selected="true" Text="To Hit Results">
                     <div class="container">
                         <div class="row">
                             <div class="col-6">
                                 <h3>Target: @attacker.Skill</h3>
                             </div>
                             <div class="col-6">
-                                <h3>Rolling: @attacker.Attacks</h3>
+                                <h3>Rolling: @sim.AttackNumber</h3>
                             </div>
                         </div>
                         <div class="row">
@@ -77,7 +77,7 @@
                         </div>
                     </div>
                 </RadzenAccordionItem>
-                <RadzenAccordionItem Text="Strength vs Toughness">
+                <RadzenAccordionItem Selected="true" Text="Strength vs Toughness">
                     <div class="container">
                         <div class="row">
                             <div class="col-6">
@@ -108,9 +108,7 @@
                         </div>
                     </div>
                 </RadzenAccordionItem>
-                <RadzenAccordionItem Text="Armor Rolls">
-
-                    <h2>Armor rolls</h2>
+                <RadzenAccordionItem Selected="true" Text="Armor Rolls">
                     <div class="container">
                         <div class="col-6">
                             <h3>Target: @fightSimulationService.DetermineArmorSave(sim)</h3>
@@ -135,9 +133,37 @@
                 </RadzenAccordionItem>
 
                 @* <h2>Wound Rolls</h2> *@
+                
+                @if (sim.AttackProfile.IsVariableDamage)
+                {
+
+                    <RadzenAccordionItem Selected="true" Text="Damage Rolls">
+                        <div class="container">
+                            <div class="col-6">
+                                <h3>
+                                    Rolling: @attacker.VariableDamageDiceNumber
+                                    d @attacker.VariableDamageDiceSides
+                                    + @attacker.VariableAttackDiceConstant
+                                </h3>
+                            </div>
+                            <div class="col-6">
+                                <h3> Total: @sim.DamageNumber</h3>
+                            </div>
+                            <div class="row">
+                                @foreach (var die in sim.WoundDice)
+                                {
+                                    <div class="col-1">
+
+                                        <DieDisplay die="@die"></DieDisplay>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </RadzenAccordionItem>
+                }
                 @if (defender.FeelNoPain)
                 {
-                    <RadzenAccordionItem Text="Feel No Pain Rolls">
+                    <RadzenAccordionItem Selected="true" Text="Feel No Pain Rolls">
                         <div class="container">
                             <div class="col-6">
                                 <h3>Target: @defender.FeelNoPainTarget</h3>
@@ -198,8 +224,11 @@ else if (!FightComplete && !simulating)
             Attacks = 20,
             Damage = 1,
             Skill = 3,
-            Strength = 4
-
+            Strength = 4,
+            VariableAttackDiceConstant = 1,
+            VariableAttackDiceNumber = 2,
+            VariableDamageDiceConstant = 1,
+            VariableDamageDiceNumber = 1
         };
         return base.OnInitializedAsync();
     }
@@ -214,6 +243,11 @@ else if (!FightComplete && !simulating)
         fightSimulationService.RollToHit(sim);
         fightSimulationService.RollStrengthStep(sim);
         fightSimulationService.RollArmorSaves(sim);
+        
+        if (sim.AttackProfile.IsVariableDamage)
+        {
+            fightSimulationService.RollDamageDice(sim);
+        }
         if (defender.FeelNoPain)
         {
             fightSimulationService.RollFeelNoPain(sim);

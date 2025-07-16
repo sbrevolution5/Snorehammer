@@ -2,19 +2,17 @@
 <RadzenCard Variant="Variant.Outlined">
 
     <EditForm Model="@attack">
-        <div class="rz-p-12 rz-text-align-center">
-            <RadzenCheckBox @bind-Value=@attack.IsVariableAttacks Name="Variable" />
-            <RadzenLabel Text="Roll for # of attacks" Component="Variable" class="rz-ms-2" />
-        </div>
         <RadzenRow AlignItems="AlignItems.End" Wrap="FlexWrap.Wrap" Gap="1rem" class="rz-p-sm-12">
             <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+                    <RadzenCheckBox @bind-Value=@attack.IsVariableAttacks Name="Variable" />
+                    <RadzenLabel Text="Roll for # of attacks" Component="Variable" class="rz-ms-2" />
                 @if (attack.IsVariableAttacks)
                 {
-                    <RadzenFormField Text="X * y + z" Variant="Variant.Flat">
+                    <RadzenFormField Text="Attacks (X * [d]y + z)" Variant="Variant.Flat">
 
-                        <RadzenNumeric @bind-Value="attack.VariableDiceNumber" />
-                        <RadzenNumeric @bind-Value="attack.VariableDiceSides" />
-                        <RadzenNumeric @bind-Value="attack.VariableDiceConstant" />
+                        <RadzenNumeric @bind-Value="attack.VariableAttackDiceNumber" />
+                        <RadzenNumeric @bind-Value="attack.VariableAttackDiceSides" />
+                        <RadzenNumeric @bind-Value="attack.VariableAttackDiceConstant" />
                     </RadzenFormField>
                 }
                 else
@@ -39,10 +37,25 @@
                 </RadzenFormField>
             </RadzenColumn>
             <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
-                <RadzenFormField Text="Damage" Variant="Variant.Flat">
+                    <RadzenCheckBox @bind-Value=@attack.IsVariableDamage Name="Variable" />
+                    <RadzenLabel Text="Rolls damage" Component="Variable" class="rz-ms-2" />
+                @if (attack.IsVariableDamage)
+                {
+                    <RadzenFormField Text="Damage (X * [d]y + z)" Variant="Variant.Flat">
 
-                    <RadzenNumeric @bind-Value="attack.Damage" />
-                </RadzenFormField>
+                        <RadzenNumeric @bind-Value="attack.VariableDamageDiceNumber" />
+                        <RadzenNumeric @bind-Value="attack.VariableDamageDiceSides" />
+                        <RadzenNumeric @bind-Value="attack.VariableDamageDiceConstant" />
+                    </RadzenFormField>
+                }
+                else
+                {
+
+                    <RadzenFormField Text="Damage" Variant="Variant.Flat">
+
+                        <RadzenNumeric @bind-Value="attack.Damage" />
+                    </RadzenFormField>
+                }
             </RadzenColumn>
         </RadzenRow>
         <RadzenRow AlignItems="AlignItems.End" Wrap="FlexWrap.Wrap" Gap="1rem" class="rz-p-sm-12">
@@ -52,7 +65,7 @@
                 <RadzenCheckBox @bind-Value=@attack.Devastating Name="Devastating" />
                 <RadzenLabel Text="Devastating Wounds" Component="Devastating" class="rz-ms-2" />
             </RadzenColumn>
-            <RadzenColumn Size="2"class="rz-p-3 rz-text-align-center">
+            <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
                 <RadzenCheckBox @bind-Value=@attack.Sustained Name="Sustained" />
                 <RadzenLabel Text="Sustained Hits" Component="Sustained" class="rz-ms-2" />
             </RadzenColumn>
