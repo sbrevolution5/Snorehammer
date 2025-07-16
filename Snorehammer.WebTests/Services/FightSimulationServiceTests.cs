@@ -1,13 +1,7 @@
-﻿using Snorehammer.Web.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FakeItEasy;
+﻿using FakeItEasy;
 using FluentAssertions;
-using Snorehammer.Web.FrontendModels;
 using NUnit.Framework;
+using Snorehammer.Web.FrontendModels;
 
 namespace Snorehammer.Web.Services.Tests
 {

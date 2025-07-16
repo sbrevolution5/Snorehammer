@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Primitives;
-using Snorehammer.Web.FrontendModels;
+﻿using Snorehammer.Web.FrontendModels;
 using System.Text;
 
 namespace Snorehammer.Web.Services
