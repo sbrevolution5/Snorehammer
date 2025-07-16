@@ -141,6 +141,16 @@ namespace Snorehammer.Web.Services
                     sim.ArmorDice.Add(die);
                 }
             }
+            else if (sim.AttackProfile.Reroll1Wound)
+            {
+                var failed = sim.StrengthDice.Where(d => d.Result == 1);
+                sim.StrengthDice = sim.StrengthDice.Where(d => d.Result >= 1).ToList();
+                foreach (var die in failed)
+                {
+                    die.Reroll(_random);
+                    sim.StrengthDice.Add(die);
+                }
+            }
 
         }
 
