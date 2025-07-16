@@ -93,7 +93,7 @@ namespace Snorehammer.Web.Services
         }
         public void RollStrengthStep(FightSimulation sim)
         {
-            var targetValue = DetermineWoundTarget(sim.Defender.Toughness, sim.AttackProfile.Strength);
+            var targetValue = sim.ModdedWoundTarget;
             if (sim.AttackProfile.Sustained)
             {
                 for (int i = 0; i < sim.ToHitDice.Where(d => d.Critical).Count(); i++)
@@ -228,28 +228,50 @@ namespace Snorehammer.Web.Services
             return sim.Defender.InvulnerableSave;
         }
 
-        public int DetermineWoundTarget(int toughness, int strength)
+        public void DetermineWoundTarget(FightSimulation sim)
         {
+            var strength = sim.AttackProfile.Strength;
+            var toughness = sim.Defender.Toughness;
             if (toughness == strength)
             {
-                return 4;
+                sim.WoundTarget= 4;
             }
             else if (toughness > strength)
             {
 
                 if (toughness >= strength * 2)
                 {
-                    return 6;
+                    sim.WoundTarget= 6;
                 }
-                return 5;
+                sim.WoundTarget= 5;
             }
             else
             {
                 if (strength >= toughness * 2)
                 {
-                    return 2;
+                    sim.WoundTarget= 2;
                 }
-                return 3;
+                sim.WoundTarget =3;
+            }
+        }
+        public void DetermineModdedWoundTarget(FightSimulation sim)
+        {
+            sim.ModdedWoundTarget = sim.WoundTarget;
+            if (sim.AttackProfile.Plus1Wound)
+            {
+                sim.WoundTarget--;
+            }
+            if (sim.Defender.Stealth || sim.Defender.Minus1Hit)
+            {
+                sim.WoundTarget++;
+            }
+            if (sim.WoundTarget < 2)
+            {
+                sim.WoundTarget = 2;
+            }
+            if (sim.WoundTarget > 6)
+            {
+                sim.WoundTarget = 6;
             }
         }
         public void RollDamageDice(FightSimulation sim)
