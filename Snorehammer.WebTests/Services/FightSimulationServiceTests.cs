@@ -1,13 +1,7 @@
-﻿using Snorehammer.Web.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FakeItEasy;
+﻿using FakeItEasy;
 using FluentAssertions;
-using Snorehammer.Web.FrontendModels;
 using NUnit.Framework;
+using Snorehammer.Web.FrontendModels;
 
 namespace Snorehammer.Web.Services.Tests
 {
@@ -177,6 +171,7 @@ namespace Snorehammer.Web.Services.Tests
                     }
                     sim.ArmorDice = diceList;
                     sim.FeelNoPainDice = fnpDiceList;
+                    sim.DamageNumber = 20;
                     //act
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
@@ -200,6 +195,7 @@ namespace Snorehammer.Web.Services.Tests
                     }
                     sim.ArmorDice = diceList;
                     sim.FeelNoPainDice = fnpDiceList;
+                    sim.DamageNumber = 20;
                     //act
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
@@ -222,6 +218,7 @@ namespace Snorehammer.Web.Services.Tests
                     }
                     sim.ArmorDice = diceList;
                     sim.FeelNoPainDice = fnpDiceList;
+                    sim.DamageNumber = 20;
                     //act
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
@@ -241,6 +238,7 @@ namespace Snorehammer.Web.Services.Tests
                         diceList.Add(new Dice(unitProfile.MinimumSave, random));
                     }
                     sim.ArmorDice = diceList;
+                    sim.DamageNumber = 20;
                     //act
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
@@ -265,6 +263,7 @@ namespace Snorehammer.Web.Services.Tests
                         diceList.Add(new Dice(unitProfile.MinimumSave, random));
                     }
                     sim.ArmorDice = diceList;
+                    sim.DamageNumber = 10;
                     //act
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
@@ -285,6 +284,7 @@ namespace Snorehammer.Web.Services.Tests
                         diceList.Add(new Dice(unitProfile.MinimumSave, random));
                     }
                     sim.ArmorDice = diceList;
+                    sim.DamageNumber = 1;
                     //act
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
@@ -303,6 +303,8 @@ namespace Snorehammer.Web.Services.Tests
                     unitProfile.ModelCount = 1;
                     diceList.Add(new Dice(unitProfile.MinimumSave, random));
                     sim.ArmorDice = diceList;
+                    sim.DamageNumber = 1;
+
                     //act
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
@@ -322,6 +324,7 @@ namespace Snorehammer.Web.Services.Tests
                         diceList.Add(new Dice(unitProfile.MinimumSave, random));
                     }
                     sim.ArmorDice = diceList;
+                    sim.DamageNumber = 20;
                     //act
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
@@ -339,6 +342,7 @@ namespace Snorehammer.Web.Services.Tests
                         diceList.Add(new Dice(unitProfile.MinimumSave, random));
                     }
                     sim.ArmorDice = diceList;
+                    sim.DamageNumber = 0;
                     //act
                     var res = service.GenerateWinnerMessage(sim);
                     //assert

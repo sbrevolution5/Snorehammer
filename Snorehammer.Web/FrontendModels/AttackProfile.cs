@@ -11,15 +11,24 @@
         public int Damage { get; set; }
         public bool Devastating { get; set; } = false;
         public bool Sustained { get; set; } = false;
+        public int SustainAmount { get; set; } = 1;
         public bool Lethal { get; set; } = false;
         public bool RerollHit { get; set; } = false;
         public bool RerollWound { get; set; } = false;
         public bool RerollDamage { get; set; } = false;
+        public bool Reroll1Hit { get; set; } = false;
+        public bool Reroll1Wound { get; set; } = false;
+        public bool Reroll1Damage { get; set; } = false;
         public bool Torrent { get; set; } = false;
         public bool Blast { get; set; } = false;
         public bool IsVariableAttacks { get; set; } = false;
-        public int VariableDiceNumber { get; set; }
-        public int VariableDiceSides { get; set; } = 6;
-        public int VariableDiceConstant { get; set; }
+        public int VariableAttackDiceNumber { get; set; }
+        public int VariableAttackDiceSides { get; set; } = 6;
+        public int VariableAttackDiceConstant { get; set; }
+        public bool IsVariableDamage { get; set; } = false;
+        public int VariableDamageDiceNumber { get; set; }
+        public int VariableDamageDiceSides { get; set; } = 6;
+        public int VariableDamageDiceConstant { get; set; }
+
     }
 }

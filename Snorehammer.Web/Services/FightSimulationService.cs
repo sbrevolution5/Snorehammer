@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Primitives;
-using Snorehammer.Web.FrontendModels;
+﻿using Snorehammer.Web.FrontendModels;
 using System.Text;
 
 namespace Snorehammer.Web.Services
@@ -14,20 +13,23 @@ namespace Snorehammer.Web.Services
         public void RollAttackDice(FightSimulation sim)
         {
             sim.AttackDice = new List<Dice>();
-            for (int i = 0; i < sim.AttackProfile.VariableDiceNumber; i++)
+            for (int i = 0; i < sim.AttackProfile.VariableAttackDiceNumber; i++)
             {
-                //0 because target doesn't matter here
-                sim.AttackDice.Add(new Dice(7, _random,sim.AttackProfile.VariableDiceSides));
+                sim.AttackDice.Add(new Dice(0, _random, sim.AttackProfile.VariableAttackDiceSides));
             }
         }
         public void RollToHit(FightSimulation sim)
         {
             sim.ToHitDice = new List<Dice>();
-            sim.BlastBonus = sim.Defender.ModelCount / 5;
+            if (sim.AttackProfile.Blast)
+            {
+                sim.BlastBonus = sim.Defender.ModelCount / 5;
+            }
             sim.AttackNumber = sim.AttackProfile.Attacks;
             if (sim.AttackDice.Count != 0)
             {
-                sim.AttackNumber = sim.AttackDice.Sum(d => d.Result) + sim.AttackProfile.VariableDiceConstant;
+                //currently doesn't account for "per model" just a flat equation, so 1d6 +1 with 10 models must be written as 10d6 + 10
+                sim.AttackNumber = sim.AttackDice.Sum(d => d.Result) + sim.AttackProfile.VariableAttackDiceConstant;
                 if (sim.AttackProfile.Blast)
                 {
                     sim.AttackNumber += sim.BlastBonus;
@@ -58,6 +60,16 @@ namespace Snorehammer.Web.Services
                     sim.ToHitDice.Add(die);
                 }
             }
+            else if (sim.AttackProfile.Reroll1Hit)
+            {
+                var failed = sim.ToHitDice.Where(d => d.Result == 1);
+                sim.ToHitDice = sim.ToHitDice.Where(d => d.Result >= 1).ToList();
+                foreach (var die in failed)
+                {
+                    die.Reroll(_random);
+                    sim.ToHitDice.Add(die);
+                }
+            }
         }
         public void RollStrengthStep(FightSimulation sim)
         {
@@ -66,7 +78,10 @@ namespace Snorehammer.Web.Services
             {
                 for (int i = 0; i < sim.ToHitDice.Where(d => d.Critical).Count(); i++)
                 {
-                    sim.StrengthDice.Add(new Dice(targetValue, _random));
+                    for(int j = 0; j < sim.AttackProfile.SustainAmount; j++)
+                    {
+                        sim.StrengthDice.Add(new Dice(targetValue, _random));
+                    }
                 }
             }
             if (sim.AttackProfile.Lethal)
@@ -90,6 +105,16 @@ namespace Snorehammer.Web.Services
             {
                 var failed = sim.StrengthDice.Where(d => !d.Success);
                 sim.StrengthDice = sim.StrengthDice.Where(d => d.Success).ToList();
+                foreach (var die in failed)
+                {
+                    die.Reroll(_random);
+                    sim.StrengthDice.Add(die);
+                }
+            }
+            else if (sim.AttackProfile.Reroll1Wound)
+            {
+                var failed = sim.StrengthDice.Where(d => d.Result == 1);
+                sim.StrengthDice = sim.StrengthDice.Where(d => d.Result >= 1).ToList();
                 foreach (var die in failed)
                 {
                     die.Reroll(_random);
@@ -121,7 +146,7 @@ namespace Snorehammer.Web.Services
                     sim.ArmorDice.Add(new Dice(targetValue, _random));
                 }
             }
-            if (sim.AttackProfile.RerollWound)
+            if (sim.Defender.ArmorReroll)
             {
                 var failed = sim.ArmorDice.Where(d => !d.Success);
                 sim.ArmorDice = sim.ArmorDice.Where(d => d.Success).ToList();
@@ -131,7 +156,17 @@ namespace Snorehammer.Web.Services
                     sim.ArmorDice.Add(die);
                 }
             }
-
+            else if (sim.Defender.Reroll1Save)
+            {
+                var failed = sim.ArmorDice.Where(d => d.Result == 1);
+                sim.ArmorDice = sim.ArmorDice.Where(d => d.Result >= 1).ToList();
+                foreach (var die in failed)
+                {
+                    die.Reroll(_random);
+                    sim.ArmorDice.Add(die);
+                }
+            }
+            sim.DamageNumber = sim.ArmorDice.Where(d => !d.Success).Count() * sim.AttackProfile.Damage;
         }
 
         public int DetermineArmorSave(FightSimulation sim)
@@ -197,6 +232,19 @@ namespace Snorehammer.Web.Services
                 return 3;
             }
         }
+        public void RollDamageDice(FightSimulation sim)
+        {
+            sim.WoundDice = new List<Dice>();
+            var failedArmorSaves = sim.ArmorDice.Where(d => !d.Success).Count();
+            for (int i = 0; i < failedArmorSaves; i++)
+            {
+                for (int j = 0; j < sim.AttackProfile.VariableDamageDiceNumber; j++)
+                {
+                    sim.WoundDice.Add(new Dice(0, _random, sim.AttackProfile.VariableDamageDiceSides));
+                }
+            }
+            sim.DamageNumber = sim.WoundDice.Sum(d => d.Result) + sim.AttackProfile.VariableDamageDiceConstant * failedArmorSaves;
+        }
         public void RollFeelNoPain(FightSimulation sim)
         {
             if (!sim.Defender.FeelNoPain)
@@ -214,7 +262,7 @@ namespace Snorehammer.Web.Services
             var res = new StringBuilder();
             var successful = sim.ArmorDice.Where(d => !d.Success).Count();
             res.Append($"{successful} out of {sim.AttackProfile.Attacks} attacks broke through armor.\n");
-            int inflictedWounds = successful * sim.AttackProfile.Damage;
+            int inflictedWounds = sim.DamageNumber;
             if (sim.Defender.FeelNoPain && inflictedWounds != 0)
             {
                 var fnpBlockedWounds = sim.FeelNoPainDice.Where(d => d.Success).Count();
