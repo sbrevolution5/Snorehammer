@@ -22,6 +22,7 @@
         <RadzenAccordion Multiple="true">
             <Items>
 
+
                 @if (sim.AttackProfile.IsVariableAttacks)
                 {
                     <RadzenAccordionItem Text="Number Of Attacks">
@@ -170,6 +171,7 @@ else if (!FightComplete && !simulating)
 {
     <h1>LOADING</h1>
 }
+
 <RadzenButton Click=@(() => FightUnits()) Text="Fight Again" ButtonStyle="ButtonStyle.Base" />
 
 @code {
