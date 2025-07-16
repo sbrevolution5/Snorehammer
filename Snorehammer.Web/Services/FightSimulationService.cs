@@ -106,6 +106,16 @@ namespace Snorehammer.Web.Services
                     sim.StrengthDice.Add(die);
                 }
             }
+            else if (sim.AttackProfile.Reroll1Wound)
+            {
+                var failed = sim.StrengthDice.Where(d => d.Result == 1);
+                sim.StrengthDice = sim.StrengthDice.Where(d => d.Result >= 1).ToList();
+                foreach (var die in failed)
+                {
+                    die.Reroll(_random);
+                    sim.StrengthDice.Add(die);
+                }
+            }
         }
         public void RollArmorSaves(FightSimulation sim)
         {
@@ -131,7 +141,7 @@ namespace Snorehammer.Web.Services
                     sim.ArmorDice.Add(new Dice(targetValue, _random));
                 }
             }
-            if (sim.AttackProfile.RerollWound)
+            if (sim.Defender.ArmorReroll)
             {
                 var failed = sim.ArmorDice.Where(d => !d.Success);
                 sim.ArmorDice = sim.ArmorDice.Where(d => d.Success).ToList();
@@ -141,14 +151,14 @@ namespace Snorehammer.Web.Services
                     sim.ArmorDice.Add(die);
                 }
             }
-            else if (sim.AttackProfile.Reroll1Wound)
+            else if (sim.Defender.Reroll1Save)
             {
-                var failed = sim.StrengthDice.Where(d => d.Result == 1);
-                sim.StrengthDice = sim.StrengthDice.Where(d => d.Result >= 1).ToList();
+                var failed = sim.ArmorDice.Where(d => d.Result == 1);
+                sim.ArmorDice = sim.ArmorDice.Where(d => d.Result >= 1).ToList();
                 foreach (var die in failed)
                 {
                     die.Reroll(_random);
-                    sim.StrengthDice.Add(die);
+                    sim.ArmorDice.Add(die);
                 }
             }
 
