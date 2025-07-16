@@ -52,6 +52,18 @@
                     <RadzenCheckBox @bind-Value=@Unit.Reroll1Save Name="Reroll1Save" />
                     <RadzenLabel Text="Reroll 1s for armor saves" Component="Reroll1Save" class="rz-ms-2" />
                 </RadzenColumn>
+                <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                    <RadzenCheckBox @bind-Value=@Unit.Stealth Name="Stealth" />
+                    <RadzenLabel Text="Stealth (do not use for melee defender)" Component="Stealth" class="rz-ms-2" />
+                </RadzenColumn>
+                <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                    <RadzenCheckBox @bind-Value=@Unit.Minus1Hit Name="Minus1Hit" />
+                    <RadzenLabel Text="Minus 1 to hit roll" Component="Minus1Hit" class="rz-ms-2" />
+                </RadzenColumn>
+                <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                    <RadzenCheckBox @bind-Value=@Unit.Minus1Wound Name="Minus1Wound" />
+                    <RadzenLabel Text="Minus 1 to wound roll" Component="Minus1Wound" class="rz-ms-2" />
+                </RadzenColumn>
             <div class="rz-p-4 rz-text-align-center">
                 <RadzenCheckBox @bind-Value=@Unit.FeelNoPain Name="FeelNoPain" />
                 <RadzenLabel Text="Feel No Pain" Component="FeelNoPain" class="rz-ms-2" />

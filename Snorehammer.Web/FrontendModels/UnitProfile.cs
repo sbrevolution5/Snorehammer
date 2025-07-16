@@ -13,6 +13,9 @@
         public bool ArmorReroll { get; set; }
         public bool Reroll1Save { get; set; }
         public bool FeelNoPain { get; set; } = false;
+        public bool Minus1Hit { get; set; } = false;
+        public bool Minus1Wound { get; set; } = false;
+        public bool Stealth { get; set; } = false;
         public int FeelNoPainTarget { get; set; } = 6;
         public bool HasCover { get; set; } = false;
     }
