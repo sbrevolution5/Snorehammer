@@ -133,28 +133,7 @@
                 </RadzenAccordionItem>
 
                 @* <h2>Wound Rolls</h2> *@
-                @if (defender.FeelNoPain)
-                {
-                    <RadzenAccordionItem Selected="true" Text="Feel No Pain Rolls">
-                        <div class="container">
-                            <div class="col-6">
-                                <h3>Target: @defender.FeelNoPainTarget</h3>
-                            </div>
-                            <div class="col-6">
-                                <h3>Rolling: @(sim.ArmorDice.Where(d => !d.Success).Count() * attacker.Damage)</h3>
-                            </div>
-                            <div class="row">
-                                @foreach (var die in sim.FeelNoPainDice)
-                                {
-                                    <div class="col-1">
-                                        <DieDisplay die="@die"></DieDisplay>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                    </RadzenAccordionItem>
-
-                }
+                
                 @if (sim.AttackProfile.IsVariableDamage)
                 {
 
@@ -181,6 +160,28 @@
                             </div>
                         </div>
                     </RadzenAccordionItem>
+                }
+                @if (defender.FeelNoPain)
+                {
+                    <RadzenAccordionItem Selected="true" Text="Feel No Pain Rolls">
+                        <div class="container">
+                            <div class="col-6">
+                                <h3>Target: @defender.FeelNoPainTarget</h3>
+                            </div>
+                            <div class="col-6">
+                                <h3>Rolling: @(sim.ArmorDice.Where(d => !d.Success).Count() * attacker.Damage)</h3>
+                            </div>
+                            <div class="row">
+                                @foreach (var die in sim.FeelNoPainDice)
+                                {
+                                    <div class="col-1">
+                                        <DieDisplay die="@die"></DieDisplay>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </RadzenAccordionItem>
+
                 }
             </Items>
 
@@ -239,13 +240,14 @@ else if (!FightComplete && !simulating)
         fightSimulationService.RollToHit(sim);
         fightSimulationService.RollStrengthStep(sim);
         fightSimulationService.RollArmorSaves(sim);
-        if (defender.FeelNoPain)
-        {
-            fightSimulationService.RollFeelNoPain(sim);
-        }
+        
         if (sim.AttackProfile.IsVariableDamage)
         {
             fightSimulationService.RollDamageDice(sim);
+        }
+        if (defender.FeelNoPain)
+        {
+            fightSimulationService.RollFeelNoPain(sim);
         }
         sim.WinnerMessage = fightSimulationService.GenerateWinnerMessage(sim);
         FightComplete = true;
