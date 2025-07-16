@@ -10,6 +10,8 @@
         public List<Dice> ArmorDice { get; set; } = new List<Dice>();
         public List<Dice> WoundDice { get; set; } = new List<Dice>();
         public List<Dice> FeelNoPainDice { get; set; } = new List<Dice>();
+        public int HitTarget = 0;
+        public int WoundTarget = 0;
         public int ArmorSave { get; set; } = 0;
         public int AttackNumber { get; set; } = 0;
         public int DamageNumber { get; set; } = 0;

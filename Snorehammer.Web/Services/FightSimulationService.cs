@@ -18,6 +18,26 @@ namespace Snorehammer.Web.Services
                 sim.AttackDice.Add(new Dice(0, _random, sim.AttackProfile.VariableAttackDiceSides));
             }
         }
+        public void DetermineHitTarget(FightSimulation sim)
+        {
+            sim.HitTarget = sim.AttackProfile.Skill;
+            if (sim.AttackProfile.Plus1Hit)
+            {
+                sim.HitTarget--;
+            }
+            if (sim.Defender.Stealth || sim.Defender.Minus1Hit)
+            {
+                sim.HitTarget++;
+            }
+            if (sim.HitTarget < 2)
+            {
+                sim.HitTarget = 2;
+            }
+            if (sim.HitTarget > 6)
+            {
+                sim.HitTarget = 6;
+            }
+        }
         public void RollToHit(FightSimulation sim)
         {
             sim.ToHitDice = new List<Dice>();
