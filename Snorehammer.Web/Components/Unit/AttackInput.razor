@@ -80,6 +80,18 @@
                 <RadzenCheckBox @bind-Value=@attack.RerollDamage Name="RerollDamage" />
                 <RadzenLabel Text="Reroll Damage" Component="RerollDamage" class="rz-ms-2" />
             </RadzenColumn>
+            <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                <RadzenCheckBox @bind-Value=@attack.Reroll1Hit Name="Reroll1Hit" />
+                <RadzenLabel Text="Reroll 1s for Hit" Component="Reroll1Hit" class="rz-ms-2" />
+            </RadzenColumn>
+            <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                <RadzenCheckBox @bind-Value=@attack.Reroll1Wound Name="Reroll1Wound" />
+                <RadzenLabel Text="Reroll 1s for Wounds" Component="Reroll1Wound" class="rz-ms-2" />
+            </RadzenColumn>
+            <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                <RadzenCheckBox @bind-Value=@attack.Reroll1Damage Name="Reroll1Damage" />
+                <RadzenLabel Text="Reroll 1s for Damage" Component="Reroll1Damage" class="rz-ms-2" />
+            </RadzenColumn>
         </RadzenRow>
     </EditForm>
 </RadzenCard>

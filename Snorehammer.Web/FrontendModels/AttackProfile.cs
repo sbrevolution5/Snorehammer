@@ -15,6 +15,9 @@
         public bool RerollHit { get; set; } = false;
         public bool RerollWound { get; set; } = false;
         public bool RerollDamage { get; set; } = false;
+        public bool Reroll1Hit { get; set; } = false;
+        public bool Reroll1Wound { get; set; } = false;
+        public bool Reroll1Damage { get; set; } = false;
         public bool Torrent { get; set; } = false;
         public bool Blast { get; set; } = false;
         public bool IsVariableAttacks { get; set; } = false;

@@ -48,6 +48,10 @@
                 <RadzenCheckBox @bind-Value=@Unit.ArmorReroll Name="ArmorReroll" />
                 <RadzenLabel Text="Reroll all failed armor saves" Component="ArmorReroll" class="rz-ms-2" />
             </div>
+                <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                    <RadzenCheckBox @bind-Value=@Unit.Reroll1Save Name="Reroll1Save" />
+                    <RadzenLabel Text="Reroll 1s for armor saves" Component="Reroll1Save" class="rz-ms-2" />
+                </RadzenColumn>
             <div class="rz-p-4 rz-text-align-center">
                 <RadzenCheckBox @bind-Value=@Unit.FeelNoPain Name="FeelNoPain" />
                 <RadzenLabel Text="Feel No Pain" Component="FeelNoPain" class="rz-ms-2" />
