@@ -58,6 +58,16 @@ namespace Snorehammer.Web.Services
                     sim.ToHitDice.Add(die);
                 }
             }
+            else if (sim.AttackProfile.Reroll1Hit)
+            {
+                var failed = sim.ToHitDice.Where(d => d.Result == 1);
+                sim.ToHitDice = sim.ToHitDice.Where(d => d.Result >= 1).ToList();
+                foreach (var die in failed)
+                {
+                    die.Reroll(_random);
+                    sim.ToHitDice.Add(die);
+                }
+            }
         }
         public void RollStrengthStep(FightSimulation sim)
         {
