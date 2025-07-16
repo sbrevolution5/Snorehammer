@@ -92,7 +92,7 @@
                                     }
                                     @if (attacker.Sustained && sustainedDice)
                                     {
-                                        <span> + @sim.ToHitDice.Where(d => d.Critical).Count() (sustained)</span>
+                                        <span> + @(@sim.ToHitDice.Where(d => d.Critical).Count()*@sim.AttackProfile.SustainAmount) (sustained)</span>
                                     }
                                 </h3>
                             </div>

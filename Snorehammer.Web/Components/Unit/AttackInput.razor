@@ -68,6 +68,9 @@
             <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
                 <RadzenCheckBox @bind-Value=@attack.Sustained Name="Sustained" />
                 <RadzenLabel Text="Sustained Hits" Component="Sustained" class="rz-ms-2" />
+                <RadzenFormField Text="" Style="width: 100%;">
+                    <RadzenNumeric @bind-Value="@attack.SustainAmount" Disabled=!attack.Sustained/>
+                </RadzenFormField>
             </RadzenColumn>
             <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
                 <RadzenCheckBox @bind-Value=@attack.Lethal Name="Lethal" />
