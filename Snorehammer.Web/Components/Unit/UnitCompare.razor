@@ -155,6 +155,33 @@
                     </RadzenAccordionItem>
 
                 }
+                @if (sim.AttackProfile.IsVariableDamage)
+                {
+
+                    <RadzenAccordionItem Selected="true" Text="Damage Rolls">
+                        <div class="container">
+                            <div class="col-6">
+                                <h3>
+                                    Rolling: @attacker.VariableDamageDiceNumber
+                                    d @attacker.VariableDamageDiceSides
+                                    + @attacker.VariableAttackDiceConstant
+                                </h3>
+                            </div>
+                            <div class="col-6">
+                                <h3> Total: @sim.AttackProfile.Damage</h3>
+                            </div>
+                            <div class="row">
+                                @foreach (var die in sim.WoundDice)
+                                {
+                                    <div class="col-1">
+
+                                        <DieDisplay die="@die"></DieDisplay>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </RadzenAccordionItem>
+                }
             </Items>
 
         </RadzenAccordion>
@@ -215,6 +242,10 @@ else if (!FightComplete && !simulating)
         if (defender.FeelNoPain)
         {
             fightSimulationService.RollFeelNoPain(sim);
+        }
+        if (sim.AttackProfile.IsVariableDamage)
+        {
+            fightSimulationService.RollDamageDice(sim);
         }
         sim.WinnerMessage = fightSimulationService.GenerateWinnerMessage(sim);
         FightComplete = true;

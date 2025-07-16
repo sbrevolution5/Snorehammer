@@ -16,8 +16,7 @@ namespace Snorehammer.Web.Services
             sim.AttackDice = new List<Dice>();
             for (int i = 0; i < sim.AttackProfile.VariableAttackDiceNumber; i++)
             {
-                //0 because target doesn't matter here
-                sim.AttackDice.Add(new Dice(7, _random,sim.AttackProfile.VariableAttackDiceSides));
+                sim.AttackDice.Add(new Dice(0, _random,sim.AttackProfile.VariableAttackDiceSides));
             }
         }
         public void RollToHit(FightSimulation sim)
@@ -225,6 +224,14 @@ namespace Snorehammer.Web.Services
                     return 2;
                 }
                 return 3;
+            }
+        }
+        public void RollDamageDice(FightSimulation sim)
+        {
+            sim.WoundDice = new List<Dice>();
+            for (int i = 0; i < sim.AttackProfile.VariableDamageDiceNumber; i++)
+            {
+                sim.WoundDice.Add(new Dice(0, _random, sim.AttackProfile.VariableDamageDiceSides));
             }
         }
         public void RollFeelNoPain(FightSimulation sim)
