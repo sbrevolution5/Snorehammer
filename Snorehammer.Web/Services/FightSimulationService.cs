@@ -29,6 +29,7 @@ namespace Snorehammer.Web.Services
             sim.AttackNumber = sim.AttackProfile.Attacks;
             if (sim.AttackDice.Count != 0)
             {
+                //currently doesn't account for "per model" just a flat equation, so 1d6 +1 with 10 models must be written as 10d6 + 10
                 sim.AttackNumber = sim.AttackDice.Sum(d => d.Result) + sim.AttackProfile.VariableAttackDiceConstant;
                 if (sim.AttackProfile.Blast)
                 {
@@ -232,14 +233,15 @@ namespace Snorehammer.Web.Services
         public void RollDamageDice(FightSimulation sim)
         {
             sim.WoundDice = new List<Dice>();
-            for (int i = 0; i < sim.ArmorDice.Where(d => !d.Success).Count(); i++)
+            var failedArmorSaves = sim.ArmorDice.Where(d => !d.Success).Count();
+            for (int i = 0; i < failedArmorSaves; i++)
             {
                 for (int j = 0; j < sim.AttackProfile.VariableDamageDiceNumber; j++)
                 {
                     sim.WoundDice.Add(new Dice(0, _random, sim.AttackProfile.VariableDamageDiceSides));
                 }
             }
-            sim.DamageNumber = sim.WoundDice.Sum(d => d.Result) + sim.AttackProfile.VariableDamageDiceConstant;
+            sim.DamageNumber = sim.WoundDice.Sum(d => d.Result) + sim.AttackProfile.VariableDamageDiceConstant * failedArmorSaves;
         }
         public void RollFeelNoPain(FightSimulation sim)
         {
