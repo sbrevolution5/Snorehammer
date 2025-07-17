@@ -118,7 +118,7 @@
             </RadzenColumn>
             <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
                 <RadzenCheckBox @bind-Value=@attack.Melta Name="Melta" />
-                <RadzenLabel Text="Melta Hits" Component="Melta" class="rz-ms-2" />
+                <RadzenLabel Text="Melta " Component="Melta" class="rz-ms-2" />
                 <RadzenFormField Text="Assumes attacker is within melta range" Style="width: 100%;">
                     <RadzenNumeric @bind-Value="@attack.MeltaDamage" Disabled=!attack.Melta />
                 </RadzenFormField>
