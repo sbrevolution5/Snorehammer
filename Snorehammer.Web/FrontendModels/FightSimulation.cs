@@ -19,5 +19,13 @@
         public int BlastBonus = 0;
         public bool CoverIgnored { get; set; } = false;
         public string WinnerMessage { get; set; } = "";
+        public int ModelsDestroyed { get; set; } = 0;
+        public int WoundsInflicted { get; set; }
+        public int ArmorSavesFailed { get; set; }
+        public int AttacksHit { get; set; }
+        public int DamageApplied { get; set; }
+        public int FeelNoPainMade { get; set; }
+        
+
     }
 }
