@@ -31,6 +31,8 @@
         public int VariableDamageDiceNumber { get; set; }
         public int VariableDamageDiceSides { get; set; } = 6;
         public int VariableDamageDiceConstant { get; set; }
+        public bool Melta { get; set; } = false;
+        public bool MeltaDamage { get; set; } = 1;
 
     }
 }
