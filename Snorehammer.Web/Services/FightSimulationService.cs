@@ -186,7 +186,16 @@ namespace Snorehammer.Web.Services
                     sim.ArmorDice.Add(die);
                 }
             }
-            sim.DamageNumber = sim.ArmorDice.Where(d => !d.Success).Count() * sim.AttackProfile.Damage;
+            if (!sim.AttackProfile.IsVariableDamage)
+            {
+
+                int failedsaves = sim.ArmorDice.Where(d => !d.Success).Count();
+                sim.DamageNumber = failedsaves * sim.AttackProfile.Damage;
+                if (sim.AttackProfile.Melta)
+                {
+                    sim.DamageNumber += failedsaves * sim.AttackProfile.MeltaDamage;
+                }
+            }
         }
 
         public int DetermineArmorSave(FightSimulation sim)
@@ -286,6 +295,10 @@ namespace Snorehammer.Web.Services
                 }
             }
             sim.DamageNumber = sim.WoundDice.Sum(d => d.Result) + sim.AttackProfile.VariableDamageDiceConstant * failedArmorSaves;
+            if (sim.AttackProfile.Melta) 
+            {
+                sim.DamageNumber += sim.AttackProfile.MeltaDamage * failedArmorSaves;
+            }
         }
         public void RollFeelNoPain(FightSimulation sim)
         {
