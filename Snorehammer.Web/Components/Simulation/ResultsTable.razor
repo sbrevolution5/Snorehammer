@@ -1,0 +1,78 @@
+@using Snorehammer.Web.Components.Simulation.DiceRoller
+@using Snorehammer.Web.FrontendModels
+@using Snorehammer.Web.Services
+
+<RadzenTable GridLines="DataGridGridLines.Both" AllowAlternatingRows="true">
+    <RadzenTableHeader>
+        <RadzenTableHeaderRow>
+            <RadzenTableHeaderCell>
+                Stat
+            </RadzenTableHeaderCell>
+            <RadzenTableHeaderCell>
+                Fight 1
+            </RadzenTableHeaderCell>
+        </RadzenTableHeaderRow>
+    </RadzenTableHeader>
+    <RadzenTableBody>
+        <RadzenTableRow>
+            <RadzenTableCell>
+                Attacks Made
+            </RadzenTableCell>
+            <RadzenTableCell>
+                @sim.AttackNumber
+            </RadzenTableCell>
+        </RadzenTableRow>
+        <RadzenTableRow>
+            <RadzenTableCell>
+                Attacks Hit
+            </RadzenTableCell>
+            <RadzenTableCell>
+                @sim.AttacksHit
+            </RadzenTableCell>
+        </RadzenTableRow>
+        <RadzenTableRow>
+            <RadzenTableCell>
+                Wounds inflicted
+            </RadzenTableCell>
+            <RadzenTableCell>
+                @sim.WoundsInflicted
+            </RadzenTableCell>
+        </RadzenTableRow>
+        <RadzenTableRow>
+            <RadzenTableCell>
+                Armor Saves Failed
+            </RadzenTableCell>
+            <RadzenTableCell>
+                @sim.ArmorSavesFailed
+            </RadzenTableCell>
+        </RadzenTableRow>
+        <RadzenTableRow>
+            <RadzenTableCell>
+                Damage Applied
+            </RadzenTableCell>
+            <RadzenTableCell>
+                @sim.DamageNumber
+            </RadzenTableCell>
+        </RadzenTableRow>
+        <RadzenTableRow>
+            <RadzenTableCell>
+                Feel No Pain Successful
+            </RadzenTableCell>
+            <RadzenTableCell>
+                @sim.FeelNoPainMade
+            </RadzenTableCell>
+        </RadzenTableRow>
+        <RadzenTableRow>
+            <RadzenTableCell>
+                Models Destroyed
+            </RadzenTableCell>
+            <RadzenTableCell>
+                @sim.ModelsDestroyed
+            </RadzenTableCell>
+        </RadzenTableRow>
+    </RadzenTableBody>
+</RadzenTable>
+@code{
+    [Parameter]
+    public FightSimulation sim { get; set; }
+}

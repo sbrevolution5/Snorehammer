@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using Snorehammer.Web.Components.Simulation
 @using Snorehammer.Web.Components.Simulation.DiceRoller
 @using Snorehammer.Web.FrontendModels
 @using Snorehammer.Web.Services
@@ -198,6 +199,9 @@
 
         <h1>Winner:</h1>
         <p>@sim.WinnerMessage</p>
+    </RadzenCard>
+    <RadzenCard>
+        <ResultsTable sim=@sim/>
     </RadzenCard>
 }
 else if (!FightComplete && !simulating)
