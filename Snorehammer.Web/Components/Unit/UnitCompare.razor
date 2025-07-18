@@ -30,11 +30,36 @@
                     </RadzenText>
                 </HeaderTemplate>
                 <ChildContent>
+                    <RadzenRow>
+                        <RadzenColumn Size="6">
+                            <h3>
+                                Rolling: @attacker.VariableAttackDiceNumber
+                                d @attacker.VariableAttackDiceSides
+                                + @attacker.VariableAttackDiceConstant
+                                @if (sim.BlastBonus > 0)
+                                {
+                                    <span> + @sim.BlastBonus</span>
+                                }
+                            </h3>
+                        </RadzenColumn>
+                        <RadzenColumn>
+                            <h3> Total: @sim.AttackNumber</h3>
+                        </RadzenColumn>
+                    </RadzenRow>
+                    <RadzenRow>
+                        @foreach (var die in sim.AttackDice)
+                        {
+                            <div class="col-1">
 
-
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-6">
+                                <DieDisplay die="@die"></DieDisplay>
+                            </div>
+                        }
+                    </RadzenRow>
+                </ChildContent>
+                <SummaryTemplate>
+                    <RadzenCard class="rz-mt-4">
+                        <RadzenRow>
+                            <RadzenColumn Size="6">
                                 <h3>
                                     Rolling: @attacker.VariableAttackDiceNumber
                                     d @attacker.VariableAttackDiceSides
@@ -44,25 +69,11 @@
                                         <span> + @sim.BlastBonus</span>
                                     }
                                 </h3>
-                            </div>
-                            <div class="col-6">
+                            </RadzenColumn>
+                            <RadzenColumn>
                                 <h3> Total: @sim.AttackNumber</h3>
-                            </div>
-                        </div>
-                        <div class="row">
-                            @foreach (var die in sim.AttackDice)
-                            {
-                                <div class="col-1">
-
-                                    <DieDisplay die="@die"></DieDisplay>
-                                </div>
-                            }
-                        </div>
-                    </div>
-                </ChildContent>
-                <SummaryTemplate>
-                    <RadzenCard Variant="Variant.Outlined" class="rz-mt-4">
-                        <b>@sim.AttackNumber</b>
+                            </RadzenColumn>
+                        </RadzenRow>
                     </RadzenCard>
                 </SummaryTemplate>
             </RadzenPanel>
@@ -94,6 +105,18 @@
                     </div>
                 </div>
             </ChildContent>
+            <SummaryTemplate>
+                <RadzenCard Variant="Variant.Outlined" class="rz-mt-4">
+                    <div class="row">
+                        <div class="col-6">
+                            <h3>Target: @attacker.Skill</h3>
+                        </div>
+                        <div class="col-6">
+                            <h3>Rolling: @sim.AttackNumber</h3>
+                        </div>
+                    </div>
+                </RadzenCard>
+            </SummaryTemplate>
         </RadzenPanel>
         <RadzenPanel AllowCollapse="true" class="rz-my-10 rz-mx-auto">
             <HeaderTemplate>
@@ -132,6 +155,28 @@
                     </div>
                 </div>
             </ChildContent>
+            <SummaryTemplate>
+                <RadzenCard Variant="Variant.Outlined" class="rz-mt-4">
+                    <div class="row">
+                        <div class="col-6">
+                            <h3>Target: @sim.ModdedWoundTarget</h3>
+                        </div>
+                        <div class="col-6">
+                            <h3>
+                                Rolling:
+                                @sim.ToHitDice.Where(d => d.Success).Count()
+                                @{
+                                    var sustainedDice = sim.ToHitDice.Where(d => d.Critical).Count() > 0;
+                                }
+                                @if (attacker.Sustained && sustainedDice)
+                                {
+                                    <span> + @(@sim.ToHitDice.Where(d => d.Critical).Count() * @sim.AttackProfile.SustainAmount) (sustained)</span>
+                                }
+                            </h3>
+                        </div>
+                    </div>
+                </RadzenCard>
+            </SummaryTemplate>
         </RadzenPanel>
         <RadzenPanel AllowCollapse="true" class="rz-my-10 rz-mx-auto">
             <HeaderTemplate>
@@ -162,6 +207,20 @@
                     </div>
                 </div>
             </ChildContent>
+            <SummaryTemplate>
+                <RadzenCard Variant="Variant.Outlined" class="rz-mt-4">
+                    <div class="col-6">
+                        <h3>Target: @fightSimulationService.DetermineArmorSave(sim)</h3>
+                        @if (sim.CoverIgnored)
+                        {
+                            <h4>Cover did not matter</h4>
+                        }
+                    </div>
+                    <div class="col-6">
+                        <h3>Rolling: @sim.StrengthDice.Where(d => d.Success).Count()</h3>
+                    </div>
+                </RadzenCard>
+            </SummaryTemplate>
         </RadzenPanel>
 
 
@@ -206,6 +265,27 @@
                         </div>
                     </div>
                 </ChildContent>
+                <SummaryTemplate>
+                    <RadzenCard Variant="Variant.Outlined" class="rz-mt-4">
+                        <div class="col-6">
+                            <h3>
+                                Rolling: @attacker.VariableDamageDiceNumber
+                                d @attacker.VariableDamageDiceSides
+                                + @attacker.VariableAttackDiceConstant
+                                @if (sim.AttackProfile.Melta)
+                                {
+                                    <span>
+
+                                        + @attacker.MeltaDamage (Melta)
+                                    </span>
+                                }
+                            </h3>
+                        </div>
+                        <div class="col-6">
+                            <h3> Total: @sim.DamageNumber</h3>
+                        </div>
+                    </RadzenCard>
+                </SummaryTemplate>
             </RadzenPanel>
         }
         @if (defender.FeelNoPain)
@@ -235,6 +315,16 @@
                         </div>
                     </div>
                 </ChildContent>
+                <SummaryTemplate>
+                    <RadzenCard class="rz-mt-4">
+                        <div class="col-6">
+                            <h3>Target: @defender.FeelNoPainTarget</h3>
+                        </div>
+                        <div class="col-6">
+                            <h3>Rolling: @(sim.ArmorDice.Where(d => !d.Success).Count() * attacker.Damage)</h3>
+                        </div>
+                    </RadzenCard>
+                </SummaryTemplate>
             </RadzenPanel>
 
         }
