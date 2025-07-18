@@ -13,17 +13,11 @@
         <RadzenRow>
             <RadzenColumn Size="6">
                 <h3>
-                    Rolling: @sim.AttackProfile.VariableAttackDiceNumber
-                    d @sim.AttackProfile.VariableAttackDiceSides
-                    + @sim.AttackProfile.VariableAttackDiceConstant
-                    @if (sim.BlastBonus > 0)
-                    {
-                        <span> + @sim.BlastBonus</span>
-                    }
+                    @RollString1
                 </h3>
             </RadzenColumn>
             <RadzenColumn>
-                <h3> Total: @sim.AttackNumber</h3>
+                <h3> @RollString2</h3>
             </RadzenColumn>
         </RadzenRow>
         <RadzenRow>
@@ -60,4 +54,8 @@
 @code{
     [Parameter]
     public FightSimulation sim { get; set; }
+    [Parameter]
+    public string RollString1 { get; set; }
+    [Parameter]
+    public string RollString2 { get; set; }
 }
