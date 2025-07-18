@@ -23,12 +23,12 @@
 
         @if (sim.AttackProfile.IsVariableAttacks)
         {
-            <DicePanel sim="@sim" />
+            <DicePanel sim="@sim" Title="Number of Attacks" RollString1=@($"Rolling: {sim.AttackProfile.VariableAttackDiceNumber} d{sim.AttackProfile.VariableAttackDiceSides} + {sim.AttackProfile.VariableAttackDiceConstant}" + (sim.BlastBonus > 0 ? $" + {@sim.BlastBonus}" : "")) RollString2=@($"Total: {sim.AttackNumber}") DiceList="@sim.AttackDice"/>
         }
         <RadzenPanel AllowCollapse="true" class="rz-my-10 rz-mx-auto">
             <HeaderTemplate>
                 <RadzenText TextStyle="TextStyle.H6" class="rz-display-flex rz-align-items-center rz-m-0">
-                    <RadzenIcon Icon="account_box" class="rz-me-1" /><b>To Hit results</b>
+                    <RadzenIcon Icon="casino" class="rz-me-1" /><b>To Hit results</b>
                 </RadzenText>
             </HeaderTemplate>
             <ChildContent>
@@ -68,7 +68,7 @@
         <RadzenPanel AllowCollapse="true" class="rz-my-10 rz-mx-auto">
             <HeaderTemplate>
                 <RadzenText TextStyle="TextStyle.H6" class="rz-display-flex rz-align-items-center rz-m-0">
-                    <RadzenIcon Icon="account_box" class="rz-me-1" /><b>To Wound Roll</b>
+                    <RadzenIcon Icon="casino" class="rz-me-1" /><b>To Wound Roll</b>
                 </RadzenText>
             </HeaderTemplate>
             <ChildContent>
@@ -128,7 +128,7 @@
         <RadzenPanel AllowCollapse="true" class="rz-my-10 rz-mx-auto">
             <HeaderTemplate>
                 <RadzenText TextStyle="TextStyle.H6" class="rz-display-flex rz-align-items-center rz-m-0">
-                    <RadzenIcon Icon="account_box" class="rz-me-1" /><b>Armor Roll</b>
+                    <RadzenIcon Icon="casino" class="rz-me-1" /><b>Armor Roll</b>
                 </RadzenText>
             </HeaderTemplate>
             <ChildContent>
@@ -179,7 +179,7 @@
             <RadzenPanel AllowCollapse="true" class="rz-my-10 rz-mx-auto">
                 <HeaderTemplate>
                     <RadzenText TextStyle="TextStyle.H6" class="rz-display-flex rz-align-items-center rz-m-0">
-                        <RadzenIcon Icon="account_box" class="rz-me-1" /><b>Damage Roll</b>
+                        <RadzenIcon Icon="casino" class="rz-me-1" /><b>Damage Roll</b>
                     </RadzenText>
                 </HeaderTemplate>
                 <ChildContent>
@@ -240,7 +240,7 @@
             <RadzenPanel AllowCollapse="true" class="rz-my-10 rz-mx-auto">
                 <HeaderTemplate>
                     <RadzenText TextStyle="TextStyle.H6" class="rz-display-flex rz-align-items-center rz-m-0">
-                        <RadzenIcon Icon="account_box" class="rz-me-1" /><b>Feel No Pain Roll</b>
+                        <RadzenIcon Icon="casino" class="rz-me-1" /><b>Feel No Pain Roll</b>
                     </RadzenText>
                 </HeaderTemplate>
                 <ChildContent>

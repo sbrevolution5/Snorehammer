@@ -6,28 +6,22 @@
 <RadzenPanel AllowCollapse="true" class="rz-my-10 rz-mx-auto">
     <HeaderTemplate>
         <RadzenText TextStyle="TextStyle.H6" class="rz-display-flex rz-align-items-center rz-m-0">
-            <RadzenIcon Icon="account_box" class="rz-me-1" /><b>Number of Attacks</b>
+            <RadzenIcon Icon="casino" class="rz-me-1" /><b>@Title</b>
         </RadzenText>
     </HeaderTemplate>
     <ChildContent>
         <RadzenRow>
             <RadzenColumn Size="6">
                 <h3>
-                    Rolling: @sim.AttackProfile.VariableAttackDiceNumber
-                    d @sim.AttackProfile.VariableAttackDiceSides
-                    + @sim.AttackProfile.VariableAttackDiceConstant
-                    @if (sim.BlastBonus > 0)
-                    {
-                        <span> + @sim.BlastBonus</span>
-                    }
+                    @RollString1
                 </h3>
             </RadzenColumn>
             <RadzenColumn>
-                <h3> Total: @sim.AttackNumber</h3>
+                <h3> @RollString2</h3>
             </RadzenColumn>
         </RadzenRow>
         <RadzenRow>
-            @foreach (var die in sim.AttackDice)
+            @foreach (var die in DiceList)
             {
                 <div class="col-1">
 
@@ -41,17 +35,11 @@
             <RadzenRow>
                 <RadzenColumn Size="6">
                     <h3>
-                        Rolling: @sim.AttackProfile.VariableAttackDiceNumber
-                        d @sim.AttackProfile.VariableAttackDiceSides
-                        + @sim.AttackProfile.VariableAttackDiceConstant
-                        @if (sim.BlastBonus > 0)
-                        {
-                            <span> + @sim.BlastBonus</span>
-                        }
+                        @RollString1
                     </h3>
                 </RadzenColumn>
                 <RadzenColumn>
-                    <h3> Total: @sim.AttackNumber</h3>
+                    <h3> @RollString2</h3>
                 </RadzenColumn>
             </RadzenRow>
         </RadzenCard>
@@ -60,4 +48,14 @@
 @code{
     [Parameter]
     public FightSimulation sim { get; set; }
+    [Parameter]
+    public string RollString1 { get; set; }
+    [Parameter]
+    public string RollString2 { get; set; }
+    [Parameter]
+    public string Title { get; set; }
+    [Parameter]
+    public List<Dice> DiceList { get; set; }
+    [Parameter]
+    public bool CriticalMatters { get; set; } = false;
 }
