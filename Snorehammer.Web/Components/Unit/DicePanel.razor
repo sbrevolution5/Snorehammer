@@ -1,0 +1,63 @@
+@using Snorehammer.Web.Components.Simulation
+@using Snorehammer.Web.Components.Simulation.DiceRoller
+@using Snorehammer.Web.FrontendModels
+@using Snorehammer.Web.Services
+
+<RadzenPanel AllowCollapse="true" class="rz-my-10 rz-mx-auto">
+    <HeaderTemplate>
+        <RadzenText TextStyle="TextStyle.H6" class="rz-display-flex rz-align-items-center rz-m-0">
+            <RadzenIcon Icon="account_box" class="rz-me-1" /><b>Number of Attacks</b>
+        </RadzenText>
+    </HeaderTemplate>
+    <ChildContent>
+        <RadzenRow>
+            <RadzenColumn Size="6">
+                <h3>
+                    Rolling: @sim.AttackProfile.VariableAttackDiceNumber
+                    d @sim.AttackProfile.VariableAttackDiceSides
+                    + @sim.AttackProfile.VariableAttackDiceConstant
+                    @if (sim.BlastBonus > 0)
+                    {
+                        <span> + @sim.BlastBonus</span>
+                    }
+                </h3>
+            </RadzenColumn>
+            <RadzenColumn>
+                <h3> Total: @sim.AttackNumber</h3>
+            </RadzenColumn>
+        </RadzenRow>
+        <RadzenRow>
+            @foreach (var die in sim.AttackDice)
+            {
+                <div class="col-1">
+
+                    <DieDisplay die="@die"></DieDisplay>
+                </div>
+            }
+        </RadzenRow>
+    </ChildContent>
+    <SummaryTemplate>
+        <RadzenCard class="rz-mt-4">
+            <RadzenRow>
+                <RadzenColumn Size="6">
+                    <h3>
+                        Rolling: @sim.AttackProfile.VariableAttackDiceNumber
+                        d @sim.AttackProfile.VariableAttackDiceSides
+                        + @sim.AttackProfile.VariableAttackDiceConstant
+                        @if (sim.BlastBonus > 0)
+                        {
+                            <span> + @sim.BlastBonus</span>
+                        }
+                    </h3>
+                </RadzenColumn>
+                <RadzenColumn>
+                    <h3> Total: @sim.AttackNumber</h3>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenCard>
+    </SummaryTemplate>
+</RadzenPanel>
+@code{
+    [Parameter]
+    public FightSimulation sim { get; set; }
+}
