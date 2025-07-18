@@ -20,109 +20,38 @@
 
         <h1>Results</h1>
         <br />
-        <RadzenAccordion Multiple="true">
-            <Items>
 
 
-                @if (sim.AttackProfile.IsVariableAttacks)
-                {
-                    <RadzenAccordionItem Selected="true" Text="Number Of Attacks">
+    @if (sim.AttackProfile.IsVariableAttacks)
+    {
+            <RadzenPanel AllowCollapse="true" class="rz-my-10 rz-mx-auto">
+                <HeaderTemplate>
+                    <RadzenText TextStyle="TextStyle.H6" class="rz-display-flex rz-align-items-center rz-m-0">
+                        <RadzenIcon Icon="account_box" class="rz-me-1" /><b>Number of Attacks</b>
+                    </RadzenText>
+                </HeaderTemplate>
+                <ChildContent>
 
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-6">
-                                    <h3>
-                                        Rolling: @attacker.VariableAttackDiceNumber
-                                        d @attacker.VariableAttackDiceSides
-                                        + @attacker.VariableAttackDiceConstant
-                                        @if (sim.BlastBonus > 0)
-                                        {
-                                            <span> + @sim.BlastBonus</span>
-                                        }
-                                    </h3>
-                                </div>
-                                <div class="col-6">
-                                    <h3> Total: @sim.AttackNumber</h3>
-                                </div>
-                            </div>
-                            <div class="row">
-                                @foreach (var die in sim.AttackDice)
-                                {
-                                    <div class="col-1">
 
-                                        <DieDisplay die="@die"></DieDisplay>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                    </RadzenAccordionItem>
-                }
-                <RadzenAccordionItem Selected="true" Text="To Hit Results">
                     <div class="container">
                         <div class="row">
-                            <div class="col-6">
-                                <h3>Target: @attacker.Skill</h3>
-                            </div>
-                            <div class="col-6">
-                                <h3>Rolling: @sim.AttackNumber</h3>
-                            </div>
-                        </div>
-                        <div class="row">
-                            @foreach (var die in sim.ToHitDice)
-                            {
-                                <div class="col-1">
-
-                                    <DieDisplay die="@die" CriticalMatters="@(attacker.Sustained || attacker.Lethal)"></DieDisplay>
-                                </div>
-                            }
-                        </div>
-                    </div>
-                </RadzenAccordionItem>
-                <RadzenAccordionItem Selected="true" Text="Strength vs Toughness">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-6">
-                                <h3>Target: @sim.ModdedWoundTarget</h3>
-                            </div>
                             <div class="col-6">
                                 <h3>
-                                    Rolling:
-                                    @sim.ToHitDice.Where(d => d.Success).Count()
-                                    @{
-                                        var sustainedDice = sim.ToHitDice.Where(d => d.Critical).Count() > 0;
-                                    }
-                                    @if (attacker.Sustained && sustainedDice)
+                                    Rolling: @attacker.VariableAttackDiceNumber
+                                    d @attacker.VariableAttackDiceSides
+                                    + @attacker.VariableAttackDiceConstant
+                                    @if (sim.BlastBonus > 0)
                                     {
-                                        <span> + @(@sim.ToHitDice.Where(d => d.Critical).Count() * @sim.AttackProfile.SustainAmount) (sustained)</span>
+                                        <span> + @sim.BlastBonus</span>
                                     }
                                 </h3>
                             </div>
+                            <div class="col-6">
+                                <h3> Total: @sim.AttackNumber</h3>
+                            </div>
                         </div>
                         <div class="row">
-                            @foreach (var die in sim.StrengthDice)
-                            {
-                                <div class="col-1">
-
-                                    <DieDisplay die="@die" CriticalMatters="@attacker.Devastating"></DieDisplay>
-                                </div>
-                            }
-                        </div>
-                    </div>
-                </RadzenAccordionItem>
-                <RadzenAccordionItem Selected="true" Text="Armor Rolls">
-                    <div class="container">
-                        <div class="col-6">
-                            <h3>Target: @fightSimulationService.DetermineArmorSave(sim)</h3>
-                            @if (sim.CoverIgnored)
-                            {
-                                <h4>Cover did not matter</h4>
-                            }
-                        </div>
-                        <div class="col-6">
-                            <h3>Rolling: @sim.StrengthDice.Where(d => d.Success).Count()</h3>
-                        </div>
-                        <div class="row">
-                            @foreach (var die in sim.ArmorDice)
+                            @foreach (var die in sim.AttackDice)
                             {
                                 <div class="col-1">
 
@@ -131,69 +60,151 @@
                             }
                         </div>
                     </div>
-                </RadzenAccordionItem>
+                </ChildContent>
+                <SummaryTemplate>
+                    <RadzenCard Variant="Variant.Outlined" class="rz-mt-4">
+                        <b>@sim.AttackNumber</b>
+                    </RadzenCard>
+                </SummaryTemplate>
+            </RadzenPanel>
+    }
+        <RadzenAccordionItem Selected="true" Text="To Hit Results">
+            <div class="container">
+                <div class="row">
+                    <div class="col-6">
+                        <h3>Target: @attacker.Skill</h3>
+                    </div>
+                    <div class="col-6">
+                        <h3>Rolling: @sim.AttackNumber</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    @foreach (var die in sim.ToHitDice)
+                    {
+                        <div class="col-1">
 
-                @* <h2>Wound Rolls</h2> *@
-
-                @if (sim.AttackProfile.IsVariableDamage)
-                {
-
-                    <RadzenAccordionItem Selected="true" Text="Damage Rolls">
-                        <div class="container">
-                            <div class="col-6">
-                                <h3>
-                                    Rolling: @attacker.VariableDamageDiceNumber
-                                    d @attacker.VariableDamageDiceSides
-                                    + @attacker.VariableAttackDiceConstant
-                                    @if (sim.AttackProfile.Melta)
-                                    {
-                                        <span>
-
-                                            + @attacker.MeltaDamage (Melta)
-                                        </span>
-                                    }
-                                </h3>
-                            </div>
-                            <div class="col-6">
-                                <h3> Total: @sim.DamageNumber</h3>
-                            </div>
-                            <div class="row">
-                                @foreach (var die in sim.WoundDice)
-                                {
-                                    <div class="col-1">
-
-                                        <DieDisplay die="@die"></DieDisplay>
-                                    </div>
-                                }
-                            </div>
+                            <DieDisplay die="@die" CriticalMatters="@(attacker.Sustained || attacker.Lethal)"></DieDisplay>
                         </div>
-                    </RadzenAccordionItem>
-                }
-                @if (defender.FeelNoPain)
-                {
-                    <RadzenAccordionItem Selected="true" Text="Feel No Pain Rolls">
-                        <div class="container">
-                            <div class="col-6">
-                                <h3>Target: @defender.FeelNoPainTarget</h3>
-                            </div>
-                            <div class="col-6">
-                                <h3>Rolling: @(sim.ArmorDice.Where(d => !d.Success).Count() * attacker.Damage)</h3>
-                            </div>
-                            <div class="row">
-                                @foreach (var die in sim.FeelNoPainDice)
-                                {
-                                    <div class="col-1">
-                                        <DieDisplay die="@die"></DieDisplay>
-                                    </div>
-                                }
-                            </div>
+                    }
+                </div>
+            </div>
+        </RadzenAccordionItem>
+        <RadzenAccordionItem Selected="true" Text="Strength vs Toughness">
+            <div class="container">
+                <div class="row">
+                    <div class="col-6">
+                        <h3>Target: @sim.ModdedWoundTarget</h3>
+                    </div>
+                    <div class="col-6">
+                        <h3>
+                            Rolling:
+                            @sim.ToHitDice.Where(d => d.Success).Count()
+                            @{
+                                var sustainedDice = sim.ToHitDice.Where(d => d.Critical).Count() > 0;
+                            }
+                            @if (attacker.Sustained && sustainedDice)
+                            {
+                                <span> + @(@sim.ToHitDice.Where(d => d.Critical).Count() * @sim.AttackProfile.SustainAmount) (sustained)</span>
+                            }
+                        </h3>
+                    </div>
+                </div>
+                <div class="row">
+                    @foreach (var die in sim.StrengthDice)
+                    {
+                        <div class="col-1">
+
+                            <DieDisplay die="@die" CriticalMatters="@attacker.Devastating"></DieDisplay>
                         </div>
-                    </RadzenAccordionItem>
+                    }
+                </div>
+            </div>
+        </RadzenAccordionItem>
+        <RadzenAccordionItem Selected="true" Text="Armor Rolls">
+            <div class="container">
+                <div class="col-6">
+                    <h3>Target: @fightSimulationService.DetermineArmorSave(sim)</h3>
+                    @if (sim.CoverIgnored)
+                    {
+                        <h4>Cover did not matter</h4>
+                    }
+                </div>
+                <div class="col-6">
+                    <h3>Rolling: @sim.StrengthDice.Where(d => d.Success).Count()</h3>
+                </div>
+                <div class="row">
+                    @foreach (var die in sim.ArmorDice)
+                    {
+                        <div class="col-1">
 
-                }
-            </Items>
+                            <DieDisplay die="@die"></DieDisplay>
+                        </div>
+                    }
+                </div>
+            </div>
+        </RadzenAccordionItem>
 
-        </RadzenAccordion>
+    @* <h2>Wound Rolls</h2> *@
+
+    @if (sim.AttackProfile.IsVariableDamage)
+    {
+
+            <RadzenAccordionItem Selected="true" Text="Damage Rolls">
+                <div class="container">
+                    <div class="col-6">
+                        <h3>
+                            Rolling: @attacker.VariableDamageDiceNumber
+                            d @attacker.VariableDamageDiceSides
+                            + @attacker.VariableAttackDiceConstant
+                            @if (sim.AttackProfile.Melta)
+                            {
+                                <span>
+
+                                    + @attacker.MeltaDamage (Melta)
+                                </span>
+                            }
+                        </h3>
+                    </div>
+                    <div class="col-6">
+                        <h3> Total: @sim.DamageNumber</h3>
+                    </div>
+                    <div class="row">
+                        @foreach (var die in sim.WoundDice)
+                        {
+                            <div class="col-1">
+
+                                <DieDisplay die="@die"></DieDisplay>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </RadzenAccordionItem>
+    }
+    @if (defender.FeelNoPain)
+    {
+            <RadzenAccordionItem Selected="true" Text="Feel No Pain Rolls">
+                <div class="container">
+                    <div class="col-6">
+                        <h3>Target: @defender.FeelNoPainTarget</h3>
+                    </div>
+                    <div class="col-6">
+                        <h3>Rolling: @(sim.ArmorDice.Where(d => !d.Success).Count() * attacker.Damage)</h3>
+                    </div>
+                    <div class="row">
+                        @foreach (var die in sim.FeelNoPainDice)
+                        {
+                            <div class="col-1">
+                                <DieDisplay die="@die"></DieDisplay>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </RadzenAccordionItem>
+
+    }
+    </Items>
+
+    </>
     </RadzenCard>
     <RadzenCard>
 
