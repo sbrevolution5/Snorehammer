@@ -6,7 +6,7 @@
 <RadzenPanel AllowCollapse="true" class="rz-my-10 rz-mx-auto">
     <HeaderTemplate>
         <RadzenText TextStyle="TextStyle.H6" class="rz-display-flex rz-align-items-center rz-m-0">
-            <RadzenIcon Icon="account_box" class="rz-me-1" /><b>Number of Attacks</b>
+            <RadzenIcon Icon="account_box" class="rz-me-1" /><b>@Title</b>
         </RadzenText>
     </HeaderTemplate>
     <ChildContent>
@@ -58,4 +58,6 @@
     public string RollString1 { get; set; }
     [Parameter]
     public string RollString2 { get; set; }
+    [Parameter]
+    public string Title { get; set; }
 }
