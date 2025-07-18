@@ -93,7 +93,7 @@
                                     }
                                     @if (attacker.Sustained && sustainedDice)
                                     {
-                                        <span> + @(@sim.ToHitDice.Where(d => d.Critical).Count()*@sim.AttackProfile.SustainAmount) (sustained)</span>
+                                        <span> + @(@sim.ToHitDice.Where(d => d.Critical).Count() * @sim.AttackProfile.SustainAmount) (sustained)</span>
                                     }
                                 </h3>
                             </div>
@@ -134,7 +134,7 @@
                 </RadzenAccordionItem>
 
                 @* <h2>Wound Rolls</h2> *@
-                
+
                 @if (sim.AttackProfile.IsVariableDamage)
                 {
 
@@ -149,7 +149,7 @@
                                     {
                                         <span>
 
-                                        + @attacker.MeltaDamage (Melta)
+                                            + @attacker.MeltaDamage (Melta)
                                         </span>
                                     }
                                 </h3>
@@ -201,15 +201,15 @@
         <p>@sim.WinnerMessage</p>
     </RadzenCard>
     <RadzenCard>
-        <ResultsTable sim=@sim/>
+        <ResultsTable sim=@sim />
     </RadzenCard>
+    <RadzenButton Click=@(() => FightUnits()) Text="Fight Again" ButtonStyle="ButtonStyle.Base" />
 }
 else if (!FightComplete && !simulating)
 {
     <h1>LOADING</h1>
 }
 
-<RadzenButton Click=@(() => FightUnits()) Text="Fight Again" ButtonStyle="ButtonStyle.Base" />
 
 @code {
     private FightSimulation sim { get; set; } = new FightSimulation();
@@ -254,7 +254,7 @@ else if (!FightComplete && !simulating)
         fightSimulationService.RollToHit(sim);
         fightSimulationService.RollStrengthStep(sim);
         fightSimulationService.RollArmorSaves(sim);
-        
+
         if (sim.AttackProfile.IsVariableDamage)
         {
             fightSimulationService.RollDamageDice(sim);
