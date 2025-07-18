@@ -42,6 +42,13 @@
                 </RadzenFormField>
             </RadzenColumn>
         </RadzenRow>
+        <RadzenPanel AllowCollapse="true" class="rz-my-10 rz-mx-auto">
+            <HeaderTemplate>
+                <RadzenText TextStyle="TextStyle.H6" class="rz-display-flex rz-align-items-center rz-m-0">
+                    <RadzenIcon Icon="account_box" class="rz-me-1" /><b>Abilities</b>
+                </RadzenText>
+            </HeaderTemplate>
+            <ChildContent>
         <RadzenRow AlignItems="AlignItems.End" Wrap="FlexWrap.Wrap" Gap="1rem" class="rz-p-sm-4">
 
             <div class="rz-p-4 rz-text-align-center">
@@ -76,6 +83,8 @@
                 <RadzenLabel Text="Has Cover" Component="HasCover" class="rz-ms-2" />
             </div>
         </RadzenRow>
+        </ChildContent>
+        </RadzenPanel>
     </EditForm>
     </RadzenCard>
 }
