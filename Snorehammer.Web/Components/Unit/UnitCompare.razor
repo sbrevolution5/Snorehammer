@@ -23,7 +23,7 @@
 
         @if (sim.AttackProfile.IsVariableAttacks)
         {
-            <DicePanel sim="@sim" Title="Number of Attacks" RollString1=@($"Rolling: {sim.AttackProfile.VariableAttackDiceNumber} d{sim.AttackProfile.VariableAttackDiceSides} + {sim.AttackProfile.VariableAttackDiceConstant}" + (sim.BlastBonus > 0 ? $" + {@sim.BlastBonus}" : "")) RollString2=@($"Total: {sim.AttackNumber}") />
+            <DicePanel sim="@sim" Title="Number of Attacks" RollString1=@($"Rolling: {sim.AttackProfile.VariableAttackDiceNumber} d{sim.AttackProfile.VariableAttackDiceSides} + {sim.AttackProfile.VariableAttackDiceConstant}" + (sim.BlastBonus > 0 ? $" + {@sim.BlastBonus}" : "")) RollString2=@($"Total: {sim.AttackNumber}") DiceList="@sim.AttackDice"/>
         }
         <RadzenPanel AllowCollapse="true" class="rz-my-10 rz-mx-auto">
             <HeaderTemplate>
