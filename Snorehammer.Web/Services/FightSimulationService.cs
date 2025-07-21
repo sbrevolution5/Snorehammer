@@ -94,6 +94,7 @@ namespace Snorehammer.Web.Services
         }
         public void RollStrengthStep(FightSimulation sim)
         {
+            DetermineModdedWoundTarget(sim);
             var targetValue = sim.ModdedWoundTarget;
             if (sim.AttackProfile.Sustained)
             {
@@ -268,6 +269,7 @@ namespace Snorehammer.Web.Services
         }
         public void DetermineModdedWoundTarget(FightSimulation sim)
         {
+            DetermineWoundTarget(sim);
             sim.ModdedWoundTarget = sim.WoundTarget;
             if (sim.AttackProfile.Plus1Wound)
             {
