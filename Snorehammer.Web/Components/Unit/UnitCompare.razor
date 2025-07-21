@@ -21,6 +21,7 @@
         <br />
 
 
+
     @if (sim.AttackProfile.IsVariableAttacks)
     {
             <DicePanel sim="@sim"
@@ -50,6 +51,7 @@
     @if (sim.AttackProfile.IsVariableDamage)
     {
 
+
             <DicePanel sim="@sim"
                        Title="Damage Roll"
                        RollString1=@($"Rolling: {sim.AttackProfile.VariableDamageDiceNumber} d{sim.AttackProfile.VariableDamageDiceSides} + {sim.AttackProfile.VariableDamageDiceConstant}" + (sim.AttackProfile.Melta ? $" + {@sim.AttackProfile.MeltaDamage}" : ""))
@@ -77,6 +79,7 @@
         else if (!FightComplete && !simulating)
         {
         <h1>LOADING</h1>
+
         }
 
 
