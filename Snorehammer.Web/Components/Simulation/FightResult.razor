@@ -79,7 +79,7 @@
 
 @code {
     [Parameter]
-    public FightSimulation sim { get; set; } = new FightSimulation();
+    public FightSimulation sim { get; set; }
     private bool FightComplete { get; set; } = false;
     private bool simulating { get; set; } = true;
     private FightSimulationService fightSimulationService = new FightSimulationService();

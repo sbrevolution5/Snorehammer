@@ -74,13 +74,13 @@
         };
         comparison.AlternateAttackSimulation = new FightSimulation()
             {
-                Defender = comparison.Defender1,
-                AttackProfile = comparison.Attacker2
+                Defender = comparison.Simulation1.Defender,
+                AttackProfile = comparison.Simulation1.AttackProfile
             };
         comparison.AlternateDefenseSimulation = new FightSimulation()
             {
-                Defender = comparison.Defender2,
-                AttackProfile = comparison.Attacker1
+                Defender = comparison.Simulation1.Defender,
+                AttackProfile = comparison.Simulation1.AttackProfile
             };
 
         return base.OnInitializedAsync();
