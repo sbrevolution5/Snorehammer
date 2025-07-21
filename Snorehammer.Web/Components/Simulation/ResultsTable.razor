@@ -11,6 +11,12 @@
             <RadzenTableHeaderCell>
                 Fight 1
             </RadzenTableHeaderCell>
+            @if (sim2 is not null)
+            {
+                <RadzenTableHeaderCell>
+                    Fight 2
+                </RadzenTableHeaderCell>
+            }
         </RadzenTableHeaderRow>
     </RadzenTableHeader>
     <RadzenTableBody>
@@ -21,6 +27,12 @@
             <RadzenTableCell>
                 @sim.AttackNumber
             </RadzenTableCell>
+            @if (sim2 is not null)
+            {
+                <RadzenTableCell>
+                    @sim2.AttackNumber
+                </RadzenTableCell>
+            }
         </RadzenTableRow>
         <RadzenTableRow>
             <RadzenTableCell>
@@ -29,6 +41,12 @@
             <RadzenTableCell>
                 @sim.AttacksHit
             </RadzenTableCell>
+            @if (sim2 is not null)
+            {
+                <RadzenTableCell>
+                    @sim2.AttacksHit
+                </RadzenTableCell>
+            }
         </RadzenTableRow>
         <RadzenTableRow>
             <RadzenTableCell>
@@ -37,6 +55,12 @@
             <RadzenTableCell>
                 @sim.WoundsInflicted
             </RadzenTableCell>
+            @if (sim2 is not null)
+            {
+                <RadzenTableCell>
+                    @sim2.WoundsInflicted
+                </RadzenTableCell>
+            }
         </RadzenTableRow>
         <RadzenTableRow>
             <RadzenTableCell>
@@ -45,6 +69,12 @@
             <RadzenTableCell>
                 @sim.ArmorSavesFailed
             </RadzenTableCell>
+            @if (sim2 is not null)
+            {
+                <RadzenTableCell>
+                    @sim2.ArmorSavesFailed
+                </RadzenTableCell>
+            }
         </RadzenTableRow>
         <RadzenTableRow>
             <RadzenTableCell>
@@ -53,6 +83,12 @@
             <RadzenTableCell>
                 @sim.DamageNumber
             </RadzenTableCell>
+            @if (sim2 is not null)
+            {
+                <RadzenTableCell>
+                    @sim2.DamageNumber
+                </RadzenTableCell>
+            }
         </RadzenTableRow>
         <RadzenTableRow>
             <RadzenTableCell>
@@ -61,6 +97,12 @@
             <RadzenTableCell>
                 @sim.FeelNoPainMade
             </RadzenTableCell>
+            @if (sim2 is not null)
+            {
+                <RadzenTableCell>
+                    @sim2.FeelNoPainMade
+                </RadzenTableCell>
+            }
         </RadzenTableRow>
         <RadzenTableRow>
             <RadzenTableCell>
@@ -69,10 +111,18 @@
             <RadzenTableCell>
                 @sim.ModelsDestroyed
             </RadzenTableCell>
+            @if (sim2 is not null)
+            {
+                <RadzenTableCell>
+                    @sim2.ModelsDestroyed
+                </RadzenTableCell>
+            }
         </RadzenTableRow>
     </RadzenTableBody>
 </RadzenTable>
 @code{
     [Parameter]
     public FightSimulation sim { get; set; }
+    [Parameter]
+    public FightSimulation sim2 { get; set; } = null;
 }
