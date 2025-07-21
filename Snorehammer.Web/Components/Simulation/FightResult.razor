@@ -1,4 +1,4 @@
-﻿@page "/"
+﻿
 @using Snorehammer.Web.Components.Simulation
 @using Snorehammer.Web.Components.Simulation.DiceRoller
 @using Snorehammer.Web.Components.Unit
@@ -6,13 +6,6 @@
 @using Snorehammer.Web.Services
 @rendermode InteractiveServer
 <h3>UnitFight</h3>
-<RadzenCard Variant="Variant.Text">
-
-    <h1>Attacker</h1>
-    <AttackInput @bind-attack="attacker"></AttackInput>
-    <h1>Defender</h1>
-    <UnitInput @bind-Unit="defender" Attacker=false></UnitInput>
-</RadzenCard>
 <RadzenButton Click=@(() => FightUnits()) Text="Fight Units" ButtonStyle="ButtonStyle.Primary" />
 <RadzenButton Click=@(() => ResetDice()) Text="Reset" ButtonStyle="ButtonStyle.Danger" />
 @if (FightComplete)
@@ -86,36 +79,13 @@
 
 @code {
     private FightSimulation sim { get; set; } = new FightSimulation();
-    private UnitProfile defender { get; set; }
+    [Parameter]
+    public UnitProfile defender { get; set; }
     private bool FightComplete { get; set; } = false;
     private bool simulating { get; set; } = true;
-    private AttackProfile attacker { get; set; }
+    [Parameter]
+    public AttackProfile attacker { get; set; }
     private FightSimulationService fightSimulationService = new FightSimulationService();
-    protected override Task OnInitializedAsync()
-    {
-        defender = new UnitProfile()
-        {
-            InvulnerableSave = 0,
-            MinimumSave = 3,
-            Toughness = 4,
-            Wounds = 2,
-            ModelCount = 10,
-            Name = "intercessor"
-        };
-        attacker = new AttackProfile()
-        {
-            ArmorPenetration = 1,
-            Attacks = 20,
-            Damage = 1,
-            Skill = 3,
-            Strength = 4,
-            VariableAttackDiceConstant = 1,
-            VariableAttackDiceNumber = 2,
-            VariableDamageDiceConstant = 1,
-            VariableDamageDiceNumber = 1
-        };
-        return base.OnInitializedAsync();
-    }
     private async Task FightUnits()
     {
         await ResetDice();

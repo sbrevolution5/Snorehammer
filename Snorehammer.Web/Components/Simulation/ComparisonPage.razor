@@ -1,5 +1,64 @@
-﻿<h3>Comparison</h3>
+﻿@page "/"
+@using Snorehammer.Web.Components.Unit
+@using Snorehammer.Web.FrontendModels
+@rendermode InteractiveServer
+<h3>Comparison</h3>
 
+<RadzenStack class="rz-p-sm-12">
+    <RadzenSwitch @bind-Value=@comparison.Comparing />
+    <RadzenLabel>Compare Attackers</RadzenLabel>
+</RadzenStack>
+
+<RadzenCard Variant="Variant.Text">
+
+    <h1>Attacker</h1>
+    <RadzenCardGroup>
+
+        <AttackInput @bind-attack="comparison.Attacker1" />
+        @if (comparison.Comparing)
+        {
+            <AttackInput @bind-attack="comparison.Attacker2" />
+        }
+    </RadzenCardGroup>
+    <h1>Defender</h1>
+    <UnitInput @bind-Unit="comparison.Defender1" Attacker=false />
+</RadzenCard>
+<RadzenCardGroup>
+
+<FightResult attacker="comparison.Attacker1" defender="comparison.Defender1"></FightResult>
+    @if (comparison.Comparing)
+    {
+        <FightResult attacker="comparison.Attacker2" defender="comparison.Defender1"></FightResult>
+    }
+</RadzenCardGroup>
 @code {
-
+    public Comparison comparison { get; set; }
+    protected override Task OnInitializedAsync()
+    {
+        comparison = new Comparison();
+        comparison.Defender1 = new UnitProfile()
+        {
+            InvulnerableSave = 0,
+            MinimumSave = 3,
+            Toughness = 4,
+            Wounds = 2,
+            ModelCount = 10,
+            Name = "intercessor"
+        };
+        comparison.Attacker1 = new AttackProfile()
+        {
+            ArmorPenetration = 1,
+            Attacks = 20,
+            Damage = 1,
+            Skill = 3,
+            Strength = 4,
+            VariableAttackDiceConstant = 1,
+            VariableAttackDiceNumber = 2,
+            VariableDamageDiceConstant = 1,
+            VariableDamageDiceNumber = 1
+        };
+        comparison.Attacker2 = comparison.Attacker1;
+        // comparison.Defender2 = comparison.Defender1;
+        return base.OnInitializedAsync();
+    }
 }
