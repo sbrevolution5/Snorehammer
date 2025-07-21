@@ -15,7 +15,6 @@
 
     <h1>Attacker</h1>
     <RadzenCardGroup>
-
         <AttackInput @bind-attack="comparison.Attacker1" />
         @if (comparison.ComparingAttackers)
         {
@@ -23,15 +22,17 @@
         }
     </RadzenCardGroup>
     <h1>Defender</h1>
-    <UnitInput @bind-Unit="comparison.Defender1" Attacker=false />
-    @if (comparison.ComparingDefenders)
-    {
-        <UnitInput @bind-Unit="comparison.Defender2" Attacker=false/>
-    }
+    <RadzenCardGroup>
+        <UnitInput @bind-Unit="comparison.Defender1" Attacker=false />
+        @if (comparison.ComparingDefenders)
+        {
+            <UnitInput @bind-Unit="comparison.Defender2" Attacker=false />
+        }
+    </RadzenCardGroup>
 </RadzenCard>
 <RadzenCardGroup>
 
-<FightResult attacker="comparison.Attacker1" defender="comparison.Defender1"></FightResult>
+    <FightResult attacker="comparison.Attacker1" defender="comparison.Defender1"></FightResult>
     @if (comparison.ComparingAttackers)
     {
         <FightResult attacker="comparison.Attacker2" defender="comparison.Defender1"></FightResult>
