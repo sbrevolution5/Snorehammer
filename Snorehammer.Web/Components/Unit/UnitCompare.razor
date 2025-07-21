@@ -23,48 +23,25 @@
 
         @if (sim.AttackProfile.IsVariableAttacks)
         {
-            <DicePanel sim="@sim" Title="Number of Attacks" RollString1=@($"Rolling: {sim.AttackProfile.VariableAttackDiceNumber} d{sim.AttackProfile.VariableAttackDiceSides} + {sim.AttackProfile.VariableAttackDiceConstant}" + (sim.BlastBonus > 0 ? $" + {@sim.BlastBonus}" : "")) RollString2=@($"Total: {sim.AttackNumber}") DiceList="@sim.AttackDice"/>
+            <DicePanel sim="@sim"
+                       Title="Number of Attacks"
+                       RollString1=@($"Rolling: {sim.AttackProfile.VariableAttackDiceNumber} d{sim.AttackProfile.VariableAttackDiceSides} + {sim.AttackProfile.VariableAttackDiceConstant}" + (sim.BlastBonus > 0 ? $" + {@sim.BlastBonus}" : ""))
+                       RollString2=@($"Total: {sim.AttackNumber}")
+                       DiceList="@sim.AttackDice"/>
         }
-        <RadzenPanel AllowCollapse="true" class="rz-my-10 rz-mx-auto">
-            <HeaderTemplate>
-                <RadzenText TextStyle="TextStyle.H6" class="rz-display-flex rz-align-items-center rz-m-0">
-                    <RadzenIcon Icon="casino" class="rz-me-1" /><b>To Hit results</b>
-                </RadzenText>
-            </HeaderTemplate>
-            <ChildContent>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-6">
-                            <h3>Target: @attacker.Skill</h3>
-                        </div>
-                        <div class="col-6">
-                            <h3>Rolling: @sim.AttackNumber</h3>
-                        </div>
-                    </div>
-                    <div class="row">
-                        @foreach (var die in sim.ToHitDice)
-                        {
-                            <div class="col-1">
-
-                                <DieDisplay die="@die" CriticalMatters="@(attacker.Sustained || attacker.Lethal)"></DieDisplay>
-                            </div>
-                        }
-                    </div>
-                </div>
-            </ChildContent>
-            <SummaryTemplate>
-                <RadzenCard Variant="Variant.Outlined" class="rz-mt-4">
-                    <div class="row">
-                        <div class="col-6">
-                            <h3>Target: @attacker.Skill</h3>
-                        </div>
-                        <div class="col-6">
-                            <h3>Rolling: @sim.AttackNumber</h3>
-                        </div>
-                    </div>
-                </RadzenCard>
-            </SummaryTemplate>
-        </RadzenPanel>
+        <DicePanel sim="@sim"
+                   Title="To Hit Roll"
+                   RollString1=@($"Target: {attacker.Skill}")
+                   RollString2=@($"Rolling {sim.AttackNumber}")
+                   DiceList="@sim.ToHitDice"
+                   CriticalMatters="@(attacker.Sustained || attacker.Lethal)" />
+        <DicePanel sim="@sim"
+                   Title="To Wound Roll"
+                   RollString1=@($"Target: {sim.ModdedWoundTarget}")
+                   RollString2=@($"Rolling {sim.AttackNumber}")
+                   DiceList="@sim.ToHitDice"
+                   CriticalMatters="@(attacker.Sustained || attacker.Lethal)" />
+        
         <RadzenPanel AllowCollapse="true" class="rz-my-10 rz-mx-auto">
             <HeaderTemplate>
                 <RadzenText TextStyle="TextStyle.H6" class="rz-display-flex rz-align-items-center rz-m-0">
