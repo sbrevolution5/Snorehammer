@@ -41,50 +41,11 @@
                    RollString2=@($"Rolling: {sim.WoundDice.Count}")
                    DiceList="@sim.StrengthDice"
                    CriticalMatters="@(attacker.Devastating)" />
-        <RadzenPanel AllowCollapse="true" class="rz-my-10 rz-mx-auto">
-            <HeaderTemplate>
-                <RadzenText TextStyle="TextStyle.H6" class="rz-display-flex rz-align-items-center rz-m-0">
-                    <RadzenIcon Icon="casino" class="rz-me-1" /><b>Armor Roll</b>
-                </RadzenText>
-            </HeaderTemplate>
-            <ChildContent>
-                <div class="container">
-                    <div class="col-6">
-                        <h3>Target: @fightSimulationService.DetermineArmorSave(sim)</h3>
-                        @if (sim.CoverIgnored)
-                        {
-                            <h4>Cover did not matter</h4>
-                        }
-                    </div>
-                    <div class="col-6">
-                        <h3>Rolling: @sim.StrengthDice.Where(d => d.Success).Count()</h3>
-                    </div>
-                    <div class="row">
-                        @foreach (var die in sim.ArmorDice)
-                        {
-                            <div class="col-1">
-
-                                <DieDisplay die="@die"></DieDisplay>
-                            </div>
-                        }
-                    </div>
-                </div>
-            </ChildContent>
-            <SummaryTemplate>
-                <RadzenCard Variant="Variant.Outlined" class="rz-mt-4">
-                    <div class="col-6">
-                        <h3>Target: @fightSimulationService.DetermineArmorSave(sim)</h3>
-                        @if (sim.CoverIgnored)
-                        {
-                            <h4>Cover did not matter</h4>
-                        }
-                    </div>
-                    <div class="col-6">
-                        <h3>Rolling: @sim.StrengthDice.Where(d => d.Success).Count()</h3>
-                    </div>
-                </RadzenCard>
-            </SummaryTemplate>
-        </RadzenPanel>
+        <DicePanel sim="@sim"
+                   Title="To Wound Roll"
+                   RollString1=@($"Target: {sim.ArmorSave}")
+                   RollString2=@($"Rolling: {sim.ArmorDice.Count}")
+                   DiceList="@sim.ArmorDice" />
 
 
         @* <h2>Wound Rolls</h2> *@
