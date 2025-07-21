@@ -5,30 +5,41 @@
 <h3>Comparison</h3>
 
 <RadzenStack class="rz-p-sm-12">
-    <RadzenSwitch @bind-Value=@comparison.Comparing />
+    <RadzenSwitch @bind-Value=@comparison.ComparingAttackers />
     <RadzenLabel>Compare Attackers</RadzenLabel>
+    <RadzenSwitch @bind-Value=@comparison.ComparingDefenders />
+    <RadzenLabel>Compare Defenders</RadzenLabel>
 </RadzenStack>
 
 <RadzenCard Variant="Variant.Text">
 
     <h1>Attacker</h1>
     <RadzenCardGroup>
-
         <AttackInput @bind-attack="comparison.Attacker1" />
-        @if (comparison.Comparing)
+        @if (comparison.ComparingAttackers)
         {
             <AttackInput @bind-attack="comparison.Attacker2" />
         }
     </RadzenCardGroup>
     <h1>Defender</h1>
-    <UnitInput @bind-Unit="comparison.Defender1" Attacker=false />
+    <RadzenCardGroup>
+        <UnitInput @bind-Unit="comparison.Defender1" Attacker=false />
+        @if (comparison.ComparingDefenders)
+        {
+            <UnitInput @bind-Unit="comparison.Defender2" Attacker=false />
+        }
+    </RadzenCardGroup>
 </RadzenCard>
 <RadzenCardGroup>
 
-<FightResult attacker="comparison.Attacker1" defender="comparison.Defender1"></FightResult>
-    @if (comparison.Comparing)
+    <FightResult attacker="comparison.Attacker1" defender="comparison.Defender1"></FightResult>
+    @if (comparison.ComparingAttackers)
     {
         <FightResult attacker="comparison.Attacker2" defender="comparison.Defender1"></FightResult>
+    }
+    @if (comparison.ComparingDefenders)
+    {
+        <FightResult attacker="comparison.Attacker1" defender="comparison.Defender2"></FightResult>
     }
 </RadzenCardGroup>
 @code {
@@ -58,7 +69,7 @@
             VariableDamageDiceNumber = 1
         };
         comparison.Attacker2 = comparison.Attacker1;
-        // comparison.Defender2 = comparison.Defender1;
+        comparison.Defender2 = comparison.Defender1;
         return base.OnInitializedAsync();
     }
 }
