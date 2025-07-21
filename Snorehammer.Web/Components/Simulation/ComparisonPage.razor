@@ -15,31 +15,31 @@
 
     <h1>Attacker</h1>
     <RadzenCardGroup>
-        <AttackInput @bind-attack="comparison.Attacker1" />
+        <AttackInput @bind-attack="comparison.Simulation1.AttackProfile" />
         @if (comparison.ComparingAttackers)
         {
-            <AttackInput @bind-attack="comparison.Attacker2" />
+            <AttackInput @bind-attack="comparison.AlternateAttackSimulation.AttackProfile" />
         }
     </RadzenCardGroup>
     <h1>Defender</h1>
     <RadzenCardGroup>
-        <UnitInput @bind-Unit="comparison.Defender1" Attacker=false />
+        <UnitInput @bind-Unit="comparison.Simulation1.Defender" Attacker=false />
         @if (comparison.ComparingDefenders)
         {
-            <UnitInput @bind-Unit="comparison.Defender2" Attacker=false />
+            <UnitInput @bind-Unit="comparison.AlternateDefenseSimulation.Defender" Attacker=false />
         }
     </RadzenCardGroup>
 </RadzenCard>
 <RadzenCardGroup>
 
-    <FightResult attacker="comparison.Attacker1" defender="comparison.Defender1"></FightResult>
+    <FightResult sim="comparison.Simulation1"></FightResult>
     @if (comparison.ComparingAttackers)
     {
-        <FightResult attacker="comparison.Attacker2" defender="comparison.Defender1"></FightResult>
+        <FightResult sim="comparison.AlternateAttackSimulation"></FightResult>
     }
     @if (comparison.ComparingDefenders)
     {
-        <FightResult attacker="comparison.Attacker1" defender="comparison.Defender2"></FightResult>
+        <FightResult sim="comparison.AlternateDefenseSimulation"></FightResult>
     }
 </RadzenCardGroup>
 @code {
@@ -47,29 +47,42 @@
     protected override Task OnInitializedAsync()
     {
         comparison = new Comparison();
-        comparison.Defender1 = new UnitProfile()
+        comparison.Simulation1 = new FightSimulation()
         {
-            InvulnerableSave = 0,
-            MinimumSave = 3,
-            Toughness = 4,
-            Wounds = 2,
-            ModelCount = 10,
-            Name = "intercessor"
+
+            Defender = new UnitProfile()
+            {
+                InvulnerableSave = 0,
+                MinimumSave = 3,
+                Toughness = 4,
+                Wounds = 2,
+                ModelCount = 10,
+                Name = "intercessor"
+            },
+            AttackProfile = new AttackProfile()
+            {
+                ArmorPenetration = 1,
+                Attacks = 20,
+                Damage = 1,
+                Skill = 3,
+                Strength = 4,
+                VariableAttackDiceConstant = 1,
+                VariableAttackDiceNumber = 2,
+                VariableDamageDiceConstant = 1,
+                VariableDamageDiceNumber = 1
+            }
         };
-        comparison.Attacker1 = new AttackProfile()
-        {
-            ArmorPenetration = 1,
-            Attacks = 20,
-            Damage = 1,
-            Skill = 3,
-            Strength = 4,
-            VariableAttackDiceConstant = 1,
-            VariableAttackDiceNumber = 2,
-            VariableDamageDiceConstant = 1,
-            VariableDamageDiceNumber = 1
-        };
-        comparison.Attacker2 = comparison.Attacker1;
-        comparison.Defender2 = comparison.Defender1;
+        comparison.AlternateAttackSimulation = new FightSimulation()
+            {
+                Defender = comparison.Defender1,
+                AttackProfile = comparison.Attacker2
+            };
+        comparison.AlternateDefenseSimulation = new FightSimulation()
+            {
+                Defender = comparison.Defender2,
+                AttackProfile = comparison.Attacker1
+            };
+
         return base.OnInitializedAsync();
     }
 }

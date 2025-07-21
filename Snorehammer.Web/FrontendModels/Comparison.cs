@@ -8,7 +8,8 @@
         public AttackProfile Attacker2 { get; set; }
         public UnitProfile Defender1 { get; set; }
         public UnitProfile Defender2 { get; set; }
-        public FightSimulation simulation1 { get; set; }
-        public FightSimulation simulation2 { get; set; }
+        public FightSimulation Simulation1 { get; set; }
+        public FightSimulation AlternateAttackSimulation { get; set; }
+        public FightSimulation AlternateDefenseSimulation { get; set; }
     }
 }
