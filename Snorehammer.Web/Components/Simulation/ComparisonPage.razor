@@ -7,6 +7,8 @@
 <RadzenStack class="rz-p-sm-12">
     <RadzenSwitch @bind-Value=@comparison.ComparingAttackers />
     <RadzenLabel>Compare Attackers</RadzenLabel>
+    <RadzenSwitch @bind-Value=@comparison.ComparingDefenders />
+    <RadzenLabel>Compare Defenders</RadzenLabel>
 </RadzenStack>
 
 <RadzenCard Variant="Variant.Text">
@@ -24,7 +26,7 @@
     <UnitInput @bind-Unit="comparison.Defender1" Attacker=false />
     @if (comparison.ComparingDefenders)
     {
-        <UnitInput @bind-attack="comparison.Defender2" Attacker=false/>
+        <UnitInput @bind-Unit="comparison.Defender2" Attacker=false/>
     }
 </RadzenCard>
 <RadzenCardGroup>
