@@ -42,6 +42,20 @@
         <FightResult sim="comparison.AlternateDefenseSimulation"></FightResult>
     }
 </RadzenCardGroup>
+<RadzenCard>
+    @if (comparison.ComparingAttackers)
+    {
+        <ResultsTable sim=@comparison.Simulation1 sim2=@comparison.AlternateAttackSimulation />
+    }
+    else if (comparison.ComparingDefenders)
+    {
+        <ResultsTable sim=@comparison.Simulation1 sim2=@comparison.AlternateDefenseSimulation />
+    }
+    else
+    {
+        <ResultsTable sim=@comparison.Simulation1 />
+    }
+</RadzenCard>
 @code {
     public Comparison comparison { get; set; }
     protected override Task OnInitializedAsync()
@@ -73,15 +87,15 @@
             }
         };
         comparison.AlternateAttackSimulation = new FightSimulation()
-            {
-                Defender = comparison.Simulation1.Defender,
-                AttackProfile = comparison.Simulation1.AttackProfile
-            };
+        {
+            Defender = comparison.Simulation1.Defender,
+            AttackProfile = comparison.Simulation1.AttackProfile
+        };
         comparison.AlternateDefenseSimulation = new FightSimulation()
-            {
-                Defender = comparison.Simulation1.Defender,
-                AttackProfile = comparison.Simulation1.AttackProfile
-            };
+        {
+            Defender = comparison.Simulation1.Defender,
+            AttackProfile = comparison.Simulation1.AttackProfile
+        };
 
         return base.OnInitializedAsync();
     }

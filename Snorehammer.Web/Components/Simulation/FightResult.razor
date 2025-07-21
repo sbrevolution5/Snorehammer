@@ -65,9 +65,6 @@
             <h1>Winner:</h1>
             <p>@sim.WinnerMessage</p>
         </RadzenCard>
-        <RadzenCard>
-            <ResultsTable sim=@sim />
-        </RadzenCard>
         <RadzenButton Click=@(() => FightUnits()) Text="Fight Again" ButtonStyle="ButtonStyle.Base" />
     }
     else if (!FightComplete && !simulating)
