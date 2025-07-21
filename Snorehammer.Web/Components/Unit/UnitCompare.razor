@@ -38,70 +38,9 @@
         <DicePanel sim="@sim"
                    Title="To Wound Roll"
                    RollString1=@($"Target: {sim.ModdedWoundTarget}")
-                   RollString2=@($"Rolling {sim.AttackNumber}")
-                   DiceList="@sim.ToHitDice"
-                   CriticalMatters="@(attacker.Sustained || attacker.Lethal)" />
-        
-        <RadzenPanel AllowCollapse="true" class="rz-my-10 rz-mx-auto">
-            <HeaderTemplate>
-                <RadzenText TextStyle="TextStyle.H6" class="rz-display-flex rz-align-items-center rz-m-0">
-                    <RadzenIcon Icon="casino" class="rz-me-1" /><b>To Wound Roll</b>
-                </RadzenText>
-            </HeaderTemplate>
-            <ChildContent>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-6">
-                            <h3>Target: @sim.ModdedWoundTarget</h3>
-                        </div>
-                        <div class="col-6">
-                            <h3>
-                                Rolling:
-                                @sim.ToHitDice.Where(d => d.Success).Count()
-                                @{
-                                    var sustainedDice = sim.ToHitDice.Where(d => d.Critical).Count() > 0;
-                                }
-                                @if (attacker.Sustained && sustainedDice)
-                                {
-                                    <span> + @(@sim.ToHitDice.Where(d => d.Critical).Count() * @sim.AttackProfile.SustainAmount) (sustained)</span>
-                                }
-                            </h3>
-                        </div>
-                    </div>
-                    <div class="row">
-                        @foreach (var die in sim.StrengthDice)
-                        {
-                            <div class="col-1">
-
-                                <DieDisplay die="@die" CriticalMatters="@attacker.Devastating"></DieDisplay>
-                            </div>
-                        }
-                    </div>
-                </div>
-            </ChildContent>
-            <SummaryTemplate>
-                <RadzenCard Variant="Variant.Outlined" class="rz-mt-4">
-                    <div class="row">
-                        <div class="col-6">
-                            <h3>Target: @sim.ModdedWoundTarget</h3>
-                        </div>
-                        <div class="col-6">
-                            <h3>
-                                Rolling:
-                                @sim.ToHitDice.Where(d => d.Success).Count()
-                                @{
-                                    var sustainedDice = sim.ToHitDice.Where(d => d.Critical).Count() > 0;
-                                }
-                                @if (attacker.Sustained && sustainedDice)
-                                {
-                                    <span> + @(@sim.ToHitDice.Where(d => d.Critical).Count() * @sim.AttackProfile.SustainAmount) (sustained)</span>
-                                }
-                            </h3>
-                        </div>
-                    </div>
-                </RadzenCard>
-            </SummaryTemplate>
-        </RadzenPanel>
+                   RollString2=@($"Rolling: {sim.WoundDice.Count}")
+                   DiceList="@sim.StrengthDice"
+                   CriticalMatters="@(attacker.Devastating)" />
         <RadzenPanel AllowCollapse="true" class="rz-my-10 rz-mx-auto">
             <HeaderTemplate>
                 <RadzenText TextStyle="TextStyle.H6" class="rz-display-flex rz-align-items-center rz-m-0">
