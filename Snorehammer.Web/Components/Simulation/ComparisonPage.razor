@@ -22,6 +22,10 @@
     </RadzenCardGroup>
     <h1>Defender</h1>
     <UnitInput @bind-Unit="comparison.Defender1" Attacker=false />
+    @if (comparison.ComparingDefenders)
+    {
+        <UnitInput @bind-attack="comparison.Defender2" Attacker=false/>
+    }
 </RadzenCard>
 <RadzenCardGroup>
 
@@ -29,6 +33,10 @@
     @if (comparison.ComparingAttackers)
     {
         <FightResult attacker="comparison.Attacker2" defender="comparison.Defender1"></FightResult>
+    }
+    @if (comparison.ComparingDefenders)
+    {
+        <FightResult attacker="comparison.Attacker1" defender="comparison.Defender2"></FightResult>
     }
 </RadzenCardGroup>
 @code {
