@@ -40,7 +40,7 @@
             AttacksHit = (float)FightSimulations.Select(f => f.AttacksHit).Average();
             FeelNoPainMade = (float)FightSimulations.Select(f => f.FeelNoPainMade).Average();
             UnitEntirelyDestroyed = FightSimulations.Where(f => f.UnitEntirelyDestroyed).Count();
-            HalfOrLess = FightSimulations.Where(f => f.HalfOrLess).Count();
+            HalfOrLess = FightSimulations.Where(f => f.LessThanHalf).Count();
             UnitDamaged = FightSimulations.Where(f => f.UnitDamaged).Count();
             LostAModel = FightSimulations.Where(f => f.LostAModel).Count();
         }

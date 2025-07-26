@@ -366,17 +366,27 @@ namespace Snorehammer.Web.Services
             }
             if (inflictedWounds > 0)
             {
+                sim.UnitDamaged = true;
                 res.Append($"{inflictedWounds} wounds inflicted to defender.\n");
 
                 int totalWounds = sim.Defender.Wounds * sim.Defender.ModelCount;
                 sim.ModelsDestroyed = inflictedWounds / sim.Defender.Wounds;
                 if (sim.ModelsDestroyed >= sim.Defender.ModelCount)
                 {
+                    sim.UnitEntirelyDestroyed = true;
                     res.Append("The entire unit was destroyed.\n");
                     return res.ToString();
                 }
                 if (sim.Defender.ModelCount > 1)
                 {
+                    if (sim.ModelsDestroyed >0)
+                    {
+                        sim.LostAModel = true;
+                    }
+                    if (sim.ModelsDestroyed > sim.Defender.ModelCount/2)
+                    {
+                        sim.LessThanHalf = true;
+                    }
                     res.Append($"{sim.ModelsDestroyed} out of {sim.Defender.ModelCount} models were destroyed.\n");
                     int woundRemainder = inflictedWounds % sim.Defender.Wounds;
                     if (woundRemainder != 0)
@@ -384,6 +394,10 @@ namespace Snorehammer.Web.Services
                         res.Append($"A remaining model was inflicted {woundRemainder} wounds, leaving it with {sim.Defender.Wounds - woundRemainder} remaining.\n");
                     }
                     return res.ToString();
+                }
+                if (sim.Defender.Wounds-inflictedWounds < sim.Defender.Wounds/2)
+                {
+                    sim.LessThanHalf = true;
                 }
                 res.Append($"The model has {sim.Defender.Wounds - inflictedWounds} wound(s) remaining.\n");
             }
