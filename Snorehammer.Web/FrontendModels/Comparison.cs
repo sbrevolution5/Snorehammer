@@ -4,8 +4,8 @@
     {
         public bool ComparingAttackers { get; set; }
         public bool ComparingDefenders { get; set; }
-        public FightSimulation Simulation1 { get; set; }
-        public FightSimulation AlternateAttackSimulation { get; set; }
-        public FightSimulation AlternateDefenseSimulation { get; set; }
+        public MultiFightSimulation Simulation1 { get; set; }
+        public MultiFightSimulation AlternateAttackSimulation { get; set; }
+        public MultiFightSimulation AlternateDefenseSimulation { get; set; }
     }
 }

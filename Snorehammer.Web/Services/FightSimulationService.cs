@@ -10,6 +10,14 @@ namespace Snorehammer.Web.Services
         {
             _random = new Random(Guid.NewGuid().GetHashCode());
         }
+        public void SimulateAllFights(MultiFightSimulation multiSim)
+        {
+            foreach (var sim in multiSim.FightSimulations)
+            {
+                SimulateFight(sim);
+            }
+            multiSim.SetAverages();
+        }
         public void SimulateFight(FightSimulation sim)
         {
             sim.Reset();
