@@ -10,6 +10,27 @@ namespace Snorehammer.Web.Services
         {
             _random = new Random(Guid.NewGuid().GetHashCode());
         }
+        public void SimulateFight(FightSimulation sim)
+        {
+            sim.Reset();
+            if (sim.AttackProfile.IsVariableAttacks)
+            {
+                RollAttackDice(sim);
+            }
+            RollToHit(sim);
+            RollStrengthStep(sim);
+            RollArmorSaves(sim);
+
+            if (sim.AttackProfile.IsVariableDamage)
+            {
+                RollDamageDice(sim);
+            }
+            if (sim.Defender.FeelNoPain)
+            {
+                RollFeelNoPain(sim);
+            }
+            sim.WinnerMessage = GenerateWinnerMessage(sim);
+        }
         public void RollAttackDice(FightSimulation sim)
         {
             sim.AttackDice = new List<Dice>();
