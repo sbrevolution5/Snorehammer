@@ -39,6 +39,10 @@
             ArmorSavesFailed = (float)FightSimulations.Select(f => f.ArmorSavesFailed).Average();
             AttacksHit = (float)FightSimulations.Select(f => f.AttacksHit).Average();
             FeelNoPainMade = (float)FightSimulations.Select(f => f.FeelNoPainMade).Average();
+            UnitEntirelyDestroyed = FightSimulations.Where(f => f.UnitEntirelyDestroyed).Count();
+            HalfOrLess = FightSimulations.Where(f => f.HalfOrLess).Count();
+            UnitDamaged = FightSimulations.Where(f => f.UnitDamaged).Count();
+            LostAModel = FightSimulations.Where(f => f.LostAModel).Count();
         }
     }
 }
