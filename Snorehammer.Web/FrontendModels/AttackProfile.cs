@@ -1,6 +1,6 @@
 ﻿namespace Snorehammer.Web.FrontendModels
 {
-    public class AttackProfile
+    public class AttackProfile :ICloneable
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -33,6 +33,10 @@
         public int VariableDamageDiceConstant { get; set; }
         public bool Melta { get; set; } = false;
         public int MeltaDamage { get; set; } = 1;
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
 
     }
 }

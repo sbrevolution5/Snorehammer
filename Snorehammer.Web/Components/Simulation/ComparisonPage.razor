@@ -11,15 +11,18 @@
     <RadzenSwitch @bind-Value=@comparison.ComparingDefenders />
     <RadzenLabel>Compare Defenders</RadzenLabel>
     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
-        <RadzenSelectBar TValue="int" Size="ButtonSize.Small" Change="x => AssignMultiSims(x)">
+        <EditForm Model="SelectedNumberOfSimulations">
+
+        <RadzenSelectBar TValue="int" Size="ButtonSize.Small" @bind-Value="SelectedNumberOfSimulations" Change="x => AssignMultiSims(x)">
             <Items>
-                <RadzenSelectBarItem Value="1" Text="Eats food" />
-                <RadzenSelectBarItem Value="5" Text="drinks water" />
-                <RadzenSelectBarItem Value="10" Text="flaps wings" />
-                <RadzenSelectBarItem Value="100" Text="flaps wings" />
-                <RadzenSelectBarItem Value="1000" Disabled Text="flaps wings" />
+                <RadzenSelectBarItem Value="1" Text="x1" />
+                <RadzenSelectBarItem Value="5" Text="x5" />
+                <RadzenSelectBarItem Value="10" Text="x10" />
+                <RadzenSelectBarItem Value="100" Text="x100" />
+                <RadzenSelectBarItem Value="1000" Disabled Text="x1000" />
             </Items>
         </RadzenSelectBar>
+        </EditForm>
     </RadzenStack>
 </RadzenStack>
 
@@ -76,9 +79,11 @@
 @code {
     public Comparison comparison { get; set; }
     public bool ShowTable { get; set; } = true;
+    private int SelectedNumberOfSimulations = 1;
     private FightSimulationService fightSimulationService = new FightSimulationService();
     private void AssignMultiSims(int x)
     {
+        SelectedNumberOfSimulations = x;
         comparison.Simulation1.SetSimNumber(x);
         comparison.AlternateDefenseSimulation.SetSimNumber(x);
         comparison.AlternateAttackSimulation.SetSimNumber(x);
@@ -126,14 +131,15 @@
         };
         comparison.AlternateAttackSimulation = new MultiFightSimulation()
         {
-            Defender = comparison.Simulation1.Defender,
-            AttackProfile = comparison.Simulation1.AttackProfile
+            Defender = (UnitProfile)comparison.Simulation1.Defender.Clone(),
+            AttackProfile = (AttackProfile)comparison.Simulation1.AttackProfile.Clone()
         };
         comparison.AlternateDefenseSimulation = new MultiFightSimulation()
         {
-            Defender = comparison.Simulation1.Defender,
-            AttackProfile = comparison.Simulation1.AttackProfile
+            Defender = (UnitProfile)comparison.Simulation1.Defender.Clone(),
+            AttackProfile = (AttackProfile)comparison.Simulation1.AttackProfile.Clone()
         };
+        AssignMultiSims(1);
 
         return base.OnInitializedAsync();
     }

@@ -1,6 +1,6 @@
 ﻿namespace Snorehammer.Web.FrontendModels
 {
-    public class UnitProfile
+    public class UnitProfile : ICloneable
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -18,5 +18,9 @@
         public bool Stealth { get; set; } = false;
         public int FeelNoPainTarget { get; set; } = 6;
         public bool HasCover { get; set; } = false;
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
     }
 }
