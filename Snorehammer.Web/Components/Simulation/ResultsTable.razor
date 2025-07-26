@@ -118,6 +118,77 @@
                 </RadzenTableCell>
             }
         </RadzenTableRow>
+        <RadzenTableRow>
+            <RadzenTableCell>
+                Fights Where Unit destroyed
+            </RadzenTableCell>
+            <RadzenTableCell>
+                @sim.UnitEntirelyDestroyed
+            </RadzenTableCell>
+            @if (sim2 is not null)
+            {
+                <RadzenTableCell>
+                    @sim2.UnitEntirelyDestroyed
+                </RadzenTableCell>
+            }
+        </RadzenTableRow>
+        <RadzenTableRow>
+            <RadzenTableCell>
+                Fights Where Unit Left at Half or less
+            </RadzenTableCell>
+            <RadzenTableCell>
+                @sim.HalfOrLess
+            </RadzenTableCell>
+            @if (sim2 is not null)
+            {
+                <RadzenTableCell>
+                    @sim2.HalfOrLess
+                </RadzenTableCell>
+            }
+        </RadzenTableRow>
+        <RadzenTableRow>
+            <RadzenTableCell>
+                Fights Where Unit Damaged
+            </RadzenTableCell>
+            <RadzenTableCell>
+                @sim.UnitDamaged
+            </RadzenTableCell>
+            @if (sim2 is not null)
+            {
+                <RadzenTableCell>
+                    @sim2.UnitDamaged
+                </RadzenTableCell>
+            }
+        </RadzenTableRow>
+        <RadzenTableRow>
+            <RadzenTableCell>
+                Fights Where Unit Lost A Model
+            </RadzenTableCell>
+            <RadzenTableCell>
+                @sim.LostAModel
+            </RadzenTableCell>
+            @if (sim2 is not null)
+            {
+                <RadzenTableCell>
+                    @sim2.LostAModel
+                </RadzenTableCell>
+            }
+        </RadzenTableRow>
+        @* <RadzenTableRow>
+            <RadzenTableCell>
+                Fights Where Attacker Died on fightback
+            </RadzenTableCell>
+            <RadzenTableCell>
+                Value
+            </RadzenTableCell>
+            @if (sim2 is not null)
+            {
+                <RadzenTableCell>
+                    @sim2.ModelsDestroyed
+                </RadzenTableCell>
+            }
+        </RadzenTableRow> *@
+
     </RadzenTableBody>
 </RadzenTable>
 @code{

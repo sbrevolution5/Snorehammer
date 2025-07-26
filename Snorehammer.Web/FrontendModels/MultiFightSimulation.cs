@@ -13,6 +13,10 @@
         public float ArmorSavesFailed { get; set; } = 0;
         public float AttacksHit { get; set; } = 0;
         public float FeelNoPainMade { get; set; } = 0;
+        public int UnitEntirelyDestroyed { get; set; } = 0;
+        public int HalfOrLess { get; set; } = 0;
+        public int UnitDamaged { get; set; } = 0;
+        public int LostAModel { get; set; } = 0;
         public void SetSimNumber(int number)
         {
             Rounds = number;
@@ -35,6 +39,10 @@
             ArmorSavesFailed = (float)FightSimulations.Select(f => f.ArmorSavesFailed).Average();
             AttacksHit = (float)FightSimulations.Select(f => f.AttacksHit).Average();
             FeelNoPainMade = (float)FightSimulations.Select(f => f.FeelNoPainMade).Average();
+            UnitEntirelyDestroyed = FightSimulations.Where(f => f.UnitEntirelyDestroyed).Count();
+            HalfOrLess = FightSimulations.Where(f => f.LessThanHalf).Count();
+            UnitDamaged = FightSimulations.Where(f => f.UnitDamaged).Count();
+            LostAModel = FightSimulations.Where(f => f.LostAModel).Count();
         }
     }
 }
