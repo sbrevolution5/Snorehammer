@@ -350,8 +350,9 @@ namespace Snorehammer.Web.Services
         public string GenerateWinnerMessage(FightSimulation sim)
         {
             var res = new StringBuilder();
-            var successful = sim.ArmorDice.Where(d => !d.Success).Count();
-            res.Append($"{successful} out of {sim.AttackProfile.Attacks} attacks broke through armor.\n");
+            sim.ArmorSavesFailed = sim.ArmorDice.Where(d => !d.Success).Count();
+
+            res.Append($"{sim.ArmorSavesFailed} out of {sim.AttackProfile.Attacks} attacks broke through armor.\n");
             int inflictedWounds = sim.DamageNumber;
             if (sim.Defender.FeelNoPain && inflictedWounds != 0)
             {
