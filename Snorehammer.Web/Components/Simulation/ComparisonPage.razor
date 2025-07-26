@@ -10,6 +10,17 @@
     <RadzenLabel>Compare Attackers</RadzenLabel>
     <RadzenSwitch @bind-Value=@comparison.ComparingDefenders />
     <RadzenLabel>Compare Defenders</RadzenLabel>
+    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
+        <RadzenSelectBar TValue="int" Size="ButtonSize.Small" Change="x => AssignMultiSims(x)">
+            <Items>
+                <RadzenSelectBarItem Value="1" Text="Eats food" />
+                <RadzenSelectBarItem Value="5" Text="drinks water" />
+                <RadzenSelectBarItem Value="10" Text="flaps wings" />
+                <RadzenSelectBarItem Value="100" Text="flaps wings" />
+                <RadzenSelectBarItem Value="1000" Disabled Text="flaps wings" />
+            </Items>
+        </RadzenSelectBar>
+    </RadzenStack>
 </RadzenStack>
 
 <RadzenCard Variant="Variant.Text">
@@ -33,14 +44,14 @@
 </RadzenCard>
 <RadzenCardGroup>
 
-    <FightResult sim="comparison.Simulation1"></FightResult>
+    <FightResult sim="comparison.Simulation1.FightSimulations.First()"></FightResult>
     @if (comparison.ComparingAttackers)
     {
-        <FightResult sim="comparison.AlternateAttackSimulation"></FightResult>
+        <FightResult sim="comparison.AlternateAttackSimulation.FightSimulations.First()"></FightResult>
     }
     @if (comparison.ComparingDefenders)
     {
-        <FightResult sim="comparison.AlternateDefenseSimulation"></FightResult>
+        <FightResult sim="comparison.AlternateDefenseSimulation.FightSimulations.First()"></FightResult>
     }
 </RadzenCardGroup>
 <RadzenButton Click=@(() => FightUnits()) Text="Fight all Units" ButtonStyle="ButtonStyle.Primary" />
@@ -66,22 +77,29 @@
     public Comparison comparison { get; set; }
     public bool ShowTable { get; set; } = true;
     private FightSimulationService fightSimulationService = new FightSimulationService();
+    private void AssignMultiSims(int x)
+    {
+        comparison.Simulation1.SetSimNumber(x);
+        comparison.AlternateDefenseSimulation.SetSimNumber(x);
+        comparison.AlternateAttackSimulation.SetSimNumber(x);
+
+    }
     private void FightUnits()
     {
-        fightSimulationService.SimulateFight(comparison.Simulation1);
+        fightSimulationService.SimulateAllFights(comparison.Simulation1);
         if (comparison.ComparingAttackers)
         {
-            fightSimulationService.SimulateFight(comparison.AlternateAttackSimulation);
+            fightSimulationService.SimulateAllFights(comparison.AlternateAttackSimulation);
         }
         else if (comparison.ComparingDefenders)
         {
-            fightSimulationService.SimulateFight(comparison.AlternateDefenseSimulation);
+            fightSimulationService.SimulateAllFights(comparison.AlternateDefenseSimulation);
         }
     }
     protected override Task OnInitializedAsync()
     {
         comparison = new Comparison();
-        comparison.Simulation1 = new FightSimulation()
+        comparison.Simulation1 = new MultiFightSimulation()
         {
 
             Defender = new UnitProfile()
@@ -106,12 +124,12 @@
                 VariableDamageDiceNumber = 1
             }
         };
-        comparison.AlternateAttackSimulation = new FightSimulation()
+        comparison.AlternateAttackSimulation = new MultiFightSimulation()
         {
             Defender = comparison.Simulation1.Defender,
             AttackProfile = comparison.Simulation1.AttackProfile
         };
-        comparison.AlternateDefenseSimulation = new FightSimulation()
+        comparison.AlternateDefenseSimulation = new MultiFightSimulation()
         {
             Defender = comparison.Simulation1.Defender,
             AttackProfile = comparison.Simulation1.AttackProfile

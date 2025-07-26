@@ -15,6 +15,8 @@
         public float FeelNoPainMade { get; set; } = 0;
         public void SetSimNumber(int number)
         {
+            Rounds = number;
+            FightSimulations = new List<FightSimulation>();
             for (int i = 0; i < number; i++)
             {
                 FightSimulations.Add(new FightSimulation()
