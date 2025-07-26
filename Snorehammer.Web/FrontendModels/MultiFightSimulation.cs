@@ -13,6 +13,10 @@
         public float ArmorSavesFailed { get; set; } = 0;
         public float AttacksHit { get; set; } = 0;
         public float FeelNoPainMade { get; set; } = 0;
+        public int UnitEntirelyDestroyed { get; set; } = 0;
+        public int HalfOrLess { get; set; } = 0;
+        public int UnitDamaged { get; set; } = 0;
+        public int LostAModel { get; set; } = 0;
         public void SetSimNumber(int number)
         {
             Rounds = number;

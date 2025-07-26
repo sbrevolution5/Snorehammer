@@ -24,6 +24,10 @@
         public int ArmorSavesFailed { get; set; } = 0;
         public int AttacksHit { get; set; } = 0;
         public int FeelNoPainMade { get; set; } = 0;
+        public bool UnitEntirelyDestroyed { get; set; } = false;
+        public bool HalfOrLess { get; set; } = false;
+        public bool UnitDamaged { get; set; } = false;
+        public bool LostAModel { get; set; } = false;
         public void Reset() {
             AttackDice = new List<Dice>();
             ArmorDice = new List<Dice>();
