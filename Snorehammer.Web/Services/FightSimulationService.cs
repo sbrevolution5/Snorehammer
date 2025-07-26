@@ -12,7 +12,7 @@ namespace Snorehammer.Web.Services
         }
         public void SimulateFight(FightSimulation sim)
         {
-            
+            sim.Reset();
             if (sim.AttackProfile.IsVariableAttacks)
             {
                 RollAttackDice(sim);

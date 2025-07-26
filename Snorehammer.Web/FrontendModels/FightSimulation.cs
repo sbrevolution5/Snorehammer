@@ -24,7 +24,14 @@
         public int ArmorSavesFailed { get; set; } = 0;
         public int AttacksHit { get; set; } = 0;
         public int FeelNoPainMade { get; set; } = 0;
-
+        public void Reset() {
+            AttackDice = new List<Dice>();
+            ArmorDice = new List<Dice>();
+            ToHitDice = new List<Dice>();
+            StrengthDice = new List<Dice>();
+            WoundDice = new List<Dice>();
+            FeelNoPainDice = new List<Dice>();
+        }
 
     }
 }

@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using Snorehammer.Web.Components.Unit
 @using Snorehammer.Web.FrontendModels
+@using Snorehammer.Web.Services
 @rendermode InteractiveServer
 <h3>Comparison</h3>
 
@@ -42,6 +43,7 @@
         <FightResult sim="comparison.AlternateDefenseSimulation"></FightResult>
     }
 </RadzenCardGroup>
+<RadzenButton Click=@(() => FightUnits()) Text="Fight COMPARISON Units" ButtonStyle="ButtonStyle.Primary" />
 <RadzenCard>
     @if (ShowTable)
     {
@@ -62,7 +64,12 @@
 </RadzenCard>
 @code {
     public Comparison comparison { get; set; }
-    public bool ShowTable { get; set; } = false;
+    public bool ShowTable { get; set; } = true;
+    private FightSimulationService fightSimulationService = new FightSimulationService();
+    private void FightUnits()
+    {
+        fightSimulationService.SimulateFight(comparison.Simulation1);
+    }
     protected override Task OnInitializedAsync()
     {
         comparison = new Comparison();
