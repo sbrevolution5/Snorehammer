@@ -84,23 +84,7 @@
     {
         await ResetDice();
         simulating = true;
-        if (sim.AttackProfile.IsVariableAttacks)
-        {
-            fightSimulationService.RollAttackDice(sim);
-        }
-        fightSimulationService.RollToHit(sim);
-        fightSimulationService.RollStrengthStep(sim);
-        fightSimulationService.RollArmorSaves(sim);
-
-        if (sim.AttackProfile.IsVariableDamage)
-        {
-            fightSimulationService.RollDamageDice(sim);
-        }
-        if (sim.Defender.FeelNoPain)
-        {
-            fightSimulationService.RollFeelNoPain(sim);
-        }
-        sim.WinnerMessage = fightSimulationService.GenerateWinnerMessage(sim);
+        fightSimulationService.SimulateFight(sim);
         FightComplete = true;
         simulating = false;
     }

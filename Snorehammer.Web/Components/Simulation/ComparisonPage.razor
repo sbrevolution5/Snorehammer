@@ -43,21 +43,26 @@
     }
 </RadzenCardGroup>
 <RadzenCard>
-    @if (comparison.ComparingAttackers)
+    @if (ShowTable)
     {
-        <ResultsTable sim=@comparison.Simulation1 sim2=@comparison.AlternateAttackSimulation />
-    }
-    else if (comparison.ComparingDefenders)
-    {
-        <ResultsTable sim=@comparison.Simulation1 sim2=@comparison.AlternateDefenseSimulation />
-    }
-    else
-    {
-        <ResultsTable sim=@comparison.Simulation1 />
+
+        @if (comparison.ComparingAttackers)
+        {
+            <ResultsTable sim=@comparison.Simulation1 sim2=@comparison.AlternateAttackSimulation />
+        }
+        else if (comparison.ComparingDefenders)
+        {
+            <ResultsTable sim=@comparison.Simulation1 sim2=@comparison.AlternateDefenseSimulation />
+        }
+        else
+        {
+            <ResultsTable sim=@comparison.Simulation1 />
+        }
     }
 </RadzenCard>
 @code {
     public Comparison comparison { get; set; }
+    public bool ShowTable { get; set; } = false;
     protected override Task OnInitializedAsync()
     {
         comparison = new Comparison();
