@@ -43,7 +43,7 @@
         <FightResult sim="comparison.AlternateDefenseSimulation"></FightResult>
     }
 </RadzenCardGroup>
-<RadzenButton Click=@(() => FightUnits()) Text="Fight COMPARISON Units" ButtonStyle="ButtonStyle.Primary" />
+<RadzenButton Click=@(() => FightUnits()) Text="Fight all Units" ButtonStyle="ButtonStyle.Primary" />
 <RadzenCard>
     @if (ShowTable)
     {
@@ -69,6 +69,14 @@
     private void FightUnits()
     {
         fightSimulationService.SimulateFight(comparison.Simulation1);
+        if (comparison.ComparingAttackers)
+        {
+            fightSimulationService.SimulateFight(comparison.AlternateAttackSimulation);
+        }
+        else if (comparison.ComparingDefenders)
+        {
+            fightSimulationService.SimulateFight(comparison.AlternateDefenseSimulation);
+        }
     }
     protected override Task OnInitializedAsync()
     {
