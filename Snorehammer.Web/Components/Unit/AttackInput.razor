@@ -81,6 +81,10 @@
                         <RadzenLabel Text="Plus 1 to Wound roll" Component="Plus1Wound" class="rz-ms-2" />
                     </RadzenColumn>
                     <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                        <RadzenCheckBox Disabled=!attack.Melee @bind-Value=@attack.Lance Name="Lance" />
+                        <RadzenLabel Text="Lance (assumes unit charged)" Component="Lance" class="rz-ms-2" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
                         <RadzenCheckBox @bind-Value=@attack.Devastating Name="Devastating" />
                         <RadzenLabel Text="Devastating Wounds" Component="Devastating" class="rz-ms-2" />
                     </RadzenColumn>
@@ -134,6 +138,7 @@
                             <RadzenNumeric @bind-Value="@attack.MeltaDamage" Disabled=!attack.Melta />
                         </RadzenFormField>
                     </RadzenColumn>
+                    
                 </RadzenRow>
             </ChildContent>
             
