@@ -378,6 +378,7 @@ namespace Snorehammer.Web.Services
                 {
                     DamageDiceCopy.AddRange(sim.WoundDice);
                 }
+                int fnpUnused = fnpBlockedWounds;
                 while (sim.ModelsDestroyed < sim.Defender.ModelCount && AttacksApplied < sim.ArmorSavesFailed)
                 {
                     if (!sim.AttackProfile.IsVariableDamage)
@@ -385,8 +386,22 @@ namespace Snorehammer.Web.Services
                         int currentWounds = sim.Defender.Wounds;
                         while (currentWounds > 0 && AttacksApplied < sim.ArmorSavesFailed)
                         {
+                            int fnpBlock = 0;
                             AttacksApplied++;
-                            currentWounds -= sim.AttackProfile.Damage;
+                            //if we have any unused feelnopains absorb damage with them.
+                            if (fnpUnused > 0)
+                            {
+                                //set fnpBlock to either the damage done, or the remaining fnp available
+                                if(fnpUnused < currentWounds)
+                                {
+                                    fnpBlock = fnpUnused;
+                                }
+                                else
+                                {
+                                    fnpBlock = sim.AttackProfile.Damage;
+                                }
+                            }
+                            currentWounds -= sim.AttackProfile.Damage-fnpBlock;
                         }
                         sim.ModelsDestroyed++;
                     }
@@ -396,8 +411,26 @@ namespace Snorehammer.Web.Services
                         int currentWounds = sim.Defender.Wounds;
                         while (currentWounds > 0 && AttacksApplied < sim.ArmorSavesFailed)
                         {
+                            int fnpBlock = 0;
                             AttacksApplied++;
-                            currentWounds -= DamageDiceCopy.First().Result + sim.AttackProfile.VariableDamageDiceConstant;
+                            //if we have any unused feelnopains absorb damage with them.
+                            if (fnpUnused > 0)
+                            {
+                                //set fnpBlock to either the damage done, or the remaining fnp available
+                                if (fnpUnused < currentWounds)
+                                {
+                                    fnpBlock = fnpUnused;
+                                }
+                                else
+                                {
+                                    fnpBlock = DamageDiceCopy.First().Result + sim.AttackProfile.VariableDamageDiceConstant;
+                                    if (sim.AttackProfile.Melta && !sim.AttackProfile.Melee)
+                                    {
+                                        fnpBlock += sim.AttackProfile.MeltaDamage;
+                                    }
+                                }
+                            }
+                            currentWounds -= DamageDiceCopy.First().Result + sim.AttackProfile.VariableDamageDiceConstant - fnpBlock;
                             if (sim.AttackProfile.Melta && !sim.AttackProfile.Melee)
                             {
                                 currentWounds -= sim.AttackProfile.MeltaDamage;
