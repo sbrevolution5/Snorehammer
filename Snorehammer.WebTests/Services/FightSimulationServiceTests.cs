@@ -350,6 +350,133 @@ namespace Snorehammer.Web.Services.Tests
 
                 }
             }
+            [TestClass]
+            public class FightSimulationSpilloverTests : FightSimulationServiceTests
+            {
+                private List<Dice> diceList;
+                private List<Dice> fnpDiceList;
+                private List<Dice> woundDiceList;
+                private Random random = A.Fake<Random>();
+                private Random fnpRandom = A.Fake<Random>();
+                private Random woundRandom = A.Fake<Random>();
+                [SetUp]
+                public override void Setup()
+                {
+                    base.Setup();
+                    diceList = new List<Dice>();
+                    fnpDiceList = new List<Dice>();
+                    woundDiceList = new List<Dice>();
+                }
+                [TearDown]
+                public override void TearDown()
+                {
+                    base.TearDown();
+                    diceList = null;
+                    fnpDiceList = null;
+                    woundDiceList = null;
+                }
+                [Test]
+                public void SpilloverDoesNotHappen()
+                {
+                    //arrange
+                    sim.AttackProfile.Damage = 5;
+                    sim.AttackProfile.Attacks = 1;
+                    A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(2);
+                    for (int i = 0; i < sim.AttackProfile.Attacks; i++)
+                    {
+                        diceList.Add(new Dice(unitProfile.MinimumSave, random));
+                    }
+                    sim.ArmorDice = diceList;
+                    sim.DamageNumber = 5;
+                    //act
+                    var res = service.GenerateWinnerMessage(sim);
+                    //assert
+                    sim.ModelsDestroyed.Should().Be(1);
+                }
+                [Test]
+                public void SpilloverUsesFeelNoPainRolls()
+                {
+                    //arrange
+                    sim.Defender.Wounds = 3;
+                    sim.AttackProfile.Damage = 3;
+                    sim.AttackProfile.Attacks = 2;
+                    A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(2);
+                    unitProfile.FeelNoPain = true;
+                    A.CallTo(() => fnpRandom.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(1);
+                    //blocks 2 damage, lets 1 and 3 damage through, only killing a single model
+                    A.CallTo(() => fnpRandom.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).ReturnsNextFromSequence(6,6);
+                    for (int i = 0; i < sim.AttackProfile.Attacks; i++)
+                    {
+                        diceList.Add(new Dice(unitProfile.MinimumSave, random));
+                        fnpDiceList.Add(new Dice(unitProfile.FeelNoPainTarget, fnpRandom));
+                    }
+                    sim.ArmorDice = diceList;
+                    sim.FeelNoPainDice = fnpDiceList;
+                    sim.DamageNumber = 6;
+                    //act
+                    var res = service.GenerateWinnerMessage(sim);
+                    //assert
+                    sim.ModelsDestroyed.Should().Be(1);
+                }
+                [Test]
+                public void SpilloverUsesVariableDamageRolls()
+                {
+                    //arrange
+                    sim.AttackProfile.IsVariableDamage = true;
+                    sim.AttackProfile.VariableAttackDiceNumber = 1;
+                    sim.AttackProfile.VariableDamageDiceSides = 6;
+                    sim.AttackProfile.Attacks = 2;
+                    A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(2);
+                    A.CallTo(() => woundRandom.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).ReturnsNextFromSequence(1,2);
+                    for (int i = 0; i < 2; i++)
+                    {
+                        diceList.Add(new Dice(unitProfile.MinimumSave, random));
+                        woundDiceList.Add(new Dice(1, woundRandom));
+                    }
+                    sim.ArmorDice = diceList;
+                    sim.WoundDice = woundDiceList;
+                    sim.DamageNumber = 3;
+                    //act
+                    var res = service.GenerateWinnerMessage(sim);
+                    //assert
+                    sim.ModelsDestroyed.Should().Be(1);
+                }
+                [Test]
+                public void SpilloverUsesVariableDamageAndFeelNoPainRolls()
+                {
+                    //arrange
+                    sim.AttackProfile.IsVariableDamage = true;
+                    sim.AttackProfile.VariableAttackDiceNumber = 1;
+                    sim.AttackProfile.VariableDamageDiceSides = 6;
+                    sim.AttackProfile.Attacks = 2;
+                    sim.Defender.Wounds = 3;
+                    A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(2);
+                    unitProfile.FeelNoPain = true;
+                    A.CallTo(() => fnpRandom.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(1);
+                    //blocks 2 damage, lets 1 and 3 damage through, only killing a single model
+                    A.CallTo(() => fnpRandom.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).ReturnsNextFromSequence(6, 6);
+                    A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(2);
+                    A.CallTo(() => woundRandom.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).ReturnsNextFromSequence(1, 6);
+                    for (int i = 0; i < 2; i++)
+                    {
+                        diceList.Add(new Dice(unitProfile.MinimumSave, random));
+                        woundDiceList.Add(new Dice(1, woundRandom));
+                    }
+                    for(int i = 0; i<7; i++)
+                    {
+                        fnpDiceList.Add(new Dice(6,fnpRandom));
+                    }
+                    sim.ArmorDice = diceList;
+                    sim.FeelNoPainDice = fnpDiceList;
+                    sim.WoundDice = woundDiceList;
+                    sim.DamageNumber = 6;
+                    //act
+                    var res = service.GenerateWinnerMessage(sim);
+                    //assert
+                    sim.ModelsDestroyed.Should().Be(1);
+                }
+            }
         }
     }
+
 }
