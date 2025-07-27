@@ -70,7 +70,7 @@ namespace Snorehammer.Web.Services
         public void RollToHit(FightSimulation sim)
         {
             sim.ToHitDice = new List<Dice>();
-            if (sim.AttackProfile.Blast)
+            if (sim.AttackProfile.Blast && !sim.AttackProfile.Melee)
             {
                 sim.BlastBonus = sim.Defender.ModelCount / 5;
             }
@@ -79,12 +79,12 @@ namespace Snorehammer.Web.Services
             {
                 //currently doesn't account for "per model" just a flat equation, so 1d6 +1 with 10 models must be written as 10d6 + 10
                 sim.AttackNumber = sim.AttackDice.Sum(d => d.Result) + sim.AttackProfile.VariableAttackDiceConstant;
-                if (sim.AttackProfile.Blast)
+                if (sim.AttackProfile.Blast && !sim.AttackProfile.Melee)
                 {
                     sim.AttackNumber += sim.BlastBonus;
                 }
             }
-            if (sim.AttackProfile.Torrent)
+            if (sim.AttackProfile.Torrent && !sim.AttackProfile.Melee)
             {
                 for (int i = 0; i < sim.AttackNumber; i++)
                 {
@@ -223,7 +223,7 @@ namespace Snorehammer.Web.Services
 
                 int failedsaves = sim.ArmorDice.Where(d => !d.Success).Count();
                 sim.DamageNumber = failedsaves * sim.AttackProfile.Damage;
-                if (sim.AttackProfile.Melta)
+                if (sim.AttackProfile.Melta && !sim.AttackProfile.Melee)
                 {
                     sim.DamageNumber += failedsaves * sim.AttackProfile.MeltaDamage;
                 }
@@ -329,7 +329,7 @@ namespace Snorehammer.Web.Services
                 }
             }
             sim.DamageNumber = sim.WoundDice.Sum(d => d.Result) + sim.AttackProfile.VariableDamageDiceConstant * sim.ArmorSavesFailed;
-            if (sim.AttackProfile.Melta) 
+            if (sim.AttackProfile.Melta && !sim.AttackProfile.Melee) 
             {
                 sim.DamageNumber += sim.AttackProfile.MeltaDamage * sim.ArmorSavesFailed;
             }
