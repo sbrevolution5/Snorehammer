@@ -13,15 +13,15 @@
     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
         <EditForm Model="SelectedNumberOfSimulations">
 
-        <RadzenSelectBar TValue="int" Size="ButtonSize.Small" @bind-Value="SelectedNumberOfSimulations" Change="x => AssignMultiSims(x)">
-            <Items>
-                <RadzenSelectBarItem Value="1" Text="x1" />
-                <RadzenSelectBarItem Value="5" Text="x5" />
-                <RadzenSelectBarItem Value="10" Text="x10" />
-                <RadzenSelectBarItem Value="100" Text="x100" />
-                <RadzenSelectBarItem Value="1000" Text="x1000" />
-            </Items>
-        </RadzenSelectBar>
+            <RadzenSelectBar TValue="int" Size="ButtonSize.Small" @bind-Value="SelectedNumberOfSimulations" Change="x => AssignMultiSims(x)">
+                <Items>
+                    <RadzenSelectBarItem Value="1" Text="x1" />
+                    <RadzenSelectBarItem Value="5" Text="x5" />
+                    <RadzenSelectBarItem Value="10" Text="x10" />
+                    <RadzenSelectBarItem Value="100" Text="x100" />
+                    <RadzenSelectBarItem Value="1000" Text="x1000" />
+                </Items>
+            </RadzenSelectBar>
         </EditForm>
     </RadzenStack>
 </RadzenStack>
@@ -30,10 +30,22 @@
 
     <h1>Attacker</h1>
     <RadzenCardGroup>
-        <AttackInput @bind-attack="comparison.Simulation1.AttackProfile" />
         @if (comparison.ComparingAttackers)
         {
-            <AttackInput @bind-attack="comparison.AlternateAttackSimulation.AttackProfile" />
+            <RadzenCard>
+                <AttackInput @bind-attack="comparison.Simulation1.AttackProfile" />
+                <RadzenButton Click=@(() => SetAttacker(comparison.AlternateAttackSimulation.AttackProfile,comparison.Simulation1)) Text="Copy from Attacker 2" ButtonStyle="ButtonStyle.Primary" />
+            </RadzenCard>
+            <RadzenCard>
+
+                <AttackInput @bind-attack="comparison.AlternateAttackSimulation.AttackProfile" />
+                <RadzenButton Click=@(() => FightUnits()) Text="Copy from Attacker 1" ButtonStyle="ButtonStyle.Primary" />
+            </RadzenCard>
+        }
+        else
+        {
+            <AttackInput @bind-attack="comparison.Simulation1.AttackProfile" />
+
         }
     </RadzenCardGroup>
     <h1>Defender</h1>
@@ -83,6 +95,14 @@
     private FightSimulationService fightSimulationService = new FightSimulationService();
     private FightSimulation ViewSim1;
     private FightSimulation ViewSim2;
+    private void SetAttacker(AttackProfile source, MultiFightSimulation destination)
+    {
+        destination.AttackProfile = (AttackProfile)source.Clone();
+    }
+    private void SetAttacker(AttackProfile source, MultiFightSimulation destination)
+    {
+        destination.AttackProfile = (AttackProfile)source.Clone();
+    }
     private void AssignMultiSims(int x)
     {
         SelectedNumberOfSimulations = x;
