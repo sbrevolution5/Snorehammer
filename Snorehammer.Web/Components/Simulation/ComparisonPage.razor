@@ -39,7 +39,7 @@
             <RadzenCard>
 
                 <AttackInput @bind-attack="comparison.AlternateAttackSimulation.AttackProfile" />
-                <RadzenButton Click=@(() => FightUnits()) Text="Copy from Attacker 1" ButtonStyle="ButtonStyle.Primary" />
+                <RadzenButton Click=@(() => SetAttacker(comparison.Simulation1.AttackProfile, comparison.AlternateAttackSimulation)) Text="Copy from Attacker 1" ButtonStyle="ButtonStyle.Primary" />
             </RadzenCard>
         }
         else
@@ -50,10 +50,13 @@
     </RadzenCardGroup>
     <h1>Defender</h1>
     <RadzenCardGroup>
-        <UnitInput @bind-Unit="comparison.Simulation1.Defender" Attacker=false />
         @if (comparison.ComparingDefenders)
         {
             <UnitInput @bind-Unit="comparison.AlternateDefenseSimulation.Defender" Attacker=false />
+        }
+        else
+        {   
+        <UnitInput @bind-Unit="comparison.Simulation1.Defender" Attacker=false />
         }
     </RadzenCardGroup>
 </RadzenCard>
@@ -99,9 +102,9 @@
     {
         destination.AttackProfile = (AttackProfile)source.Clone();
     }
-    private void SetAttacker(AttackProfile source, MultiFightSimulation destination)
+    private void SetDefender(UnitProfile source, MultiFightSimulation destination)
     {
-        destination.AttackProfile = (AttackProfile)source.Clone();
+        destination.Defender = (UnitProfile)source.Clone();
     }
     private void AssignMultiSims(int x)
     {
