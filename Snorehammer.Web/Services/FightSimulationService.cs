@@ -119,7 +119,7 @@ namespace Snorehammer.Web.Services
                     sim.ToHitDice.Add(die);
                 }
             }
-            
+
         }
         public void RollStrengthStep(FightSimulation sim)
         {
@@ -129,7 +129,7 @@ namespace Snorehammer.Web.Services
             {
                 for (int i = 0; i < sim.ToHitDice.Where(d => d.Critical).Count(); i++)
                 {
-                    for(int j = 0; j < sim.AttackProfile.SustainAmount; j++)
+                    for (int j = 0; j < sim.AttackProfile.SustainAmount; j++)
                     {
                         sim.StrengthDice.Add(new Dice(targetValue, _random));
                     }
@@ -276,24 +276,28 @@ namespace Snorehammer.Web.Services
             var toughness = sim.Defender.Toughness;
             if (toughness == strength)
             {
-                sim.WoundTarget= 4;
+                sim.WoundTarget = 4;
             }
             else if (toughness > strength)
             {
 
                 if (toughness >= strength * 2)
                 {
-                    sim.WoundTarget= 6;
+                    sim.WoundTarget = 6;
                 }
-                sim.WoundTarget= 5;
+                sim.WoundTarget = 5;
             }
             else
             {
                 if (strength >= toughness * 2)
                 {
-                    sim.WoundTarget= 2;
+                    sim.WoundTarget = 2;
                 }
-                sim.WoundTarget =3;
+                sim.WoundTarget = 3;
+                if (sim.Defender.MinusOneToWoundAgainstStronger)
+                {
+                    sim.WoundTarget++;
+                }
             }
         }
         public void DetermineModdedWoundTarget(FightSimulation sim)
@@ -329,7 +333,7 @@ namespace Snorehammer.Web.Services
                 }
             }
             sim.DamageNumber = sim.WoundDice.Sum(d => d.Result) + sim.AttackProfile.VariableDamageDiceConstant * sim.ArmorSavesFailed;
-            if (sim.AttackProfile.Melta && !sim.AttackProfile.Melee) 
+            if (sim.AttackProfile.Melta && !sim.AttackProfile.Melee)
             {
                 sim.DamageNumber += sim.AttackProfile.MeltaDamage * sim.ArmorSavesFailed;
             }
@@ -344,7 +348,7 @@ namespace Snorehammer.Web.Services
             {
                 sim.FeelNoPainDice.Add(new Dice(sim.Defender.FeelNoPainTarget, _random));
             }
-            sim.FeelNoPainMade = sim.FeelNoPainDice.Where(d=> d.Success).Count();
+            sim.FeelNoPainMade = sim.FeelNoPainDice.Where(d => d.Success).Count();
 
         }
         public string GenerateWinnerMessage(FightSimulation sim)
@@ -380,11 +384,11 @@ namespace Snorehammer.Web.Services
                 }
                 if (sim.Defender.ModelCount > 1)
                 {
-                    if (sim.ModelsDestroyed >0)
+                    if (sim.ModelsDestroyed > 0)
                     {
                         sim.LostAModel = true;
                     }
-                    if (sim.ModelsDestroyed > sim.Defender.ModelCount/2)
+                    if (sim.ModelsDestroyed > sim.Defender.ModelCount / 2)
                     {
                         sim.LessThanHalf = true;
                     }
@@ -396,7 +400,7 @@ namespace Snorehammer.Web.Services
                     }
                     return res.ToString();
                 }
-                if (sim.Defender.Wounds-inflictedWounds < sim.Defender.Wounds/2)
+                if (sim.Defender.Wounds - inflictedWounds < sim.Defender.Wounds / 2)
                 {
                     sim.LessThanHalf = true;
                 }
