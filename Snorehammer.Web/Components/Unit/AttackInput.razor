@@ -96,11 +96,11 @@
                         <RadzenLabel Text="Lethal Hits" Component="Lethal" class="rz-ms-2" />
                     </RadzenColumn>
                     <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
-                        <RadzenCheckBox @bind-Value=@attack.Torrent Name="Torrent" />
+                        <RadzenCheckBox Disabled=attack.Melee @bind-Value=@attack.Torrent Name="Torrent" />
                         <RadzenLabel Text="Torrent" Component="Torrent" class="rz-ms-2" />
                     </RadzenColumn>
                     <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
-                        <RadzenCheckBox @bind-Value=@attack.Blast Name="Blast" />
+                        <RadzenCheckBox Disabled=attack.Melee @bind-Value=@attack.Blast Name="Blast" />
                         <RadzenLabel Text="Blast" Component="Blast" class="rz-ms-2" />
                     </RadzenColumn>
                     <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
@@ -128,7 +128,7 @@
                         <RadzenLabel Text="Reroll 1s for Damage" Component="Reroll1Damage" class="rz-ms-2" />
                     </RadzenColumn>
                     <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
-                        <RadzenCheckBox @bind-Value=@attack.Melta Name="Melta" />
+                        <RadzenCheckBox Disabled=attack.Melee @bind-Value=@attack.Melta Name="Melta" />
                         <RadzenLabel Text="Melta " Component="Melta" class="rz-ms-2" />
                         <RadzenFormField Text="Assumes attacker is within melta range" Style="width: 100%;">
                             <RadzenNumeric @bind-Value="@attack.MeltaDamage" Disabled=!attack.Melta />
