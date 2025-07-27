@@ -5,7 +5,7 @@
 @using Snorehammer.Web.Services
 @rendermode InteractiveServer
 <RadzenCard>
-    @if (FightComplete)
+    @if (sim is not null)
     {
         <RadzenCard Variant="Variant.Text">
             <h1>Results</h1>
