@@ -304,7 +304,7 @@ namespace Snorehammer.Web.Services
         {
             DetermineWoundTarget(sim);
             sim.ModdedWoundTarget = sim.WoundTarget;
-            if (sim.AttackProfile.Plus1Wound)
+            if (sim.AttackProfile.Plus1Wound || (sim.AttackProfile.Lance && sim.AttackProfile.Melee))
             {
                 sim.WoundTarget--;
             }
