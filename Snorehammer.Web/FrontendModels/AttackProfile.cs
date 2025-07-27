@@ -24,6 +24,7 @@
         public bool IsVariableAttacks { get; set; } = false;
         public bool Plus1Hit { get; set; } = false;
         public bool Plus1Wound { get; set; } = false;
+        public bool Lance { get; set; } = false;
         public int VariableAttackDiceNumber { get; set; }
         public int VariableAttackDiceSides { get; set; } = 6;
         public int VariableAttackDiceConstant { get; set; }
