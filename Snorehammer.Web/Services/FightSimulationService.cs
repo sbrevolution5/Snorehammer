@@ -440,7 +440,6 @@ namespace Snorehammer.Web.Services
                         sim.ModelsDestroyed++;
                     }
                 }
-                sim.ModelsDestroyed = inflictedWounds / sim.Defender.Wounds;
                 if (sim.ModelsDestroyed >= sim.Defender.ModelCount)
                 {
                     sim.UnitEntirelyDestroyed = true;
