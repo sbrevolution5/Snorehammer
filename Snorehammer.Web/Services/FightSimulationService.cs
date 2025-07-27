@@ -357,9 +357,9 @@ namespace Snorehammer.Web.Services
 
             res.Append($"{sim.ArmorSavesFailed} out of {sim.AttackProfile.Attacks} attacks broke through armor.\n");
             int inflictedWounds = sim.DamageNumber;
+            var fnpBlockedWounds = sim.FeelNoPainDice.Where(d => d.Success).Count();
             if (sim.Defender.FeelNoPain && inflictedWounds != 0)
             {
-                var fnpBlockedWounds = sim.FeelNoPainDice.Where(d => d.Success).Count();
                 if (fnpBlockedWounds == inflictedWounds)
                 {
                     res.Append("All wounds blocked by feel no pain. \n");
@@ -373,15 +373,39 @@ namespace Snorehammer.Web.Services
                 sim.UnitDamaged = true;
                 res.Append($"{inflictedWounds} wounds inflicted to defender.\n");
                 int AttacksApplied = 0;
-                while (sim.ModelsDestroyed < sim.Defender.ModelCount && AttacksApplied <sim.ArmorSavesFailed) {
-                    //assumes no variable damage or feel no pain for now
-                    int currentWounds = sim.Defender.Wounds;
-                    while (currentWounds > 0)
+                var DamageDiceCopy = new List<Dice>();
+                if (sim.AttackProfile.IsVariableDamage)
+                {
+                    DamageDiceCopy.AddRange(sim.WoundDice);
+                }
+                while (sim.ModelsDestroyed < sim.Defender.ModelCount && AttacksApplied < sim.ArmorSavesFailed)
+                {
+                    if (!sim.AttackProfile.IsVariableDamage)
                     {
-                        AttacksApplied++;
-                        currentWounds -= sim.AttackProfile.Damage;
+                        int currentWounds = sim.Defender.Wounds;
+                        while (currentWounds > 0 && AttacksApplied < sim.ArmorSavesFailed)
+                        {
+                            AttacksApplied++;
+                            currentWounds -= sim.AttackProfile.Damage;
+                        }
+                        sim.ModelsDestroyed++;
                     }
-                    sim.ModelsDestroyed++;
+                    else
+                    {
+                        //uses variable damage stats
+                        int currentWounds = sim.Defender.Wounds;
+                        while (currentWounds > 0 && AttacksApplied < sim.ArmorSavesFailed)
+                        {
+                            AttacksApplied++;
+                            currentWounds -= DamageDiceCopy.First().Result + sim.AttackProfile.VariableDamageDiceConstant;
+                            if (sim.AttackProfile.Melta && !sim.AttackProfile.Melee)
+                            {
+                                currentWounds -= sim.AttackProfile.MeltaDamage;
+                            }
+                            DamageDiceCopy.Remove(DamageDiceCopy.First());
+                        }
+                        sim.ModelsDestroyed++;
+                    }
                 }
                 sim.ModelsDestroyed = inflictedWounds / sim.Defender.Wounds;
                 if (sim.ModelsDestroyed >= sim.Defender.ModelCount)
