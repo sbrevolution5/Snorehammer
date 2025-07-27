@@ -47,14 +47,14 @@
 </RadzenCard>
 <RadzenCardGroup>
 
-    <FightResult sim="comparison.Simulation1.FightSimulations.First()"></FightResult>
+    <FightResult sim="ViewSim1"></FightResult>
     @if (comparison.ComparingAttackers)
     {
-        <FightResult sim="comparison.AlternateAttackSimulation.FightSimulations.First()"></FightResult>
+        <FightResult sim="ViewSim2"></FightResult>
     }
     @if (comparison.ComparingDefenders)
     {
-        <FightResult sim="comparison.AlternateDefenseSimulation.FightSimulations.First()"></FightResult>
+        <FightResult sim="ViewSim2"></FightResult>
     }
 </RadzenCardGroup>
 <RadzenButton Click=@(() => FightUnits()) Text="Fight all Units" ButtonStyle="ButtonStyle.Primary" />
@@ -81,6 +81,8 @@
     public bool ShowTable { get; set; } = true;
     private int SelectedNumberOfSimulations = 1;
     private FightSimulationService fightSimulationService = new FightSimulationService();
+    private FightSimulation ViewSim1;
+    private FightSimulation ViewSim2;
     private void AssignMultiSims(int x)
     {
         SelectedNumberOfSimulations = x;
@@ -92,14 +94,20 @@
     private void FightUnits()
     {
         fightSimulationService.SimulateAllFights(comparison.Simulation1);
+        ViewSim1 = comparison.Simulation1.FightSimulations.First();
         if (comparison.ComparingAttackers)
         {
             fightSimulationService.SimulateAllFights(comparison.AlternateAttackSimulation);
+            ViewSim2 = comparison.AlternateAttackSimulation.FightSimulations.First();
+
         }
         else if (comparison.ComparingDefenders)
         {
             fightSimulationService.SimulateAllFights(comparison.AlternateDefenseSimulation);
+            ViewSim2 = comparison.AlternateDefenseSimulation.FightSimulations.First();
+
         }
+        StateHasChanged();
     }
     protected override Task OnInitializedAsync()
     {
