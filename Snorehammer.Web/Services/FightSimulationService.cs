@@ -401,6 +401,7 @@ namespace Snorehammer.Web.Services
                                 {
                                     fnpBlock = sim.AttackProfile.Damage;
                                 }
+                                fnpUnused -= fnpBlock;
                             }
                             singleModelRemainingWounds -= sim.AttackProfile.Damage - fnpBlock;
                         }
@@ -429,6 +430,8 @@ namespace Snorehammer.Web.Services
                                         fnpBlock += sim.AttackProfile.MeltaDamage;
                                     }
                                 }
+                                fnpUnused -= fnpBlock;
+
                             }
                             singleModelRemainingWounds -= DamageDiceCopy.First().Result + sim.AttackProfile.VariableDamageDiceConstant - fnpBlock;
                             if (sim.AttackProfile.Melta && !sim.AttackProfile.Melee)
