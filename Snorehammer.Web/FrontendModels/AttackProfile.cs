@@ -33,6 +33,7 @@
         public int VariableDamageDiceConstant { get; set; }
         public bool Melta { get; set; } = false;
         public int MeltaDamage { get; set; } = 1;
+        public bool Melee { get; set; } = false;
         public object Clone()
         {
             return this.MemberwiseClone();
