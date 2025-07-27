@@ -52,9 +52,16 @@
                     <RadzenRow AlignItems="AlignItems.End" Wrap="FlexWrap.Wrap" Gap="1rem" class="rz-p-sm-4">
 
                         <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
-
                             <RadzenCheckBox @bind-Value=@Unit.ArmorReroll Name="ArmorReroll" />
                             <RadzenLabel Text="Reroll all failed armor saves" Component="ArmorReroll" class="rz-ms-2" />
+                        </RadzenColumn>
+                        @* <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                            <RadzenCheckBox @bind-Value=@Unit.ChargeBonus Name="ChargeBonus" />
+                            <RadzenLabel Text="Charge Bonus" Component="ChargeBonus" class="rz-ms-2" />
+                        </RadzenColumn> *@
+                        <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                            <RadzenCheckBox @bind-Value=@Unit.FightsFirst Name="FightsFirst" />
+                            <RadzenLabel Text="Fights First" Component="FightsFirst" class="rz-ms-2" />
                         </RadzenColumn>
                         <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
                             <RadzenCheckBox @bind-Value=@Unit.Reroll1Save Name="Reroll1Save" />
