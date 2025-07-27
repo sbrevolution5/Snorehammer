@@ -5,9 +5,6 @@
 @using Snorehammer.Web.Services
 @rendermode InteractiveServer
 <RadzenCard>
-    <h3>UnitFight</h3>
-    <RadzenButton Click=@(() => FightUnits()) Text="Fight Units" ButtonStyle="ButtonStyle.Primary" />
-    <RadzenButton Click=@(() => ResetDice()) Text="Reset" ButtonStyle="ButtonStyle.Danger" />
     @if (FightComplete)
     {
         <RadzenCard Variant="Variant.Text">
