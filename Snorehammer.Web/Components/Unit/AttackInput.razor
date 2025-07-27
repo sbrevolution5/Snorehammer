@@ -77,6 +77,10 @@
                         <RadzenLabel Text="Plus 1 to Hit" Component="Plus1Hit" class="rz-ms-2" />
                     </RadzenColumn>
                     <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                        <RadzenCheckBox @bind-Value=@attack.Minus1Hit Name="Minus1Hit" />
+                        <RadzenLabel Text="Minus 1 to Hit" Component="Minus1Hit" class="rz-ms-2" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
                         <RadzenCheckBox @bind-Value=@attack.Plus1Wound Name="Plus1Wound" />
                         <RadzenLabel Text="Plus 1 to Wound roll" Component="Plus1Wound" class="rz-ms-2" />
                     </RadzenColumn>
