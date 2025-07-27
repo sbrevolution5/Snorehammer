@@ -2,6 +2,9 @@
 <RadzenCard Variant="Variant.Outlined">
 
     <EditForm Model="@attack">
+        <RadzenLabel>Ranged</RadzenLabel>
+        <RadzenSwitch @bind-Value=@attack.Melee/>
+        <RadzenLabel>Melee</RadzenLabel>
         <RadzenRow AlignItems="AlignItems.End" Wrap="FlexWrap.Wrap" Gap="1rem" class="rz-p-sm-12">
             <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
                     <RadzenCheckBox @bind-Value=@attack.IsVariableAttacks Name="Variable" />
