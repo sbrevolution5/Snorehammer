@@ -34,7 +34,7 @@
         {
             <RadzenCard>
                 <AttackInput @bind-attack="comparison.Simulation1.AttackProfile" />
-                <RadzenButton Click=@(() => SetAttacker(comparison.AlternateAttackSimulation.AttackProfile,comparison.Simulation1)) Text="Copy from Attacker 2" ButtonStyle="ButtonStyle.Primary" />
+                <RadzenButton Click=@(() => SetAttacker(comparison.AlternateAttackSimulation.AttackProfile, comparison.Simulation1)) Text="Copy from Attacker 2" ButtonStyle="ButtonStyle.Primary" />
             </RadzenCard>
             <RadzenCard>
 
@@ -52,11 +52,18 @@
     <RadzenCardGroup>
         @if (comparison.ComparingDefenders)
         {
-            <UnitInput @bind-Unit="comparison.AlternateDefenseSimulation.Defender" Attacker=false />
+            <RadzenCard>
+                <UnitInput @bind-Unit="comparison.Simulation1.Defender" Attacker=false />
+                <RadzenButton Click=@(() => SetDefender(comparison.AlternateDefenseSimulation.Defender, comparison.Simulation1)) Text="Copy from Attacker 2" ButtonStyle="ButtonStyle.Primary" />
+            </RadzenCard>
+            <RadzenCard>
+                <UnitInput @bind-Unit="comparison.AlternateDefenseSimulation.Defender" Attacker=false />
+                <RadzenButton Click=@(() => SetDefender(comparison.Simulation1.Defender, comparison.AlternateDefenseSimulation)) Text="Copy from Attacker 1" ButtonStyle="ButtonStyle.Primary" />
+            </RadzenCard>
         }
         else
-        {   
-        <UnitInput @bind-Unit="comparison.Simulation1.Defender" Attacker=false />
+        {
+            <UnitInput @bind-Unit="comparison.Simulation1.Defender" Attacker=false />
         }
     </RadzenCardGroup>
 </RadzenCard>
