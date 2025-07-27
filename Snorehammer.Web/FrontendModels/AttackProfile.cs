@@ -23,6 +23,7 @@
         public bool Blast { get; set; } = false;
         public bool IsVariableAttacks { get; set; } = false;
         public bool Plus1Hit { get; set; } = false;
+        public bool Minus1Hit { get; set; } = false;
         public bool Plus1Wound { get; set; } = false;
         public bool Lance { get; set; } = false;
         public int VariableAttackDiceNumber { get; set; }
@@ -35,6 +36,7 @@
         public bool Melta { get; set; } = false;
         public int MeltaDamage { get; set; } = 1;
         public bool Melee { get; set; } = false;
+        public bool BigGuns { get; set; } = false;
         public object Clone()
         {
             return this.MemberwiseClone();

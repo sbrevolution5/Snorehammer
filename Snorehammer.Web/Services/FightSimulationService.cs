@@ -25,6 +25,7 @@ namespace Snorehammer.Web.Services
             {
                 RollAttackDice(sim);
             }
+            DetermineHitTarget(sim);
             RollToHit(sim);
             RollStrengthStep(sim);
             RollArmorSaves(sim);
@@ -54,7 +55,7 @@ namespace Snorehammer.Web.Services
             {
                 sim.HitTarget--;
             }
-            if (sim.Defender.Stealth || sim.Defender.Minus1Hit)
+            if (sim.Defender.Stealth || sim.Defender.Minus1Hit || sim.AttackProfile.Minus1Hit || sim.AttackProfile.BigGuns)
             {
                 sim.HitTarget++;
             }
@@ -96,7 +97,7 @@ namespace Snorehammer.Web.Services
             }
             for (int i = 0; i < sim.AttackNumber; i++)
             {
-                sim.ToHitDice.Add(new Dice(sim.AttackProfile.Skill, _random));
+                sim.ToHitDice.Add(new Dice(sim.HitTarget, _random));
             }
             if (sim.AttackProfile.RerollHit)
             {

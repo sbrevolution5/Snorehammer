@@ -77,6 +77,10 @@
                         <RadzenLabel Text="Plus 1 to Hit" Component="Plus1Hit" class="rz-ms-2" />
                     </RadzenColumn>
                     <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                        <RadzenCheckBox @bind-Value=@attack.Minus1Hit Name="Minus1Hit" />
+                        <RadzenLabel Text="Minus 1 to Hit" Component="Minus1Hit" class="rz-ms-2" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
                         <RadzenCheckBox @bind-Value=@attack.Plus1Wound Name="Plus1Wound" />
                         <RadzenLabel Text="Plus 1 to Wound roll" Component="Plus1Wound" class="rz-ms-2" />
                     </RadzenColumn>
@@ -137,6 +141,10 @@
                         <RadzenFormField Text="Assumes attacker is within melta range" Style="width: 100%;">
                             <RadzenNumeric @bind-Value="@attack.MeltaDamage" Disabled=!attack.Melta />
                         </RadzenFormField>
+                    </RadzenColumn>
+                    <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                        <RadzenCheckBox Disabled=attack.Melee @bind-Value=@attack.BigGuns Name="BigGuns" />
+                        <RadzenLabel Text="Big Guns Never Tire" Component="BigGuns" class="rz-ms-2" />
                     </RadzenColumn>
                     
                 </RadzenRow>
