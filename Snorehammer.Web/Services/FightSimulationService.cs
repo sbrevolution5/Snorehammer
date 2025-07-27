@@ -379,12 +379,13 @@ namespace Snorehammer.Web.Services
                     DamageDiceCopy.AddRange(sim.WoundDice);
                 }
                 int fnpUnused = fnpBlockedWounds;
+                int singleModelRemainingWounds = sim.Defender.Wounds;
                 while (sim.ModelsDestroyed < sim.Defender.ModelCount && AttacksApplied < sim.ArmorSavesFailed)
                 {
                     if (!sim.AttackProfile.IsVariableDamage)
                     {
-                        int currentWounds = sim.Defender.Wounds;
-                        while (currentWounds > 0 && AttacksApplied < sim.ArmorSavesFailed)
+                        singleModelRemainingWounds = sim.Defender.Wounds;
+                        while (singleModelRemainingWounds > 0 && AttacksApplied < sim.ArmorSavesFailed)
                         {
                             int fnpBlock = 0;
                             AttacksApplied++;
@@ -392,7 +393,7 @@ namespace Snorehammer.Web.Services
                             if (fnpUnused > 0)
                             {
                                 //set fnpBlock to either the damage done, or the remaining fnp available
-                                if(fnpUnused < currentWounds)
+                                if (fnpUnused < singleModelRemainingWounds)
                                 {
                                     fnpBlock = fnpUnused;
                                 }
@@ -401,15 +402,14 @@ namespace Snorehammer.Web.Services
                                     fnpBlock = sim.AttackProfile.Damage;
                                 }
                             }
-                            currentWounds -= sim.AttackProfile.Damage-fnpBlock;
+                            singleModelRemainingWounds -= sim.AttackProfile.Damage - fnpBlock;
                         }
-                        sim.ModelsDestroyed++;
                     }
                     else
                     {
                         //uses variable damage stats
-                        int currentWounds = sim.Defender.Wounds;
-                        while (currentWounds > 0 && AttacksApplied < sim.ArmorSavesFailed)
+                        singleModelRemainingWounds = sim.Defender.Wounds;
+                        while (singleModelRemainingWounds > 0 && AttacksApplied < sim.ArmorSavesFailed)
                         {
                             int fnpBlock = 0;
                             AttacksApplied++;
@@ -417,7 +417,7 @@ namespace Snorehammer.Web.Services
                             if (fnpUnused > 0)
                             {
                                 //set fnpBlock to either the damage done, or the remaining fnp available
-                                if (fnpUnused < currentWounds)
+                                if (fnpUnused < singleModelRemainingWounds)
                                 {
                                     fnpBlock = fnpUnused;
                                 }
@@ -430,15 +430,15 @@ namespace Snorehammer.Web.Services
                                     }
                                 }
                             }
-                            currentWounds -= DamageDiceCopy.First().Result + sim.AttackProfile.VariableDamageDiceConstant - fnpBlock;
+                            singleModelRemainingWounds -= DamageDiceCopy.First().Result + sim.AttackProfile.VariableDamageDiceConstant - fnpBlock;
                             if (sim.AttackProfile.Melta && !sim.AttackProfile.Melee)
                             {
-                                currentWounds -= sim.AttackProfile.MeltaDamage;
+                                singleModelRemainingWounds -= sim.AttackProfile.MeltaDamage;
                             }
                             DamageDiceCopy.Remove(DamageDiceCopy.First());
                         }
-                        sim.ModelsDestroyed++;
                     }
+                    sim.ModelsDestroyed++;
                 }
                 if (sim.ModelsDestroyed >= sim.Defender.ModelCount)
                 {
@@ -457,10 +457,10 @@ namespace Snorehammer.Web.Services
                         sim.LessThanHalf = true;
                     }
                     res.Append($"{sim.ModelsDestroyed} out of {sim.Defender.ModelCount} models were destroyed.\n");
-                    int woundRemainder = inflictedWounds % sim.Defender.Wounds;
-                    if (woundRemainder != 0)
+
+                    if (singleModelRemainingWounds >= 0)
                     {
-                        res.Append($"A remaining model was inflicted {woundRemainder} wounds, leaving it with {sim.Defender.Wounds - woundRemainder} remaining.\n");
+                        res.Append($"A remaining model was inflicted {sim.Defender.Wounds - singleModelRemainingWounds} wounds, leaving it with {singleModelRemainingWounds} remaining.\n");
                     }
                     return res.ToString();
                 }
