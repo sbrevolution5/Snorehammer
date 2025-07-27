@@ -343,7 +343,7 @@ namespace Snorehammer.Web.Services
             {
                 throw new InvalidOperationException("Defender has no Feel no pain save, and attempted to roll one");
             }
-            for (int i = 0; i < sim.ArmorDice.Where(d => !d.Success).Count() * sim.AttackProfile.Damage; i++)
+            for (int i = 0; i < sim.DamageNumber; i++)
             {
                 sim.FeelNoPainDice.Add(new Dice(sim.Defender.FeelNoPainTarget, _random));
             }
@@ -405,6 +405,10 @@ namespace Snorehammer.Web.Services
                                 fnpUnused -= fnpBlock;
                             }
                             singleModelRemainingWounds -= sim.AttackProfile.Damage - fnpBlock;
+                            if (singleModelRemainingWounds <= 0)
+                            {
+                                sim.ModelsDestroyed++;
+                            }
                         }
                     }
                     else
@@ -439,10 +443,14 @@ namespace Snorehammer.Web.Services
                             {
                                 singleModelRemainingWounds -= sim.AttackProfile.MeltaDamage;
                             }
+                            if (singleModelRemainingWounds<= 0)
+                            {
+                                sim.ModelsDestroyed++;
+                            }
                             DamageDiceCopy.Remove(DamageDiceCopy.First());
                         }
                     }
-                    sim.ModelsDestroyed++;
+                    
                 }
                 if (sim.ModelsDestroyed >= sim.Defender.ModelCount)
                 {
