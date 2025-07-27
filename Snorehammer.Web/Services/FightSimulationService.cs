@@ -373,8 +373,12 @@ namespace Snorehammer.Web.Services
             {
                 sim.UnitDamaged = true;
                 res.Append($"{inflictedWounds} wounds inflicted to defender.\n");
-
-                int totalWounds = sim.Defender.Wounds * sim.Defender.ModelCount;
+                int AttacksApplied = 0;
+                while (sim.ModelsDestroyed < sim.Defender.ModelCount && AttacksApplied <sim.ArmorSavesFailed) {
+                    //each attack should be allocated to a model
+                    //subtract that attack's damage from the model's wounds
+                    //if the model has 0 wounds, subtract from models remaining
+                }
                 sim.ModelsDestroyed = inflictedWounds / sim.Defender.Wounds;
                 if (sim.ModelsDestroyed >= sim.Defender.ModelCount)
                 {
