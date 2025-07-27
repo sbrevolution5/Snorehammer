@@ -469,11 +469,12 @@ namespace Snorehammer.Web.Services.Tests
                     sim.ArmorDice = diceList;
                     sim.FeelNoPainDice = fnpDiceList;
                     sim.WoundDice = woundDiceList;
-                    sim.DamageNumber = 6;
+                    sim.DamageNumber = 7;
                     //act
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
                     sim.ModelsDestroyed.Should().Be(1);
+                    sim.WoundsInflicted.Should().Be(5);
                 }
             }
         }

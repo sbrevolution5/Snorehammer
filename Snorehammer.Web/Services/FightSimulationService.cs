@@ -368,6 +368,7 @@ namespace Snorehammer.Web.Services
                 res.Append($"{fnpBlockedWounds} of {inflictedWounds} wounds blocked by Feel No Pain. \n");
                 inflictedWounds -= fnpBlockedWounds;
             }
+            sim.WoundsInflicted = inflictedWounds;
             if (inflictedWounds > 0)
             {
                 sim.UnitDamaged = true;
