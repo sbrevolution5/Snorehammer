@@ -138,6 +138,10 @@
                             <RadzenNumeric @bind-Value="@attack.MeltaDamage" Disabled=!attack.Melta />
                         </RadzenFormField>
                     </RadzenColumn>
+                    <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                        <RadzenCheckBox Disabled=attack.Melee @bind-Value=@attack.BigGuns Name="BigGuns" />
+                        <RadzenLabel Text="Big Guns Never Tire" Component="BigGuns" class="rz-ms-2" />
+                    </RadzenColumn>
                     
                 </RadzenRow>
             </ChildContent>
