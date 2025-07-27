@@ -121,6 +121,57 @@ namespace Snorehammer.Web.Services
             }
 
         }
+        public void DetermineWoundTarget(FightSimulation sim)
+        {
+            var strength = sim.AttackProfile.Strength;
+            var toughness = sim.Defender.Toughness;
+            if (toughness == strength)
+            {
+                sim.WoundTarget = 4;
+            }
+            else if (toughness > strength)
+            {
+
+                if (toughness >= strength * 2)
+                {
+                    sim.WoundTarget = 6;
+                }
+                sim.WoundTarget = 5;
+            }
+            else
+            {
+                if (strength >= toughness * 2)
+                {
+                    sim.WoundTarget = 2;
+                }
+                sim.WoundTarget = 3;
+                if (sim.Defender.MinusOneToWoundAgainstStronger)
+                {
+                    sim.WoundTarget++;
+                }
+            }
+        }
+        public void DetermineModdedWoundTarget(FightSimulation sim)
+        {
+            DetermineWoundTarget(sim);
+            sim.ModdedWoundTarget = sim.WoundTarget;
+            if (sim.AttackProfile.Plus1Wound || (sim.AttackProfile.Lance && sim.AttackProfile.Melee))
+            {
+                sim.WoundTarget--;
+            }
+            if (sim.Defender.Stealth || sim.Defender.Minus1Hit)
+            {
+                sim.WoundTarget++;
+            }
+            if (sim.WoundTarget < 2)
+            {
+                sim.WoundTarget = 2;
+            }
+            if (sim.WoundTarget > 6)
+            {
+                sim.WoundTarget = 6;
+            }
+        }
         public void RollStrengthStep(FightSimulation sim)
         {
             DetermineModdedWoundTarget(sim);
@@ -270,57 +321,7 @@ namespace Snorehammer.Web.Services
             return sim.Defender.InvulnerableSave;
         }
 
-        public void DetermineWoundTarget(FightSimulation sim)
-        {
-            var strength = sim.AttackProfile.Strength;
-            var toughness = sim.Defender.Toughness;
-            if (toughness == strength)
-            {
-                sim.WoundTarget = 4;
-            }
-            else if (toughness > strength)
-            {
-
-                if (toughness >= strength * 2)
-                {
-                    sim.WoundTarget = 6;
-                }
-                sim.WoundTarget = 5;
-            }
-            else
-            {
-                if (strength >= toughness * 2)
-                {
-                    sim.WoundTarget = 2;
-                }
-                sim.WoundTarget = 3;
-                if (sim.Defender.MinusOneToWoundAgainstStronger)
-                {
-                    sim.WoundTarget++;
-                }
-            }
-        }
-        public void DetermineModdedWoundTarget(FightSimulation sim)
-        {
-            DetermineWoundTarget(sim);
-            sim.ModdedWoundTarget = sim.WoundTarget;
-            if (sim.AttackProfile.Plus1Wound || (sim.AttackProfile.Lance && sim.AttackProfile.Melee))
-            {
-                sim.WoundTarget--;
-            }
-            if (sim.Defender.Stealth || sim.Defender.Minus1Hit)
-            {
-                sim.WoundTarget++;
-            }
-            if (sim.WoundTarget < 2)
-            {
-                sim.WoundTarget = 2;
-            }
-            if (sim.WoundTarget > 6)
-            {
-                sim.WoundTarget = 6;
-            }
-        }
+        
         public void RollDamageDice(FightSimulation sim)
         {
             sim.WoundDice = new List<Dice>();
@@ -375,6 +376,12 @@ namespace Snorehammer.Web.Services
                 res.Append($"{inflictedWounds} wounds inflicted to defender.\n");
                 int AttacksApplied = 0;
                 while (sim.ModelsDestroyed < sim.Defender.ModelCount && AttacksApplied <sim.ArmorSavesFailed) {
+                    //assumes no variable damage for now
+                    int currentWounds = sim.Defender.Wounds;
+                    while (currentWounds > 0) {
+                        AttacksApplied++;
+                        currentWounds -= 
+                    }
                     //each attack should be allocated to a model
                     //subtract that attack's damage from the model's wounds
                     //if the model has 0 wounds, subtract from models remaining
