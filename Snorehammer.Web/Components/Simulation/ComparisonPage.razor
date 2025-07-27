@@ -6,9 +6,9 @@
 <h3>Comparison</h3>
 
 <RadzenStack class="rz-p-sm-12" Orientation="Orientation.Horizontal">
-    <RadzenSwitch @bind-Value=@comparison.ComparingAttackers />
+    <RadzenSwitch Disabled=@comparison.ComparingDefenders @bind-Value=@comparison.ComparingAttackers />
     <RadzenLabel>Compare Attackers</RadzenLabel>
-    <RadzenSwitch @bind-Value=@comparison.ComparingDefenders />
+    <RadzenSwitch Disabled=@comparison.ComparingAttackers @bind-Value=@comparison.ComparingDefenders />
     <RadzenLabel>Compare Defenders</RadzenLabel>
     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
         <EditForm Model="SelectedNumberOfSimulations">
