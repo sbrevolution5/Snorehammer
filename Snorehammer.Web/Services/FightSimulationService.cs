@@ -320,8 +320,6 @@ namespace Snorehammer.Web.Services
             sim.ArmorSave = sim.Defender.InvulnerableSave;
             return sim.Defender.InvulnerableSave;
         }
-
-        
         public void RollDamageDice(FightSimulation sim)
         {
             sim.WoundDice = new List<Dice>();
@@ -376,15 +374,14 @@ namespace Snorehammer.Web.Services
                 res.Append($"{inflictedWounds} wounds inflicted to defender.\n");
                 int AttacksApplied = 0;
                 while (sim.ModelsDestroyed < sim.Defender.ModelCount && AttacksApplied <sim.ArmorSavesFailed) {
-                    //assumes no variable damage for now
+                    //assumes no variable damage or feel no pain for now
                     int currentWounds = sim.Defender.Wounds;
-                    while (currentWounds > 0) {
+                    while (currentWounds > 0)
+                    {
                         AttacksApplied++;
-                        currentWounds -= 
+                        currentWounds -= sim.AttackProfile.Damage;
                     }
-                    //each attack should be allocated to a model
-                    //subtract that attack's damage from the model's wounds
-                    //if the model has 0 wounds, subtract from models remaining
+                    sim.ModelsDestroyed++;
                 }
                 sim.ModelsDestroyed = inflictedWounds / sim.Defender.Wounds;
                 if (sim.ModelsDestroyed >= sim.Defender.ModelCount)
