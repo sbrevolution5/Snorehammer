@@ -86,7 +86,7 @@
                     </RadzenColumn>
                     <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
                         <RadzenCheckBox Disabled=!attack.Melee @bind-Value=@attack.Lance Name="Lance" />
-                        <RadzenLabel Text="Lance (assumes unit charged)" Component="Lance" class="rz-ms-2" />
+                        <RadzenLabel Text="Lance (assumes unit charged)" Component="Lance" class=@($"rz-ms-2 {MeleeLabel(true)}") />
                     </RadzenColumn>
                     <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
                         <RadzenCheckBox @bind-Value=@attack.Devastating Name="Devastating" />
@@ -159,4 +159,29 @@
     public AttackProfile attack { get; set; }
     [Parameter]
     public EventCallback<AttackProfile> AttackChanged { get; set; }
+    public string MeleeLabel(bool enabledMelee)
+    {
+        if (enabledMelee)
+        {
+            if (attack.Melee)
+            {
+                return "rz-text-disabled-color";
+            }
+            else
+            {
+                return "";
+            }
+        }
+        else
+        {
+            if (!attack.Melee)
+            {
+                return "rz-text-disabled-color";
+            }
+            else
+            {
+                return "";
+            }
+        }
+    }
 }
