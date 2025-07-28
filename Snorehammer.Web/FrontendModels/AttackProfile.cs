@@ -3,7 +3,7 @@
     public class AttackProfile :ICloneable
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         public int Attacks { get; set; }
         public int Skill { get; set; }
         public int Strength { get; set; }
