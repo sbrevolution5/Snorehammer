@@ -8,44 +8,44 @@
     @if (sim is not null)
     {
         <RadzenCard Variant="Variant.Text">
-            <h1>Results</h1>
+            <h1>Results for @sim.Attacker.Attacks[0].Name</h1>
             <br />
 
 
 
-            @if (sim.AttackProfile.IsVariableAttacks)
+            @if (sim.Attacker.Attacks[0].IsVariableAttacks)
             {
                 <DicePanel sim="@sim"
                            Title="Number of Attacks"
-                           RollString1=@($"Rolling: {sim.AttackProfile.VariableAttackDiceNumber} d{sim.AttackProfile.VariableAttackDiceSides} + {sim.AttackProfile.VariableAttackDiceConstant}" + (sim.BlastBonus > 0 ? $" + {@sim.BlastBonus}" : ""))
+                           RollString1=@($"Rolling: {sim.Attacker.Attacks[0].VariableAttackDiceNumber} d{sim.Attacker.Attacks[0].VariableAttackDiceSides} + {sim.Attacker.Attacks[0].VariableAttackDiceConstant}" + (sim.BlastBonus > 0 ? $" + {@sim.BlastBonus}" : ""))
                            RollString2=@($"Total: {sim.AttackNumber}")
                            DiceList="@sim.AttackDice" />
             }
             <DicePanel sim="@sim"
                        Title="To Hit Roll"
-                       RollString1=@($"Target: {sim.AttackProfile.Skill}")
+                       RollString1=@($"Target: {sim.Attacker.Attacks[0].Skill}")
                        RollString2=@($"Rolling {sim.AttackNumber}")
                        DiceList="@sim.ToHitDice"
-                       CriticalMatters="@(sim.AttackProfile.Sustained || sim.AttackProfile.Lethal)" />
+                       CriticalMatters="@(sim.Attacker.Attacks[0].Sustained || sim.Attacker.Attacks[0].Lethal)" />
             <DicePanel sim="@sim"
                        Title="To Wound Roll"
                        RollString1=@($"Target: {(sim.ModdedWoundTarget > 0 ? sim.ModdedWoundTarget :sim.WoundTarget)}")
                        RollString2=@($"Rolling: {sim.StrengthDice.Count}")
                        DiceList="@sim.StrengthDice"
-                       CriticalMatters="@(sim.AttackProfile.Devastating)" />
+                       CriticalMatters="@(sim.Attacker.Attacks[0].Devastating)" />
             <DicePanel sim="@sim"
                        Title="To Wound Roll"
                        RollString1=@($"Target: {sim.ArmorSave}")
                        RollString2=@($"Rolling: {sim.ArmorDice.Count}")
                        DiceList="@sim.ArmorDice" />
 
-            @if (sim.AttackProfile.IsVariableDamage)
+            @if (sim.Attacker.Attacks[0].IsVariableDamage)
             {
 
 
                 <DicePanel sim="@sim"
                            Title="Damage Roll"
-                           RollString1=@($"Rolling: {sim.AttackProfile.VariableDamageDiceNumber} d{sim.AttackProfile.VariableDamageDiceSides} + {sim.AttackProfile.VariableDamageDiceConstant}" + (sim.AttackProfile.Melta ? $" + {@sim.AttackProfile.MeltaDamage}" : ""))
+                           RollString1=@($"Rolling: {sim.Attacker.Attacks[0].VariableDamageDiceNumber} d{sim.Attacker.Attacks[0].VariableDamageDiceSides} + {sim.Attacker.Attacks[0].VariableDamageDiceConstant}" + (sim.Attacker.Attacks[0].Melta ? $" + {@sim.Attacker.Attacks[0].MeltaDamage}" : ""))
                            DiceList="@sim.WoundDice" />
             }
             @if (sim.Defender.FeelNoPain)
@@ -90,7 +90,7 @@
         FightComplete = false;
         sim = new FightSimulation()
         {
-            AttackProfile = sim.AttackProfile,
+            Attacker = sim.Attacker,
             Defender = sim.Defender
         };
         simulating = false;

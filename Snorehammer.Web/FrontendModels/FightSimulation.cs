@@ -2,7 +2,7 @@
 {
     public class FightSimulation
     {
-        public AttackProfile AttackProfile { get; set; }
+        public UnitProfile Attacker { get; set; }
         public UnitProfile Defender { get; set; }
         public List<Dice> AttackDice { get; set; } = new List<Dice>();
         public List<Dice> ToHitDice { get; set; } = new List<Dice>();

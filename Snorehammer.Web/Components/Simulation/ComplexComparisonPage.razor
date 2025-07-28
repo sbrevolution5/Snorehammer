@@ -1,9 +1,9 @@
-﻿@page "/"
+﻿@page "/complex"
 @using Snorehammer.Web.Components.Unit
 @using Snorehammer.Web.FrontendModels
 @using Snorehammer.Web.Services
 @rendermode InteractiveServer
-<h3>Comparison</h3>
+<h3>ComplexComparison</h3>
 
 <RadzenStack class="rz-p-sm-12" Orientation="Orientation.Horizontal">
     <RadzenSwitch Disabled=@comparison.ComparingDefenders @bind-Value=@comparison.ComparingAttackers />
@@ -33,18 +33,20 @@
         @if (comparison.ComparingAttackers)
         {
             <RadzenCard>
-                <AttackInput @bind-attack="comparison.Simulation1.AttackProfile" />
-                <RadzenButton Click=@(() => SetAttacker(comparison.AlternateAttackSimulation.AttackProfile, comparison.Simulation1)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Attacker 2 </span></RadzenButton>
+                <UnitInput @bind-Unit="comparison.Simulation1.Attacker" Attacker=true />
+
+                <RadzenButton Click=@(() => SetAttacker(comparison.AlternateAttackSimulation.Attacker.Attacks[0], comparison.Simulation1)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Attacker 2 </span></RadzenButton>
             </RadzenCard>
             <RadzenCard>
 
-                <AttackInput @bind-attack="comparison.AlternateAttackSimulation.AttackProfile" />
-                <RadzenButton Click=@(() => SetAttacker(comparison.Simulation1.AttackProfile, comparison.AlternateAttackSimulation)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Attacker 1 </span></RadzenButton>
+                <UnitInput @bind-attack="comparison.AlternateAttackSimulation.Attacker" Attacker=true />
+                <RadzenButton Click=@(() => SetAttacker(comparison.Simulation1.Attacker.Attacks[0], comparison.AlternateAttackSimulation)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Attacker 1 </span></RadzenButton>
             </RadzenCard>
         }
         else
         {
-            <AttackInput @bind-attack="comparison.Simulation1.AttackProfile" />
+            <UnitInput @bind-Unit="comparison.Simulation1.Attacker" Attacker=true />
+
 
         }
     </RadzenCardGroup>
@@ -99,6 +101,7 @@
     }
 </RadzenCard>
 @code {
+
     public Comparison comparison { get; set; }
     public bool ShowTable { get; set; } = true;
     private int SelectedNumberOfSimulations = 1;
@@ -107,7 +110,7 @@
     private FightSimulation ViewSim2;
     private void SetAttacker(AttackProfile source, MultiFightSimulation destination)
     {
-        destination.AttackProfile = (AttackProfile)source.Clone();
+        destination.Attacker = (UnitProfile)source.Clone();
     }
     private void SetDefender(UnitProfile source, MultiFightSimulation destination)
     {
@@ -154,28 +157,40 @@
                 ModelCount = 10,
                 Name = "intercessor"
             },
-            AttackProfile = new AttackProfile()
+            Attacker = new UnitProfile()
             {
-                ArmorPenetration = 1,
-                Attacks = 20,
-                Damage = 1,
-                Skill = 3,
-                Strength = 4,
-                VariableAttackDiceConstant = 1,
-                VariableAttackDiceNumber = 2,
-                VariableDamageDiceConstant = 1,
-                VariableDamageDiceNumber = 1
+                Attacks = new List<AttackProfile>()
+                {
+                    new AttackProfile()
+                    {
+                        ArmorPenetration = 1,
+                        Attacks = 20,
+                        Damage = 1,
+                        Skill = 3,
+                        Strength = 4,
+                        VariableAttackDiceConstant = 1,
+                        VariableAttackDiceNumber = 2,
+                        VariableDamageDiceConstant = 1,
+                        VariableDamageDiceNumber = 1
+                    }
+                },
+                InvulnerableSave = 0,
+                MinimumSave = 3,
+                Toughness = 4,
+                Wounds = 2,
+                ModelCount = 10,
+                Name = "intercessor"
             }
         };
         comparison.AlternateAttackSimulation = new MultiFightSimulation()
         {
             Defender = (UnitProfile)comparison.Simulation1.Defender.Clone(),
-            AttackProfile = (AttackProfile)comparison.Simulation1.AttackProfile.Clone()
+            Attacker = (UnitProfile)comparison.Simulation1.Attacker.Clone()
         };
         comparison.AlternateDefenseSimulation = new MultiFightSimulation()
         {
             Defender = (UnitProfile)comparison.Simulation1.Defender.Clone(),
-            AttackProfile = (AttackProfile)comparison.Simulation1.AttackProfile.Clone()
+            Attacker = (UnitProfile)comparison.Simulation1.Attacker.Clone()
         };
         AssignMultiSims(1);
 
