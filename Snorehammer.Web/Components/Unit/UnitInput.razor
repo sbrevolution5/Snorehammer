@@ -98,11 +98,19 @@
                     </RadzenRow>
                 </ChildContent>
             </RadzenPanel>
+            @if (Attacker)
+            {
+                foreach(var atk in Unit.Attacks)
+                {
+                    <AttackInput attack="@atk"></AttackInput>
+                }
+            }
         </EditForm>
     </RadzenCard>
 }
 
 @code {
+    //next step is to make the unit input able to take in multiple attacks with a foreach loop of components, 
     [Parameter]
     public UnitProfile Unit { get; set; }
     [Parameter]
@@ -113,5 +121,9 @@
     {
         loaded = true;
         return base.OnInitializedAsync();
+    }
+    public void AddAttack()
+    {
+        Unit.Attacks.Add(Unit.Attacks.Last());
     }
 }
