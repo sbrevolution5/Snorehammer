@@ -33,18 +33,18 @@
         @if (comparison.ComparingAttackers)
         {
             <RadzenCard>
-                <AttackInput @bind-attack="comparison.Simulation1.Attacker" />
-                <RadzenButton Click=@(() => SetAttacker(comparison.AlternateAttackSimulation.Attacker, comparison.Simulation1)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Attacker 2 </span></RadzenButton>
+                <AttackInput @bind-attack="comparison.Simulation1.Attacker.Attacks[0]" />
+                <RadzenButton Click=@(() => SetAttacker(comparison.AlternateAttackSimulation.Attacker.Attacks[0], comparison.Simulation1)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Attacker 2 </span></RadzenButton>
             </RadzenCard>
             <RadzenCard>
 
-                <AttackInput @bind-attack="comparison.AlternateAttackSimulation.Attacker" />
-                <RadzenButton Click=@(() => SetAttacker(comparison.Simulation1.AttackProfile, comparison.AlternateAttackSimulation)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Attacker 1 </span></RadzenButton>
+                <AttackInput @bind-attack="comparison.AlternateAttackSimulation.Attacker.Attacks[0]" />
+                <RadzenButton Click=@(() => SetAttacker(comparison.Simulation1.Attacker.Attacks[0], comparison.AlternateAttackSimulation)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Attacker 1 </span></RadzenButton>
             </RadzenCard>
         }
         else
         {
-            <AttackInput @bind-attack="comparison.Simulation1.AttackProfile" />
+            <AttackInput @bind-attack="comparison.Simulation1.Attacker.Attacks[0]" />
 
         }
     </RadzenCardGroup>
@@ -104,613 +104,10 @@
     private int SelectedNumberOfSimulations = 1;
     private FightSimulationService fightSimulationService = new FightSimulationService();
     private FightSimulation ViewSim1;
-                __builder2.CloseComponent();
-                __builder2.AddMarkupContent(96, "\r\n    ");
-                __builder2.AddMarkupContent(97, "<h1>Defender</h1>\r\n    ");
-                __builder2.OpenComponent<global::Radzen.Blazor.RadzenCardGroup>(98);
-                __builder2.AddAttribute(99, "ChildContent", (global::Microsoft.AspNetCore.Components.RenderFragment)((__builder3) => {
-#nullable restore
-#line (53,1)-(53,9) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-        
-
-#line default
-#line hidden
-#nullable disable
-
-#nullable restore
-#line (53,10)-(55,1) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-if (comparison.ComparingDefenders)
-        {
-
-#line default
-#line hidden
-#nullable disable
-
-                    __builder3.OpenComponent<global::Radzen.Blazor.RadzenCard>(100);
-                    __builder3.AddAttribute(101, "ChildContent", (global::Microsoft.AspNetCore.Components.RenderFragment)((__builder4) => {
-                        __builder4.OpenComponent<global::Snorehammer.Web.Components.Unit.UnitInput>(102);
-                        __builder4.AddComponentParameter(103, nameof(global::Snorehammer.Web.Components.Unit.UnitInput.
-#nullable restore
-#line (56,73)-(56,81) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-Attacker
-
-#line default
-#line hidden
-#nullable disable
-                        ), global::Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<global::System.Boolean>(
-#nullable restore
-#line (56,82)-(56,87) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-false
-
-#line default
-#line hidden
-#nullable disable
-                        ));
-                        __builder4.AddComponentParameter(104, nameof(global::Snorehammer.Web.Components.Unit.UnitInput.
-#nullable restore
-#line (56,34)-(56,38) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-Unit
-
-#line default
-#line hidden
-#nullable disable
-                        ), global::Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<global::Snorehammer.Web.FrontendModels.UnitProfile>(
-#nullable restore
-#line (56,40)-(56,71) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-comparison.Simulation1.Defender
-
-#line default
-#line hidden
-#nullable disable
-                        ));
-                        __builder4.AddComponentParameter(105, nameof(global::Snorehammer.Web.Components.Unit.UnitInput.UnitChanged), global::Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<global::Microsoft.AspNetCore.Components.EventCallback<global::Snorehammer.Web.FrontendModels.UnitProfile>>(global::Microsoft.AspNetCore.Components.EventCallback.Factory.Create<global::Snorehammer.Web.FrontendModels.UnitProfile>(this, global::Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.CreateInferredEventCallback(this, __value => comparison.Simulation1.Defender = __value, comparison.Simulation1.Defender))));
-                        __builder4.CloseComponent();
-                        __builder4.AddMarkupContent(106, "\r\n                ");
-                        __builder4.OpenComponent<global::Radzen.Blazor.RadzenButton>(107);
-                        __builder4.AddComponentParameter(108, nameof(global::Radzen.Blazor.RadzenButton.
-#nullable restore
-#line (57,31)-(57,36) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-Click
-
-#line default
-#line hidden
-#nullable disable
-                        ), global::Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<global::Microsoft.AspNetCore.Components.EventCallback<global::Microsoft.AspNetCore.Components.Web.MouseEventArgs>>(global::Microsoft.AspNetCore.Components.EventCallback.Factory.Create<global::Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, 
-#nullable restore
-#line (57,39)-(57,128) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-() => SetDefender(comparison.AlternateDefenseSimulation.Defender, comparison.Simulation1)
-
-#line default
-#line hidden
-#nullable disable
-                        )));
-                        __builder4.AddComponentParameter(109, nameof(global::Radzen.Blazor.RadzenButton.
-#nullable restore
-#line (57,130)-(57,141) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-ButtonStyle
-
-#line default
-#line hidden
-#nullable disable
-                        ), global::Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<global::Radzen.ButtonStyle>(
-#nullable restore
-#line (57,143)-(57,162) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-ButtonStyle.Primary
-
-#line default
-#line hidden
-#nullable disable
-                        ));
-                        __builder4.AddAttribute(110, "ChildContent", (global::Microsoft.AspNetCore.Components.RenderFragment)((__builder5) => {
-                            __builder5.OpenComponent<global::Radzen.Blazor.RadzenIcon>(111);
-                            __builder5.AddComponentParameter(112, nameof(global::Radzen.Blazor.RadzenIcon.
-#nullable restore
-#line (57,176)-(57,180) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-Icon
-
-#line default
-#line hidden
-#nullable disable
-                            ), "content_copy");
-                            __builder5.CloseComponent();
-                            __builder5.AddMarkupContent(113, "<span> Copy from Defender 2 </span>");
-                        }
-                        ));
-                        __builder4.CloseComponent();
-                    }
-                    ));
-                    __builder3.CloseComponent();
-                    __builder3.AddMarkupContent(114, "\r\n            ");
-                    __builder3.OpenComponent<global::Radzen.Blazor.RadzenCard>(115);
-                    __builder3.AddAttribute(116, "ChildContent", (global::Microsoft.AspNetCore.Components.RenderFragment)((__builder4) => {
-                        __builder4.OpenComponent<global::Snorehammer.Web.Components.Unit.UnitInput>(117);
-                        __builder4.AddComponentParameter(118, nameof(global::Snorehammer.Web.Components.Unit.UnitInput.
-#nullable restore
-#line (60,88)-(60,96) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-Attacker
-
-#line default
-#line hidden
-#nullable disable
-                        ), global::Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<global::System.Boolean>(
-#nullable restore
-#line (60,97)-(60,102) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-false
-
-#line default
-#line hidden
-#nullable disable
-                        ));
-                        __builder4.AddComponentParameter(119, nameof(global::Snorehammer.Web.Components.Unit.UnitInput.
-#nullable restore
-#line (60,34)-(60,38) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-Unit
-
-#line default
-#line hidden
-#nullable disable
-                        ), global::Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<global::Snorehammer.Web.FrontendModels.UnitProfile>(
-#nullable restore
-#line (60,40)-(60,86) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-comparison.AlternateDefenseSimulation.Defender
-
-#line default
-#line hidden
-#nullable disable
-                        ));
-                        __builder4.AddComponentParameter(120, nameof(global::Snorehammer.Web.Components.Unit.UnitInput.UnitChanged), global::Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<global::Microsoft.AspNetCore.Components.EventCallback<global::Snorehammer.Web.FrontendModels.UnitProfile>>(global::Microsoft.AspNetCore.Components.EventCallback.Factory.Create<global::Snorehammer.Web.FrontendModels.UnitProfile>(this, global::Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.CreateInferredEventCallback(this, __value => comparison.AlternateDefenseSimulation.Defender = __value, comparison.AlternateDefenseSimulation.Defender))));
-                        __builder4.CloseComponent();
-                        __builder4.AddMarkupContent(121, "\r\n                ");
-                        __builder4.OpenComponent<global::Radzen.Blazor.RadzenButton>(122);
-                        __builder4.AddComponentParameter(123, nameof(global::Radzen.Blazor.RadzenButton.
-#nullable restore
-#line (61,31)-(61,36) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-Click
-
-#line default
-#line hidden
-#nullable disable
-                        ), global::Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<global::Microsoft.AspNetCore.Components.EventCallback<global::Microsoft.AspNetCore.Components.Web.MouseEventArgs>>(global::Microsoft.AspNetCore.Components.EventCallback.Factory.Create<global::Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, 
-#nullable restore
-#line (61,39)-(61,128) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-() => SetDefender(comparison.Simulation1.Defender, comparison.AlternateDefenseSimulation)
-
-#line default
-#line hidden
-#nullable disable
-                        )));
-                        __builder4.AddComponentParameter(124, nameof(global::Radzen.Blazor.RadzenButton.
-#nullable restore
-#line (61,130)-(61,141) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-ButtonStyle
-
-#line default
-#line hidden
-#nullable disable
-                        ), global::Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<global::Radzen.ButtonStyle>(
-#nullable restore
-#line (61,143)-(61,162) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-ButtonStyle.Primary
-
-#line default
-#line hidden
-#nullable disable
-                        ));
-                        __builder4.AddAttribute(125, "ChildContent", (global::Microsoft.AspNetCore.Components.RenderFragment)((__builder5) => {
-                            __builder5.OpenComponent<global::Radzen.Blazor.RadzenIcon>(126);
-                            __builder5.AddComponentParameter(127, nameof(global::Radzen.Blazor.RadzenIcon.
-#nullable restore
-#line (61,176)-(61,180) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-Icon
-
-#line default
-#line hidden
-#nullable disable
-                            ), "content_copy");
-                            __builder5.CloseComponent();
-                            __builder5.AddMarkupContent(128, "<span> Copy from Defender 1 </span>");
-                        }
-                        ));
-                        __builder4.CloseComponent();
-                    }
-                    ));
-                    __builder3.CloseComponent();
-#nullable restore
-#line (63,1)-(66,1) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-        }
-        else
-        {
-
-#line default
-#line hidden
-#nullable disable
-
-                    __builder3.OpenComponent<global::Snorehammer.Web.Components.Unit.UnitInput>(129);
-                    __builder3.AddComponentParameter(130, nameof(global::Snorehammer.Web.Components.Unit.UnitInput.
-#nullable restore
-#line (66,69)-(66,77) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-Attacker
-
-#line default
-#line hidden
-#nullable disable
-                    ), global::Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<global::System.Boolean>(
-#nullable restore
-#line (66,78)-(66,83) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-false
-
-#line default
-#line hidden
-#nullable disable
-                    ));
-                    __builder3.AddComponentParameter(131, nameof(global::Snorehammer.Web.Components.Unit.UnitInput.
-#nullable restore
-#line (66,30)-(66,34) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-Unit
-
-#line default
-#line hidden
-#nullable disable
-                    ), global::Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<global::Snorehammer.Web.FrontendModels.UnitProfile>(
-#nullable restore
-#line (66,36)-(66,67) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-comparison.Simulation1.Defender
-
-#line default
-#line hidden
-#nullable disable
-                    ));
-                    __builder3.AddComponentParameter(132, nameof(global::Snorehammer.Web.Components.Unit.UnitInput.UnitChanged), global::Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<global::Microsoft.AspNetCore.Components.EventCallback<global::Snorehammer.Web.FrontendModels.UnitProfile>>(global::Microsoft.AspNetCore.Components.EventCallback.Factory.Create<global::Snorehammer.Web.FrontendModels.UnitProfile>(this, global::Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.CreateInferredEventCallback(this, __value => comparison.Simulation1.Defender = __value, comparison.Simulation1.Defender))));
-                    __builder3.CloseComponent();
-#nullable restore
-#line (67,1)-(68,1) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-        }
-
-#line default
-#line hidden
-#nullable disable
-
-                }
-                ));
-                __builder2.CloseComponent();
-            }
-            ));
-            __builder.CloseComponent();
-            __builder.AddMarkupContent(133, "\r\n");
-            __builder.OpenComponent<global::Radzen.Blazor.RadzenCardGroup>(134);
-            __builder.AddAttribute(135, "ChildContent", (global::Microsoft.AspNetCore.Components.RenderFragment)((__builder2) => {
-                __builder2.OpenComponent<global::Snorehammer.Web.Components.Simulation.FightResult>(136);
-                __builder2.AddComponentParameter(137, nameof(global::Snorehammer.Web.Components.Simulation.FightResult.
-#nullable restore
-#line (72,18)-(72,21) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-sim
-
-#line default
-#line hidden
-#nullable disable
-                ), global::Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<global::Snorehammer.Web.FrontendModels.FightSimulation>(
-#nullable restore
-#line (72,23)-(72,31) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-ViewSim1
-
-#line default
-#line hidden
-#nullable disable
-                ));
-                __builder2.CloseComponent();
-#nullable restore
-#line (73,1)-(73,5) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-    
-
-#line default
-#line hidden
-#nullable disable
-
-#nullable restore
-#line (73,6)-(75,1) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-if (comparison.ComparingAttackers)
-    {
-
-#line default
-#line hidden
-#nullable disable
-
-                __builder2.OpenComponent<global::Snorehammer.Web.Components.Simulation.FightResult>(138);
-                __builder2.AddComponentParameter(139, nameof(global::Snorehammer.Web.Components.Simulation.FightResult.
-#nullable restore
-#line (75,22)-(75,25) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-sim
-
-#line default
-#line hidden
-#nullable disable
-                ), global::Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<global::Snorehammer.Web.FrontendModels.FightSimulation>(
-#nullable restore
-#line (75,27)-(75,35) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-ViewSim2
-
-#line default
-#line hidden
-#nullable disable
-                ));
-                __builder2.CloseComponent();
-#nullable restore
-#line (76,1)-(77,1) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-    }
-
-#line default
-#line hidden
-#nullable disable
-
-#nullable restore
-#line (77,1)-(77,5) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-    
-
-#line default
-#line hidden
-#nullable disable
-
-#nullable restore
-#line (77,6)-(79,1) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-if (comparison.ComparingDefenders)
-    {
-
-#line default
-#line hidden
-#nullable disable
-
-                __builder2.OpenComponent<global::Snorehammer.Web.Components.Simulation.FightResult>(140);
-                __builder2.AddComponentParameter(141, nameof(global::Snorehammer.Web.Components.Simulation.FightResult.
-#nullable restore
-#line (79,22)-(79,25) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-sim
-
-#line default
-#line hidden
-#nullable disable
-                ), global::Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<global::Snorehammer.Web.FrontendModels.FightSimulation>(
-#nullable restore
-#line (79,27)-(79,35) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-ViewSim2
-
-#line default
-#line hidden
-#nullable disable
-                ));
-                __builder2.CloseComponent();
-#nullable restore
-#line (80,1)-(81,1) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-    }
-
-#line default
-#line hidden
-#nullable disable
-
-            }
-            ));
-            __builder.CloseComponent();
-            __builder.AddMarkupContent(142, "\r\n");
-            __builder.OpenComponent<global::Radzen.Blazor.RadzenButton>(143);
-            __builder.AddComponentParameter(144, nameof(global::Radzen.Blazor.RadzenButton.
-#nullable restore
-#line (82,15)-(82,20) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-Click
-
-#line default
-#line hidden
-#nullable disable
-            ), global::Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<global::Microsoft.AspNetCore.Components.EventCallback<global::Microsoft.AspNetCore.Components.Web.MouseEventArgs>>(global::Microsoft.AspNetCore.Components.EventCallback.Factory.Create<global::Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, 
-#nullable restore
-#line (82,23)-(82,41) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-() => FightUnits()
-
-#line default
-#line hidden
-#nullable disable
-            )));
-            __builder.AddComponentParameter(145, nameof(global::Radzen.Blazor.RadzenButton.
-#nullable restore
-#line (82,43)-(82,47) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-Text
-
-#line default
-#line hidden
-#nullable disable
-            ), "Fight all Units");
-            __builder.AddComponentParameter(146, nameof(global::Radzen.Blazor.RadzenButton.
-#nullable restore
-#line (82,66)-(82,77) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-ButtonStyle
-
-#line default
-#line hidden
-#nullable disable
-            ), global::Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<global::Radzen.ButtonStyle>(
-#nullable restore
-#line (82,79)-(82,98) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-ButtonStyle.Primary
-
-#line default
-#line hidden
-#nullable disable
-            ));
-            __builder.CloseComponent();
-            __builder.AddMarkupContent(147, "\r\n");
-            __builder.OpenComponent<global::Radzen.Blazor.RadzenCard>(148);
-            __builder.AddAttribute(149, "ChildContent", (global::Microsoft.AspNetCore.Components.RenderFragment)((__builder2) => {
-#nullable restore
-#line (84,1)-(84,5) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-    
-
-#line default
-#line hidden
-#nullable disable
-
-#nullable restore
-#line (84,6)-(87,9) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-if (ShowTable)
-    {
-
-        
-
-#line default
-#line hidden
-#nullable disable
-
-#nullable restore
-#line (87,10)-(89,1) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-if (comparison.ComparingAttackers)
-        {
-
-#line default
-#line hidden
-#nullable disable
-
-                __builder2.OpenComponent<global::Snorehammer.Web.Components.Simulation.ResultsTable>(150);
-                __builder2.AddComponentParameter(151, nameof(global::Snorehammer.Web.Components.Simulation.ResultsTable.
-#nullable restore
-#line (89,27)-(89,30) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-sim
-
-#line default
-#line hidden
-#nullable disable
-                ), global::Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<global::Snorehammer.Web.FrontendModels.MultiFightSimulation>(
-#nullable restore
-#line (89,32)-(89,54) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-comparison.Simulation1
-
-#line default
-#line hidden
-#nullable disable
-                ));
-                __builder2.AddComponentParameter(152, nameof(global::Snorehammer.Web.Components.Simulation.ResultsTable.
-#nullable restore
-#line (89,55)-(89,59) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-sim2
-
-#line default
-#line hidden
-#nullable disable
-                ), global::Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<global::Snorehammer.Web.FrontendModels.MultiFightSimulation>(
-#nullable restore
-#line (89,61)-(89,97) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-comparison.AlternateAttackSimulation
-
-#line default
-#line hidden
-#nullable disable
-                ));
-                __builder2.CloseComponent();
-#nullable restore
-#line (90,1)-(93,1) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-        }
-        else if (comparison.ComparingDefenders)
-        {
-
-#line default
-#line hidden
-#nullable disable
-
-                __builder2.OpenComponent<global::Snorehammer.Web.Components.Simulation.ResultsTable>(153);
-                __builder2.AddComponentParameter(154, nameof(global::Snorehammer.Web.Components.Simulation.ResultsTable.
-#nullable restore
-#line (93,27)-(93,30) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-sim
-
-#line default
-#line hidden
-#nullable disable
-                ), global::Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<global::Snorehammer.Web.FrontendModels.MultiFightSimulation>(
-#nullable restore
-#line (93,32)-(93,54) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-comparison.Simulation1
-
-#line default
-#line hidden
-#nullable disable
-                ));
-                __builder2.AddComponentParameter(155, nameof(global::Snorehammer.Web.Components.Simulation.ResultsTable.
-#nullable restore
-#line (93,55)-(93,59) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-sim2
-
-#line default
-#line hidden
-#nullable disable
-                ), global::Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<global::Snorehammer.Web.FrontendModels.MultiFightSimulation>(
-#nullable restore
-#line (93,61)-(93,98) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-comparison.AlternateDefenseSimulation
-
-#line default
-#line hidden
-#nullable disable
-                ));
-                __builder2.CloseComponent();
-#nullable restore
-#line (94,1)-(97,1) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-        }
-        else
-        {
-
-#line default
-#line hidden
-#nullable disable
-
-                __builder2.OpenComponent<global::Snorehammer.Web.Components.Simulation.ResultsTable>(156);
-                __builder2.AddComponentParameter(157, nameof(global::Snorehammer.Web.Components.Simulation.ResultsTable.
-#nullable restore
-#line (97,27)-(97,30) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-sim
-
-#line default
-#line hidden
-#nullable disable
-                ), global::Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck<global::Snorehammer.Web.FrontendModels.MultiFightSimulation>(
-#nullable restore
-#line (97,32)-(97,54) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-comparison.Simulation1
-
-#line default
-#line hidden
-#nullable disable
-                ));
-                __builder2.CloseComponent();
-#nullable restore
-#line (98,1)-(98,10) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-        }
-
-#line default
-#line hidden
-#nullable disable
-
-#nullable restore
-#line (98,10)-(100,1) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-
-    }
-
-#line default
-#line hidden
-#nullable disable
-
-            }
-            ));
-            __builder.CloseComponent();
-        }
-        #pragma warning restore 1998
-#nullable restore
-#line (101,8)-(184,1) "F:\CoderFoundry\Code\SnoreHammer\Snorehammer\Snorehammer.Web\Components\Simulation\SimpleComparisonPage.razor"
-
-    public Comparison comparison { get; set; }
-    public bool ShowTable { get; set; } = true;
-    private int SelectedNumberOfSimulations = 1;
-    private FightSimulationService fightSimulationService = new FightSimulationService();
-    private FightSimulation ViewSim1;
     private FightSimulation ViewSim2;
     private void SetAttacker(AttackProfile source, MultiFightSimulation destination)
     {
-        destination.Attacker = (AttackProfile)source.Clone();
+        destination.Attacker = (UnitProfile)source.Clone();
     }
     private void SetDefender(UnitProfile source, MultiFightSimulation destination)
     {
@@ -757,28 +154,40 @@ comparison.Simulation1
                 ModelCount = 10,
                 Name = "intercessor"
             },
-            Attacker = new AttackProfile()
+            Attacker = new UnitProfile()
             {
-                ArmorPenetration = 1,
-                Attacks = 20,
-                Damage = 1,
-                Skill = 3,
-                Strength = 4,
-                VariableAttackDiceConstant = 1,
-                VariableAttackDiceNumber = 2,
-                VariableDamageDiceConstant = 1,
-                VariableDamageDiceNumber = 1
+                Attacks = new List<AttackProfile>()
+                {
+                    new AttackProfile()
+                    {
+                        ArmorPenetration = 1,
+                        Attacks = 20,
+                        Damage = 1,
+                        Skill = 3,
+                        Strength = 4,
+                        VariableAttackDiceConstant = 1,
+                        VariableAttackDiceNumber = 2,
+                        VariableDamageDiceConstant = 1,
+                        VariableDamageDiceNumber = 1
+                    }
+                },
+                InvulnerableSave = 0,
+                MinimumSave = 3,
+                Toughness = 4,
+                Wounds = 2,
+                ModelCount = 10,
+                Name = "intercessor"
             }
         };
         comparison.AlternateAttackSimulation = new MultiFightSimulation()
         {
             Defender = (UnitProfile)comparison.Simulation1.Defender.Clone(),
-            Attacker = (AttackProfile)comparison.Simulation1.Attacker.Clone()
+            Attacker = (UnitProfile)comparison.Simulation1.Attacker.Clone()
         };
         comparison.AlternateDefenseSimulation = new MultiFightSimulation()
         {
             Defender = (UnitProfile)comparison.Simulation1.Defender.Clone(),
-            Attacker = (AttackProfile)comparison.Simulation1.Attacker.Clone()
+            Attacker = (UnitProfile)comparison.Simulation1.Attacker.Clone()
         };
         AssignMultiSims(1);
 

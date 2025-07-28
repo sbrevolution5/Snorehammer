@@ -25,7 +25,7 @@
             {
                 FightSimulations.Add(new FightSimulation()
                 {
-                    AttackProfile = Attacker,
+                    Attacker = Attacker,
                     Defender = Defender,
                 });
             }

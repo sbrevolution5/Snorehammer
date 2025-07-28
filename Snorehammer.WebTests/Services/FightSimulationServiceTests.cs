@@ -8,7 +8,7 @@ namespace Snorehammer.Web.Services.Tests
     public class FightSimulationServiceTests
     {
         private FightSimulationService service;
-        private AttackProfile attacker;
+        private UnitProfile attacker;
         private UnitProfile unitProfile;
 
         private FightSimulation sim;
@@ -16,7 +16,18 @@ namespace Snorehammer.Web.Services.Tests
         public virtual void Setup()
         {
             service = new FightSimulationService();
-            attacker = new AttackProfile()
+            attacker = new UnitProfile()
+            {
+                Id = 1,
+                InvulnerableSave = 0,
+                ModelCount = 10,
+                Name = "Intercessors",
+                MinimumSave = 3,
+                Toughness = 4,
+                Wounds = 2,
+                Attacks = new List<AttackProfile>() {
+
+            new AttackProfile()
             {
                 ArmorPenetration = 0,
                 Attacks = 2,
@@ -25,6 +36,8 @@ namespace Snorehammer.Web.Services.Tests
                 Name = "bolt Rifle",
                 Skill = 3,
                 Strength = 4
+            } 
+                }
             };
             unitProfile = new UnitProfile()
             {
@@ -38,7 +51,7 @@ namespace Snorehammer.Web.Services.Tests
             };
             sim = new FightSimulation()
             {
-                AttackProfile = attacker,
+                Attacker = attacker,
                 Defender = unitProfile
             };
         }
@@ -77,7 +90,7 @@ namespace Snorehammer.Web.Services.Tests
             public void CalculateArmorSaveMinusOne()
             {
                 //arrange
-                sim.AttackProfile.ArmorPenetration = 1;
+                sim.Attacker.Attacks[0].ArmorPenetration = 1;
                 //act
                 service.DetermineArmorSave(sim);
                 //assert
@@ -88,7 +101,7 @@ namespace Snorehammer.Web.Services.Tests
             public void CalculateArmorSaveUsesInvulnerable()
             {
                 //arrange
-                sim.AttackProfile.ArmorPenetration = 4;
+                sim.Attacker.Attacks[0].ArmorPenetration = 4;
                 sim.Defender.InvulnerableSave = 4;
                 //act
                 service.DetermineArmorSave(sim);
@@ -100,7 +113,7 @@ namespace Snorehammer.Web.Services.Tests
             public void CalculateArmorSaveUsesCover()
             {
                 //arrange
-                sim.AttackProfile.ArmorPenetration = 1;
+                sim.Attacker.Attacks[0].ArmorPenetration = 1;
                 sim.Defender.HasCover = true;
                 //act
                 var res = service.DetermineArmorSave(sim);
@@ -112,7 +125,7 @@ namespace Snorehammer.Web.Services.Tests
             public void CalculateArmorSaveCoverDoesNotReduceTo2()
             {
                 //arrange
-                sim.AttackProfile.ArmorPenetration = 0;
+                sim.Attacker.Attacks[0].ArmorPenetration = 0;
                 sim.Defender.HasCover = true;
                 //act
                 var res = service.DetermineArmorSave(sim);
@@ -125,7 +138,7 @@ namespace Snorehammer.Web.Services.Tests
             public void CalculateArmorSaveIgnoresCoverBecauseInvulnerable()
             {
                 //arrange
-                sim.AttackProfile.ArmorPenetration = 3;
+                sim.Attacker.Attacks[0].ArmorPenetration = 3;
                 sim.Defender.InvulnerableSave = 4;
                 sim.Defender.HasCover = true;
                 //act
@@ -163,7 +176,7 @@ namespace Snorehammer.Web.Services.Tests
                     A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(2);
                     unitProfile.FeelNoPain = true;
                     A.CallTo(() => fnpRandom.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(1);
-                    attacker.Attacks = 20;
+                    sim.Attacker.Attacks[0].Attacks = 20;
                     for (int i = 0; i < 20; i++)
                     {
                         diceList.Add(new Dice(unitProfile.MinimumSave, random));
@@ -187,7 +200,7 @@ namespace Snorehammer.Web.Services.Tests
                     unitProfile.FeelNoPain = true;
                     A.CallTo(() => fnpRandom.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(1);
                     A.CallTo(() => fnpRandom.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).ReturnsNextFromSequence(6);
-                    attacker.Attacks = 20;
+                    sim.Attacker.Attacks[0].Attacks = 20;
                     for (int i = 0; i < 20; i++)
                     {
                         diceList.Add(new Dice(unitProfile.MinimumSave, random));
@@ -210,7 +223,7 @@ namespace Snorehammer.Web.Services.Tests
                     A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(2);
                     unitProfile.FeelNoPain = true;
                     A.CallTo(() => fnpRandom.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(6);
-                    attacker.Attacks = 20;
+                    sim.Attacker.Attacks[0].Attacks = 20;
                     for (int i = 0; i < 20; i++)
                     {
                         diceList.Add(new Dice(unitProfile.MinimumSave, random));
@@ -232,7 +245,7 @@ namespace Snorehammer.Web.Services.Tests
                 {
                     //arrange
                     A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(2);
-                    attacker.Attacks = 20;
+                    sim.Attacker.Attacks[0].Attacks = 20;
                     for (int i = 0; i < 20; i++)
                     {
                         diceList.Add(new Dice(unitProfile.MinimumSave, random));
@@ -257,7 +270,7 @@ namespace Snorehammer.Web.Services.Tests
                         sequence.Add(3);
                     }
                     A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).ReturnsNextFromSequence(sequence.ToArray());
-                    attacker.Attacks = 20;
+                    sim.Attacker.Attacks[0].Attacks = 20;
                     for (int i = 0; i < 20; i++)
                     {
                         diceList.Add(new Dice(unitProfile.MinimumSave, random));
@@ -278,7 +291,7 @@ namespace Snorehammer.Web.Services.Tests
 
                     A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(3);
                     A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).ReturnsNextFromSequence(1);
-                    attacker.Attacks = 20;
+                    sim.Attacker.Attacks[0].Attacks = 20;
                     for (int i = 0; i < 20; i++)
                     {
                         diceList.Add(new Dice(unitProfile.MinimumSave, random));
@@ -299,7 +312,7 @@ namespace Snorehammer.Web.Services.Tests
                     //arrange
 
                     A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(2);
-                    attacker.Attacks = 1;
+                    sim.Attacker.Attacks[0].Attacks = 1;
                     unitProfile.ModelCount = 1;
                     diceList.Add(new Dice(unitProfile.MinimumSave, random));
                     sim.ArmorDice = diceList;
@@ -317,7 +330,7 @@ namespace Snorehammer.Web.Services.Tests
                 {
                     //arrange
                     A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(1);
-                    attacker.Attacks = 20;
+                    sim.Attacker.Attacks[0].Attacks = 20;
                     unitProfile.ModelCount = 1;
                     for (int i = 0; i < 20; i++)
                     {
@@ -379,10 +392,10 @@ namespace Snorehammer.Web.Services.Tests
                 public void SpilloverDoesNotHappen()
                 {
                     //arrange
-                    sim.AttackProfile.Damage = 5;
-                    sim.AttackProfile.Attacks = 1;
+                    sim.Attacker.Attacks[0].Damage = 5;
+                    sim.Attacker.Attacks[0].Attacks = 1;
                     A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(2);
-                    for (int i = 0; i < sim.AttackProfile.Attacks; i++)
+                    for (int i = 0; i < sim.Attacker.Attacks[0].Attacks; i++)
                     {
                         diceList.Add(new Dice(unitProfile.MinimumSave, random));
                     }
@@ -398,14 +411,14 @@ namespace Snorehammer.Web.Services.Tests
                 {
                     //arrange
                     sim.Defender.Wounds = 3;
-                    sim.AttackProfile.Damage = 3;
-                    sim.AttackProfile.Attacks = 2;
+                    sim.Attacker.Attacks[0].Damage = 3;
+                    sim.Attacker.Attacks[0].Attacks = 2;
                     A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(2);
                     unitProfile.FeelNoPain = true;
                     A.CallTo(() => fnpRandom.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(1);
                     //blocks 2 damage, lets 1 and 3 damage through, only killing a single model
-                    A.CallTo(() => fnpRandom.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).ReturnsNextFromSequence(6,6);
-                    for (int i = 0; i < sim.AttackProfile.Attacks; i++)
+                    A.CallTo(() => fnpRandom.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).ReturnsNextFromSequence(6, 6);
+                    for (int i = 0; i < sim.Attacker.Attacks[0].Attacks; i++)
                     {
                         diceList.Add(new Dice(unitProfile.MinimumSave, random));
                         fnpDiceList.Add(new Dice(unitProfile.FeelNoPainTarget, fnpRandom));
@@ -422,12 +435,12 @@ namespace Snorehammer.Web.Services.Tests
                 public void SpilloverUsesVariableDamageRolls()
                 {
                     //arrange
-                    sim.AttackProfile.IsVariableDamage = true;
-                    sim.AttackProfile.VariableAttackDiceNumber = 1;
-                    sim.AttackProfile.VariableDamageDiceSides = 6;
-                    sim.AttackProfile.Attacks = 2;
+                    sim.Attacker.Attacks[0].IsVariableDamage = true;
+                    sim.Attacker.Attacks[0].VariableAttackDiceNumber = 1;
+                    sim.Attacker.Attacks[0].VariableDamageDiceSides = 6;
+                    sim.Attacker.Attacks[0].Attacks = 2;
                     A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(2);
-                    A.CallTo(() => woundRandom.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).ReturnsNextFromSequence(1,2);
+                    A.CallTo(() => woundRandom.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).ReturnsNextFromSequence(1, 2);
                     for (int i = 0; i < 2; i++)
                     {
                         diceList.Add(new Dice(unitProfile.MinimumSave, random));
@@ -445,10 +458,10 @@ namespace Snorehammer.Web.Services.Tests
                 public void SpilloverUsesVariableDamageAndFeelNoPainRolls()
                 {
                     //arrange
-                    sim.AttackProfile.IsVariableDamage = true;
-                    sim.AttackProfile.VariableAttackDiceNumber = 1;
-                    sim.AttackProfile.VariableDamageDiceSides = 6;
-                    sim.AttackProfile.Attacks = 2;
+                    sim.Attacker.Attacks[0].IsVariableDamage = true;
+                    sim.Attacker.Attacks[0].VariableAttackDiceNumber = 1;
+                    sim.Attacker.Attacks[0].VariableDamageDiceSides = 6;
+                    sim.Attacker.Attacks[0].Attacks = 2;
                     sim.Defender.Wounds = 3;
                     A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(2);
                     unitProfile.FeelNoPain = true;
@@ -462,9 +475,9 @@ namespace Snorehammer.Web.Services.Tests
                         diceList.Add(new Dice(unitProfile.MinimumSave, random));
                         woundDiceList.Add(new Dice(1, woundRandom));
                     }
-                    for(int i = 0; i<7; i++)
+                    for (int i = 0; i < 7; i++)
                     {
-                        fnpDiceList.Add(new Dice(6,fnpRandom));
+                        fnpDiceList.Add(new Dice(6, fnpRandom));
                     }
                     sim.ArmorDice = diceList;
                     sim.FeelNoPainDice = fnpDiceList;
