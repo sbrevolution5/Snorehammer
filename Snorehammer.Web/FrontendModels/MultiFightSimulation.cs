@@ -2,7 +2,7 @@
 {
     public class MultiFightSimulation
     {
-        public AttackProfile AttackProfile { get; set; }
+        public UnitProfile Attacker { get; set; }
         public UnitProfile Defender { get; set; }
         public List<FightSimulation> FightSimulations { get; set; } = new List<FightSimulation>();
         public int Rounds { get; set; }
@@ -25,7 +25,7 @@
             {
                 FightSimulations.Add(new FightSimulation()
                 {
-                    AttackProfile = AttackProfile,
+                    AttackProfile = Attacker,
                     Defender = Defender,
                 });
             }

@@ -33,18 +33,18 @@
         @if (comparison.ComparingAttackers)
         {
             <RadzenCard>
-                <AttackInput @bind-attack="comparison.Simulation1.AttackProfile" />
-                <RadzenButton Click=@(() => SetAttacker(comparison.AlternateAttackSimulation.AttackProfile, comparison.Simulation1)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Attacker 2 </span></RadzenButton>
+                <AttackInput @bind-attack="comparison.Simulation1.Attacker" />
+                <RadzenButton Click=@(() => SetAttacker(comparison.AlternateAttackSimulation.Attacker, comparison.Simulation1)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Attacker 2 </span></RadzenButton>
             </RadzenCard>
             <RadzenCard>
 
-                <AttackInput @bind-attack="comparison.AlternateAttackSimulation.AttackProfile" />
-                <RadzenButton Click=@(() => SetAttacker(comparison.Simulation1.AttackProfile, comparison.AlternateAttackSimulation)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Attacker 1 </span></RadzenButton>
+                <AttackInput @bind-attack="comparison.AlternateAttackSimulation.Attacker" />
+                <RadzenButton Click=@(() => SetAttacker(comparison.Simulation1.Attacker, comparison.AlternateAttackSimulation)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Attacker 1 </span></RadzenButton>
             </RadzenCard>
         }
         else
         {
-            <AttackInput @bind-attack="comparison.Simulation1.AttackProfile" />
+            <AttackInput @bind-attack="comparison.Simulation1.Attacker" />
 
         }
     </RadzenCardGroup>
@@ -81,11 +81,11 @@
 </RadzenCardGroup>
 <RadzenButton Click=@(() => FightUnits()) Text="Fight all Units" ButtonStyle="ButtonStyle.Primary" />
 <RadzenCard>
-    @if (ShowTable)
+    @if (comparison.ComparingAttackers)
     {
 
-        @if (comparison.ComparingAttackers)
-        {
+        @if (comparison.ComparingDefenders)
+    {
             <ResultsTable sim=@comparison.Simulation1 sim2=@comparison.AlternateAttackSimulation />
         }
         else if (comparison.ComparingDefenders)
@@ -107,7 +107,7 @@
     private FightSimulation ViewSim2;
     private void SetAttacker(AttackProfile source, MultiFightSimulation destination)
     {
-        destination.AttackProfile = (AttackProfile)source.Clone();
+        destination.Attacker = (AttackProfile)source.Clone();
     }
     private void SetDefender(UnitProfile source, MultiFightSimulation destination)
     {
@@ -154,7 +154,7 @@
                 ModelCount = 10,
                 Name = "intercessor"
             },
-            AttackProfile = new AttackProfile()
+            Attacker = new AttackProfile()
             {
                 ArmorPenetration = 1,
                 Attacks = 20,
@@ -170,12 +170,12 @@
         comparison.AlternateAttackSimulation = new MultiFightSimulation()
         {
             Defender = (UnitProfile)comparison.Simulation1.Defender.Clone(),
-            AttackProfile = (AttackProfile)comparison.Simulation1.AttackProfile.Clone()
+            Attacker = (AttackProfile)comparison.Simulation1.Attacker.Clone()
         };
         comparison.AlternateDefenseSimulation = new MultiFightSimulation()
         {
             Defender = (UnitProfile)comparison.Simulation1.Defender.Clone(),
-            AttackProfile = (AttackProfile)comparison.Simulation1.AttackProfile.Clone()
+            Attacker = (AttackProfile)comparison.Simulation1.Attacker.Clone()
         };
         AssignMultiSims(1);
 
