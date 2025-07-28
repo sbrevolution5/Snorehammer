@@ -103,6 +103,10 @@
                 foreach(var atk in Unit.Attacks)
                 {
                     <AttackInput attack="@atk"></AttackInput>
+                    @if(Unit.Attacks.Count() > 1)
+                    {
+                        <RadzenButton Click="() => RemoveAttack(atk)" ButtonStyle="ButtonStyle.Danger"><RadzenIcon Icon="remove" /></RadzenButton>
+                    }
                 }
                 <RadzenButton Click="() => AddAttack()" ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="add" /></RadzenButton>
             }
@@ -126,5 +130,9 @@
     public void AddAttack()
     {
         Unit.Attacks.Add((AttackProfile)Unit.Attacks.Last().Clone());
+    }
+    public void RemoveAttack(AttackProfile attack)
+    {
+        Unit.Attacks.Remove(attack);
     }
 }
