@@ -104,6 +104,7 @@
                 {
                     <AttackInput attack="@atk"></AttackInput>
                 }
+                <RadzenButton Click="()=>AddAttack()"></RadzenButton>
             }
         </EditForm>
     </RadzenCard>
@@ -124,6 +125,6 @@
     }
     public void AddAttack()
     {
-        Unit.Attacks.Add(Unit.Attacks.Last());
+        Unit.Attacks.Add((AttackProfile)Unit.Attacks.Last().Clone());
     }
 }
