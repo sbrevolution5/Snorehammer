@@ -88,7 +88,7 @@ namespace Snorehammer.Web.Services
             {
                 sim.BlastBonus = sim.Defender.ModelCount / 5;
             }
-            sim.AttackNumber = sim.Attacker.Attacks[0].Attacks;
+            sim.AttackNumber = sim.Attacker.Attacks[0].Attacks * sim.Attacker.Attacks[0].WeaponsInUnit;
             if (sim.AttackDice.Count != 0)
             {
                 //currently doesn't account for "per model" just a flat equation, so 1d6 +1 with 10 models must be written as 10d6 + 10

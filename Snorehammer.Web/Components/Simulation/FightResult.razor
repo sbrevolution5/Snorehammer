@@ -2,6 +2,7 @@
 @using Snorehammer.Web.Components.Simulation.DiceRoller
 @using Snorehammer.Web.Components.Unit
 @using Snorehammer.Web.FrontendModels
+@using Snorehammer.Web.FrontendModels.Simulations
 @using Snorehammer.Web.Services
 @rendermode InteractiveServer
 <RadzenCard>
@@ -17,7 +18,7 @@
             {
                 <DicePanel sim="@sim"
                            Title="Number of Attacks"
-                           RollString1=@($"Rolling: {sim.Attacker.Attacks[0].VariableAttackDiceNumber} d{sim.Attacker.Attacks[0].VariableAttackDiceSides} + {sim.Attacker.Attacks[0].VariableAttackDiceConstant}" + (sim.BlastBonus > 0 ? $" + {@sim.BlastBonus}" : ""))
+                           RollString1=@($"Rolling: {sim.Attacker.Attacks[0].VariableAttackDiceNumber} d{sim.Attacker.Attacks[0].VariableAttackDiceSides} + {sim.Attacker.Attacks[0].VariableAttackDiceConstant}" + (sim.BlastBonus > 0 ? $" + {@sim.BlastBonus}" : "") + $" x {sim.Attacker.Attacks[0].WeaponsInUnit}")
                            RollString2=@($"Total: {sim.AttackNumber}")
                            DiceList="@sim.AttackDice" />
             }
