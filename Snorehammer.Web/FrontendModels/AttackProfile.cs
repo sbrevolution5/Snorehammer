@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public int ModelsWithWeapon { get; set; }
+        public int WeaponsInUnit { get; set; }
         public int Attacks { get; set; }
         public int Skill { get; set; }
         public int Strength { get; set; }

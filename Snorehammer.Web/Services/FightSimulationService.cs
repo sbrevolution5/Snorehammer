@@ -52,9 +52,12 @@ namespace Snorehammer.Web.Services
         public void RollAttackDice(FightSimulation sim)
         {
             sim.AttackDice = new List<Dice>();
-            for (int i = 0; i < sim.Attacker.Attacks[0].VariableAttackDiceNumber; i++)
+            for (int j = 0; j < sim.Attacker.Attacks[0].WeaponsInUnit; j++)
             {
-                sim.AttackDice.Add(new Dice(0, _random, sim.Attacker.Attacks[0].VariableAttackDiceSides));
+                for (int i = 0; i < sim.Attacker.Attacks[0].VariableAttackDiceNumber; i++)
+                {
+                    sim.AttackDice.Add(new Dice(0, _random, sim.Attacker.Attacks[0].VariableAttackDiceSides));
+                }
             }
         }
         public void DetermineHitTarget(FightSimulation sim)
@@ -91,22 +94,28 @@ namespace Snorehammer.Web.Services
                 sim.AttackNumber = sim.AttackDice.Sum(d => d.Result) + sim.Attacker.Attacks[0].VariableAttackDiceConstant;
                 if (sim.Attacker.Attacks[0].Blast && !sim.Attacker.Attacks[0].Melee)
                 {
-                    sim.AttackNumber += sim.BlastBonus;
+                    sim.AttackNumber += sim.BlastBonus * sim.Attacker.Attacks[0].WeaponsInUnit;
                 }
             }
             if (sim.Attacker.Attacks[0].Torrent && !sim.Attacker.Attacks[0].Melee)
             {
-                for (int i = 0; i < sim.AttackNumber; i++)
+                for (int j = 0; j < sim.Attacker.Attacks[0].WeaponsInUnit; j++)
                 {
-                    sim.ToHitDice.Add(new Dice(true));
+                    for (int i = 0; i < sim.AttackNumber; i++)
+                    {
+                        sim.ToHitDice.Add(new Dice(true));
+                    }
                 }
                 //torrent attacks don't count as criticals, incase there are lethal hits or sustained involved
                 sim.ToHitDice.ForEach(d => d.Critical = false);
                 return;
             }
-            for (int i = 0; i < sim.AttackNumber; i++)
+            for (int j = 0; j < sim.Attacker.Attacks[0].WeaponsInUnit; j++)
             {
-                sim.ToHitDice.Add(new Dice(sim.HitTarget, _random));
+                for (int i = 0; i < sim.AttackNumber; i++)
+                {
+                    sim.ToHitDice.Add(new Dice(sim.HitTarget, _random));
+                }
             }
             if (sim.Attacker.Attacks[0].RerollHit)
             {
@@ -453,14 +462,14 @@ namespace Snorehammer.Web.Services
                             {
                                 singleModelRemainingWounds -= sim.Attacker.Attacks[0].MeltaDamage;
                             }
-                            if (singleModelRemainingWounds<= 0)
+                            if (singleModelRemainingWounds <= 0)
                             {
                                 sim.Stats.ModelsDestroyed++;
                             }
                             DamageDiceCopy.Remove(DamageDiceCopy.First());
                         }
                     }
-                    
+
                 }
                 if (sim.Stats.ModelsDestroyed >= sim.Defender.ModelCount)
                 {
