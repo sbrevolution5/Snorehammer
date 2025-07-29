@@ -391,7 +391,7 @@ namespace Snorehammer.Web.Services
                 }
                 int fnpUnused = fnpBlockedWounds;
                 int singleModelRemainingWounds = sim.Defender.Wounds;
-                while (sim.ModelsDestroyed < sim.Defender.ModelCount && AttacksApplied < sim.ArmorSavesFailed)
+                while (sim.Stats.ModelsDestroyed < sim.Defender.ModelCount && AttacksApplied < sim.ArmorSavesFailed)
                 {
                     if (!sim.Attacker.Attacks[0].IsVariableDamage)
                     {
@@ -417,7 +417,7 @@ namespace Snorehammer.Web.Services
                             singleModelRemainingWounds -= sim.Attacker.Attacks[0].Damage - fnpBlock;
                             if (singleModelRemainingWounds <= 0)
                             {
-                                sim.ModelsDestroyed++;
+                                sim.Stats.ModelsDestroyed++;
                             }
                         }
                     }
@@ -455,14 +455,14 @@ namespace Snorehammer.Web.Services
                             }
                             if (singleModelRemainingWounds<= 0)
                             {
-                                sim.ModelsDestroyed++;
+                                sim.Stats.ModelsDestroyed++;
                             }
                             DamageDiceCopy.Remove(DamageDiceCopy.First());
                         }
                     }
                     
                 }
-                if (sim.ModelsDestroyed >= sim.Defender.ModelCount)
+                if (sim.Stats.ModelsDestroyed >= sim.Defender.ModelCount)
                 {
                     sim.UnitEntirelyDestroyed = true;
                     res.Append("The entire unit was destroyed.\n");
@@ -470,15 +470,15 @@ namespace Snorehammer.Web.Services
                 }
                 if (sim.Defender.ModelCount > 1)
                 {
-                    if (sim.ModelsDestroyed > 0)
+                    if (sim.Stats.ModelsDestroyed > 0)
                     {
                         sim.LostAModel = true;
                     }
-                    if (sim.ModelsDestroyed > sim.Defender.ModelCount / 2)
+                    if (sim.Stats.ModelsDestroyed > sim.Defender.ModelCount / 2)
                     {
                         sim.LessThanHalf = true;
                     }
-                    res.Append($"{sim.ModelsDestroyed} out of {sim.Defender.ModelCount} models were destroyed.\n");
+                    res.Append($"{sim.Stats.ModelsDestroyed} out of {sim.Defender.ModelCount} models were destroyed.\n");
 
                     if (singleModelRemainingWounds >= 0)
                     {

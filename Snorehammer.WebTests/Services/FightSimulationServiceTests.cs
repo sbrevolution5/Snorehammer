@@ -404,7 +404,7 @@ namespace Snorehammer.Web.Services.Tests
                     //act
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
-                    sim.ModelsDestroyed.Should().Be(1);
+                    sim.Stats.ModelsDestroyed.Should().Be(1);
                 }
                 [Test]
                 public void SpilloverUsesFeelNoPainRolls()
@@ -429,7 +429,7 @@ namespace Snorehammer.Web.Services.Tests
                     //act
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
-                    sim.ModelsDestroyed.Should().Be(1);
+                    sim.Stats.ModelsDestroyed.Should().Be(1);
                 }
                 [Test]
                 public void SpilloverUsesVariableDamageRolls()
@@ -452,7 +452,7 @@ namespace Snorehammer.Web.Services.Tests
                     //act
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
-                    sim.ModelsDestroyed.Should().Be(1);
+                    sim.Stats.ModelsDestroyed.Should().Be(1);
                 }
                 [Test]
                 public void SpilloverUsesVariableDamageAndFeelNoPainRolls()
@@ -486,7 +486,7 @@ namespace Snorehammer.Web.Services.Tests
                     //act
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
-                    sim.ModelsDestroyed.Should().Be(1);
+                    sim.Stats.ModelsDestroyed.Should().Be(1);
                     sim.WoundsInflicted.Should().Be(5);
                 }
             }

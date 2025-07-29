@@ -34,7 +34,7 @@
         {
             AttackNumber = (float)FightSimulations.Select(f => f.AttackNumber).Average();
             DamageNumber = (float)FightSimulations.Select(f => f.DamageNumber).Average();
-            ModelsDestroyed = (float)FightSimulations.Select(f => f.ModelsDestroyed).Average();
+            ModelsDestroyed = (float)FightSimulations.Select(f => f.Stats.ModelsDestroyed).Average();
             WoundsInflicted = (float)FightSimulations.Select(f => f.WoundsInflicted).Average();
             ArmorSavesFailed = (float)FightSimulations.Select(f => f.ArmorSavesFailed).Average();
             AttacksHit = (float)FightSimulations.Select(f => f.AttacksHit).Average();
