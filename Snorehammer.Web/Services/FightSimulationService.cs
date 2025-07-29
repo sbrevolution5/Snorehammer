@@ -367,29 +367,32 @@ namespace Snorehammer.Web.Services
             sim.Stats.FeelNoPainMade = sim.FeelNoPainDice.Where(d => d.Success).Count();
 
         }
+        public void GenerateStats(FightSimulation sim)
+        {
+            sim.Stats.ArmorSavesFailed = sim.ArmorDice.Where(d => !d.Success).Count();
+
+        }
         public string GenerateWinnerMessage(FightSimulation sim)
         {
             var res = new StringBuilder();
-            sim.Stats.ArmorSavesFailed = sim.ArmorDice.Where(d => !d.Success).Count();
 
             res.Append($"{sim.Stats.ArmorSavesFailed} out of {sim.Attacker.Attacks[0].Attacks} attacks broke through armor.\n");
-            int inflictedWounds = sim.DamageNumber;
             var fnpBlockedWounds = sim.FeelNoPainDice.Where(d => d.Success).Count();
-            if (sim.Defender.FeelNoPain && inflictedWounds != 0)
+            if (sim.Defender.FeelNoPain && sim.DamageNumber != 0)
             {
-                if (fnpBlockedWounds == inflictedWounds)
+                if (fnpBlockedWounds == sim.DamageNumber)
                 {
                     res.Append("All wounds blocked by feel no pain. \n");
                     return res.ToString();
                 }
-                res.Append($"{fnpBlockedWounds} of {inflictedWounds} wounds blocked by Feel No Pain. \n");
-                inflictedWounds -= fnpBlockedWounds;
+                res.Append($"{fnpBlockedWounds} of {sim.DamageNumber} wounds blocked by Feel No Pain. \n");
+                sim.DamageNumber -= fnpBlockedWounds;
             }
-            sim.Stats.WoundsInflicted = inflictedWounds;
-            if (inflictedWounds > 0)
+            sim.Stats.WoundsInflicted = sim.DamageNumber;
+            if (sim.DamageNumber > 0)
             {
                 sim.Stats.UnitDamaged = true;
-                res.Append($"{inflictedWounds} wounds inflicted to defender.\n");
+                res.Append($"{sim.DamageNumber} wounds inflicted to defender.\n");
                 int AttacksApplied = 0;
                 var DamageDiceCopy = new List<Dice>();
                 if (sim.Attacker.Attacks[0].IsVariableDamage)
@@ -493,11 +496,11 @@ namespace Snorehammer.Web.Services
                     }
                     return res.ToString();
                 }
-                if (sim.Defender.Wounds - inflictedWounds < sim.Defender.Wounds / 2)
+                if (sim.Defender.Wounds - sim.DamageNumber < sim.Defender.Wounds / 2)
                 {
                     sim.Stats.LessThanHalf = true;
                 }
-                res.Append($"The model has {sim.Defender.Wounds - inflictedWounds} wound(s) remaining.\n");
+                res.Append($"The model has {sim.Defender.Wounds - sim.DamageNumber} wound(s) remaining.\n");
             }
             return res.ToString();
         }
