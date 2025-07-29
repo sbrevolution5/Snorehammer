@@ -13,6 +13,12 @@
                 </RadzenFormField>
             </RadzenColumn>
             <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+                <RadzenFormField Text="Weapons in unit" Variant="Variant.Flat">
+
+                    <RadzenNumeric @bind-Value="attack.WeaponsInUnit" />
+                </RadzenFormField>
+            </RadzenColumn>
+            <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
                 <RadzenCheckBox @bind-Value=@attack.IsVariableAttacks Name="Variable" />
                 <RadzenLabel Text="Roll for # of attacks" Component="Variable" class="rz-ms-2" />
                 @if (attack.IsVariableAttacks)
