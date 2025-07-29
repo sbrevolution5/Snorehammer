@@ -2,6 +2,8 @@
 {
     public class FightStats
     {
+        public int PreFNPDamage { get; set; } = 0;
+        public int SingleModelRemainingWounds { get; set; } = 0;
         public int ModelsDestroyed { get; set; } = 0;
         public int WoundsInflicted { get; set; } = 0;
         public int ArmorSavesFailed { get; set; } = 0;
