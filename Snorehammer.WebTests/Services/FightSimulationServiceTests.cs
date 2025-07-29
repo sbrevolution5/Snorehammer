@@ -187,7 +187,10 @@ namespace Snorehammer.Web.Services.Tests
                     sim.ArmorDice = diceList;
                     sim.FeelNoPainDice = fnpDiceList;
                     sim.DamageNumber = 20;
+                    sim.Stats.PreFNPDamage = 20;
+                    sim.Stats.ArmorSavesFailed = 20;
                     //act
+                    service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
                     res.Should().Contain("0 of 20 wounds blocked by Feel No Pain.");
@@ -210,7 +213,10 @@ namespace Snorehammer.Web.Services.Tests
                     }
                     sim.ArmorDice = diceList;
                     sim.FeelNoPainDice = fnpDiceList;
-                    sim.DamageNumber = 20;
+                    sim.Stats.ArmorSavesFailed = 20;
+                    sim.Stats.FeelNoPainMade = 1;
+                    sim.Stats.PreFNPDamage = 20;
+                    sim.DamageNumber = 19;
                     //act
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
@@ -233,7 +239,10 @@ namespace Snorehammer.Web.Services.Tests
                     }
                     sim.ArmorDice = diceList;
                     sim.FeelNoPainDice = fnpDiceList;
+                    sim.Stats.PreFNPDamage = 20;
+                    sim.Stats.FeelNoPainMade = 20;
                     sim.DamageNumber = 20;
+                    sim.Stats.ArmorSavesFailed = 20;
                     //act
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
@@ -279,6 +288,7 @@ namespace Snorehammer.Web.Services.Tests
                     }
                     sim.ArmorDice = diceList;
                     sim.DamageNumber = 10;
+                    sim.Stats.ArmorSavesFailed = 10;
                     //act
                     service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
@@ -286,6 +296,7 @@ namespace Snorehammer.Web.Services.Tests
                     res.Should().Contain("10 out of 20 attacks broke through armor.");
                     res.Should().Contain("10 wounds inflicted to defender.");
                     res.Should().Contain("5 out of 10 models were destroyed");
+                    res.Should().NotContain("remaining");
                 }
                 [Test]
                 public void WinnerMessageDamageButNoModelDestroyed()
@@ -301,6 +312,7 @@ namespace Snorehammer.Web.Services.Tests
                     }
                     sim.ArmorDice = diceList;
                     sim.DamageNumber = 1;
+                    sim.Stats.ArmorSavesFailed = 1;
                     //act
                     service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
@@ -321,6 +333,7 @@ namespace Snorehammer.Web.Services.Tests
                     diceList.Add(new Dice(unitProfile.MinimumSave, random));
                     sim.ArmorDice = diceList;
                     sim.DamageNumber = 1;
+                    sim.Stats.ArmorSavesFailed = 1;
 
                     //act
                     service.DealDamage(sim);
@@ -343,6 +356,7 @@ namespace Snorehammer.Web.Services.Tests
                     }
                     sim.ArmorDice = diceList;
                     sim.DamageNumber = 20;
+                    sim.Stats.ArmorSavesFailed = 20;
                     //act
                     service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
@@ -362,6 +376,7 @@ namespace Snorehammer.Web.Services.Tests
                     }
                     sim.ArmorDice = diceList;
                     sim.DamageNumber = 0;
+                    sim.Stats.ArmorSavesFailed = 0;
                     //act
                     service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
