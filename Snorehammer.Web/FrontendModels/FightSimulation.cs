@@ -21,11 +21,6 @@
         public string WinnerMessage { get; set; } = "";
         public FightStats Stats { get; set; }
         public List<FightStats> WeaponStats { get; set; }
-        public int FeelNoPainMade { get; set; } = 0;
-        public bool UnitEntirelyDestroyed { get; set; } = false;
-        public bool LessThanHalf { get; set; } = false;
-        public bool UnitDamaged { get; set; } = false;
-        public bool LostAModel { get; set; } = false;
         public void Reset() {
             AttackDice = new List<Dice>();
             ArmorDice = new List<Dice>();
@@ -33,10 +28,10 @@
             StrengthDice = new List<Dice>();
             WoundDice = new List<Dice>();
             FeelNoPainDice = new List<Dice>();
-            UnitEntirelyDestroyed = false;
-            LessThanHalf = false;
-            UnitDamaged = false;
-            LostAModel = false;
+            Stats.UnitEntirelyDestroyed = false;
+            Stats.LessThanHalf = false;
+            Stats.UnitDamaged = false;
+            Stats.LostAModel = false;
         }
 
     }

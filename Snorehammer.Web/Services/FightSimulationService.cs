@@ -381,7 +381,7 @@ namespace Snorehammer.Web.Services
             sim.Stats.WoundsInflicted = inflictedWounds;
             if (inflictedWounds > 0)
             {
-                sim.UnitDamaged = true;
+                sim.Stats.UnitDamaged = true;
                 res.Append($"{inflictedWounds} wounds inflicted to defender.\n");
                 int AttacksApplied = 0;
                 var DamageDiceCopy = new List<Dice>();
@@ -464,7 +464,7 @@ namespace Snorehammer.Web.Services
                 }
                 if (sim.Stats.ModelsDestroyed >= sim.Defender.ModelCount)
                 {
-                    sim.UnitEntirelyDestroyed = true;
+                    sim.Stats.UnitEntirelyDestroyed = true;
                     res.Append("The entire unit was destroyed.\n");
                     return res.ToString();
                 }
@@ -472,11 +472,11 @@ namespace Snorehammer.Web.Services
                 {
                     if (sim.Stats.ModelsDestroyed > 0)
                     {
-                        sim.LostAModel = true;
+                        sim.Stats.LostAModel = true;
                     }
                     if (sim.Stats.ModelsDestroyed > sim.Defender.ModelCount / 2)
                     {
-                        sim.LessThanHalf = true;
+                        sim.Stats.LessThanHalf = true;
                     }
                     res.Append($"{sim.Stats.ModelsDestroyed} out of {sim.Defender.ModelCount} models were destroyed.\n");
 
@@ -488,7 +488,7 @@ namespace Snorehammer.Web.Services
                 }
                 if (sim.Defender.Wounds - inflictedWounds < sim.Defender.Wounds / 2)
                 {
-                    sim.LessThanHalf = true;
+                    sim.Stats.LessThanHalf = true;
                 }
                 res.Append($"The model has {sim.Defender.Wounds - inflictedWounds} wound(s) remaining.\n");
             }
