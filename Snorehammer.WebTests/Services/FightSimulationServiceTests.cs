@@ -280,6 +280,7 @@ namespace Snorehammer.Web.Services.Tests
                     sim.ArmorDice = diceList;
                     sim.DamageNumber = 10;
                     //act
+                    service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
                     res.Should().Contain("10 out of 20 attacks broke through armor.");
@@ -301,6 +302,7 @@ namespace Snorehammer.Web.Services.Tests
                     sim.ArmorDice = diceList;
                     sim.DamageNumber = 1;
                     //act
+                    service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
                     res.Should().Contain("1 out of 20 attacks broke through armor.");
@@ -321,6 +323,7 @@ namespace Snorehammer.Web.Services.Tests
                     sim.DamageNumber = 1;
 
                     //act
+                    service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
                     res.Should().Contain("1 out of 1 attacks broke through armor.");
@@ -341,6 +344,7 @@ namespace Snorehammer.Web.Services.Tests
                     sim.ArmorDice = diceList;
                     sim.DamageNumber = 20;
                     //act
+                    service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
                     res.Should().Contain("20 out of 20 attacks broke through armor.");
@@ -359,6 +363,7 @@ namespace Snorehammer.Web.Services.Tests
                     sim.ArmorDice = diceList;
                     sim.DamageNumber = 0;
                     //act
+                    service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
                     res.Should().Contain("0 out of 2 attacks broke through armor.");
@@ -404,6 +409,7 @@ namespace Snorehammer.Web.Services.Tests
                     sim.ArmorDice = diceList;
                     sim.DamageNumber = 5;
                     //act
+                    service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
                     sim.Stats.ModelsDestroyed.Should().Be(1);
@@ -429,6 +435,7 @@ namespace Snorehammer.Web.Services.Tests
                     sim.FeelNoPainDice = fnpDiceList;
                     sim.DamageNumber = 6;
                     //act
+                    service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
                     sim.Stats.ModelsDestroyed.Should().Be(1);
@@ -452,6 +459,7 @@ namespace Snorehammer.Web.Services.Tests
                     sim.WoundDice = woundDiceList;
                     sim.DamageNumber = 3;
                     //act
+                    service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
                     sim.Stats.ModelsDestroyed.Should().Be(1);
@@ -486,6 +494,7 @@ namespace Snorehammer.Web.Services.Tests
                     sim.WoundDice = woundDiceList;
                     sim.DamageNumber = 7;
                     //act
+                    service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
                     sim.Stats.ModelsDestroyed.Should().Be(1);
