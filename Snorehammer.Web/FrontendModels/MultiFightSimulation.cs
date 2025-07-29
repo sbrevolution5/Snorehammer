@@ -6,7 +6,7 @@
         public UnitProfile Defender { get; set; }
         public List<FightSimulation> FightSimulations { get; set; } = new List<FightSimulation>();
         public int Rounds { get; set; }
-        public MultiFightStats Stats { get; set; }
+        public MultiFightStats Stats { get; set; } = new MultiFightStats();
         public void SetSimNumber(int number)
         {
             Rounds = number;
