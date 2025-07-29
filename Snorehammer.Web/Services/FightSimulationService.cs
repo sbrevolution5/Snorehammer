@@ -25,7 +25,7 @@ namespace Snorehammer.Web.Services
             {
                 SimulateFight(sim);
             }
-            multiSim.SetAverages();
+            multiSim.SetAverages(            multiSim.GetFightSimulations());
         }
         public void SimulateFight(FightSimulation sim)
         {

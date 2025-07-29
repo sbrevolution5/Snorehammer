@@ -6,17 +6,7 @@
         public UnitProfile Defender { get; set; }
         public List<FightSimulation> FightSimulations { get; set; } = new List<FightSimulation>();
         public int Rounds { get; set; }
-        public float AttackNumber { get; set; } = 0;
-        public float DamageNumber { get; set; } = 0;
-        public float ModelsDestroyed { get; set; } = 0;
-        public float WoundsInflicted { get; set; } = 0;
-        public float ArmorSavesFailed { get; set; } = 0;
-        public float AttacksHit { get; set; } = 0;
-        public float FeelNoPainMade { get; set; } = 0;
-        public int UnitEntirelyDestroyed { get; set; } = 0;
-        public int HalfOrLess { get; set; } = 0;
-        public int UnitDamaged { get; set; } = 0;
-        public int LostAModel { get; set; } = 0;
+        public MultiFightStats Stats { get; set; }
         public void SetSimNumber(int number)
         {
             Rounds = number;
@@ -30,19 +20,9 @@
                 });
             }
         }
-        public void SetAverages()
-        {
-            AttackNumber = (float)FightSimulations.Select(f => f.AttackNumber).Average();
-            DamageNumber = (float)FightSimulations.Select(f => f.DamageNumber).Average();
-            ModelsDestroyed = (float)FightSimulations.Select(f => f.Stats.ModelsDestroyed).Average();
-            WoundsInflicted = (float)FightSimulations.Select(f => f.Stats.WoundsInflicted).Average();
-            ArmorSavesFailed = (float)FightSimulations.Select(f => f.Stats.ArmorSavesFailed).Average();
-            AttacksHit = (float)FightSimulations.Select(f => f.Stats.AttacksHit).Average();
-            FeelNoPainMade = (float)FightSimulations.Select(f => f.Stats.FeelNoPainMade).Average();
-            UnitEntirelyDestroyed = FightSimulations.Where(f => f.Stats.UnitEntirelyDestroyed).Count();
-            HalfOrLess = FightSimulations.Where(f => f.Stats.LessThanHalf).Count();
-            UnitDamaged = FightSimulations.Where(f => f.Stats.UnitDamaged).Count();
-            LostAModel = FightSimulations.Where(f => f.Stats.LostAModel).Count();
-        }
+
+        
+
+        
     }
 }
