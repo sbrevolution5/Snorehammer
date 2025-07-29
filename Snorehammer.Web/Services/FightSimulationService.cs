@@ -10,6 +10,15 @@ namespace Snorehammer.Web.Services
         {
             _random = new Random(Guid.NewGuid().GetHashCode());
         }
+        public async Task ResetDice(MultiFightSimulation multiSim)
+        {
+            _random = new Random(Guid.NewGuid().GetHashCode());
+            foreach (var sim in multiSim.FightSimulations)
+            {
+                sim.Reset();
+            }
+            await Task.Yield();
+        }
         public void SimulateAllFights(MultiFightSimulation multiSim)
         {
             foreach (var sim in multiSim.FightSimulations)
