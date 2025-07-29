@@ -111,12 +111,9 @@ namespace Snorehammer.Web.Services
                 sim.ToHitDice.ForEach(d => d.Critical = false);
                 return;
             }
-            for (int j = 0; j < sim.Attacker.Attacks[0].WeaponsInUnit; j++)
+            for (int i = 0; i < sim.AttackNumber; i++)
             {
-                for (int i = 0; i < sim.AttackNumber; i++)
-                {
-                    sim.ToHitDice.Add(new Dice(sim.HitTarget, _random));
-                }
+                sim.ToHitDice.Add(new Dice(sim.HitTarget, _random));
             }
             if (sim.Attacker.Attacks[0].RerollHit)
             {

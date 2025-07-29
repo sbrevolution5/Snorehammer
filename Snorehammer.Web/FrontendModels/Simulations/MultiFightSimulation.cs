@@ -1,4 +1,5 @@
-﻿using Snorehammer.Web.FrontendModels.Stats;
+﻿using Snorehammer.Web.FrontendModels.Profiles;
+using Snorehammer.Web.FrontendModels.Stats;
 
 namespace Snorehammer.Web.FrontendModels.Simulations
 {
