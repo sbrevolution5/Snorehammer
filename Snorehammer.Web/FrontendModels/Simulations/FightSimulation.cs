@@ -1,4 +1,7 @@
-﻿namespace Snorehammer.Web.FrontendModels
+﻿using Snorehammer.Web.FrontendModels.Profiles;
+using Snorehammer.Web.FrontendModels.Stats;
+
+namespace Snorehammer.Web.FrontendModels.Simulations
 {
     public class FightSimulation
     {
@@ -19,15 +22,8 @@
         public int BlastBonus = 0;
         public bool CoverIgnored { get; set; } = false;
         public string WinnerMessage { get; set; } = "";
-        public int ModelsDestroyed { get; set; } = 0;
-        public int WoundsInflicted { get; set; } = 0;
-        public int ArmorSavesFailed { get; set; } = 0;
-        public int AttacksHit { get; set; } = 0;
-        public int FeelNoPainMade { get; set; } = 0;
-        public bool UnitEntirelyDestroyed { get; set; } = false;
-        public bool LessThanHalf { get; set; } = false;
-        public bool UnitDamaged { get; set; } = false;
-        public bool LostAModel { get; set; } = false;
+        public FightStats Stats { get; set; } = new FightStats();
+        public List<FightStats> WeaponStats { get; set; } = new List<FightStats>();
         public void Reset() {
             AttackDice = new List<Dice>();
             ArmorDice = new List<Dice>();
@@ -35,10 +31,10 @@
             StrengthDice = new List<Dice>();
             WoundDice = new List<Dice>();
             FeelNoPainDice = new List<Dice>();
-            UnitEntirelyDestroyed = false;
-            LessThanHalf = false;
-            UnitDamaged = false;
-            LostAModel = false;
+            Stats.UnitEntirelyDestroyed = false;
+            Stats.LessThanHalf = false;
+            Stats.UnitDamaged = false;
+            Stats.LostAModel = false;
         }
 
     }

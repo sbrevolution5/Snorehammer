@@ -1,6 +1,12 @@
 ﻿@page "/complex"
 @using Snorehammer.Web.Components.Unit
 @using Snorehammer.Web.FrontendModels
+@using Snorehammer.Web.FrontendModels.Profiles
+@using Snorehammer.Web.FrontendModels.Simulations
+@using Snorehammer.Web.Services
+dels.Simulations
+@using Snorehammer.Web.Services
+dels.Profiles
 @using Snorehammer.Web.Services
 @rendermode InteractiveServer
 <h3>ComplexComparison</h3>
@@ -163,8 +169,9 @@
                 {
                     new AttackProfile()
                     {
+                        WeaponsInUnit = 10,
                         ArmorPenetration = 1,
-                        Attacks = 20,
+                        Attacks = 2,
                         Damage = 1,
                         Skill = 3,
                         Strength = 4,

@@ -1,9 +1,10 @@
-﻿namespace Snorehammer.Web.FrontendModels
+﻿namespace Snorehammer.Web.FrontendModels.Profiles
 {
     public class AttackProfile :ICloneable
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
+        public int WeaponsInUnit { get; set; }
         public int Attacks { get; set; }
         public int Skill { get; set; }
         public int Strength { get; set; }
@@ -39,7 +40,7 @@
         public bool BigGuns { get; set; } = false;
         public object Clone()
         {
-            return this.MemberwiseClone();
+            return MemberwiseClone();
         }
 
     }

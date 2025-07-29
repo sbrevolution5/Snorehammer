@@ -1,6 +1,12 @@
 ﻿@page "/"
 @using Snorehammer.Web.Components.Unit
 @using Snorehammer.Web.FrontendModels
+@using Snorehammer.Web.FrontendModels.Profiles
+@using Snorehammer.Web.FrontendModels.Simulations
+@using Snorehammer.Web.Services
+dels.Simulations
+@using Snorehammer.Web.Services
+dels.Profiles
 @using Snorehammer.Web.Services
 @rendermode InteractiveServer
 <h3>Comparison</h3>
@@ -121,18 +127,21 @@
         comparison.AlternateAttackSimulation.SetSimNumber(x);
 
     }
-    private void FightUnits()
+    private async void FightUnits()
     {
+        await fightSimulationService.ResetDice(comparison.Simulation1);
         fightSimulationService.SimulateAllFights(comparison.Simulation1);
         ViewSim1 = comparison.Simulation1.FightSimulations.First();
         if (comparison.ComparingAttackers)
         {
+            await fightSimulationService.ResetDice(comparison.AlternateAttackSimulation);
             fightSimulationService.SimulateAllFights(comparison.AlternateAttackSimulation);
             ViewSim2 = comparison.AlternateAttackSimulation.FightSimulations.First();
 
         }
         else if (comparison.ComparingDefenders)
         {
+            await fightSimulationService.ResetDice(comparison.AlternateDefenseSimulation);
             fightSimulationService.SimulateAllFights(comparison.AlternateDefenseSimulation);
             ViewSim2 = comparison.AlternateDefenseSimulation.FightSimulations.First();
 
@@ -160,8 +169,9 @@
                 {
                     new AttackProfile()
                     {
+                        WeaponsInUnit = 10,
                         ArmorPenetration = 1,
-                        Attacks = 20,
+                        Attacks = 2,
                         Damage = 1,
                         Skill = 3,
                         Strength = 4,

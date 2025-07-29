@@ -1,4 +1,5 @@
 ﻿using Snorehammer.Web.FrontendModels;
+using Snorehammer.Web.FrontendModels.Simulations;
 using System.Text;
 
 namespace Snorehammer.Web.Services
@@ -10,13 +11,22 @@ namespace Snorehammer.Web.Services
         {
             _random = new Random(Guid.NewGuid().GetHashCode());
         }
+        public async Task ResetDice(MultiFightSimulation multiSim)
+        {
+            _random = new Random(Guid.NewGuid().GetHashCode());
+            foreach (var sim in multiSim.FightSimulations)
+            {
+                sim.Reset();
+            }
+            await Task.Yield();
+        }
         public void SimulateAllFights(MultiFightSimulation multiSim)
         {
             foreach (var sim in multiSim.FightSimulations)
             {
                 SimulateFight(sim);
             }
-            multiSim.SetAverages();
+            multiSim.Stats.SetAverages(multiSim.FightSimulations);
         }
         public void SimulateFight(FightSimulation sim)
         {
@@ -43,9 +53,12 @@ namespace Snorehammer.Web.Services
         public void RollAttackDice(FightSimulation sim)
         {
             sim.AttackDice = new List<Dice>();
-            for (int i = 0; i < sim.Attacker.Attacks[0].VariableAttackDiceNumber; i++)
+            for (int j = 0; j < sim.Attacker.Attacks[0].WeaponsInUnit; j++)
             {
-                sim.AttackDice.Add(new Dice(0, _random, sim.Attacker.Attacks[0].VariableAttackDiceSides));
+                for (int i = 0; i < sim.Attacker.Attacks[0].VariableAttackDiceNumber; i++)
+                {
+                    sim.AttackDice.Add(new Dice(0, _random, sim.Attacker.Attacks[0].VariableAttackDiceSides));
+                }
             }
         }
         public void DetermineHitTarget(FightSimulation sim)
@@ -75,21 +88,24 @@ namespace Snorehammer.Web.Services
             {
                 sim.BlastBonus = sim.Defender.ModelCount / 5;
             }
-            sim.AttackNumber = sim.Attacker.Attacks[0].Attacks;
+            sim.AttackNumber = sim.Attacker.Attacks[0].Attacks * sim.Attacker.Attacks[0].WeaponsInUnit;
             if (sim.AttackDice.Count != 0)
             {
                 //currently doesn't account for "per model" just a flat equation, so 1d6 +1 with 10 models must be written as 10d6 + 10
-                sim.AttackNumber = sim.AttackDice.Sum(d => d.Result) + sim.Attacker.Attacks[0].VariableAttackDiceConstant;
+                sim.AttackNumber = sim.AttackDice.Sum(d => d.Result) + (sim.Attacker.Attacks[0].VariableAttackDiceConstant * sim.Attacker.Attacks[0].WeaponsInUnit);
                 if (sim.Attacker.Attacks[0].Blast && !sim.Attacker.Attacks[0].Melee)
                 {
-                    sim.AttackNumber += sim.BlastBonus;
+                    sim.AttackNumber += sim.BlastBonus * sim.Attacker.Attacks[0].WeaponsInUnit;
                 }
             }
             if (sim.Attacker.Attacks[0].Torrent && !sim.Attacker.Attacks[0].Melee)
             {
-                for (int i = 0; i < sim.AttackNumber; i++)
+                for (int j = 0; j < sim.Attacker.Attacks[0].WeaponsInUnit; j++)
                 {
-                    sim.ToHitDice.Add(new Dice(true));
+                    for (int i = 0; i < sim.AttackNumber; i++)
+                    {
+                        sim.ToHitDice.Add(new Dice(true));
+                    }
                 }
                 //torrent attacks don't count as criticals, incase there are lethal hits or sustained involved
                 sim.ToHitDice.ForEach(d => d.Critical = false);
@@ -224,7 +240,7 @@ namespace Snorehammer.Web.Services
                     sim.StrengthDice.Add(die);
                 }
             }
-            sim.AttacksHit = sim.StrengthDice.Count();
+            sim.Stats.AttacksHit = sim.StrengthDice.Count();
         }
         public void RollArmorSaves(FightSimulation sim)
         {
@@ -280,7 +296,7 @@ namespace Snorehammer.Web.Services
                     sim.DamageNumber += failedsaves * sim.Attacker.Attacks[0].MeltaDamage;
                 }
             }
-            sim.WoundsInflicted = sim.ArmorDice.Count();
+            sim.Stats.WoundsInflicted = sim.ArmorDice.Count();
         }
 
         public int DetermineArmorSave(FightSimulation sim)
@@ -324,18 +340,18 @@ namespace Snorehammer.Web.Services
         public void RollDamageDice(FightSimulation sim)
         {
             sim.WoundDice = new List<Dice>();
-            sim.ArmorSavesFailed = sim.ArmorDice.Where(d => !d.Success).Count();
-            for (int i = 0; i < sim.ArmorSavesFailed; i++)
+            sim.Stats.ArmorSavesFailed = sim.ArmorDice.Where(d => !d.Success).Count();
+            for (int i = 0; i < sim.Stats.ArmorSavesFailed; i++)
             {
                 for (int j = 0; j < sim.Attacker.Attacks[0].VariableDamageDiceNumber; j++)
                 {
                     sim.WoundDice.Add(new Dice(0, _random, sim.Attacker.Attacks[0].VariableDamageDiceSides));
                 }
             }
-            sim.DamageNumber = sim.WoundDice.Sum(d => d.Result) + sim.Attacker.Attacks[0].VariableDamageDiceConstant * sim.ArmorSavesFailed;
+            sim.DamageNumber = sim.WoundDice.Sum(d => d.Result) + sim.Attacker.Attacks[0].VariableDamageDiceConstant * sim.Stats.ArmorSavesFailed;
             if (sim.Attacker.Attacks[0].Melta && !sim.Attacker.Attacks[0].Melee)
             {
-                sim.DamageNumber += sim.Attacker.Attacks[0].MeltaDamage * sim.ArmorSavesFailed;
+                sim.DamageNumber += sim.Attacker.Attacks[0].MeltaDamage * sim.Stats.ArmorSavesFailed;
             }
         }
         public void RollFeelNoPain(FightSimulation sim)
@@ -348,15 +364,15 @@ namespace Snorehammer.Web.Services
             {
                 sim.FeelNoPainDice.Add(new Dice(sim.Defender.FeelNoPainTarget, _random));
             }
-            sim.FeelNoPainMade = sim.FeelNoPainDice.Where(d => d.Success).Count();
+            sim.Stats.FeelNoPainMade = sim.FeelNoPainDice.Where(d => d.Success).Count();
 
         }
         public string GenerateWinnerMessage(FightSimulation sim)
         {
             var res = new StringBuilder();
-            sim.ArmorSavesFailed = sim.ArmorDice.Where(d => !d.Success).Count();
+            sim.Stats.ArmorSavesFailed = sim.ArmorDice.Where(d => !d.Success).Count();
 
-            res.Append($"{sim.ArmorSavesFailed} out of {sim.Attacker.Attacks[0].Attacks} attacks broke through armor.\n");
+            res.Append($"{sim.Stats.ArmorSavesFailed} out of {sim.Attacker.Attacks[0].Attacks} attacks broke through armor.\n");
             int inflictedWounds = sim.DamageNumber;
             var fnpBlockedWounds = sim.FeelNoPainDice.Where(d => d.Success).Count();
             if (sim.Defender.FeelNoPain && inflictedWounds != 0)
@@ -369,10 +385,10 @@ namespace Snorehammer.Web.Services
                 res.Append($"{fnpBlockedWounds} of {inflictedWounds} wounds blocked by Feel No Pain. \n");
                 inflictedWounds -= fnpBlockedWounds;
             }
-            sim.WoundsInflicted = inflictedWounds;
+            sim.Stats.WoundsInflicted = inflictedWounds;
             if (inflictedWounds > 0)
             {
-                sim.UnitDamaged = true;
+                sim.Stats.UnitDamaged = true;
                 res.Append($"{inflictedWounds} wounds inflicted to defender.\n");
                 int AttacksApplied = 0;
                 var DamageDiceCopy = new List<Dice>();
@@ -382,12 +398,12 @@ namespace Snorehammer.Web.Services
                 }
                 int fnpUnused = fnpBlockedWounds;
                 int singleModelRemainingWounds = sim.Defender.Wounds;
-                while (sim.ModelsDestroyed < sim.Defender.ModelCount && AttacksApplied < sim.ArmorSavesFailed)
+                while (sim.Stats.ModelsDestroyed < sim.Defender.ModelCount && AttacksApplied < sim.Stats.ArmorSavesFailed)
                 {
                     if (!sim.Attacker.Attacks[0].IsVariableDamage)
                     {
                         singleModelRemainingWounds = sim.Defender.Wounds;
-                        while (singleModelRemainingWounds > 0 && AttacksApplied < sim.ArmorSavesFailed)
+                        while (singleModelRemainingWounds > 0 && AttacksApplied < sim.Stats.ArmorSavesFailed)
                         {
                             int fnpBlock = 0;
                             AttacksApplied++;
@@ -408,7 +424,7 @@ namespace Snorehammer.Web.Services
                             singleModelRemainingWounds -= sim.Attacker.Attacks[0].Damage - fnpBlock;
                             if (singleModelRemainingWounds <= 0)
                             {
-                                sim.ModelsDestroyed++;
+                                sim.Stats.ModelsDestroyed++;
                             }
                         }
                     }
@@ -416,7 +432,7 @@ namespace Snorehammer.Web.Services
                     {
                         //uses variable damage stats
                         singleModelRemainingWounds = sim.Defender.Wounds;
-                        while (singleModelRemainingWounds > 0 && AttacksApplied < sim.ArmorSavesFailed)
+                        while (singleModelRemainingWounds > 0 && AttacksApplied < sim.Stats.ArmorSavesFailed)
                         {
                             int fnpBlock = 0;
                             AttacksApplied++;
@@ -444,32 +460,32 @@ namespace Snorehammer.Web.Services
                             {
                                 singleModelRemainingWounds -= sim.Attacker.Attacks[0].MeltaDamage;
                             }
-                            if (singleModelRemainingWounds<= 0)
+                            if (singleModelRemainingWounds <= 0)
                             {
-                                sim.ModelsDestroyed++;
+                                sim.Stats.ModelsDestroyed++;
                             }
                             DamageDiceCopy.Remove(DamageDiceCopy.First());
                         }
                     }
-                    
+
                 }
-                if (sim.ModelsDestroyed >= sim.Defender.ModelCount)
+                if (sim.Stats.ModelsDestroyed >= sim.Defender.ModelCount)
                 {
-                    sim.UnitEntirelyDestroyed = true;
+                    sim.Stats.UnitEntirelyDestroyed = true;
                     res.Append("The entire unit was destroyed.\n");
                     return res.ToString();
                 }
                 if (sim.Defender.ModelCount > 1)
                 {
-                    if (sim.ModelsDestroyed > 0)
+                    if (sim.Stats.ModelsDestroyed > 0)
                     {
-                        sim.LostAModel = true;
+                        sim.Stats.LostAModel = true;
                     }
-                    if (sim.ModelsDestroyed > sim.Defender.ModelCount / 2)
+                    if (sim.Stats.ModelsDestroyed > sim.Defender.ModelCount / 2)
                     {
-                        sim.LessThanHalf = true;
+                        sim.Stats.LessThanHalf = true;
                     }
-                    res.Append($"{sim.ModelsDestroyed} out of {sim.Defender.ModelCount} models were destroyed.\n");
+                    res.Append($"{sim.Stats.ModelsDestroyed} out of {sim.Defender.ModelCount} models were destroyed.\n");
 
                     if (singleModelRemainingWounds >= 0)
                     {
@@ -479,7 +495,7 @@ namespace Snorehammer.Web.Services
                 }
                 if (sim.Defender.Wounds - inflictedWounds < sim.Defender.Wounds / 2)
                 {
-                    sim.LessThanHalf = true;
+                    sim.Stats.LessThanHalf = true;
                 }
                 res.Append($"The model has {sim.Defender.Wounds - inflictedWounds} wound(s) remaining.\n");
             }

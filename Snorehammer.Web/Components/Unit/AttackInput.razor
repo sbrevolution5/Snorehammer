@@ -1,4 +1,5 @@
 ﻿@using Snorehammer.Web.FrontendModels
+@using Snorehammer.Web.FrontendModels.Profiles
 <RadzenCard Variant="Variant.Outlined">
 
     <EditForm Model="@attack">
@@ -10,6 +11,12 @@
                 <RadzenFormField Text="Name" Variant="Variant.Flat">
 
                     <RadzenTextBox @bind-Value="attack.Name" />
+                </RadzenFormField>
+            </RadzenColumn>
+            <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+                <RadzenFormField Text="Weapons in unit" Variant="Variant.Flat">
+
+                    <RadzenNumeric @bind-Value="attack.WeaponsInUnit" />
                 </RadzenFormField>
             </RadzenColumn>
             <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
