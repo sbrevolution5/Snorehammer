@@ -357,7 +357,7 @@ namespace Snorehammer.Web.Services
             {
                 sim.FeelNoPainDice.Add(new Dice(sim.Defender.FeelNoPainTarget, _random));
             }
-            sim.FeelNoPainMade = sim.FeelNoPainDice.Where(d => d.Success).Count();
+            sim.Stats.FeelNoPainMade = sim.FeelNoPainDice.Where(d => d.Success).Count();
 
         }
         public string GenerateWinnerMessage(FightSimulation sim)

@@ -38,7 +38,7 @@
             WoundsInflicted = (float)FightSimulations.Select(f => f.Stats.WoundsInflicted).Average();
             ArmorSavesFailed = (float)FightSimulations.Select(f => f.Stats.ArmorSavesFailed).Average();
             AttacksHit = (float)FightSimulations.Select(f => f.Stats.AttacksHit).Average();
-            FeelNoPainMade = (float)FightSimulations.Select(f => f.FeelNoPainMade).Average();
+            FeelNoPainMade = (float)FightSimulations.Select(f => f.Stats.FeelNoPainMade).Average();
             UnitEntirelyDestroyed = FightSimulations.Where(f => f.UnitEntirelyDestroyed).Count();
             HalfOrLess = FightSimulations.Where(f => f.LessThanHalf).Count();
             UnitDamaged = FightSimulations.Where(f => f.UnitDamaged).Count();
