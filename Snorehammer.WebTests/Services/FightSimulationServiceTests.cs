@@ -74,7 +74,7 @@ namespace Snorehammer.Web.Services.Tests
                 base.Setup();
             }
             [TearDown]
-            public void TearDown()
+            public override void TearDown()
             {
                 base.TearDown();
             }
