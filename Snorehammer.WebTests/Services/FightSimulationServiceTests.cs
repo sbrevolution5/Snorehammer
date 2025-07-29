@@ -487,7 +487,7 @@ namespace Snorehammer.Web.Services.Tests
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
                     sim.Stats.ModelsDestroyed.Should().Be(1);
-                    sim.WoundsInflicted.Should().Be(5);
+                    sim.Stats.WoundsInflicted.Should().Be(5);
                 }
             }
         }
