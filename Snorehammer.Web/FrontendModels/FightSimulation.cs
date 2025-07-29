@@ -21,7 +21,6 @@
         public string WinnerMessage { get; set; } = "";
         public FightStats Stats { get; set; }
         public List<FightStats> WeaponStats { get; set; }
-        public int ArmorSavesFailed { get; set; } = 0;
         public int AttacksHit { get; set; } = 0;
         public int FeelNoPainMade { get; set; } = 0;
         public bool UnitEntirelyDestroyed { get; set; } = false;

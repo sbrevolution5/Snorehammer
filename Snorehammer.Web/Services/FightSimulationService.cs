@@ -233,7 +233,7 @@ namespace Snorehammer.Web.Services
                     sim.StrengthDice.Add(die);
                 }
             }
-            sim.AttacksHit = sim.StrengthDice.Count();
+            sim.Stats.AttacksHit = sim.StrengthDice.Count();
         }
         public void RollArmorSaves(FightSimulation sim)
         {
