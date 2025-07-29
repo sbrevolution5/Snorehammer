@@ -1,4 +1,4 @@
-﻿namespace Snorehammer.Web.FrontendModels
+﻿namespace Snorehammer.Web.FrontendModels.Stats
 {
     public class FightStats
     {

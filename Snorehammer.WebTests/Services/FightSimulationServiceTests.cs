@@ -2,6 +2,8 @@
 using FluentAssertions;
 using NUnit.Framework;
 using Snorehammer.Web.FrontendModels;
+using Snorehammer.Web.FrontendModels.Profiles;
+using Snorehammer.Web.FrontendModels.Simulations;
 
 namespace Snorehammer.Web.Services.Tests
 {

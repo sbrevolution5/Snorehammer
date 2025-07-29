@@ -1,4 +1,5 @@
 ﻿using Snorehammer.Web.FrontendModels;
+using Snorehammer.Web.FrontendModels.Simulations;
 using System.Text;
 
 namespace Snorehammer.Web.Services

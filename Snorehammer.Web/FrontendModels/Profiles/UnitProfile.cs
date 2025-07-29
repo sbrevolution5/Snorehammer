@@ -1,4 +1,6 @@
-﻿namespace Snorehammer.Web.FrontendModels
+﻿using Snorehammer.Web.FrontendModels.Profiles;
+
+namespace Snorehammer.Web.FrontendModels
 {
     public class UnitProfile : ICloneable
     {

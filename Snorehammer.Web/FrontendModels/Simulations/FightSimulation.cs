@@ -1,4 +1,6 @@
-﻿namespace Snorehammer.Web.FrontendModels
+﻿using Snorehammer.Web.FrontendModels.Stats;
+
+namespace Snorehammer.Web.FrontendModels.Simulations
 {
     public class FightSimulation
     {

@@ -1,4 +1,6 @@
-﻿namespace Snorehammer.Web.FrontendModels
+﻿using Snorehammer.Web.FrontendModels.Simulations;
+
+namespace Snorehammer.Web.FrontendModels
 {
     public class Comparison
     {
