@@ -25,8 +25,6 @@ namespace Snorehammer.Web.FrontendModels.Simulations
         public int WoundTarget = 0;
         public int ModdedWoundTarget = 0;
         public int ArmorSave { get; set; } = 0;
-        public int AttackNumber { get; set; } = 0;
-        public int DamageNumber { get; set; } = 0;
         public int BlastBonus = 0;
         public bool CoverIgnored { get; set; } = false;
         public FightStats Stats { get; set; } = new FightStats();
