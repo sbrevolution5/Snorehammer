@@ -6,69 +6,20 @@
 @using Snorehammer.Web.Services
 @rendermode InteractiveServer
 <RadzenCard>
-    @if (sim is not null)
+    @foreach (var weapon in sim.WeaponSimulations)
     {
-        <RadzenCard Variant="Variant.Text">
-            <h1>Results for @sim.Weapon.Name</h1>
-            <br />
-
-
-
-            @if (sim.Weapon.IsVariableAttacks)
-            {
-                <DicePanel sim="@sim"
-                           Title="Number of Attacks"
-                           RollString1=@($"Rolling: {sim.Weapon.VariableAttackDiceNumber} d{sim.Weapon.VariableAttackDiceSides} + {sim.Weapon.VariableAttackDiceConstant}" + (sim.BlastBonus > 0 ? $" + {@sim.BlastBonus}" : "") + $" x {sim.Weapon.WeaponsInUnit}")
-                           RollString2=@($"Total: {sim.AttackNumber}")
-                           DiceList="@sim.AttackDice" />
-            }
-            <DicePanel sim="@sim"
-                       Title="To Hit Roll"
-                       RollString1=@($"Target: {sim.Weapon.Skill}")
-                       RollString2=@($"Rolling {sim.AttackNumber}")
-                       DiceList="@sim.ToHitDice"
-                       CriticalMatters="@(sim.Weapon.Sustained || sim.Weapon.Lethal)" />
-            <DicePanel sim="@sim"
-                       Title="To Wound Roll"
-                       RollString1=@($"Target: {(sim.ModdedWoundTarget > 0 ? sim.ModdedWoundTarget :sim.WoundTarget)}")
-                       RollString2=@($"Rolling: {sim.StrengthDice.Count}")
-                       DiceList="@sim.StrengthDice"
-                       CriticalMatters="@(sim.Weapon.Devastating)" />
-            <DicePanel sim="@sim"
-                       Title="To Wound Roll"
-                       RollString1=@($"Target: {sim.ArmorSave}")
-                       RollString2=@($"Rolling: {sim.ArmorDice.Count}")
-                       DiceList="@sim.ArmorDice" />
-
-            @if (sim.Weapon.IsVariableDamage)
-            {
-
-
-                <DicePanel sim="@sim"
-                           Title="Damage Roll"
-                           RollString1=@($"Rolling: {sim.Weapon.VariableDamageDiceNumber} d{sim.Weapon.VariableDamageDiceSides} + {sim.Weapon.VariableDamageDiceConstant}" + (sim.Weapon.Melta ? $" + {@sim.Weapon.MeltaDamage}" : ""))
-                           DiceList="@sim.WoundDice" />
-            }
-            @if (sim.Defender.FeelNoPain)
-            {
-                <DicePanel sim="@sim"
-                           Title="Feel No Pain Roll"
-                           RollString1=@($"Target: {sim.Defender.FeelNoPainTarget}")
-                           RollString2=@($"Rolling: {sim.DamageNumber}")
-                           DiceList="@sim.FeelNoPainDice" />
-            }
-        </RadzenCard>
-        <RadzenCard>
-
-            <h1>Winner:</h1>
-            <p>@sim.WinnerMessage</p>
-        </RadzenCard>
+        <WeaponResult sim="weapon"></WeaponResult>
     }
+    <RadzenCard>
+
+        <h1>Winner:</h1>
+        <p>@sim.WinnerMessage</p>
+    </RadzenCard>
 </RadzenCard>
 
 @code {
     [Parameter]
-    public WeaponSimulation sim { get; set; }
+    public FightSimulation sim { get; set; }
     private bool FightComplete { get; set; } = false;
     private bool simulating { get; set; } = true;
     private FightSimulationService fightSimulationService = new FightSimulationService();

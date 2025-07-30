@@ -21,7 +21,6 @@ namespace Snorehammer.Web.FrontendModels.Simulations
         public int DamageNumber { get; set; } = 0;
         public int BlastBonus = 0;
         public bool CoverIgnored { get; set; } = false;
-        public string WinnerMessage { get; set; } = "";
         public FightStats Stats { get; set; } = new FightStats();
     }
 }
