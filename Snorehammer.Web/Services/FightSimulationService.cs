@@ -35,20 +35,20 @@ namespace Snorehammer.Web.Services
             {
                 if (weapon.Weapon.IsVariableAttacks)
                 {
-                    RollAttackDice(sim);
+                    RollAttackDice(weapon);
                 }
-                DetermineHitTarget(sim);
-                RollToHit(sim);
-                RollStrengthStep(sim);
-                RollArmorSaves(sim);
+                DetermineHitTarget(weapon);
+                RollToHit(weapon);
+                RollStrengthStep(weapon);
+                RollArmorSaves(weapon);
 
                 if (sim.Attacker.Attacks[0].IsVariableDamage)
                 {
-                    RollDamageDice(sim);
+                    RollDamageDice(weapon);
                 }
                 if (sim.Defender.FeelNoPain)
                 {
-                    RollFeelNoPain(sim);
+                    RollFeelNoPain(weapon);
                 }
                 DealDamage(sim);
             }
@@ -246,11 +246,11 @@ namespace Snorehammer.Web.Services
             }
             sim.Stats.AttacksHit = sim.StrengthDice.Count();
         }
-        public void RollArmorSaves(FightSimulation sim)
+        public void RollArmorSaves(WeaponSimulation sim)
         {
 
             var targetValue = DetermineArmorSave(sim);
-            if (sim.Attacker.Attacks[0].Devastating)
+            if (sim.Weapon.Devastating)
             {
                 for (int i = 0; i < sim.StrengthDice.Where(d => d.Critical).Count(); i++)
                 {
@@ -290,14 +290,14 @@ namespace Snorehammer.Web.Services
                     sim.ArmorDice.Add(die);
                 }
             }
-            if (!sim.Attacker.Attacks[0].IsVariableDamage)
+            if (!sim.Weapon.IsVariableDamage)
             {
 
                 int failedsaves = sim.ArmorDice.Where(d => !d.Success).Count();
-                sim.DamageNumber = failedsaves * sim.Attacker.Attacks[0].Damage;
-                if (sim.Attacker.Attacks[0].Melta && !sim.Attacker.Attacks[0].Melee)
+                sim.DamageNumber = failedsaves * sim.Weapon.Damage;
+                if (sim.Weapon.Melta && !sim.Weapon.Melee)
                 {
-                    sim.DamageNumber += failedsaves * sim.Attacker.Attacks[0].MeltaDamage;
+                    sim.DamageNumber += failedsaves * sim.Weapon.MeltaDamage;
                 }
             }
             sim.Stats.ArmorSavesFailed = sim.ArmorDice.Where(d => !d.Success).Count();
@@ -310,7 +310,7 @@ namespace Snorehammer.Web.Services
 
             if (sim.Defender.HasCover)
             {
-                if ((sim.Defender.MinimumSave > 4 && sim.Weapon.ArmorPenetration == 0) || sim.Weapon.ArmorPenetration > 0)
+                if ((sim.Defender.MinimumSave >= 4 && sim.Weapon.ArmorPenetration == 0) || sim.Weapon.ArmorPenetration > 0)
                 {
                     moddedSave--;
                 }

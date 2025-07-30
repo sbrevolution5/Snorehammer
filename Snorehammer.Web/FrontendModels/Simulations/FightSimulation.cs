@@ -13,14 +13,8 @@ namespace Snorehammer.Web.FrontendModels.Simulations
         public List<Dice> ArmorDice { get; set; } = new List<Dice>();
         public List<Dice> WoundDice { get; set; } = new List<Dice>();
         public List<Dice> FeelNoPainDice { get; set; } = new List<Dice>();
-        public int HitTarget = 0;
-        public int WoundTarget = 0;
-        public int ModdedWoundTarget = 0;
-        public int ArmorSave { get; set; } = 0;
         public int AttackNumber { get; set; } = 0;
         public int DamageNumber { get; set; } = 0;
-        public int BlastBonus = 0;
-        public bool CoverIgnored { get; set; } = false;
         public string WinnerMessage { get; set; } = "";
         public List<WeaponSimulation> WeaponSimulations { get; set; } = new List<WeaponSimulation>();
         public FightStats Stats { get; set; } = new FightStats();
