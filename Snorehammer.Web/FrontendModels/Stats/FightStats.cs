@@ -2,8 +2,8 @@
 {
     public class FightStats
     {
-        public float AttackNumber { get; set; } = 0;
-        public float DamageNumber { get; set; } = 0;
+        public int AttackNumber { get; set; } = 0;
+        public int DamageNumber { get; set; } = 0;
         public int PreFNPDamage { get; set; } = 0;
         public int SingleModelRemainingWounds { get; set; } = 0;
         public int ModelsDestroyed { get; set; } = 0;

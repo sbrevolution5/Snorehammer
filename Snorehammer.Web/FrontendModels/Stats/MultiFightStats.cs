@@ -17,8 +17,8 @@ namespace Snorehammer.Web.FrontendModels.Stats
         public float LostAModel { get; set; } = 0;
         public void SetAverages(IEnumerable<ISimulationForStats> fightSimulations)
         {
-            AttackNumber = (float)fightSimulations.Select(f => f.AttackNumber).Average();
-            DamageNumber = (float)fightSimulations.Select(f => f.DamageNumber).Average();
+            AttackNumber = (float)fightSimulations.Select(f => f.Stats.AttackNumber).Average();
+            DamageNumber = (float)fightSimulations.Select(f => f.Stats.DamageNumber).Average();
             ModelsDestroyed = (float)fightSimulations.Select(f => f.Stats.ModelsDestroyed).Average();
             WoundsInflicted = (float)fightSimulations.Select(f => f.Stats.WoundsInflicted).Average();
             ArmorSavesFailed = (float)fightSimulations.Select(f => f.Stats.ArmorSavesFailed).Average();

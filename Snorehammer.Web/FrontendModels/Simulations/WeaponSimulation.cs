@@ -7,6 +7,7 @@ namespace Snorehammer.Web.FrontendModels.Simulations
     {
         public WeaponSimulation(AttackProfile weapon, UnitProfile defender,int id)
         {
+            Stats = new FightStats();
             Weapon = weapon;
             Defender = defender;
             Id = id;
