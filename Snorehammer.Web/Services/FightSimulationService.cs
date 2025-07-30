@@ -1,6 +1,7 @@
 ﻿using Snorehammer.Web.FrontendModels;
 using Snorehammer.Web.FrontendModels.Profiles;
 using Snorehammer.Web.FrontendModels.Simulations;
+using Snorehammer.Web.FrontendModels.Stats;
 using System.Text;
 
 namespace Snorehammer.Web.Services
@@ -33,6 +34,18 @@ namespace Snorehammer.Web.Services
                 SimulateFight(sim);
             }
             multiSim.Stats.SetAverages(multiSim.FightSimulations);
+            //should call set averages on a list of each weapon fight
+            List<List<WeaponSimulation>> listPerWeapon = new List<List<WeaponSimulation>>();
+            foreach (var weapon in multiSim.Attacker.Attacks)
+            {
+            //need to combine the fights per weapon into a list with only that weapon.  
+                var singleWeaponList = multiSim.FightSimulations.SelectMany(f => f.WeaponSimulations.Where(w => w.Weapon == weapon));
+                var multiStats = new MultiFightStats();
+                multiStats.SetAverages(singleWeaponList);
+                multiSim.PerWeaponStats.Add();
+            }
+            //then add a per weapon stats object for each weapon
+            //then run set averages on each list
         }
         public void SimulateFight(FightSimulation sim)
         {

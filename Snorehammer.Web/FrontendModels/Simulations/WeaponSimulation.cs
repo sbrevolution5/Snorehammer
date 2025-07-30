@@ -3,7 +3,7 @@ using Snorehammer.Web.FrontendModels.Stats;
 
 namespace Snorehammer.Web.FrontendModels.Simulations
 {
-    public class WeaponSimulation
+    public class WeaponSimulation : ISimulationForStats
     {
         public WeaponSimulation(AttackProfile weapon, UnitProfile defender)
         {
