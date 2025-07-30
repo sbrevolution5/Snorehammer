@@ -425,7 +425,9 @@ namespace Snorehammer.Web.Services.Tests
                         diceList.Add(new Dice(unitProfile.MinimumSave, random));
                     }
                     sim.ArmorDice = diceList;
+                    sim.Stats.ArmorSavesFailed = sim.ArmorDice.Where(d => !d.Success).Count();
                     sim.DamageNumber = 5;
+                    sim.Stats.WoundsInflicted = sim.DamageNumber;
                     //act
                     service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
@@ -452,6 +454,10 @@ namespace Snorehammer.Web.Services.Tests
                     sim.ArmorDice = diceList;
                     sim.FeelNoPainDice = fnpDiceList;
                     sim.DamageNumber = 6;
+                    sim.Stats.ArmorSavesFailed = sim.ArmorDice.Where(d => !d.Success).Count();
+                    sim.Stats.FeelNoPainMade = sim.FeelNoPainDice.Where(d => d.Success).Count();
+                    sim.DamageNumber -= sim.Stats.FeelNoPainMade;
+                    sim.Stats.WoundsInflicted = sim.DamageNumber;
                     //act
                     service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
@@ -476,6 +482,8 @@ namespace Snorehammer.Web.Services.Tests
                     sim.ArmorDice = diceList;
                     sim.WoundDice = woundDiceList;
                     sim.DamageNumber = 3;
+                    sim.Stats.ArmorSavesFailed = sim.ArmorDice.Where(d => !d.Success).Count();
+                    sim.Stats.WoundsInflicted = sim.DamageNumber;
                     //act
                     service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
@@ -511,6 +519,10 @@ namespace Snorehammer.Web.Services.Tests
                     sim.FeelNoPainDice = fnpDiceList;
                     sim.WoundDice = woundDiceList;
                     sim.DamageNumber = 7;
+                    sim.Stats.ArmorSavesFailed = sim.ArmorDice.Where(d => !d.Success).Count();
+                    sim.Stats.FeelNoPainMade = sim.FeelNoPainDice.Where(d => d.Success).Count();
+                    sim.DamageNumber -= sim.Stats.FeelNoPainMade;
+                    sim.Stats.WoundsInflicted = sim.DamageNumber;
                     //act
                     service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
