@@ -1,4 +1,5 @@
 ﻿using Snorehammer.Web.FrontendModels;
+using Snorehammer.Web.FrontendModels.Profiles;
 using Snorehammer.Web.FrontendModels.Simulations;
 using System.Text;
 
@@ -24,6 +25,11 @@ namespace Snorehammer.Web.Services
         {
             foreach (var sim in multiSim.FightSimulations)
             {
+                sim.WeaponSimulations.Clear();
+                foreach (var weapon in sim.Attacker.Attacks)
+                {
+                    sim.WeaponSimulations.Add(new WeaponSimulation((AttackProfile)weapon.Clone(), (UnitProfile)sim.Defender.Clone()));
+                }
                 SimulateFight(sim);
             }
             multiSim.Stats.SetAverages(multiSim.FightSimulations);
@@ -31,45 +37,49 @@ namespace Snorehammer.Web.Services
         public void SimulateFight(FightSimulation sim)
         {
             sim.Reset();
-            if (sim.Attacker.Attacks[0].IsVariableAttacks)
+            foreach (var weapon in sim.WeaponSimulations)
             {
-                RollAttackDice(sim);
-            }
-            DetermineHitTarget(sim);
-            RollToHit(sim);
-            RollStrengthStep(sim);
-            RollArmorSaves(sim);
+                if (weapon.Weapon.IsVariableAttacks)
+                {
+                    RollAttackDice(weapon);
+                }
+                DetermineHitTarget(weapon);
+                RollToHit(weapon);
+                RollStrengthStep(weapon);
+                RollArmorSaves(weapon);
 
-            if (sim.Attacker.Attacks[0].IsVariableDamage)
-            {
-                RollDamageDice(sim);
-            }
-            if (sim.Defender.FeelNoPain)
-            {
-                RollFeelNoPain(sim);
+                if (sim.Attacker.Attacks[0].IsVariableDamage)
+                {
+                    RollDamageDice(weapon);
+                }
+                if (sim.Defender.FeelNoPain)
+                {
+                    RollFeelNoPain(weapon);
+                }
+                DealDamage(sim);
             }
             DealDamage(sim);
             sim.WinnerMessage = GenerateWinnerMessage(sim);
         }
-        public void RollAttackDice(FightSimulation sim)
+        public void RollAttackDice(WeaponSimulation sim)
         {
             sim.AttackDice = new List<Dice>();
-            for (int j = 0; j < sim.Attacker.Attacks[0].WeaponsInUnit; j++)
+            for (int j = 0; j < sim.Weapon.WeaponsInUnit; j++)
             {
-                for (int i = 0; i < sim.Attacker.Attacks[0].VariableAttackDiceNumber; i++)
+                for (int i = 0; i < sim.Weapon.VariableAttackDiceNumber; i++)
                 {
-                    sim.AttackDice.Add(new Dice(0, _random, sim.Attacker.Attacks[0].VariableAttackDiceSides));
+                    sim.AttackDice.Add(new Dice(0, _random, sim.Weapon.VariableAttackDiceSides));
                 }
             }
         }
-        public void DetermineHitTarget(FightSimulation sim)
+        public void DetermineHitTarget(WeaponSimulation sim)
         {
-            sim.HitTarget = sim.Attacker.Attacks[0].Skill;
-            if (sim.Attacker.Attacks[0].Plus1Hit)
+            sim.HitTarget = sim.Weapon.Skill;
+            if (sim.Weapon.Plus1Hit)
             {
                 sim.HitTarget--;
             }
-            if (sim.Defender.Stealth || sim.Defender.Minus1Hit || sim.Attacker.Attacks[0].Minus1Hit || sim.Attacker.Attacks[0].BigGuns)
+            if (sim.Defender.Stealth || sim.Defender.Minus1Hit || sim.Weapon.Minus1Hit || sim.Weapon.BigGuns)
             {
                 sim.HitTarget++;
             }
@@ -82,26 +92,26 @@ namespace Snorehammer.Web.Services
                 sim.HitTarget = 6;
             }
         }
-        public void RollToHit(FightSimulation sim)
+        public void RollToHit(WeaponSimulation sim)
         {
             sim.ToHitDice = new List<Dice>();
-            if (sim.Attacker.Attacks[0].Blast && !sim.Attacker.Attacks[0].Melee)
+            if (sim.Weapon.Blast && !sim.Weapon.Melee)
             {
                 sim.BlastBonus = sim.Defender.ModelCount / 5;
             }
-            sim.AttackNumber = sim.Attacker.Attacks[0].Attacks * sim.Attacker.Attacks[0].WeaponsInUnit;
+            sim.AttackNumber = sim.Weapon.Attacks * sim.Weapon.WeaponsInUnit;
             if (sim.AttackDice.Count != 0)
             {
                 //currently doesn't account for "per model" just a flat equation, so 1d6 +1 with 10 models must be written as 10d6 + 10
-                sim.AttackNumber = sim.AttackDice.Sum(d => d.Result) + (sim.Attacker.Attacks[0].VariableAttackDiceConstant * sim.Attacker.Attacks[0].WeaponsInUnit);
-                if (sim.Attacker.Attacks[0].Blast && !sim.Attacker.Attacks[0].Melee)
+                sim.AttackNumber = sim.AttackDice.Sum(d => d.Result) + (sim.Weapon.VariableAttackDiceConstant * sim.Weapon.WeaponsInUnit);
+                if (sim.Weapon.Blast && !sim.Weapon.Melee)
                 {
-                    sim.AttackNumber += sim.BlastBonus * sim.Attacker.Attacks[0].WeaponsInUnit;
+                    sim.AttackNumber += sim.BlastBonus * sim.Weapon.WeaponsInUnit;
                 }
             }
-            if (sim.Attacker.Attacks[0].Torrent && !sim.Attacker.Attacks[0].Melee)
+            if (sim.Weapon.Torrent && !sim.Weapon.Melee)
             {
-                for (int j = 0; j < sim.Attacker.Attacks[0].WeaponsInUnit; j++)
+                for (int j = 0; j < sim.Weapon.WeaponsInUnit; j++)
                 {
                     for (int i = 0; i < sim.AttackNumber; i++)
                     {
@@ -116,7 +126,7 @@ namespace Snorehammer.Web.Services
             {
                 sim.ToHitDice.Add(new Dice(sim.HitTarget, _random));
             }
-            if (sim.Attacker.Attacks[0].RerollHit)
+            if (sim.Weapon.RerollHit)
             {
 
                 var failed = sim.ToHitDice.Where(d => !d.Success);
@@ -127,7 +137,7 @@ namespace Snorehammer.Web.Services
                     sim.ToHitDice.Add(die);
                 }
             }
-            else if (sim.Attacker.Attacks[0].Reroll1Hit)
+            else if (sim.Weapon.Reroll1Hit)
             {
                 var failed = sim.ToHitDice.Where(d => d.Result == 1);
                 sim.ToHitDice = sim.ToHitDice.Where(d => d.Result >= 1).ToList();
@@ -139,9 +149,9 @@ namespace Snorehammer.Web.Services
             }
 
         }
-        public void DetermineWoundTarget(FightSimulation sim)
+        public void DetermineWoundTarget(WeaponSimulation sim)
         {
-            var strength = sim.Attacker.Attacks[0].Strength;
+            var strength = sim.Weapon.Strength;
             var toughness = sim.Defender.Toughness;
             if (toughness == strength)
             {
@@ -169,11 +179,11 @@ namespace Snorehammer.Web.Services
                 }
             }
         }
-        public void DetermineModdedWoundTarget(FightSimulation sim)
+        public void DetermineModdedWoundTarget(WeaponSimulation sim)
         {
             DetermineWoundTarget(sim);
             sim.ModdedWoundTarget = sim.WoundTarget;
-            if (sim.Attacker.Attacks[0].Plus1Wound || (sim.Attacker.Attacks[0].Lance && sim.Attacker.Attacks[0].Melee))
+            if (sim.Weapon.Plus1Wound || (sim.Weapon.Lance && sim.Weapon.Melee))
             {
                 sim.WoundTarget--;
             }
@@ -190,21 +200,21 @@ namespace Snorehammer.Web.Services
                 sim.WoundTarget = 6;
             }
         }
-        public void RollStrengthStep(FightSimulation sim)
+        public void RollStrengthStep(WeaponSimulation sim)
         {
             DetermineModdedWoundTarget(sim);
             var targetValue = sim.ModdedWoundTarget;
-            if (sim.Attacker.Attacks[0].Sustained)
+            if (sim.Weapon.Sustained)
             {
                 for (int i = 0; i < sim.ToHitDice.Where(d => d.Critical).Count(); i++)
                 {
-                    for (int j = 0; j < sim.Attacker.Attacks[0].SustainAmount; j++)
+                    for (int j = 0; j < sim.Weapon.SustainAmount; j++)
                     {
                         sim.StrengthDice.Add(new Dice(targetValue, _random));
                     }
                 }
             }
-            if (sim.Attacker.Attacks[0].Lethal)
+            if (sim.Weapon.Lethal)
             {
 
                 for (int i = 0; i < sim.ToHitDice.Where(d => d.Critical).Count(); i++)
@@ -221,7 +231,7 @@ namespace Snorehammer.Web.Services
             {
                 sim.StrengthDice.Add(new Dice(targetValue, _random));
             }
-            if (sim.Attacker.Attacks[0].RerollWound)
+            if (sim.Weapon.RerollWound)
             {
                 var failed = sim.StrengthDice.Where(d => !d.Success);
                 sim.StrengthDice = sim.StrengthDice.Where(d => d.Success).ToList();
@@ -231,7 +241,7 @@ namespace Snorehammer.Web.Services
                     sim.StrengthDice.Add(die);
                 }
             }
-            else if (sim.Attacker.Attacks[0].Reroll1Wound)
+            else if (sim.Weapon.Reroll1Wound)
             {
                 var failed = sim.StrengthDice.Where(d => d.Result == 1);
                 sim.StrengthDice = sim.StrengthDice.Where(d => d.Result >= 1).ToList();
@@ -243,11 +253,11 @@ namespace Snorehammer.Web.Services
             }
             sim.Stats.AttacksHit = sim.StrengthDice.Count();
         }
-        public void RollArmorSaves(FightSimulation sim)
+        public void RollArmorSaves(WeaponSimulation sim)
         {
 
             var targetValue = DetermineArmorSave(sim);
-            if (sim.Attacker.Attacks[0].Devastating)
+            if (sim.Weapon.Devastating)
             {
                 for (int i = 0; i < sim.StrengthDice.Where(d => d.Critical).Count(); i++)
                 {
@@ -287,27 +297,27 @@ namespace Snorehammer.Web.Services
                     sim.ArmorDice.Add(die);
                 }
             }
-            if (!sim.Attacker.Attacks[0].IsVariableDamage)
+            if (!sim.Weapon.IsVariableDamage)
             {
 
                 int failedsaves = sim.ArmorDice.Where(d => !d.Success).Count();
-                sim.DamageNumber = failedsaves * sim.Attacker.Attacks[0].Damage;
-                if (sim.Attacker.Attacks[0].Melta && !sim.Attacker.Attacks[0].Melee)
+                sim.DamageNumber = failedsaves * sim.Weapon.Damage;
+                if (sim.Weapon.Melta && !sim.Weapon.Melee)
                 {
-                    sim.DamageNumber += failedsaves * sim.Attacker.Attacks[0].MeltaDamage;
+                    sim.DamageNumber += failedsaves * sim.Weapon.MeltaDamage;
                 }
             }
             sim.Stats.ArmorSavesFailed = sim.ArmorDice.Where(d => !d.Success).Count();
             sim.Stats.WoundsInflicted = sim.ArmorDice.Count();
         }
 
-        public int DetermineArmorSave(FightSimulation sim)
+        public int DetermineArmorSave(WeaponSimulation sim)
         {
-            int moddedSave = sim.Defender.MinimumSave + sim.Attacker.Attacks[0].ArmorPenetration;
+            int moddedSave = sim.Defender.MinimumSave + sim.Weapon.ArmorPenetration;
 
             if (sim.Defender.HasCover)
             {
-                if ((sim.Defender.MinimumSave > 4 && sim.Attacker.Attacks[0].ArmorPenetration == 0) || sim.Attacker.Attacks[0].ArmorPenetration > 0)
+                if ((sim.Defender.MinimumSave >= 4 && sim.Weapon.ArmorPenetration == 0) || sim.Weapon.ArmorPenetration > 0)
                 {
                     moddedSave--;
                 }
@@ -339,26 +349,26 @@ namespace Snorehammer.Web.Services
             sim.ArmorSave = sim.Defender.InvulnerableSave;
             return sim.Defender.InvulnerableSave;
         }
-        public void RollDamageDice(FightSimulation sim)
+        public void RollDamageDice(WeaponSimulation sim)
         {
             sim.WoundDice = new List<Dice>();
             sim.Stats.ArmorSavesFailed = sim.ArmorDice.Where(d => !d.Success).Count();
             for (int i = 0; i < sim.Stats.ArmorSavesFailed; i++)
             {
-                for (int j = 0; j < sim.Attacker.Attacks[0].VariableDamageDiceNumber; j++)
+                for (int j = 0; j < sim.Weapon.VariableDamageDiceNumber; j++)
                 {
-                    sim.WoundDice.Add(new Dice(0, _random, sim.Attacker.Attacks[0].VariableDamageDiceSides));
+                    sim.WoundDice.Add(new Dice(0, _random, sim.Weapon.VariableDamageDiceSides));
                 }
             }
-            sim.DamageNumber = sim.WoundDice.Sum(d => d.Result) + sim.Attacker.Attacks[0].VariableDamageDiceConstant * sim.Stats.ArmorSavesFailed;
-            if (sim.Attacker.Attacks[0].Melta && !sim.Attacker.Attacks[0].Melee)
+            sim.DamageNumber = sim.WoundDice.Sum(d => d.Result) + sim.Weapon.VariableDamageDiceConstant * sim.Stats.ArmorSavesFailed;
+            if (sim.Weapon.Melta && !sim.Weapon.Melee)
             {
-                sim.DamageNumber += sim.Attacker.Attacks[0].MeltaDamage * sim.Stats.ArmorSavesFailed;
+                sim.DamageNumber += sim.Weapon.MeltaDamage * sim.Stats.ArmorSavesFailed;
             }
             sim.Stats.PreFNPDamage = sim.DamageNumber;
 
         }
-        public void RollFeelNoPain(FightSimulation sim)
+        public void RollFeelNoPain(WeaponSimulation sim)
         {
             if (!sim.Defender.FeelNoPain)
             {

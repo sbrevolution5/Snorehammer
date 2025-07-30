@@ -1,0 +1,28 @@
+﻿@using Snorehammer.Web.Components.Simulation
+@using Snorehammer.Web.Components.Simulation.DiceRoller
+@using Snorehammer.Web.Components.Unit
+@using Snorehammer.Web.FrontendModels
+@using Snorehammer.Web.FrontendModels.Simulations
+@using Snorehammer.Web.Services
+@rendermode InteractiveServer
+@if (sim is not null)
+{
+
+    <RadzenCard>
+        @foreach (var weapon in sim.WeaponSimulations)
+        {
+            <WeaponResult sim="weapon"></WeaponResult>
+        }
+        <RadzenCard>
+            <h1>Winner:</h1>
+            <p>@sim.WinnerMessage</p>
+        </RadzenCard>
+    </RadzenCard>
+
+}
+@code {
+    [Parameter]
+    public FightSimulation sim { get; set; }
+    private bool FightComplete { get; set; } = false;
+    private bool simulating { get; set; } = true;
+}

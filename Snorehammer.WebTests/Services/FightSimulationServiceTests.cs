@@ -12,12 +12,24 @@ namespace Snorehammer.Web.Services.Tests
         private FightSimulationService service;
         private UnitProfile attacker;
         private UnitProfile unitProfile;
+        private AttackProfile weapon;
+        private WeaponSimulation weaponSim;
 
         private FightSimulation sim;
 
         public virtual void Setup()
         {
             service = new FightSimulationService();
+            weapon = new AttackProfile()
+            {
+                ArmorPenetration = 0,
+                Attacks = 2,
+                Damage = 1,
+                Id = 1,
+                Name = "bolt Rifle",
+                Skill = 3,
+                Strength = 4
+            };
             attacker = new UnitProfile()
             {
                 Id = 1,
@@ -29,16 +41,7 @@ namespace Snorehammer.Web.Services.Tests
                 Wounds = 2,
                 Attacks = new List<AttackProfile>() {
 
-            new AttackProfile()
-            {
-                ArmorPenetration = 0,
-                Attacks = 2,
-                Damage = 1,
-                Id = 1,
-                Name = "bolt Rifle",
-                Skill = 3,
-                Strength = 4
-            } 
+                    weapon
                 }
             };
             unitProfile = new UnitProfile()
@@ -54,6 +57,15 @@ namespace Snorehammer.Web.Services.Tests
             sim = new FightSimulation()
             {
                 Attacker = attacker,
+                Defender = unitProfile,
+                WeaponSimulations = new List<WeaponSimulation>()
+                {
+                    weaponSim
+                }
+            };
+            weaponSim = new WeaponSimulation()
+            {
+                Weapon = weapon,
                 Defender = unitProfile
             };
         }
@@ -83,10 +95,10 @@ namespace Snorehammer.Web.Services.Tests
             {
                 //arrange
                 //act
-                service.DetermineArmorSave(sim);
+                service.DetermineArmorSave(weaponSim);
                 //assert
-                sim.CoverIgnored.Should().BeFalse();
-                sim.ArmorSave.Should().Be(3);
+                weaponSim.CoverIgnored.Should().BeFalse();
+                weaponSim.ArmorSave.Should().Be(3);
             }
             [Test]
             public void CalculateArmorSaveMinusOne()
@@ -94,10 +106,10 @@ namespace Snorehammer.Web.Services.Tests
                 //arrange
                 sim.Attacker.Attacks[0].ArmorPenetration = 1;
                 //act
-                service.DetermineArmorSave(sim);
+                service.DetermineArmorSave(weaponSim);
                 //assert
-                sim.CoverIgnored.Should().BeFalse();
-                sim.ArmorSave.Should().Be(4);
+                weaponSim.CoverIgnored.Should().BeFalse();
+                weaponSim.ArmorSave.Should().Be(4);
             }
             [Test]
             public void CalculateArmorSaveUsesInvulnerable()
@@ -106,10 +118,10 @@ namespace Snorehammer.Web.Services.Tests
                 sim.Attacker.Attacks[0].ArmorPenetration = 4;
                 sim.Defender.InvulnerableSave = 4;
                 //act
-                service.DetermineArmorSave(sim);
+                service.DetermineArmorSave(weaponSim);
                 //assert
-                sim.CoverIgnored.Should().BeFalse();
-                sim.ArmorSave.Should().Be(4);
+                weaponSim.CoverIgnored.Should().BeFalse();
+                weaponSim.ArmorSave.Should().Be(4);
             }
             [Test]
             public void CalculateArmorSaveUsesCover()
@@ -118,9 +130,9 @@ namespace Snorehammer.Web.Services.Tests
                 sim.Attacker.Attacks[0].ArmorPenetration = 1;
                 sim.Defender.HasCover = true;
                 //act
-                var res = service.DetermineArmorSave(sim);
+                var res = service.DetermineArmorSave(weaponSim);
                 //assert
-                sim.CoverIgnored.Should().BeFalse();
+                weaponSim.CoverIgnored.Should().BeFalse();
                 res.Should().Be(3);
             }
             [Test]
@@ -130,24 +142,24 @@ namespace Snorehammer.Web.Services.Tests
                 sim.Attacker.Attacks[0].ArmorPenetration = 0;
                 sim.Defender.HasCover = true;
                 //act
-                var res = service.DetermineArmorSave(sim);
+                var res = service.DetermineArmorSave(weaponSim);
                 //assert
-                sim.CoverIgnored.Should().BeTrue();
-                sim.ArmorSave.Should().Be(3);
+                weaponSim.CoverIgnored.Should().BeTrue();
+                weaponSim.ArmorSave.Should().Be(3);
                 res.Should().Be(3);
             }
             [Test]
             public void CalculateArmorSaveIgnoresCoverBecauseInvulnerable()
             {
                 //arrange
-                sim.Attacker.Attacks[0].ArmorPenetration = 3;
-                sim.Defender.InvulnerableSave = 4;
-                sim.Defender.HasCover = true;
+                weaponSim.Weapon.ArmorPenetration = 3;
+                weaponSim.Defender.InvulnerableSave = 4;
+                weaponSim.Defender.HasCover = true;
                 //act
-                service.DetermineArmorSave(sim);
+                service.DetermineArmorSave(weaponSim);
                 //assert
-                sim.CoverIgnored.Should().BeTrue();
-                sim.ArmorSave.Should().Be(4);
+                weaponSim.CoverIgnored.Should().BeTrue();
+                weaponSim.ArmorSave.Should().Be(4);
             }
 
             [TestClass]
@@ -432,7 +444,7 @@ namespace Snorehammer.Web.Services.Tests
                     service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
-                    sim.Stats.ModelsDestroyed.Should().Be(1);
+                    weaponSim.Stats.ModelsDestroyed.Should().Be(1);
                 }
                 [Test]
                 public void SpilloverUsesFeelNoPainRolls()
@@ -462,7 +474,7 @@ namespace Snorehammer.Web.Services.Tests
                     service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
-                    sim.Stats.ModelsDestroyed.Should().Be(1);
+                    weaponSim.Stats.ModelsDestroyed.Should().Be(1);
                 }
                 [Test]
                 public void SpilloverUsesVariableDamageRolls()
@@ -488,7 +500,7 @@ namespace Snorehammer.Web.Services.Tests
                     service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
-                    sim.Stats.ModelsDestroyed.Should().Be(1);
+                    weaponSim.Stats.ModelsDestroyed.Should().Be(1);
                 }
                 [Test]
                 public void SpilloverUsesVariableDamageAndFeelNoPainRolls()
@@ -527,8 +539,8 @@ namespace Snorehammer.Web.Services.Tests
                     service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
-                    sim.Stats.ModelsDestroyed.Should().Be(1);
-                    sim.Stats.WoundsInflicted.Should().Be(5);
+                    weaponSim.Stats.ModelsDestroyed.Should().Be(1);
+                    weaponSim.Stats.WoundsInflicted.Should().Be(5);
                 }
             }
         }

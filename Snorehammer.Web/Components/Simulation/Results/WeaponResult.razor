@@ -9,44 +9,44 @@
     @if (sim is not null)
     {
         <RadzenCard Variant="Variant.Text">
-            <h1>Results for @sim.Attacker.Attacks[0].Name</h1>
+            <h1>Results for @sim.Weapon.Name</h1>
             <br />
 
 
 
-            @if (sim.Attacker.Attacks[0].IsVariableAttacks)
+            @if (sim.Weapon.IsVariableAttacks)
             {
                 <DicePanel sim="@sim"
                            Title="Number of Attacks"
-                           RollString1=@($"Rolling: {sim.Attacker.Attacks[0].VariableAttackDiceNumber} d{sim.Attacker.Attacks[0].VariableAttackDiceSides} + {sim.Attacker.Attacks[0].VariableAttackDiceConstant}" + (sim.BlastBonus > 0 ? $" + {@sim.BlastBonus}" : "") + $" x {sim.Attacker.Attacks[0].WeaponsInUnit}")
+                           RollString1=@($"Rolling: {sim.Weapon.VariableAttackDiceNumber} d{sim.Weapon.VariableAttackDiceSides} + {sim.Weapon.VariableAttackDiceConstant}" + (sim.BlastBonus > 0 ? $" + {@sim.BlastBonus}" : "") + $" x {sim.Weapon.WeaponsInUnit}")
                            RollString2=@($"Total: {sim.AttackNumber}")
                            DiceList="@sim.AttackDice" />
             }
             <DicePanel sim="@sim"
                        Title="To Hit Roll"
-                       RollString1=@($"Target: {sim.Attacker.Attacks[0].Skill}")
+                       RollString1=@($"Target: {sim.Weapon.Skill}")
                        RollString2=@($"Rolling {sim.AttackNumber}")
                        DiceList="@sim.ToHitDice"
-                       CriticalMatters="@(sim.Attacker.Attacks[0].Sustained || sim.Attacker.Attacks[0].Lethal)" />
+                       CriticalMatters="@(sim.Weapon.Sustained || sim.Weapon.Lethal)" />
             <DicePanel sim="@sim"
                        Title="To Wound Roll"
                        RollString1=@($"Target: {(sim.ModdedWoundTarget > 0 ? sim.ModdedWoundTarget :sim.WoundTarget)}")
                        RollString2=@($"Rolling: {sim.StrengthDice.Count}")
                        DiceList="@sim.StrengthDice"
-                       CriticalMatters="@(sim.Attacker.Attacks[0].Devastating)" />
+                       CriticalMatters="@(sim.Weapon.Devastating)" />
             <DicePanel sim="@sim"
                        Title="To Wound Roll"
                        RollString1=@($"Target: {sim.ArmorSave}")
                        RollString2=@($"Rolling: {sim.ArmorDice.Count}")
                        DiceList="@sim.ArmorDice" />
 
-            @if (sim.Attacker.Attacks[0].IsVariableDamage)
+            @if (sim.Weapon.IsVariableDamage)
             {
 
 
                 <DicePanel sim="@sim"
                            Title="Damage Roll"
-                           RollString1=@($"Rolling: {sim.Attacker.Attacks[0].VariableDamageDiceNumber} d{sim.Attacker.Attacks[0].VariableDamageDiceSides} + {sim.Attacker.Attacks[0].VariableDamageDiceConstant}" + (sim.Attacker.Attacks[0].Melta ? $" + {@sim.Attacker.Attacks[0].MeltaDamage}" : ""))
+                           RollString1=@($"Rolling: {sim.Weapon.VariableDamageDiceNumber} d{sim.Weapon.VariableDamageDiceSides} + {sim.Weapon.VariableDamageDiceConstant}" + (sim.Weapon.Melta ? $" + {@sim.Weapon.MeltaDamage}" : ""))
                            DiceList="@sim.WoundDice" />
             }
             @if (sim.Defender.FeelNoPain)
@@ -58,44 +58,14 @@
                            DiceList="@sim.FeelNoPainDice" />
             }
         </RadzenCard>
-        <RadzenCard>
-
-            <h1>Winner:</h1>
-            <p>@sim.WinnerMessage</p>
-        </RadzenCard>
-        <RadzenButton Click=@(() => FightUnits()) Text="Fight Again" ButtonStyle="ButtonStyle.Base" />
-    }
-    else if (!FightComplete && !simulating)
-    {
-        <h1>LOADING</h1>
-
+       
     }
 </RadzenCard>
 
 @code {
     [Parameter]
-    public FightSimulation sim { get; set; }
+    public WeaponSimulation sim { get; set; }
     private bool FightComplete { get; set; } = false;
     private bool simulating { get; set; } = true;
-    private FightSimulationService fightSimulationService = new FightSimulationService();
-    private async Task FightUnits()
-    {
-        await ResetDice();
-        simulating = true;
-        fightSimulationService.SimulateFight(sim);
-        FightComplete = true;
-        simulating = false;
-    }
-    private async Task ResetDice()
-    {
-        FightComplete = false;
-        sim = new FightSimulation()
-        {
-            Attacker = sim.Attacker,
-            Defender = sim.Defender
-        };
-        simulating = false;
-        StateHasChanged();
-        await Task.Yield();
-    }
 }
+
