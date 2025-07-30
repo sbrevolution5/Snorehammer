@@ -83,24 +83,7 @@
     }
 </RadzenCardGroup>
 <RadzenButton Click=@(() => FightUnits()) Text="Fight all Units" ButtonStyle="ButtonStyle.Primary" />
-<RadzenCard>
-    @if (ShowTable)
-    {
-
-        @if (comparison.ComparingAttackers)
-        {
-            <ResultsTable sim=@comparison.Simulation1 sim2=@comparison.AlternateAttackSimulation />
-        }
-        else if (comparison.ComparingDefenders)
-        {
-            <ResultsTable sim=@comparison.Simulation1 sim2=@comparison.AlternateDefenseSimulation />
-        }
-        else
-        {
-            <ResultsTable sim=@comparison.Simulation1 />
-        }
-    }
-</RadzenCard>
+<TableDisplay comparison="comparison" />
 @code {
     public Comparison comparison { get; set; }
     public bool ShowTable { get; set; } = true;

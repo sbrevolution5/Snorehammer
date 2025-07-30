@@ -1,0 +1,43 @@
+@using Snorehammer.Web.Components.Simulation.Results
+@using Snorehammer.Web.Components.Unit
+@using Snorehammer.Web.FrontendModels
+@using Snorehammer.Web.FrontendModels.Profiles
+@using Snorehammer.Web.FrontendModels.Simulations
+@using Snorehammer.Web.Services
+
+<RadzenCard>
+    @if (comparison.Simulation1.Rounds == 1)
+    {
+        @if (comparison.ComparingAttackers)
+        {
+            <ResultsTable sim1MultiStats=@comparison.Simulation1.Stats sim2MultiStats=@comparison.AlternateAttackSimulation.Stats />
+        }
+        else if (comparison.ComparingDefenders)
+        {
+            <ResultsTable sim1MultiStats=@comparison.Simulation1.Stats sim2MultiStats=@comparison.AlternateDefenseSimulation.Stats />
+        }
+        else
+        {
+            <ResultsTable sim1MultiStats=@comparison.Simulation1.Stats />
+        }
+    }
+    else
+    {
+        @if (comparison.ComparingAttackers)
+        {
+            <ResultsTable sim1MultiStats=@comparison.Simulation1.Stats sim2MultiStats=@comparison.AlternateAttackSimulation.Stats multiSim=true />
+        }
+        else if (comparison.ComparingDefenders)
+        {
+            <ResultsTable sim1MultiStats=@comparison.Simulation1.Stats sim2MultiStats=@comparison.AlternateDefenseSimulation.Stats multiSim=true />
+        }
+        else
+        {
+            <ResultsTable sim1MultiStats=@comparison.Simulation1.Stats multiSim=true />
+        }
+    }
+</RadzenCard>
+@code {
+    [Parameter]
+    public Comparison comparison { get; set; }
+}
