@@ -35,6 +35,10 @@ namespace Snorehammer.Web.FrontendModels.Simulations
             Stats.LessThanHalf = false;
             Stats.UnitDamaged = false;
             Stats.LostAModel = false;
+            foreach (var simulation in WeaponSimulations)
+            {
+                simulation.Reset();
+            }
         }
 
     }

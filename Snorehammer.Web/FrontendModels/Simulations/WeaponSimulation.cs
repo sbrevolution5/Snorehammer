@@ -22,5 +22,18 @@ namespace Snorehammer.Web.FrontendModels.Simulations
         public int BlastBonus = 0;
         public bool CoverIgnored { get; set; } = false;
         public FightStats Stats { get; set; } = new FightStats();
+        public void Reset()
+        {
+            AttackDice = new List<Dice>();
+            ArmorDice = new List<Dice>();
+            ToHitDice = new List<Dice>();
+            StrengthDice = new List<Dice>();
+            WoundDice = new List<Dice>();
+            FeelNoPainDice = new List<Dice>();
+            Stats.UnitEntirelyDestroyed = false;
+            Stats.LessThanHalf = false;
+            Stats.UnitDamaged = false;
+            Stats.LostAModel = false;
+        }
     }
 }
