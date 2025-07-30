@@ -29,7 +29,6 @@ namespace Snorehammer.Web.FrontendModels.Simulations
             Stats.LessThanHalf = false;
             Stats.UnitDamaged = false;
             Stats.LostAModel = false;
-            WeaponSimulations.Clear();
         }
 
     }

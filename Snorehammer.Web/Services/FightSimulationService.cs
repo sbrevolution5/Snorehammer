@@ -25,6 +25,7 @@ namespace Snorehammer.Web.Services
         {
             foreach (var sim in multiSim.FightSimulations)
             {
+                sim.WeaponSimulations.Clear();
                 foreach (var weapon in sim.Attacker.Attacks)
                 {
                     sim.WeaponSimulations.Add(new WeaponSimulation((AttackProfile)weapon.Clone(), (UnitProfile)sim.Defender.Clone()));
