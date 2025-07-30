@@ -1,6 +1,7 @@
 @using Snorehammer.Web.Components.Simulation.DiceRoller
 @using Snorehammer.Web.FrontendModels
 @using Snorehammer.Web.FrontendModels.Simulations
+@using Snorehammer.Web.FrontendModels.Stats
 @using Snorehammer.Web.Services
 
 <RadzenTable GridLines="DataGridGridLines.Both" AllowAlternatingRows="true">
@@ -261,9 +262,13 @@
 </RadzenTable>
 @code{
     [Parameter]
-    public MultiFightSimulation sim { get; set; }
+    public FightStats sim1SingleStats { get; set; } = null;
     [Parameter]
-    public MultiFightSimulation sim2 { get; set; } = null;
+    public FightStats sim2SingleStats { get; set; } = null;
+    [Parameter]
+    public MultiFightStats sim1MultiStats { get; set; } = null;
+    [Parameter]
+    public MultiFightStats sim2MultiStats { get; set; } = null;
     private string ConditionalClassList(float thisSim, float OtherSim)
     {
         if (thisSim>OtherSim)
