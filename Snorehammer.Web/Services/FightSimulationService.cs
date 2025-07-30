@@ -1,4 +1,5 @@
 ﻿using Snorehammer.Web.FrontendModels;
+using Snorehammer.Web.FrontendModels.Profiles;
 using Snorehammer.Web.FrontendModels.Simulations;
 using System.Text;
 
@@ -24,6 +25,10 @@ namespace Snorehammer.Web.Services
         {
             foreach (var sim in multiSim.FightSimulations)
             {
+                foreach (var weapon in sim.Attacker.Attacks)
+                {
+                    sim.WeaponSimulations.Add(new WeaponSimulation((AttackProfile)weapon.Clone(), (UnitProfile)sim.Defender.Clone()));
+                }
                 SimulateFight(sim);
             }
             multiSim.Stats.SetAverages(multiSim.FightSimulations);

@@ -5,6 +5,11 @@ namespace Snorehammer.Web.FrontendModels.Simulations
 {
     public class WeaponSimulation
     {
+        public WeaponSimulation(AttackProfile weapon, UnitProfile defender)
+        {
+            Weapon = weapon;
+            Defender = defender;
+        }
         public AttackProfile Weapon { get; set; }
         public UnitProfile Defender { get; set; }
         public List<Dice> AttackDice { get; set; } = new List<Dice>();
