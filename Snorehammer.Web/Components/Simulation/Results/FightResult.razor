@@ -5,18 +5,21 @@
 @using Snorehammer.Web.FrontendModels.Simulations
 @using Snorehammer.Web.Services
 @rendermode InteractiveServer
-<RadzenCard>
-    @foreach (var weapon in sim.WeaponSimulations)
-    {
-        <WeaponResult sim="weapon"></WeaponResult>
-    }
+@if (sim is not null)
+{
+
     <RadzenCard>
-
-        <h1>Winner:</h1>
-        <p>@sim.WinnerMessage</p>
+        @foreach (var weapon in sim.WeaponSimulations)
+        {
+            <WeaponResult sim="weapon"></WeaponResult>
+        }
+        <RadzenCard>
+            <h1>Winner:</h1>
+            <p>@sim.WinnerMessage</p>
+        </RadzenCard>
     </RadzenCard>
-</RadzenCard>
 
+}
 @code {
     [Parameter]
     public FightSimulation sim { get; set; }
