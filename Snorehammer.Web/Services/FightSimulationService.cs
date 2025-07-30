@@ -385,11 +385,13 @@ namespace Snorehammer.Web.Services
                 }
                 int fnpUnused = sim.Stats.FeelNoPainMade;
                 sim.Stats.SingleModelRemainingWounds = sim.Defender.Wounds;
+                //loops through models
                 while (sim.Stats.ModelsDestroyed < sim.Defender.ModelCount && AttacksApplied < sim.Stats.ArmorSavesFailed)
                 {
                     if (!sim.Attacker.Attacks[0].IsVariableDamage)
                     {
                         sim.Stats.SingleModelRemainingWounds = sim.Defender.Wounds;
+                        //loops through damage on individual model
                         while (sim.Stats.SingleModelRemainingWounds > 0 && AttacksApplied < sim.Stats.ArmorSavesFailed)
                         {
                             int fnpBlock = 0;
@@ -422,7 +424,6 @@ namespace Snorehammer.Web.Services
                         while (sim.Stats.SingleModelRemainingWounds > 0 && AttacksApplied < sim.Stats.ArmorSavesFailed)
                         {
                             int fnpBlock = 0;
-                            AttacksApplied++;
                             //if we have any unused feelnopains absorb damage with them.
                             if (fnpUnused > 0)
                             {
@@ -452,6 +453,7 @@ namespace Snorehammer.Web.Services
                                 sim.Stats.ModelsDestroyed++;
                             }
                             DamageDiceCopy.Remove(DamageDiceCopy.First());
+                            AttacksApplied++;
                         }
                     }
 
@@ -503,7 +505,7 @@ namespace Snorehammer.Web.Services
                 {
                     res.Append($"{sim.Stats.ModelsDestroyed} out of {sim.Defender.ModelCount} models were destroyed.\n");
 
-                    if (sim.Stats.SingleModelRemainingWounds >= 0)
+                    if (sim.Stats.SingleModelRemainingWounds > 0)
                     {
                         res.Append($"A remaining model was inflicted {sim.Defender.Wounds - sim.Stats.SingleModelRemainingWounds} wounds, leaving it with {sim.Stats.SingleModelRemainingWounds} remaining.\n");
                     }
