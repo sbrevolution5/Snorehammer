@@ -419,7 +419,6 @@ namespace Snorehammer.Web.Services
                     }
                     else
                     {
-                        //uses variable damage stats
                         sim.Stats.SingleModelRemainingWounds = sim.Defender.Wounds;
                         while (sim.Stats.SingleModelRemainingWounds > 0 && AttacksApplied < sim.Stats.ArmorSavesFailed)
                         {
