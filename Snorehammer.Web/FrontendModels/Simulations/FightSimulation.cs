@@ -24,7 +24,6 @@ namespace Snorehammer.Web.FrontendModels.Simulations
         public string WinnerMessage { get; set; } = "";
         public List<WeaponSimulation> WeaponSimulations { get; set; } = new List<WeaponSimulation>();
         public FightStats Stats { get; set; } = new FightStats();
-        public List<FightStats> WeaponStats { get; set; } = new List<FightStats>();
         public void Reset() {
             AttackDice = new List<Dice>();
             ArmorDice = new List<Dice>();
