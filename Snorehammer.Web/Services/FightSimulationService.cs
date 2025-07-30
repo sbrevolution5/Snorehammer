@@ -27,9 +27,11 @@ namespace Snorehammer.Web.Services
             foreach (var sim in multiSim.FightSimulations)
             {
                 sim.WeaponSimulations.Clear();
+                var i = 0;
                 foreach (var weapon in sim.Attacker.Attacks)
                 {
-                    sim.WeaponSimulations.Add(new WeaponSimulation((AttackProfile)weapon.Clone(), (UnitProfile)sim.Defender.Clone()));
+                    sim.WeaponSimulations.Add(new WeaponSimulation((AttackProfile)weapon.Clone(), (UnitProfile)sim.Defender.Clone(),i));
+                    i++;
                 }
                 SimulateFight(sim);
             }
@@ -39,7 +41,7 @@ namespace Snorehammer.Web.Services
             foreach (var weapon in multiSim.Attacker.Attacks)
             {
                 //need to combine the fights per weapon into a list with only that weapon.  
-                var singleWeaponList = multiSim.FightSimulations.SelectMany(f => f.WeaponSimulations.Where(w => w.Weapon == weapon));
+                var singleWeaponList = multiSim.FightSimulations.SelectMany(f => f.WeaponSimulations.Where(w => w.Weapon.Id == weapon.Id));
                 //then add a per weapon stats object for each weapon
                 var multiStats = new MultiFightStats();
                 //then run set averages on each list and add to overall simulation
