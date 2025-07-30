@@ -56,8 +56,8 @@ namespace Snorehammer.Web.Services
                 {
                     RollFeelNoPain(weapon);
                 }
-                DealDamage(sim);
             }
+            DealDamage(sim);
             sim.WinnerMessage = GenerateWinnerMessage(sim);
         }
         public void RollAttackDice(WeaponSimulation sim)
