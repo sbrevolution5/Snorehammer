@@ -263,6 +263,9 @@ namespace Snorehammer.Web.Services.Tests
                     }
                     sim.ArmorDice = diceList;
                     sim.DamageNumber = 20;
+                    sim.Stats.ArmorSavesFailed = 20;
+                    sim.Stats.PreFNPDamage = 20;
+                    sim.Stats.ModelsDestroyed = 10;
                     //act
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
