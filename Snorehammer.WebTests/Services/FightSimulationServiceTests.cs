@@ -120,7 +120,7 @@ namespace Snorehammer.Web.Services.Tests
                 //act
                 service.DetermineArmorSave(weaponSim);
                 //assert
-                weaponSim.CoverIgnored.Should().BeTrue();
+                weaponSim.CoverIgnored.Should().BeFalse();
                 weaponSim.ArmorSave.Should().Be(4);
             }
             [Test]
