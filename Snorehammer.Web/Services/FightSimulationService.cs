@@ -383,107 +383,110 @@ namespace Snorehammer.Web.Services
         }
         public void DealDamage(FightSimulation sim)
         {
-            if (sim.DamageNumber >= 1)
+            foreach (var weaponSim in sim.WeaponSimulations)
             {
-                sim.Stats.UnitDamaged = true;
-                int AttacksApplied = 0;
-                var DamageDiceCopy = new List<Dice>();
-                if (sim.Attacker.Attacks[0].IsVariableDamage)
+                if (weaponSim.DamageNumber >= 1)
                 {
-                    DamageDiceCopy.AddRange(sim.WoundDice);
-                }
-                int fnpUnused = sim.Stats.FeelNoPainMade;
-                sim.Stats.SingleModelRemainingWounds = sim.Defender.Wounds;
-                //loops through models
-                while (sim.Stats.ModelsDestroyed < sim.Defender.ModelCount && AttacksApplied < sim.Stats.ArmorSavesFailed)
-                {
-                    if (!sim.Attacker.Attacks[0].IsVariableDamage)
+                    weaponSim.Stats.UnitDamaged = true;
+                    int AttacksApplied = 0;
+                    var DamageDiceCopy = new List<Dice>();
+                    if (weaponSim.Weapon.IsVariableDamage)
                     {
-                        sim.Stats.SingleModelRemainingWounds = sim.Defender.Wounds;
-                        //loops through damage on individual model
-                        while (sim.Stats.SingleModelRemainingWounds > 0 && AttacksApplied < sim.Stats.ArmorSavesFailed)
-                        {
-                            int fnpBlock = 0;
-                            AttacksApplied++;
-                            //if we have any unused feelnopains absorb damage with them.
-                            if (fnpUnused > 0)
-                            {
-                                //set fnpBlock to either the damage done, or the remaining fnp available
-                                if (fnpUnused < sim.Stats.SingleModelRemainingWounds)
-                                {
-                                    fnpBlock = fnpUnused;
-                                }
-                                else
-                                {
-                                    fnpBlock = sim.Attacker.Attacks[0].Damage;
-                                }
-                                fnpUnused -= fnpBlock;
-                            }
-                            sim.Stats.SingleModelRemainingWounds -= sim.Attacker.Attacks[0].Damage - fnpBlock;
-                            if (sim.Stats.SingleModelRemainingWounds <= 0)
-                            {
-                                sim.Stats.ModelsDestroyed++;
-                            }
-                        }
+                        DamageDiceCopy.AddRange(weaponSim.WoundDice);
                     }
-                    else
+                    int fnpUnused = weaponSim.Stats.FeelNoPainMade;
+                    weaponSim.Stats.SingleModelRemainingWounds = weaponSim.Defender.Wounds;
+                    //loops through models
+                    while (weaponSim.Stats.ModelsDestroyed < weaponSim.Defender.ModelCount && AttacksApplied < weaponSim.Stats.ArmorSavesFailed)
                     {
-                        sim.Stats.SingleModelRemainingWounds = sim.Defender.Wounds;
-                        while (sim.Stats.SingleModelRemainingWounds > 0 && AttacksApplied < sim.Stats.ArmorSavesFailed)
+                        if (!weaponSim.Weapon.IsVariableDamage)
                         {
-                            int fnpBlock = 0;
-                            //if we have any unused feelnopains absorb damage with them.
-                            if (fnpUnused > 0)
+                            weaponSim.Stats.SingleModelRemainingWounds = weaponSim.Defender.Wounds;
+                            //loops through damage on individual model
+                            while (weaponSim.Stats.SingleModelRemainingWounds > 0 && AttacksApplied < weaponSim.Stats.ArmorSavesFailed)
                             {
-                                //set fnpBlock to either the damage done, or the remaining fnp available
-                                if (fnpUnused < sim.Stats.SingleModelRemainingWounds)
+                                int fnpBlock = 0;
+                                AttacksApplied++;
+                                //if we have any unused feelnopains absorb damage with them.
+                                if (fnpUnused > 0)
                                 {
-                                    fnpBlock = fnpUnused;
-                                }
-                                else
-                                {
-                                    fnpBlock = DamageDiceCopy.First().Result + sim.Attacker.Attacks[0].VariableDamageDiceConstant;
-                                    if (sim.Attacker.Attacks[0].Melta && !sim.Attacker.Attacks[0].Melee)
+                                    //set fnpBlock to either the damage done, or the remaining fnp available
+                                    if (fnpUnused < weaponSim.Stats.SingleModelRemainingWounds)
                                     {
-                                        fnpBlock += sim.Attacker.Attacks[0].MeltaDamage;
+                                        fnpBlock = fnpUnused;
                                     }
+                                    else
+                                    {
+                                        fnpBlock = weaponSim.Weapon.Damage;
+                                    }
+                                    fnpUnused -= fnpBlock;
                                 }
-                                fnpUnused -= fnpBlock;
+                                weaponSim.Stats.SingleModelRemainingWounds -= weaponSim.Weapon.Damage - fnpBlock;
+                                if (weaponSim.Stats.SingleModelRemainingWounds <= 0)
+                                {
+                                    weaponSim.Stats.ModelsDestroyed++;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            weaponSim.Stats.SingleModelRemainingWounds = weaponSim.Defender.Wounds;
+                            while (weaponSim.Stats.SingleModelRemainingWounds > 0 && AttacksApplied < weaponSim.Stats.ArmorSavesFailed)
+                            {
+                                int fnpBlock = 0;
+                                //if we have any unused feelnopains absorb damage with them.
+                                if (fnpUnused > 0)
+                                {
+                                    //set fnpBlock to either the damage done, or the remaining fnp available
+                                    if (fnpUnused < weaponSim.Stats.SingleModelRemainingWounds)
+                                    {
+                                        fnpBlock = fnpUnused;
+                                    }
+                                    else
+                                    {
+                                        fnpBlock = DamageDiceCopy.First().Result + weaponSim.Weapon.VariableDamageDiceConstant;
+                                        if (weaponSim.Weapon.Melta && !weaponSim.Weapon.Melee)
+                                        {
+                                            fnpBlock += weaponSim.Weapon.MeltaDamage;
+                                        }
+                                    }
+                                    fnpUnused -= fnpBlock;
 
+                                }
+                                weaponSim.Stats.SingleModelRemainingWounds -= DamageDiceCopy.First().Result + weaponSim.Weapon.VariableDamageDiceConstant - fnpBlock;
+                                if (weaponSim.Weapon.Melta && !weaponSim.Weapon.Melee)
+                                {
+                                    weaponSim.Stats.SingleModelRemainingWounds -= weaponSim.Weapon.MeltaDamage;
+                                }
+                                if (weaponSim.Stats.SingleModelRemainingWounds <= 0)
+                                {
+                                    weaponSim.Stats.ModelsDestroyed++;
+                                }
+                                DamageDiceCopy.Remove(DamageDiceCopy.First());
+                                AttacksApplied++;
                             }
-                            sim.Stats.SingleModelRemainingWounds -= DamageDiceCopy.First().Result + sim.Attacker.Attacks[0].VariableDamageDiceConstant - fnpBlock;
-                            if (sim.Attacker.Attacks[0].Melta && !sim.Attacker.Attacks[0].Melee)
-                            {
-                                sim.Stats.SingleModelRemainingWounds -= sim.Attacker.Attacks[0].MeltaDamage;
-                            }
-                            if (sim.Stats.SingleModelRemainingWounds <= 0)
-                            {
-                                sim.Stats.ModelsDestroyed++;
-                            }
-                            DamageDiceCopy.Remove(DamageDiceCopy.First());
-                            AttacksApplied++;
+                        }
+
+                    }
+                    if (weaponSim.Stats.ModelsDestroyed >= weaponSim.Defender.ModelCount)
+                    {
+                        weaponSim.Stats.UnitEntirelyDestroyed = true;
+                    }
+                    if (weaponSim.Defender.ModelCount > 1)
+                    {
+                        if (weaponSim.Stats.ModelsDestroyed > 0)
+                        {
+                            weaponSim.Stats.LostAModel = true;
+                        }
+                        if (weaponSim.Stats.ModelsDestroyed > weaponSim.Defender.ModelCount / 2)
+                        {
+                            weaponSim.Stats.LessThanHalf = true;
                         }
                     }
-
-                }
-                if (sim.Stats.ModelsDestroyed >= sim.Defender.ModelCount)
-                {
-                    sim.Stats.UnitEntirelyDestroyed = true;
-                }
-                if (sim.Defender.ModelCount > 1)
-                {
-                    if (sim.Stats.ModelsDestroyed > 0)
+                    else if (weaponSim.Defender.Wounds - weaponSim.DamageNumber < weaponSim.Defender.Wounds / 2)
                     {
-                        sim.Stats.LostAModel = true;
+                        weaponSim.Stats.LessThanHalf = true;
                     }
-                    if (sim.Stats.ModelsDestroyed > sim.Defender.ModelCount / 2)
-                    {
-                        sim.Stats.LessThanHalf = true;
-                    }
-                }
-                else if (sim.Defender.Wounds - sim.DamageNumber < sim.Defender.Wounds / 2)
-                {
-                    sim.Stats.LessThanHalf = true;
                 }
             }
         }
