@@ -63,12 +63,6 @@
             <h1>Winner:</h1>
             <p>@sim.WinnerMessage</p>
         </RadzenCard>
-        <RadzenButton Click=@(() => FightUnits()) Text="Fight Again" ButtonStyle="ButtonStyle.Base" />
-    }
-    else if (!FightComplete && !simulating)
-    {
-        <h1>LOADING</h1>
-
     }
 </RadzenCard>
 
@@ -78,24 +72,4 @@
     private bool FightComplete { get; set; } = false;
     private bool simulating { get; set; } = true;
     private FightSimulationService fightSimulationService = new FightSimulationService();
-    private async Task FightUnits()
-    {
-        await ResetDice();
-        simulating = true;
-        fightSimulationService.SimulateFight(sim);
-        FightComplete = true;
-        simulating = false;
-    }
-    private async Task ResetDice()
-    {
-        FightComplete = false;
-        sim = new FightSimulation()
-        {
-            Attacker = sim.Attacker,
-            Defender = sim.Defender
-        };
-        simulating = false;
-        StateHasChanged();
-        await Task.Yield();
-    }
 }
