@@ -63,11 +63,7 @@ namespace Snorehammer.Web.Services.Tests
                     weaponSim
                 }
             };
-            weaponSim = new WeaponSimulation()
-            {
-                Weapon = weapon,
-                Defender = unitProfile
-            };
+            weaponSim = new WeaponSimulation(weapon, unitProfile);
         }
         public virtual void TearDown()
         {

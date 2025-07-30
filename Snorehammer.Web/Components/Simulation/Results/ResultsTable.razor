@@ -13,7 +13,7 @@
             <RadzenTableHeaderCell>
                 Fight 1
             </RadzenTableHeaderCell>
-            @if (sim2 is not null)
+            @if (sim2SingleStats is not null || sim2MultiStats is not null)
             {
                 <RadzenTableHeaderCell>
                     Fight 2
@@ -26,19 +26,34 @@
             <RadzenTableCell>
                 Attacks Made
             </RadzenTableCell>
-            @if (sim2 is null)
+            @if (sim2SingleStats is not null)
+            {
+                <RadzenTableCell class="@ConditionalClassList(sim1SingleStats.AttackNumber, sim2SingleStats.AttackNumber)">
+                    @sim1SingleStats.AttackNumber
+                </RadzenTableCell>
+                <RadzenTableCell class="@ConditionalClassList(sim2SingleStats.AttackNumber, sim1SingleStats.AttackNumber)">
+                    @sim2SingleStats.AttackNumber
+                </RadzenTableCell>
+            }
+            else if (sim2MultiStats is not null)
+            {
+                <RadzenTableCell class="@ConditionalClassList(sim1MultiStats.AttackNumber, sim2MultiStats.AttackNumber)">
+                    @sim1MultiStats.AttackNumber
+                </RadzenTableCell>
+                <RadzenTableCell class="@ConditionalClassList(sim2MultiStats.AttackNumber, sim1MultiStats.AttackNumber)">
+                    @sim2MultiStats.AttackNumber
+                </RadzenTableCell>
+            }
+            else if (sim1SingleStats is not null)
             {
                 <RadzenTableCell>
-                    @sim.Stats.AttackNumber
+                    @sim1SingleStats.AttackNumber
                 </RadzenTableCell>
             }
             else
             {
-                <RadzenTableCell class="@ConditionalClassList(sim.Stats.AttackNumber, sim2.Stats.AttackNumber)">
-                    @sim.Stats.AttackNumber
-                </RadzenTableCell>
-                <RadzenTableCell class="@ConditionalClassList(sim2.Stats.AttackNumber, sim.Stats.AttackNumber)">
-                    @sim2.Stats.AttackNumber
+                <RadzenTableCell>
+                    @sim1MultiStats.AttackNumber
                 </RadzenTableCell>
             }
         </RadzenTableRow>
@@ -46,19 +61,34 @@
             <RadzenTableCell>
                 Attacks Hit
             </RadzenTableCell>
-            @if (sim2 is null)
+            @if (sim2SingleStats is not null)
+            {
+                <RadzenTableCell class="@ConditionalClassList(sim1SingleStats.AttacksHit, sim2SingleStats.AttacksHit)">
+                    @sim1SingleStats.AttacksHit
+                </RadzenTableCell>
+                <RadzenTableCell class="@ConditionalClassList(sim2SingleStats.AttacksHit, sim1SingleStats.AttacksHit)">
+                    @sim2SingleStats.AttacksHit
+                </RadzenTableCell>
+            }
+            else if (sim2MultiStats is not null)
+            {
+                <RadzenTableCell class="@ConditionalClassList(sim1MultiStats.AttacksHit, sim2MultiStats.AttacksHit)">
+                    @sim1MultiStats.AttacksHit
+                </RadzenTableCell>
+                <RadzenTableCell class="@ConditionalClassList(sim2MultiStats.AttacksHit, sim1MultiStats.AttacksHit)">
+                    @sim2MultiStats.AttacksHit
+                </RadzenTableCell>
+            }
+            else if (sim1SingleStats is not null)
             {
                 <RadzenTableCell>
-                    @sim.Stats.AttacksHit
+                    @sim1SingleStats.AttacksHit
                 </RadzenTableCell>
             }
             else
             {
-                <RadzenTableCell class="@ConditionalClassList(sim.Stats.AttacksHit, sim2.Stats.AttacksHit)">
-                    @sim.Stats.AttacksHit
-                </RadzenTableCell>
-                <RadzenTableCell class="@ConditionalClassList(sim2.Stats.AttacksHit, sim.Stats.AttacksHit)">
-                    @sim2.Stats.AttacksHit
+                <RadzenTableCell>
+                    @sim1MultiStats.AttacksHit
                 </RadzenTableCell>
             }
         </RadzenTableRow>
@@ -66,19 +96,34 @@
             <RadzenTableCell>
                 Wounds inflicted
             </RadzenTableCell>
-            @if (sim2 is null)
+            @if (sim2SingleStats is not null)
+            {
+                <RadzenTableCell class="@ConditionalClassList(sim1SingleStats.WoundsInflicted, sim2SingleStats.WoundsInflicted)">
+                    @sim1SingleStats.WoundsInflicted
+                </RadzenTableCell>
+                <RadzenTableCell class="@ConditionalClassList(sim2SingleStats.WoundsInflicted, sim1SingleStats.WoundsInflicted)">
+                    @sim2SingleStats.WoundsInflicted
+                </RadzenTableCell>
+            }
+            else if (sim2MultiStats is not null)
+            {
+                <RadzenTableCell class="@ConditionalClassList(sim1MultiStats.WoundsInflicted, sim2MultiStats.WoundsInflicted)">
+                    @sim1MultiStats.WoundsInflicted
+                </RadzenTableCell>
+                <RadzenTableCell class="@ConditionalClassList(sim2MultiStats.WoundsInflicted, sim1MultiStats.WoundsInflicted)">
+                    @sim2MultiStats.WoundsInflicted
+                </RadzenTableCell>
+            }
+            else if (sim1SingleStats is not null)
             {
                 <RadzenTableCell>
-                    @sim.Stats.WoundsInflicted
+                    @sim1SingleStats.WoundsInflicted
                 </RadzenTableCell>
             }
             else
             {
-                <RadzenTableCell class="@ConditionalClassList(sim.Stats.WoundsInflicted, sim2.Stats.WoundsInflicted)">
-                    @sim.Stats.WoundsInflicted
-                </RadzenTableCell>
-                <RadzenTableCell class="@ConditionalClassList(sim2.Stats.WoundsInflicted, sim.Stats.WoundsInflicted)">
-                    @sim2.Stats.WoundsInflicted
+                <RadzenTableCell>
+                    @sim1MultiStats.WoundsInflicted
                 </RadzenTableCell>
             }
         </RadzenTableRow>
@@ -86,19 +131,34 @@
             <RadzenTableCell>
                 Armor Saves Failed
             </RadzenTableCell>
-            @if (sim2 is null)
+            @if (sim2SingleStats is not null)
+            {
+                <RadzenTableCell class="@ConditionalClassList(sim1SingleStats.ArmorSavesFailed, sim2SingleStats.ArmorSavesFailed)">
+                    @sim1SingleStats.ArmorSavesFailed
+                </RadzenTableCell>
+                <RadzenTableCell class="@ConditionalClassList(sim2SingleStats.ArmorSavesFailed, sim1SingleStats.ArmorSavesFailed)">
+                    @sim2SingleStats.ArmorSavesFailed
+                </RadzenTableCell>
+            }
+            else if (sim2MultiStats is not null)
+            {
+                <RadzenTableCell class="@ConditionalClassList(sim1MultiStats.ArmorSavesFailed, sim2MultiStats.ArmorSavesFailed)">
+                    @sim1MultiStats.ArmorSavesFailed
+                </RadzenTableCell>
+                <RadzenTableCell class="@ConditionalClassList(sim2MultiStats.ArmorSavesFailed, sim1MultiStats.ArmorSavesFailed)">
+                    @sim2MultiStats.ArmorSavesFailed
+                </RadzenTableCell>
+            }
+            else if (sim1SingleStats is not null)
             {
                 <RadzenTableCell>
-                    @sim.Stats.ArmorSavesFailed
+                    @sim1SingleStats.ArmorSavesFailed
                 </RadzenTableCell>
             }
             else
             {
-                <RadzenTableCell class="@ConditionalClassList(sim.Stats.ArmorSavesFailed, sim2.Stats.ArmorSavesFailed)">
-                    @sim.Stats.ArmorSavesFailed
-                </RadzenTableCell>
-                <RadzenTableCell class="@ConditionalClassList(sim2.Stats.ArmorSavesFailed, sim.Stats.ArmorSavesFailed)">
-                    @sim2.Stats.ArmorSavesFailed
+                <RadzenTableCell>
+                    @sim1MultiStats.ArmorSavesFailed
                 </RadzenTableCell>
             }
         </RadzenTableRow>
@@ -106,19 +166,34 @@
             <RadzenTableCell>
                 Damage Applied
             </RadzenTableCell>
-            @if (sim2 is null)
+            @if (sim2SingleStats is not null)
+            {
+                <RadzenTableCell class="@ConditionalClassList(sim1SingleStats.DamageNumber, sim2SingleStats.DamageNumber)">
+                    @sim1SingleStats.DamageNumber
+                </RadzenTableCell>
+                <RadzenTableCell class="@ConditionalClassList(sim2SingleStats.DamageNumber, sim1SingleStats.DamageNumber)">
+                    @sim2SingleStats.DamageNumber
+                </RadzenTableCell>
+            }
+            else if (sim2MultiStats is not null)
+            {
+                <RadzenTableCell class="@ConditionalClassList(sim1MultiStats.DamageNumber, sim2MultiStats.DamageNumber)">
+                    @sim1MultiStats.DamageNumber
+                </RadzenTableCell>
+                <RadzenTableCell class="@ConditionalClassList(sim2MultiStats.DamageNumber, sim1MultiStats.DamageNumber)">
+                    @sim2MultiStats.DamageNumber
+                </RadzenTableCell>
+            }
+            else if (sim1SingleStats is not null)
             {
                 <RadzenTableCell>
-                    @sim.Stats.DamageNumber
+                    @sim1SingleStats.DamageNumber
                 </RadzenTableCell>
             }
             else
             {
-                <RadzenTableCell class="@ConditionalClassList(sim.Stats.DamageNumber, sim2.Stats.DamageNumber)">
-                    @sim.Stats.DamageNumber
-                </RadzenTableCell>
-                <RadzenTableCell class="@ConditionalClassList(sim2.Stats.DamageNumber, sim.Stats.DamageNumber)">
-                    @sim2.Stats.DamageNumber
+                <RadzenTableCell>
+                    @sim1MultiStats.DamageNumber
                 </RadzenTableCell>
             }
         </RadzenTableRow>
@@ -126,20 +201,34 @@
             <RadzenTableCell>
                 Feel No Pain Successful
             </RadzenTableCell>
-
-            @if (sim2 is null)
+            @if (sim2SingleStats is not null)
+            {
+                <RadzenTableCell class="@ConditionalClassList(sim1SingleStats.FeelNoPainMade, sim2SingleStats.FeelNoPainMade)">
+                    @sim1SingleStats.FeelNoPainMade
+                </RadzenTableCell>
+                <RadzenTableCell class="@ConditionalClassList(sim2SingleStats.FeelNoPainMade, sim1SingleStats.FeelNoPainMade)">
+                    @sim2SingleStats.FeelNoPainMade
+                </RadzenTableCell>
+            }
+            else if (sim2MultiStats is not null)
+            {
+                <RadzenTableCell class="@ConditionalClassList(sim1MultiStats.FeelNoPainMade, sim2MultiStats.FeelNoPainMade)">
+                    @sim1MultiStats.FeelNoPainMade
+                </RadzenTableCell>
+                <RadzenTableCell class="@ConditionalClassList(sim2MultiStats.FeelNoPainMade, sim1MultiStats.FeelNoPainMade)">
+                    @sim2MultiStats.FeelNoPainMade
+                </RadzenTableCell>
+            }
+            else if (sim1SingleStats is not null)
             {
                 <RadzenTableCell>
-                    @sim.Stats.FeelNoPainMade
-                </RadzenTableCell>  
+                    @sim1SingleStats.FeelNoPainMade
+                </RadzenTableCell>
             }
             else
             {
-                <RadzenTableCell class="@ConditionalClassList(sim.Stats.FeelNoPainMade, sim2.Stats.FeelNoPainMade)">
-                    @sim.Stats.FeelNoPainMade
-                </RadzenTableCell>
-                <RadzenTableCell class="@ConditionalClassList(sim2.Stats.FeelNoPainMade, sim.Stats.FeelNoPainMade)">
-                    @sim2.Stats.FeelNoPainMade
+                <RadzenTableCell>
+                    @sim1MultiStats.FeelNoPainMade
                 </RadzenTableCell>
             }
         </RadzenTableRow>
@@ -147,102 +236,121 @@
             <RadzenTableCell>
                 Models Destroyed
             </RadzenTableCell>
-            @if (sim2 is null)
+            @if (sim2SingleStats is not null)
+            {
+                <RadzenTableCell class="@ConditionalClassList(sim1SingleStats.ModelsDestroyed, sim2SingleStats.ModelsDestroyed)">
+                    @sim1SingleStats.ModelsDestroyed
+                </RadzenTableCell>
+                <RadzenTableCell class="@ConditionalClassList(sim2SingleStats.ModelsDestroyed, sim1SingleStats.ModelsDestroyed)">
+                    @sim2SingleStats.ModelsDestroyed
+                </RadzenTableCell>
+            }
+            else if (sim2MultiStats is not null)
+            {
+                <RadzenTableCell class="@ConditionalClassList(sim1MultiStats.ModelsDestroyed, sim2MultiStats.ModelsDestroyed)">
+                    @sim1MultiStats.ModelsDestroyed
+                </RadzenTableCell>
+                <RadzenTableCell class="@ConditionalClassList(sim2MultiStats.ModelsDestroyed, sim1MultiStats.ModelsDestroyed)">
+                    @sim2MultiStats.ModelsDestroyed
+                </RadzenTableCell>
+            }
+            else if (sim1SingleStats is not null)
             {
                 <RadzenTableCell>
-                    @sim.Stats.ModelsDestroyed
+                    @sim1SingleStats.ModelsDestroyed
                 </RadzenTableCell>
             }
             else
             {
-                <RadzenTableCell class="@ConditionalClassList(sim.Stats.ModelsDestroyed, sim2.Stats.ModelsDestroyed)">
-                    @sim.Stats.ModelsDestroyed
-                </RadzenTableCell>
-                <RadzenTableCell class="@ConditionalClassList(sim2.Stats.ModelsDestroyed, sim.Stats.ModelsDestroyed)">
-                    @sim2.Stats.ModelsDestroyed
-                </RadzenTableCell>
-            }
-        </RadzenTableRow>
-        <RadzenTableRow>
-            <RadzenTableCell>
-                Fights Where Unit destroyed
-            </RadzenTableCell>
-            @if (sim2 is null)
-            {
                 <RadzenTableCell>
-                    @sim.Stats.UnitEntirelyDestroyed
-                </RadzenTableCell>
-            }
-            else
-            {
-                <RadzenTableCell class="@ConditionalClassList(sim.Stats.UnitEntirelyDestroyed, sim2.Stats.UnitEntirelyDestroyed)">
-                    @sim.Stats.UnitEntirelyDestroyed
-                </RadzenTableCell>
-                <RadzenTableCell class="@ConditionalClassList(sim2.Stats.UnitEntirelyDestroyed, sim.Stats.UnitEntirelyDestroyed)">
-                    @sim2.Stats.UnitEntirelyDestroyed
+                    @sim1MultiStats.ModelsDestroyed
                 </RadzenTableCell>
             }
         </RadzenTableRow>
-        <RadzenTableRow>
-            <RadzenTableCell>
-                Fights Where Unit Left at Half or less
-            </RadzenTableCell>
-            @if (sim2 is null)
-            {
+        @if (sim1MultiStats is not null)
+        {
+
+            <RadzenTableRow>
                 <RadzenTableCell>
-                    @sim.Stats.HalfOrLess
+                    Fights Where Unit destroyed
                 </RadzenTableCell>
-            }
-            else
-            {
-                <RadzenTableCell class="@ConditionalClassList(sim.Stats.HalfOrLess, sim2.Stats.HalfOrLess)">
-                    @sim.Stats.HalfOrLess
-                </RadzenTableCell>
-                <RadzenTableCell class="@ConditionalClassList(sim2.Stats.HalfOrLess, sim.Stats.HalfOrLess)">
-                    @sim2.Stats.HalfOrLess
-                </RadzenTableCell>
-            }
-        </RadzenTableRow>
-        <RadzenTableRow>
-            <RadzenTableCell>
-                Fights Where Unit Damaged
-            </RadzenTableCell>
-            @if (sim2 is null)
-            {
+                @if (sim2MultiStats is not null)
+                {
+                    <RadzenTableCell class="@ConditionalClassList(sim1MultiStats.UnitEntirelyDestroyed, sim2MultiStats.UnitEntirelyDestroyed)">
+                        @sim1MultiStats.UnitEntirelyDestroyed
+                    </RadzenTableCell>
+                    <RadzenTableCell class="@ConditionalClassList(sim2MultiStats.UnitEntirelyDestroyed, sim1MultiStats.UnitEntirelyDestroyed)">
+                        @sim2MultiStats.UnitEntirelyDestroyed
+                    </RadzenTableCell>
+                }
+                else
+                {
+                    <RadzenTableCell>
+                        @sim1MultiStats.UnitEntirelyDestroyed
+                    </RadzenTableCell>
+                }
+            </RadzenTableRow>
+            <RadzenTableRow>
                 <RadzenTableCell>
-                    @sim.Stats.UnitDamaged
+                    Fights Where Unit ends below half
                 </RadzenTableCell>
-            }
-            else
-            {
-                <RadzenTableCell class="@ConditionalClassList(sim.Stats.UnitDamaged, sim2.Stats.UnitDamaged)">
-                    @sim.Stats.UnitDamaged
-                </RadzenTableCell>
-                <RadzenTableCell class="@ConditionalClassList(sim2.Stats.UnitDamaged, sim.Stats.UnitDamaged)">
-                    @sim2.Stats.UnitDamaged
-                </RadzenTableCell>
-            }
-        </RadzenTableRow>
-        <RadzenTableRow>
-            <RadzenTableCell>
-                Fights Where Unit Lost A Model
-            </RadzenTableCell>
-            @if (sim2 is null)
-            {
+                @if (sim2MultiStats is not null)
+                {
+                    <RadzenTableCell class="@ConditionalClassList(sim1MultiStats.LessThanHalf, sim2MultiStats.LessThanHalf)">
+                        @sim1MultiStats.LessThanHalf
+                    </RadzenTableCell>
+                    <RadzenTableCell class="@ConditionalClassList(sim2MultiStats.LessThanHalf, sim1MultiStats.LessThanHalf)">
+                        @sim2MultiStats.LessThanHalf
+                    </RadzenTableCell>
+                }
+                else
+                {
+                    <RadzenTableCell>
+                        @sim1MultiStats.LessThanHalf
+                    </RadzenTableCell>
+                }
+            </RadzenTableRow>
+            <RadzenTableRow>
                 <RadzenTableCell>
-                    @sim.Stats.LostAModel
+                    Fights Where Unit Damaged
                 </RadzenTableCell>
-            }
-            else
-            {
-                <RadzenTableCell class="@ConditionalClassList(sim.Stats.LostAModel, sim2.Stats.LostAModel)">
-                    @sim.Stats.LostAModel
+                @if (sim2MultiStats is not null)
+                {
+                <RadzenTableCell class="@ConditionalClassList(sim1MultiStats.UnitDamaged, sim2MultiStats.UnitDamaged)">
+                    @sim1MultiStats.UnitDamaged
                 </RadzenTableCell>
-                <RadzenTableCell class="@ConditionalClassList(sim2.Stats.LostAModel, sim.Stats.LostAModel)">
-                    @sim2.Stats.LostAModel
+                <RadzenTableCell class="@ConditionalClassList(sim2MultiStats.UnitDamaged, sim1MultiStats.UnitDamaged)">
+                    @sim2MultiStats.UnitDamaged
                 </RadzenTableCell>
-            }
-        </RadzenTableRow>
+                }
+                else
+                {
+                <RadzenTableCell>
+                    @sim1MultiStats.UnitDamaged
+                </RadzenTableCell>
+                }
+            </RadzenTableRow>
+            <RadzenTableRow>
+                <RadzenTableCell>
+                    Fights Where Unit Lost A Model
+                </RadzenTableCell>
+                @if (sim2MultiStats is not null)
+                {
+                    <RadzenTableCell class="@ConditionalClassList(sim1MultiStats.LostAModel, sim2MultiStats.LostAModel)">
+                        @sim1MultiStats.LostAModel
+                    </RadzenTableCell>
+                    <RadzenTableCell class="@ConditionalClassList(sim2MultiStats.LostAModel, sim1MultiStats.LostAModel)">
+                        @sim2MultiStats.LostAModel
+                    </RadzenTableCell>
+                }
+                else
+                {
+                    <RadzenTableCell>
+                        @sim1MultiStats.LostAModel
+                    </RadzenTableCell>
+                }
+            </RadzenTableRow>
+        }
         @* <RadzenTableRow>
             <RadzenTableCell>
                 Fights Where Attacker Died on fightback
@@ -260,7 +368,8 @@
 
     </RadzenTableBody>
 </RadzenTable>
-@code{
+
+@code {
     [Parameter]
     public FightStats sim1SingleStats { get; set; } = null;
     [Parameter]
@@ -271,7 +380,7 @@
     public MultiFightStats sim2MultiStats { get; set; } = null;
     private string ConditionalClassList(float thisSim, float OtherSim)
     {
-        if (thisSim>OtherSim)
+        if (thisSim > OtherSim)
         {
             return "bg-success";
         }
