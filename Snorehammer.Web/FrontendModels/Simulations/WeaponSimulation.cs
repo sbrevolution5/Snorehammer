@@ -3,13 +3,16 @@ using Snorehammer.Web.FrontendModels.Stats;
 
 namespace Snorehammer.Web.FrontendModels.Simulations
 {
-    public class WeaponSimulation
+    public class WeaponSimulation : ISimulationForStats
     {
-        public WeaponSimulation(AttackProfile weapon, UnitProfile defender)
+        public WeaponSimulation(AttackProfile weapon, UnitProfile defender,int id)
         {
+            Stats = new FightStats();
             Weapon = weapon;
             Defender = defender;
+            Id = id;
         }
+        public int Id { get; set; }
         public AttackProfile Weapon { get; set; }
         public UnitProfile Defender { get; set; }
         public List<Dice> AttackDice { get; set; } = new List<Dice>();

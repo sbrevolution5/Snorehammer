@@ -1,6 +1,8 @@
-﻿using Snorehammer.Web.FrontendModels;
+﻿using Polly.Timeout;
+using Snorehammer.Web.FrontendModels;
 using Snorehammer.Web.FrontendModels.Profiles;
 using Snorehammer.Web.FrontendModels.Simulations;
+using Snorehammer.Web.FrontendModels.Stats;
 using System.Text;
 
 namespace Snorehammer.Web.Services
@@ -26,13 +28,27 @@ namespace Snorehammer.Web.Services
             foreach (var sim in multiSim.FightSimulations)
             {
                 sim.WeaponSimulations.Clear();
+                var i = 0;
                 foreach (var weapon in sim.Attacker.Attacks)
                 {
-                    sim.WeaponSimulations.Add(new WeaponSimulation((AttackProfile)weapon.Clone(), (UnitProfile)sim.Defender.Clone()));
+                    sim.WeaponSimulations.Add(new WeaponSimulation((AttackProfile)weapon.Clone(), (UnitProfile)sim.Defender.Clone(), i));
+                    i++;
                 }
                 SimulateFight(sim);
             }
             multiSim.Stats.SetAverages(multiSim.FightSimulations);
+            //should call set averages on a list of each weapon fight
+            List<List<WeaponSimulation>> listPerWeapon = new List<List<WeaponSimulation>>();
+            foreach (var weapon in multiSim.Attacker.Attacks)
+            {
+                //need to combine the fights per weapon into a list with only that weapon.  
+                var singleWeaponList = multiSim.FightSimulations.SelectMany(f => f.WeaponSimulations.Where(w => w.Weapon.Id == weapon.Id));
+                //then add a per weapon stats object for each weapon
+                var multiStats = new MultiFightStats();
+                //then run set averages on each list and add to overall simulation
+                multiStats.SetAverages(singleWeaponList);
+                multiSim.PerWeaponStats.Add(multiStats);
+            }
         }
         public void SimulateFight(FightSimulation sim)
         {
@@ -56,7 +72,6 @@ namespace Snorehammer.Web.Services
                 {
                     RollFeelNoPain(weapon);
                 }
-                DealDamage(sim);
             }
             DealDamage(sim);
             sim.WinnerMessage = GenerateWinnerMessage(sim);
@@ -99,21 +114,21 @@ namespace Snorehammer.Web.Services
             {
                 sim.BlastBonus = sim.Defender.ModelCount / 5;
             }
-            sim.AttackNumber = sim.Weapon.Attacks * sim.Weapon.WeaponsInUnit;
+            sim.Stats.AttackNumber = sim.Weapon.Attacks * sim.Weapon.WeaponsInUnit;
             if (sim.AttackDice.Count != 0)
             {
                 //currently doesn't account for "per model" just a flat equation, so 1d6 +1 with 10 models must be written as 10d6 + 10
-                sim.AttackNumber = sim.AttackDice.Sum(d => d.Result) + (sim.Weapon.VariableAttackDiceConstant * sim.Weapon.WeaponsInUnit);
+                sim.Stats.AttackNumber = sim.AttackDice.Sum(d => d.Result) + (sim.Weapon.VariableAttackDiceConstant * sim.Weapon.WeaponsInUnit);
                 if (sim.Weapon.Blast && !sim.Weapon.Melee)
                 {
-                    sim.AttackNumber += sim.BlastBonus * sim.Weapon.WeaponsInUnit;
+                    sim.Stats.AttackNumber += sim.BlastBonus * sim.Weapon.WeaponsInUnit;
                 }
             }
             if (sim.Weapon.Torrent && !sim.Weapon.Melee)
             {
                 for (int j = 0; j < sim.Weapon.WeaponsInUnit; j++)
                 {
-                    for (int i = 0; i < sim.AttackNumber; i++)
+                    for (int i = 0; i < sim.Stats.AttackNumber; i++)
                     {
                         sim.ToHitDice.Add(new Dice(true));
                     }
@@ -122,7 +137,7 @@ namespace Snorehammer.Web.Services
                 sim.ToHitDice.ForEach(d => d.Critical = false);
                 return;
             }
-            for (int i = 0; i < sim.AttackNumber; i++)
+            for (int i = 0; i < sim.Stats.AttackNumber; i++)
             {
                 sim.ToHitDice.Add(new Dice(sim.HitTarget, _random));
             }
@@ -301,10 +316,10 @@ namespace Snorehammer.Web.Services
             {
 
                 int failedsaves = sim.ArmorDice.Where(d => !d.Success).Count();
-                sim.DamageNumber = failedsaves * sim.Weapon.Damage;
+                sim.Stats.DamageNumber = failedsaves * sim.Weapon.Damage;
                 if (sim.Weapon.Melta && !sim.Weapon.Melee)
                 {
-                    sim.DamageNumber += failedsaves * sim.Weapon.MeltaDamage;
+                    sim.Stats.DamageNumber += failedsaves * sim.Weapon.MeltaDamage;
                 }
             }
             sim.Stats.ArmorSavesFailed = sim.ArmorDice.Where(d => !d.Success).Count();
@@ -360,12 +375,12 @@ namespace Snorehammer.Web.Services
                     sim.WoundDice.Add(new Dice(0, _random, sim.Weapon.VariableDamageDiceSides));
                 }
             }
-            sim.DamageNumber = sim.WoundDice.Sum(d => d.Result) + sim.Weapon.VariableDamageDiceConstant * sim.Stats.ArmorSavesFailed;
+            sim.Stats.DamageNumber = sim.WoundDice.Sum(d => d.Result) + sim.Weapon.VariableDamageDiceConstant * sim.Stats.ArmorSavesFailed;
             if (sim.Weapon.Melta && !sim.Weapon.Melee)
             {
-                sim.DamageNumber += sim.Weapon.MeltaDamage * sim.Stats.ArmorSavesFailed;
+                sim.Stats.DamageNumber += sim.Weapon.MeltaDamage * sim.Stats.ArmorSavesFailed;
             }
-            sim.Stats.PreFNPDamage = sim.DamageNumber;
+            sim.Stats.PreFNPDamage = sim.Stats.DamageNumber;
 
         }
         public void RollFeelNoPain(WeaponSimulation sim)
@@ -374,125 +389,147 @@ namespace Snorehammer.Web.Services
             {
                 throw new InvalidOperationException("Defender has no Feel no pain save, and attempted to roll one");
             }
-            for (int i = 0; i < sim.DamageNumber; i++)
+            for (int i = 0; i < sim.Stats.DamageNumber; i++)
             {
                 sim.FeelNoPainDice.Add(new Dice(sim.Defender.FeelNoPainTarget, _random));
             }
             sim.Stats.FeelNoPainMade = sim.FeelNoPainDice.Where(d => d.Success).Count();
-            sim.DamageNumber -= sim.Stats.FeelNoPainMade;
-            sim.Stats.WoundsInflicted = sim.DamageNumber;
+            sim.Stats.WoundsInflicted = sim.Stats.DamageNumber;
+            sim.Stats.DamageNumber -= sim.Stats.FeelNoPainMade;
         }
         public void DealDamage(FightSimulation sim)
         {
-            if (sim.DamageNumber >= 1)
+            //sets baseline model wounds, which get changed after damage is dealt
+            sim.Stats.SingleModelRemainingWounds = sim.Defender.Wounds;
+            foreach (var weaponSim in sim.WeaponSimulations)
             {
-                sim.Stats.UnitDamaged = true;
+                //weaponsim has current remaining wounds
+                weaponSim.Stats.SingleModelRemainingWounds = sim.Stats.SingleModelRemainingWounds;
+                DealDamageFromWeapon(sim, weaponSim);
+                //if we ended up with a damaged model, the overall damage needs to be updated on the simulation
+                sim.Stats.SingleModelRemainingWounds = weaponSim.Stats.SingleModelRemainingWounds;
+            }
+            CompileStatsFromWeapons(sim);
+        }
+
+        private void DealDamageFromWeapon(FightSimulation sim, WeaponSimulation weaponSim)
+        {
+            if (weaponSim.Stats.DamageNumber >= 1)
+            {
+                weaponSim.Stats.UnitDamaged = true;
                 int AttacksApplied = 0;
                 var DamageDiceCopy = new List<Dice>();
-                if (sim.Attacker.Attacks[0].IsVariableDamage)
+                if (weaponSim.Weapon.IsVariableDamage)
                 {
-                    DamageDiceCopy.AddRange(sim.WoundDice);
+                    DamageDiceCopy.AddRange(weaponSim.WoundDice);
                 }
-                int fnpUnused = sim.Stats.FeelNoPainMade;
-                sim.Stats.SingleModelRemainingWounds = sim.Defender.Wounds;
+                int fnpUnused = weaponSim.Stats.FeelNoPainMade;
                 //loops through models
-                while (sim.Stats.ModelsDestroyed < sim.Defender.ModelCount && AttacksApplied < sim.Stats.ArmorSavesFailed)
+                while (weaponSim.Stats.ModelsDestroyed < weaponSim.Defender.ModelCount && AttacksApplied < weaponSim.Stats.ArmorSavesFailed)
                 {
-                    if (!sim.Attacker.Attacks[0].IsVariableDamage)
+                    //loops through damage on individual model
+                    while (weaponSim.Stats.SingleModelRemainingWounds > 0 && AttacksApplied < weaponSim.Stats.ArmorSavesFailed)
                     {
-                        sim.Stats.SingleModelRemainingWounds = sim.Defender.Wounds;
-                        //loops through damage on individual model
-                        while (sim.Stats.SingleModelRemainingWounds > 0 && AttacksApplied < sim.Stats.ArmorSavesFailed)
+                        int fnpBlock = 0;
+                        AttacksApplied++;
+                        //if we have any unused feelnopains absorb damage with them.
+                        var weaponDamage = 0;
+                        if (!weaponSim.Weapon.IsVariableDamage)
                         {
-                            int fnpBlock = 0;
-                            AttacksApplied++;
-                            //if we have any unused feelnopains absorb damage with them.
-                            if (fnpUnused > 0)
-                            {
-                                //set fnpBlock to either the damage done, or the remaining fnp available
-                                if (fnpUnused < sim.Stats.SingleModelRemainingWounds)
-                                {
-                                    fnpBlock = fnpUnused;
-                                }
-                                else
-                                {
-                                    fnpBlock = sim.Attacker.Attacks[0].Damage;
-                                }
-                                fnpUnused -= fnpBlock;
-                            }
-                            sim.Stats.SingleModelRemainingWounds -= sim.Attacker.Attacks[0].Damage - fnpBlock;
-                            if (sim.Stats.SingleModelRemainingWounds <= 0)
-                            {
-                                sim.Stats.ModelsDestroyed++;
-                            }
+                            weaponDamage = weaponSim.Weapon.Damage;
                         }
-                    }
-                    else
-                    {
-                        sim.Stats.SingleModelRemainingWounds = sim.Defender.Wounds;
-                        while (sim.Stats.SingleModelRemainingWounds > 0 && AttacksApplied < sim.Stats.ArmorSavesFailed)
+                        else
                         {
-                            int fnpBlock = 0;
-                            //if we have any unused feelnopains absorb damage with them.
-                            if (fnpUnused > 0)
-                            {
-                                //set fnpBlock to either the damage done, or the remaining fnp available
-                                if (fnpUnused < sim.Stats.SingleModelRemainingWounds)
-                                {
-                                    fnpBlock = fnpUnused;
-                                }
-                                else
-                                {
-                                    fnpBlock = DamageDiceCopy.First().Result + sim.Attacker.Attacks[0].VariableDamageDiceConstant;
-                                    if (sim.Attacker.Attacks[0].Melta && !sim.Attacker.Attacks[0].Melee)
-                                    {
-                                        fnpBlock += sim.Attacker.Attacks[0].MeltaDamage;
-                                    }
-                                }
-                                fnpUnused -= fnpBlock;
-
-                            }
-                            sim.Stats.SingleModelRemainingWounds -= DamageDiceCopy.First().Result + sim.Attacker.Attacks[0].VariableDamageDiceConstant - fnpBlock;
-                            if (sim.Attacker.Attacks[0].Melta && !sim.Attacker.Attacks[0].Melee)
-                            {
-                                sim.Stats.SingleModelRemainingWounds -= sim.Attacker.Attacks[0].MeltaDamage;
-                            }
-                            if (sim.Stats.SingleModelRemainingWounds <= 0)
-                            {
-                                sim.Stats.ModelsDestroyed++;
-                            }
+                            weaponDamage = DamageDiceCopy.First().Result + weaponSim.Weapon.VariableDamageDiceConstant;
                             DamageDiceCopy.Remove(DamageDiceCopy.First());
-                            AttacksApplied++;
                         }
+                        if (weaponSim.Weapon.Melta && !weaponSim.Weapon.Melee)
+                        {
+                            weaponDamage += weaponSim.Weapon.MeltaDamage;
+                        }
+                        if (fnpUnused > 0)
+                        {
+                            //set fnpBlock to either the damage done, or the remaining fnp available
+                            if (fnpUnused < weaponDamage)
+                            {
+                                fnpBlock = fnpUnused;
+                            }
+                            else
+                            {
+                                fnpBlock = weaponDamage;
+                            }
+                            fnpUnused -= fnpBlock;
+                        }
+                        weaponSim.Stats.SingleModelRemainingWounds -= weaponDamage - fnpBlock;
+                        if (weaponSim.Stats.SingleModelRemainingWounds <= 0)
+                        {
+                            weaponSim.Stats.ModelsDestroyed++;
+                        }
+                    }
+                    if (AttacksApplied != weaponSim.Stats.ArmorSavesFailed)
+                    {
+                        weaponSim.Stats.SingleModelRemainingWounds = weaponSim.Defender.Wounds;
                     }
 
                 }
-                if (sim.Stats.ModelsDestroyed >= sim.Defender.ModelCount)
+            }
+            SetDamageStatsAfterWound(weaponSim);
+        }
+
+        private void SetDamageStatsAfterWound(WeaponSimulation weaponSim)
+        {
+            if (weaponSim.Stats.ModelsDestroyed >= weaponSim.Defender.ModelCount)
+            {
+                weaponSim.Stats.UnitEntirelyDestroyed = true;
+            }
+            if (weaponSim.Defender.ModelCount > 1)
+            {
+                if (weaponSim.Stats.ModelsDestroyed > 0)
                 {
-                    sim.Stats.UnitEntirelyDestroyed = true;
+                    weaponSim.Stats.LostAModel = true;
                 }
-                if (sim.Defender.ModelCount > 1)
+                if (weaponSim.Stats.ModelsDestroyed > weaponSim.Defender.ModelCount / 2)
                 {
-                    if (sim.Stats.ModelsDestroyed > 0)
-                    {
-                        sim.Stats.LostAModel = true;
-                    }
-                    if (sim.Stats.ModelsDestroyed > sim.Defender.ModelCount / 2)
-                    {
-                        sim.Stats.LessThanHalf = true;
-                    }
+                    weaponSim.Stats.LessThanHalf = true;
                 }
-                else if (sim.Defender.Wounds - sim.DamageNumber < sim.Defender.Wounds / 2)
-                {
-                    sim.Stats.LessThanHalf = true;
-                }
+            }
+            else if (weaponSim.Defender.Wounds - weaponSim.Stats.DamageNumber < weaponSim.Defender.Wounds / 2)
+            {
+                weaponSim.Stats.LessThanHalf = true;
+            }
+        }
+
+        private void CompileStatsFromWeapons(FightSimulation sim)
+        {
+            sim.Stats.AttackNumber = sim.WeaponSimulations.Select(s => s.Stats.AttackNumber).Sum();
+            sim.Stats.DamageNumber = sim.WeaponSimulations.Select(s => s.Stats.DamageNumber).Sum();
+            sim.Stats.ModelsDestroyed = sim.WeaponSimulations.Select(s => s.Stats.ModelsDestroyed).Sum();
+            sim.Stats.PreFNPDamage = sim.WeaponSimulations.Select(s => s.Stats.PreFNPDamage).Sum();
+            sim.Stats.FeelNoPainMade = sim.WeaponSimulations.Select(s => s.Stats.FeelNoPainMade).Sum();
+            sim.Stats.ArmorSavesFailed = sim.WeaponSimulations.Select(s => s.Stats.ArmorSavesFailed).Sum();
+            sim.Stats.AttacksHit = sim.WeaponSimulations.Select(s => s.Stats.AttacksHit).Sum();
+            sim.Stats.WoundsInflicted = sim.WeaponSimulations.Select(s => s.Stats.WoundsInflicted).Sum();
+            sim.Stats.LostAModel = sim.WeaponSimulations.Where(s => s.Stats.LostAModel).Any();
+            sim.Stats.UnitDamaged = sim.WeaponSimulations.Where(s => s.Stats.UnitDamaged).Any();
+            sim.Stats.UnitEntirelyDestroyed = sim.WeaponSimulations.Where(s => s.Stats.UnitEntirelyDestroyed).Any();
+        }
+        public void ValidateResult(FightSimulation sim)
+        {
+            if(sim.Stats.ArmorSavesFailed > sim.Stats.AttackNumber)
+            {
+                throw new InvalidProgramException("There are more failed armor saves than attacks");
+            }
+            if(sim.Stats.LostAModel && sim.Stats.ModelsDestroyed == 0)
+            {
+                throw new InvalidProgramException("Lost a model is true but 0 models were destroyed");
             }
         }
         public string GenerateWinnerMessage(FightSimulation sim)
         {
+            ValidateResult(sim);
             var res = new StringBuilder();
 
-            res.Append($"{sim.Stats.ArmorSavesFailed} out of {sim.Attacker.Attacks[0].Attacks} attacks broke through armor.\n");
+            res.Append($"{sim.Stats.ArmorSavesFailed} out of {sim.Stats.AttackNumber} attacks broke through armor.\n");
             if (sim.Defender.FeelNoPain && sim.Stats.PreFNPDamage != 0)
             {
                 if (sim.Stats.FeelNoPainMade == sim.Stats.PreFNPDamage)
@@ -502,9 +539,9 @@ namespace Snorehammer.Web.Services
                 }
                 res.Append($"{sim.Stats.FeelNoPainMade} of {sim.Stats.PreFNPDamage} wounds blocked by Feel No Pain. \n");
             }
-            if (sim.DamageNumber > 0)
+            if (sim.Stats.WoundsInflicted > 0)
             {
-                res.Append($"{sim.DamageNumber} wounds inflicted to defender.\n");
+                res.Append($"{sim.Stats.WoundsInflicted} wounds inflicted to defender.\n");
                 if (sim.Stats.ModelsDestroyed >= sim.Defender.ModelCount)
                 {
                     res.Append("The entire unit was destroyed.\n");
@@ -514,13 +551,13 @@ namespace Snorehammer.Web.Services
                 {
                     res.Append($"{sim.Stats.ModelsDestroyed} out of {sim.Defender.ModelCount} models were destroyed.\n");
 
-                    if (sim.Stats.SingleModelRemainingWounds > 0)
+                    if (sim.Stats.SingleModelRemainingWounds > 0 && sim.Stats.SingleModelRemainingWounds != sim.Defender.Wounds)
                     {
                         res.Append($"A remaining model was inflicted {sim.Defender.Wounds - sim.Stats.SingleModelRemainingWounds} wounds, leaving it with {sim.Stats.SingleModelRemainingWounds} remaining.\n");
                     }
                     return res.ToString();
                 }
-                res.Append($"The model has {sim.Defender.Wounds - sim.DamageNumber} wound(s) remaining.\n");
+                res.Append($"The model has {sim.Defender.Wounds - sim.Stats.SingleModelRemainingWounds} wound(s) remaining.\n");
             }
             return res.ToString();
         }

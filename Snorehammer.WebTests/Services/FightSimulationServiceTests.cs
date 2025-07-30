@@ -54,6 +54,7 @@ namespace Snorehammer.Web.Services.Tests
                 Toughness = 4,
                 Wounds = 2
             };
+            weaponSim = new WeaponSimulation(weapon, unitProfile, 1);
             sim = new FightSimulation()
             {
                 Attacker = attacker,
@@ -63,11 +64,6 @@ namespace Snorehammer.Web.Services.Tests
                     weaponSim
                 }
             };
-            weaponSim = new WeaponSimulation()
-            {
-                Weapon = weapon,
-                Defender = unitProfile
-            };
         }
         public virtual void TearDown()
         {
@@ -75,6 +71,8 @@ namespace Snorehammer.Web.Services.Tests
             attacker = null;
             unitProfile = null;
             service = null;
+            weaponSim = null;
+            weapon = null;
         }
         [TestClass]
         public class FightSimulationArmorSaveTests : FightSimulationServiceTests
@@ -190,17 +188,18 @@ namespace Snorehammer.Web.Services.Tests
                     A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(2);
                     unitProfile.FeelNoPain = true;
                     A.CallTo(() => fnpRandom.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(1);
-                    sim.Attacker.Attacks[0].Attacks = 20;
+                    sim.WeaponSimulations[0].Stats.AttackNumber = 20;
                     for (int i = 0; i < 20; i++)
                     {
                         diceList.Add(new Dice(unitProfile.MinimumSave, random));
                         fnpDiceList.Add(new Dice(unitProfile.FeelNoPainTarget, fnpRandom));
                     }
-                    sim.ArmorDice = diceList;
-                    sim.FeelNoPainDice = fnpDiceList;
-                    sim.DamageNumber = 20;
-                    sim.Stats.PreFNPDamage = 20;
-                    sim.Stats.ArmorSavesFailed = 20;
+                    sim.WeaponSimulations[0].ArmorDice = diceList;
+                    sim.WeaponSimulations[0].FeelNoPainDice = fnpDiceList;
+                    sim.WeaponSimulations[0].Stats.DamageNumber = 20;
+                    sim.WeaponSimulations[0].Stats.PreFNPDamage = 20;
+                    sim.WeaponSimulations[0].Stats.WoundsInflicted = 20;
+                    sim.WeaponSimulations[0].Stats.ArmorSavesFailed = 20;
                     //act
                     service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
@@ -217,19 +216,20 @@ namespace Snorehammer.Web.Services.Tests
                     unitProfile.FeelNoPain = true;
                     A.CallTo(() => fnpRandom.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(1);
                     A.CallTo(() => fnpRandom.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).ReturnsNextFromSequence(6);
-                    sim.Attacker.Attacks[0].Attacks = 20;
+                    sim.WeaponSimulations[0].Stats.AttackNumber = 20;
                     for (int i = 0; i < 20; i++)
                     {
                         diceList.Add(new Dice(unitProfile.MinimumSave, random));
                         fnpDiceList.Add(new Dice(unitProfile.MinimumSave, fnpRandom));
                     }
-                    sim.ArmorDice = diceList;
-                    sim.FeelNoPainDice = fnpDiceList;
-                    sim.Stats.ArmorSavesFailed = 20;
-                    sim.Stats.FeelNoPainMade = 1;
-                    sim.Stats.PreFNPDamage = 20;
-                    sim.DamageNumber = 19;
+                    sim.WeaponSimulations[0].ArmorDice = diceList;
+                    sim.WeaponSimulations[0].FeelNoPainDice = fnpDiceList;
+                    sim.WeaponSimulations[0].Stats.ArmorSavesFailed = 20;
+                    sim.WeaponSimulations[0].Stats.FeelNoPainMade = 1;
+                    sim.WeaponSimulations[0].Stats.PreFNPDamage = 20;
+                    sim.WeaponSimulations[0].Stats.WoundsInflicted = 19;
                     //act
+                    service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
                     res.Should().Contain("20 out of 20 attacks broke through armor.");
@@ -243,19 +243,20 @@ namespace Snorehammer.Web.Services.Tests
                     A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(2);
                     unitProfile.FeelNoPain = true;
                     A.CallTo(() => fnpRandom.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(6);
-                    sim.Attacker.Attacks[0].Attacks = 20;
+                    sim.WeaponSimulations[0].Stats.AttackNumber = 20;
                     for (int i = 0; i < 20; i++)
                     {
                         diceList.Add(new Dice(unitProfile.MinimumSave, random));
                         fnpDiceList.Add(new Dice(unitProfile.FeelNoPainTarget, fnpRandom));
                     }
-                    sim.ArmorDice = diceList;
-                    sim.FeelNoPainDice = fnpDiceList;
-                    sim.Stats.PreFNPDamage = 20;
-                    sim.Stats.FeelNoPainMade = 20;
-                    sim.DamageNumber = 20;
-                    sim.Stats.ArmorSavesFailed = 20;
+                    sim.WeaponSimulations[0].ArmorDice = diceList;
+                    sim.WeaponSimulations[0].FeelNoPainDice = fnpDiceList;
+                    sim.WeaponSimulations[0].Stats.PreFNPDamage = 20;
+                    sim.WeaponSimulations[0].Stats.FeelNoPainMade = 20;
+                    sim.WeaponSimulations[0].Stats.DamageNumber = 20;
+                    sim.WeaponSimulations[0].Stats.ArmorSavesFailed = 20;
                     //act
+                    service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
                     res.Should().Contain("20 out of 20 attacks broke through armor.");
@@ -268,17 +269,18 @@ namespace Snorehammer.Web.Services.Tests
                 {
                     //arrange
                     A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(2);
-                    sim.Attacker.Attacks[0].Attacks = 20;
+                    sim.WeaponSimulations[0].Stats.AttackNumber = 20;
                     for (int i = 0; i < 20; i++)
                     {
                         diceList.Add(new Dice(unitProfile.MinimumSave, random));
                     }
-                    sim.ArmorDice = diceList;
-                    sim.DamageNumber = 20;
-                    sim.Stats.ArmorSavesFailed = 20;
-                    sim.Stats.PreFNPDamage = 20;
-                    sim.Stats.ModelsDestroyed = 10;
+                    sim.WeaponSimulations[0].ArmorDice = diceList;
+                    sim.WeaponSimulations[0].Stats.WoundsInflicted = 20;
+                    sim.WeaponSimulations[0].Stats.ArmorSavesFailed = 20;
+                    sim.WeaponSimulations[0].Stats.PreFNPDamage = 20;
+                    sim.WeaponSimulations[0].Stats.ModelsDestroyed = 10;
                     //act
+                    service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
                     res.Should().Contain("20 out of 20 attacks broke through armor.");
@@ -296,14 +298,15 @@ namespace Snorehammer.Web.Services.Tests
                         sequence.Add(3);
                     }
                     A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).ReturnsNextFromSequence(sequence.ToArray());
-                    sim.Attacker.Attacks[0].Attacks = 20;
+                    sim.WeaponSimulations[0].Stats.AttackNumber = 20;
                     for (int i = 0; i < 20; i++)
                     {
                         diceList.Add(new Dice(unitProfile.MinimumSave, random));
                     }
-                    sim.ArmorDice = diceList;
-                    sim.DamageNumber = 10;
-                    sim.Stats.ArmorSavesFailed = 10;
+                    sim.WeaponSimulations[0].ArmorDice = diceList;
+                    sim.WeaponSimulations[0].Stats.WoundsInflicted = 10;
+                    sim.WeaponSimulations[0].Stats.DamageNumber = 10;
+                    sim.WeaponSimulations[0].Stats.ArmorSavesFailed = 10;
                     //act
                     service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
@@ -320,14 +323,15 @@ namespace Snorehammer.Web.Services.Tests
 
                     A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(3);
                     A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).ReturnsNextFromSequence(1);
-                    sim.Attacker.Attacks[0].Attacks = 20;
+                    sim.WeaponSimulations[0].Stats.AttackNumber = 20;
                     for (int i = 0; i < 20; i++)
                     {
                         diceList.Add(new Dice(unitProfile.MinimumSave, random));
                     }
-                    sim.ArmorDice = diceList;
-                    sim.DamageNumber = 1;
-                    sim.Stats.ArmorSavesFailed = 1;
+                    sim.WeaponSimulations[0].ArmorDice = diceList;
+                    sim.WeaponSimulations[0].Stats.DamageNumber = 1;
+                    sim.WeaponSimulations[0].Stats.WoundsInflicted = 1;
+                    sim.WeaponSimulations[0].Stats.ArmorSavesFailed = 1;
                     //act
                     service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
@@ -341,14 +345,14 @@ namespace Snorehammer.Web.Services.Tests
                 public void WinnerMessageDamagedSingleModel()
                 {
                     //arrange
-
                     A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(2);
-                    sim.Attacker.Attacks[0].Attacks = 1;
+                    sim.WeaponSimulations[0].Stats.AttackNumber = 1;
                     unitProfile.ModelCount = 1;
                     diceList.Add(new Dice(unitProfile.MinimumSave, random));
-                    sim.ArmorDice = diceList;
-                    sim.DamageNumber = 1;
-                    sim.Stats.ArmorSavesFailed = 1;
+                    sim.WeaponSimulations[0].ArmorDice = diceList;
+                    sim.WeaponSimulations[0].Stats.DamageNumber = 1;
+                    sim.WeaponSimulations[0].Stats.WoundsInflicted = 1;
+                    sim.WeaponSimulations[0].Stats.ArmorSavesFailed = 1;
 
                     //act
                     service.DealDamage(sim);
@@ -363,15 +367,16 @@ namespace Snorehammer.Web.Services.Tests
                 {
                     //arrange
                     A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(1);
-                    sim.Attacker.Attacks[0].Attacks = 20;
+                    sim.WeaponSimulations[0].Stats.AttackNumber = 20;
                     unitProfile.ModelCount = 1;
                     for (int i = 0; i < 20; i++)
                     {
                         diceList.Add(new Dice(unitProfile.MinimumSave, random));
                     }
-                    sim.ArmorDice = diceList;
-                    sim.DamageNumber = 20;
-                    sim.Stats.ArmorSavesFailed = 20;
+                    sim.WeaponSimulations[0].ArmorDice = diceList;
+                    sim.WeaponSimulations[0].Stats.DamageNumber = 20;
+                    sim.WeaponSimulations[0].Stats.ArmorSavesFailed = 20;
+                    sim.WeaponSimulations[0].Stats.WoundsInflicted = 20;
                     //act
                     service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
@@ -389,9 +394,10 @@ namespace Snorehammer.Web.Services.Tests
                     {
                         diceList.Add(new Dice(unitProfile.MinimumSave, random));
                     }
-                    sim.ArmorDice = diceList;
-                    sim.DamageNumber = 0;
-                    sim.Stats.ArmorSavesFailed = 0;
+                    sim.WeaponSimulations[0].Stats.AttackNumber = 2;
+                    sim.WeaponSimulations[0].ArmorDice = diceList;
+                    sim.WeaponSimulations[0].Stats.DamageNumber = 0;
+                    sim.WeaponSimulations[0].Stats.ArmorSavesFailed = 0;
                     //act
                     service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
@@ -429,17 +435,16 @@ namespace Snorehammer.Web.Services.Tests
                 public void SpilloverDoesNotHappen()
                 {
                     //arrange
-                    sim.Attacker.Attacks[0].Damage = 5;
-                    sim.Attacker.Attacks[0].Attacks = 1;
+                    sim.WeaponSimulations[0].Weapon.Damage = 5;
+                    sim.WeaponSimulations[0].Stats.AttackNumber = 1;
+                    sim.WeaponSimulations[0].Weapon.WeaponsInUnit = 1;
+                    sim.Stats.AttackNumber = 1;
                     A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(2);
-                    for (int i = 0; i < sim.Attacker.Attacks[0].Attacks; i++)
-                    {
-                        diceList.Add(new Dice(unitProfile.MinimumSave, random));
-                    }
-                    sim.ArmorDice = diceList;
-                    sim.Stats.ArmorSavesFailed = sim.ArmorDice.Where(d => !d.Success).Count();
-                    sim.DamageNumber = 5;
-                    sim.Stats.WoundsInflicted = sim.DamageNumber;
+                    diceList.Add(new Dice(unitProfile.MinimumSave, random));
+                    sim.WeaponSimulations[0].ArmorDice = diceList;
+                    sim.WeaponSimulations[0].Stats.ArmorSavesFailed = sim.WeaponSimulations[0].ArmorDice.Where(d => !d.Success).Count();
+                    sim.WeaponSimulations[0].Stats.DamageNumber = 5;
+                    sim.WeaponSimulations[0].Stats.WoundsInflicted = sim.WeaponSimulations[0].Stats.DamageNumber;
                     //act
                     service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
@@ -452,7 +457,7 @@ namespace Snorehammer.Web.Services.Tests
                     //arrange
                     sim.Defender.Wounds = 3;
                     sim.Attacker.Attacks[0].Damage = 3;
-                    sim.Attacker.Attacks[0].Attacks = 2;
+                    sim.WeaponSimulations[0].Stats.AttackNumber = 2;
                     A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(2);
                     unitProfile.FeelNoPain = true;
                     A.CallTo(() => fnpRandom.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(1);
@@ -463,13 +468,13 @@ namespace Snorehammer.Web.Services.Tests
                         diceList.Add(new Dice(unitProfile.MinimumSave, random));
                         fnpDiceList.Add(new Dice(unitProfile.FeelNoPainTarget, fnpRandom));
                     }
-                    sim.ArmorDice = diceList;
-                    sim.FeelNoPainDice = fnpDiceList;
-                    sim.DamageNumber = 6;
-                    sim.Stats.ArmorSavesFailed = sim.ArmorDice.Where(d => !d.Success).Count();
-                    sim.Stats.FeelNoPainMade = sim.FeelNoPainDice.Where(d => d.Success).Count();
-                    sim.DamageNumber -= sim.Stats.FeelNoPainMade;
-                    sim.Stats.WoundsInflicted = sim.DamageNumber;
+                    sim.WeaponSimulations[0].ArmorDice = diceList;
+                    sim.WeaponSimulations[0].FeelNoPainDice = fnpDiceList;
+                    sim.WeaponSimulations[0].Stats.DamageNumber = 6;
+                    sim.WeaponSimulations[0].Stats.ArmorSavesFailed = sim.WeaponSimulations[0].ArmorDice.Where(d => !d.Success).Count();
+                    sim.WeaponSimulations[0].Stats.FeelNoPainMade = sim.WeaponSimulations[0].FeelNoPainDice.Where(d => d.Success).Count();
+                    sim.WeaponSimulations[0].Stats.DamageNumber -= sim.Stats.FeelNoPainMade;
+                    sim.Stats.WoundsInflicted = sim.WeaponSimulations[0].Stats.DamageNumber;
                     //act
                     service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
@@ -483,7 +488,7 @@ namespace Snorehammer.Web.Services.Tests
                     sim.Attacker.Attacks[0].IsVariableDamage = true;
                     sim.Attacker.Attacks[0].VariableAttackDiceNumber = 1;
                     sim.Attacker.Attacks[0].VariableDamageDiceSides = 6;
-                    sim.Attacker.Attacks[0].Attacks = 2;
+                    sim.WeaponSimulations[0].Stats.AttackNumber = 2;
                     A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(2);
                     A.CallTo(() => woundRandom.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).ReturnsNextFromSequence(1, 2);
                     for (int i = 0; i < 2; i++)
@@ -491,11 +496,11 @@ namespace Snorehammer.Web.Services.Tests
                         diceList.Add(new Dice(unitProfile.MinimumSave, random));
                         woundDiceList.Add(new Dice(1, woundRandom));
                     }
-                    sim.ArmorDice = diceList;
-                    sim.WoundDice = woundDiceList;
-                    sim.DamageNumber = 3;
-                    sim.Stats.ArmorSavesFailed = sim.ArmorDice.Where(d => !d.Success).Count();
-                    sim.Stats.WoundsInflicted = sim.DamageNumber;
+                    sim.WeaponSimulations[0].ArmorDice = diceList;
+                    sim.WeaponSimulations[0].WoundDice = woundDiceList;
+                    sim.WeaponSimulations[0].Stats.DamageNumber = 3;
+                    sim.WeaponSimulations[0].Stats.ArmorSavesFailed = sim.WeaponSimulations[0].ArmorDice.Where(d => !d.Success).Count();
+                    sim.WeaponSimulations[0].Stats.WoundsInflicted = (int)sim.Stats.DamageNumber;
                     //act
                     service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
@@ -506,18 +511,17 @@ namespace Snorehammer.Web.Services.Tests
                 public void SpilloverUsesVariableDamageAndFeelNoPainRolls()
                 {
                     //arrange
-                    sim.Attacker.Attacks[0].IsVariableDamage = true;
-                    sim.Attacker.Attacks[0].VariableAttackDiceNumber = 1;
-                    sim.Attacker.Attacks[0].VariableDamageDiceSides = 6;
-                    sim.Attacker.Attacks[0].Attacks = 2;
-                    sim.Defender.Wounds = 3;
+                    sim.WeaponSimulations[0].Weapon.IsVariableDamage = true;
+                    sim.WeaponSimulations[0].Weapon.VariableAttackDiceNumber = 1;
+                    sim.WeaponSimulations[0].Weapon.VariableDamageDiceSides = 6;
+                    sim.WeaponSimulations[0].Stats.AttackNumber = 2;
+                    sim.WeaponSimulations[0].Defender.Wounds = 3;
                     A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(2);
-                    unitProfile.FeelNoPain = true;
+                    sim.WeaponSimulations[0].Defender.FeelNoPain = true;
                     A.CallTo(() => fnpRandom.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(1);
                     //blocks 2 damage, lets 1 and 3 damage through, only killing a single model
                     A.CallTo(() => fnpRandom.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).ReturnsNextFromSequence(6, 6);
-                    A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(2);
-                    A.CallTo(() => woundRandom.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).ReturnsNextFromSequence(1, 6);
+                    A.CallTo(() => woundRandom.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).ReturnsNextFromSequence(1,6);
                     for (int i = 0; i < 2; i++)
                     {
                         diceList.Add(new Dice(unitProfile.MinimumSave, random));
@@ -527,20 +531,20 @@ namespace Snorehammer.Web.Services.Tests
                     {
                         fnpDiceList.Add(new Dice(6, fnpRandom));
                     }
-                    sim.ArmorDice = diceList;
-                    sim.FeelNoPainDice = fnpDiceList;
-                    sim.WoundDice = woundDiceList;
-                    sim.DamageNumber = 7;
-                    sim.Stats.ArmorSavesFailed = sim.ArmorDice.Where(d => !d.Success).Count();
-                    sim.Stats.FeelNoPainMade = sim.FeelNoPainDice.Where(d => d.Success).Count();
-                    sim.DamageNumber -= sim.Stats.FeelNoPainMade;
-                    sim.Stats.WoundsInflicted = sim.DamageNumber;
+                    sim.WeaponSimulations[0].ArmorDice = diceList;
+                    sim.WeaponSimulations[0].FeelNoPainDice = fnpDiceList;
+                    sim.WeaponSimulations[0].WoundDice = woundDiceList;
+                    sim.WeaponSimulations[0].Stats.DamageNumber = 7;
+                    sim.WeaponSimulations[0].Stats.ArmorSavesFailed = sim.WeaponSimulations[0].ArmorDice.Where(d => !d.Success).Count();
+                    sim.WeaponSimulations[0].Stats.FeelNoPainMade = sim.WeaponSimulations[0].FeelNoPainDice.Where(d => d.Success).Count();
+                    sim.WeaponSimulations[0].Stats.WoundsInflicted = sim.WeaponSimulations[0].Stats.DamageNumber;
+                    sim.WeaponSimulations[0].Stats.DamageNumber -= sim.WeaponSimulations[0].Stats.FeelNoPainMade;
                     //act
                     service.DealDamage(sim);
                     var res = service.GenerateWinnerMessage(sim);
                     //assert
-                    weaponSim.Stats.ModelsDestroyed.Should().Be(1);
-                    weaponSim.Stats.WoundsInflicted.Should().Be(5);
+                    sim.Stats.DamageNumber.Should().Be(5);
+                    sim.Stats.ModelsDestroyed.Should().Be(1);
                 }
             }
         }

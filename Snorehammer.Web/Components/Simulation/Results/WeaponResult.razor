@@ -19,13 +19,13 @@
                 <DicePanel sim="@sim"
                            Title="Number of Attacks"
                            RollString1=@($"Rolling: {sim.Weapon.VariableAttackDiceNumber} d{sim.Weapon.VariableAttackDiceSides} + {sim.Weapon.VariableAttackDiceConstant}" + (sim.BlastBonus > 0 ? $" + {@sim.BlastBonus}" : "") + $" x {sim.Weapon.WeaponsInUnit}")
-                           RollString2=@($"Total: {sim.AttackNumber}")
+                           RollString2=@($"Total: {sim.Stats.AttackNumber}")
                            DiceList="@sim.AttackDice" />
             }
             <DicePanel sim="@sim"
                        Title="To Hit Roll"
                        RollString1=@($"Target: {sim.Weapon.Skill}")
-                       RollString2=@($"Rolling {sim.AttackNumber}")
+                       RollString2=@($"Rolling {sim.Stats.AttackNumber}")
                        DiceList="@sim.ToHitDice"
                        CriticalMatters="@(sim.Weapon.Sustained || sim.Weapon.Lethal)" />
             <DicePanel sim="@sim"
@@ -54,7 +54,7 @@
                 <DicePanel sim="@sim"
                            Title="Feel No Pain Roll"
                            RollString1=@($"Target: {sim.Defender.FeelNoPainTarget}")
-                           RollString2=@($"Rolling: {sim.DamageNumber}")
+                           RollString2=@($"Rolling: {sim.Stats.DamageNumber}")
                            DiceList="@sim.FeelNoPainDice" />
             }
         </RadzenCard>
