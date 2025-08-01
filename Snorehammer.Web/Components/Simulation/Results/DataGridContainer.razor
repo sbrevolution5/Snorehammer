@@ -1,37 +1,26 @@
-﻿<RadzenCard>
-    @if (comparison.Simulation1.Rounds == 1)
-    {
-        @if (comparison.ComparingAttackers)
-        {
-            <ResultsTable sim1MultiStats=@comparison.Simulation1.Stats sim2MultiStats=@comparison.AlternateAttackSimulation.Stats />
-        }
-        else if (comparison.ComparingDefenders)
-        {
-            <ResultsTable sim1MultiStats=@comparison.Simulation1.Stats sim2MultiStats=@comparison.AlternateDefenseSimulation.Stats />
-        }
-        else
-        {
-            <ResultsTable sim1MultiStats=@comparison.Simulation1.Stats />
-        }
-    }
-    else
-    {
-        @if (comparison.ComparingAttackers)
-        {
-            <ResultsTable sim1MultiStats=@comparison.Simulation1.Stats sim2MultiStats=@comparison.AlternateAttackSimulation.Stats multiSim=true />
-        }
-        else if (comparison.ComparingDefenders)
-        {
-            <ResultsTable sim1MultiStats=@comparison.Simulation1.Stats sim2MultiStats=@comparison.AlternateDefenseSimulation.Stats multiSim=true />
-        }
-        else
-        {
-            <ResultsTable sim1MultiStats=@comparison.Simulation1.Stats multiSim=true />
-        }
-    }
+﻿@using Snorehammer.Web.FrontendModels.Stats
+<RadzenCard>
+    <ResultsDataGrid stats="@DataFromComparison()"/>
 </RadzenCard>
 
 @code {
     [Parameter]
     public Snorehammer.Web.FrontendModels.Comparison comparison { get; set; }
+    private List<MultiFightStats> DataFromComparison()
+    {
+        var res = new List<MultiFightStats>();
+        @if (comparison.Simulation1.Rounds == 1)
+        {
+            res.Add(comparison.Simulation1.Stats);
+            @if (comparison.ComparingAttackers)
+            {
+                res.Add(comparison.AlternateAttackSimulation.Stats);
+            }
+            else if (comparison.ComparingDefenders)
+            {
+                res.Add(comparison.AlternateDefenseSimulation.Stats);
+            }
+        }
+        return res;
+    }
 }
