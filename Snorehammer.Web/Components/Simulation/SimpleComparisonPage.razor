@@ -84,6 +84,11 @@
 </RadzenCardGroup>
 <RadzenButton Click=@(() => FightUnits()) Text="Fight all Units" ButtonStyle="ButtonStyle.Primary" />
 <TableDisplay comparison="comparison" />
+@if (comparison.Simulation1.Stats.ColumnName !="")
+{
+
+    <DataGridContainer comparison="comparison"></DataGridContainer>
+}
 @code {
     public Comparison comparison { get; set; }
     public bool ShowTable { get; set; } = true;
@@ -94,10 +99,17 @@
     private void SetAttacker(AttackProfile source, MultiFightSimulation destination)
     {
         destination.Attacker = (UnitProfile)source.Clone();
+        destination.Attacker.Name = source.Name + "(1)";
+        foreach (var attack in destination.Attacker.Attacks)
+        {
+            attack.Name = attack.Name + "(1)";
+        }
+
     }
     private void SetDefender(UnitProfile source, MultiFightSimulation destination)
     {
         destination.Defender = (UnitProfile)source.Clone();
+        destination.Defender.Name = source.Name + "(1)";
     }
     private void AssignMultiSims(int x)
     {
@@ -112,19 +124,23 @@
         await fightSimulationService.ResetDice(comparison.Simulation1);
         fightSimulationService.SimulateAllFights(comparison.Simulation1);
         ViewSim1 = comparison.Simulation1.FightSimulations.First();
+        //if only a single sim, show attacker as column name
+        comparison.Simulation1.Stats.ColumnName = comparison.Simulation1.Attacker.Name;
         if (comparison.ComparingAttackers)
         {
             await fightSimulationService.ResetDice(comparison.AlternateAttackSimulation);
             fightSimulationService.SimulateAllFights(comparison.AlternateAttackSimulation);
             ViewSim2 = comparison.AlternateAttackSimulation.FightSimulations.First();
-
+            comparison.AlternateAttackSimulation.Stats.ColumnName = comparison.AlternateAttackSimulation.Attacker.Name;
         }
         else if (comparison.ComparingDefenders)
         {
             await fightSimulationService.ResetDice(comparison.AlternateDefenseSimulation);
             fightSimulationService.SimulateAllFights(comparison.AlternateDefenseSimulation);
             ViewSim2 = comparison.AlternateDefenseSimulation.FightSimulations.First();
-
+            //reassign to defender's name since we are comparing them
+            comparison.Simulation1.Stats.ColumnName = comparison.Simulation1.Defender.Name;
+            comparison.AlternateDefenseSimulation.Stats.ColumnName = comparison.AlternateDefenseSimulation.Defender.Name;
         }
         StateHasChanged();
     }
@@ -149,6 +165,7 @@
                 {
                     new AttackProfile()
                     {
+                        Name = "Bolt Rifle",
                         WeaponsInUnit = 10,
                         ArmorPenetration = 1,
                         Attacks = 2,
@@ -179,6 +196,9 @@
             Defender = (UnitProfile)comparison.Simulation1.Defender.Clone(),
             Attacker = (UnitProfile)comparison.Simulation1.Attacker.Clone()
         };
+        comparison.AlternateDefenseSimulation.Defender.Name = comparison.Simulation1.Defender.Name + "(1)";
+        comparison.AlternateAttackSimulation.Attacker.Name = comparison.Simulation1.Attacker.Name + "(1)";
+        comparison.AlternateAttackSimulation.Attacker.Attacks[0].Name = comparison.Simulation1.Attacker.Attacks[0].Name + "(1)";
         AssignMultiSims(1);
 
         return base.OnInitializedAsync();
