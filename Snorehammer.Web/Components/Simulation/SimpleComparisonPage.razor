@@ -117,19 +117,23 @@
         await fightSimulationService.ResetDice(comparison.Simulation1);
         fightSimulationService.SimulateAllFights(comparison.Simulation1);
         ViewSim1 = comparison.Simulation1.FightSimulations.First();
+        //if only a single sim, show attacker as column name
+        comparison.Simulation1.Stats.ColumnName = comparison.Simulation1.Attacker.Name;
         if (comparison.ComparingAttackers)
         {
             await fightSimulationService.ResetDice(comparison.AlternateAttackSimulation);
             fightSimulationService.SimulateAllFights(comparison.AlternateAttackSimulation);
             ViewSim2 = comparison.AlternateAttackSimulation.FightSimulations.First();
-
+            comparison.AlternateAttackSimulation.Stats.ColumnName = comparison.AlternateAttackSimulation.Attacker.Name;
         }
         else if (comparison.ComparingDefenders)
         {
             await fightSimulationService.ResetDice(comparison.AlternateDefenseSimulation);
             fightSimulationService.SimulateAllFights(comparison.AlternateDefenseSimulation);
             ViewSim2 = comparison.AlternateDefenseSimulation.FightSimulations.First();
-
+            //reassign to defender's name since we are comparing them
+            comparison.Simulation1.Stats.ColumnName = comparison.Simulation1.Defender.Name;
+            comparison.AlternateDefenseSimulation.Stats.ColumnName = comparison.AlternateDefenseSimulation.Defender.Name;
         }
         StateHasChanged();
     }
