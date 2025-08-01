@@ -22,39 +22,78 @@
     [Parameter]
     public IEnumerable<MultiFightStats> stats { get; set; }
     public IEnumerable<IDictionary<string, object>> data { get; set; }
-
     public IDictionary<string, Type> columns { get; set; } = new Dictionary<string, Type>();
-
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-
-        var rnd = new Random();
-
-        //We want to take our stats object and do something similar to it, but I doubt we will need the 
+        // crosstab query
+       
 
         // Add dynamic columns
         foreach (var i in stats)
         {
-            columns.Add(i..ToString(), typeof(int));
+            columns.Add(i.ColumnName.ToString(), typeof(float));
         }
 
         // Transpose crosstab data to "rows as columns" collection
-        data = Enumerable.Range(0, 2).Select(i =>
+        data = Enumerable.Range(0, stats.Count()+1).Select(i =>
         {
             var row = new Dictionary<string, object>();
 
             foreach (var column in columns)
             {
-                var dataRow = query.Where(d => d.OrderYear.ToString() == column.Key).FirstOrDefault();
+                var dataRow = stats.Where(d => d.ColumnName.ToString() == column.Key).FirstOrDefault();
 
                 row.Add(
                     column.Key,
-                    i == 0 ? dataRow.Company : dataRow.Amount
+                    dataRow.AttackNumber
                 );
+                row.Add(
+                    column.Key,
+                    dataRow.AttacksHit
+                );
+                row.Add(
+                    column.Key,
+                    dataRow.WoundsInflicted
+                );
+                row.Add(
+                    column.Key,
+                    dataRow.ArmorSavesFailed
+                );
+                row.Add(
+                    column.Key,
+                    dataRow.DamageNumber
+                );
+                row.Add(
+                    column.Key,
+                    dataRow.FeelNoPainMade
+                );
+                row.Add(
+                    column.Key,
+                    dataRow.ModelsDestroyed
+                );
+                row.Add(
+                    column.Key,
+                    dataRow.UnitDamaged
+                );
+                row.Add(
+                    column.Key,
+                    dataRow.LostAModel
+                );
+                row.Add(
+                    column.Key,
+                    dataRow.LessThanHalf
+                );
+                row.Add(
+                    column.Key,
+                    dataRow.UnitEntirelyDestroyed
+                );
+
             }
 
             return row;
         });
+    }
+
     }
 }
