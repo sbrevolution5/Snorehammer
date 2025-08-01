@@ -99,10 +99,17 @@
     private void SetAttacker(AttackProfile source, MultiFightSimulation destination)
     {
         destination.Attacker = (UnitProfile)source.Clone();
+        destination.Attacker.Name = source.Name + "(1)";
+        foreach (var attack in destination.Attacker.Attacks)
+        {
+            attack.Name = attack.Name + "(1)";
+        }
+
     }
     private void SetDefender(UnitProfile source, MultiFightSimulation destination)
     {
         destination.Defender = (UnitProfile)source.Clone();
+        destination.Defender.Name = source.Name + "(1)";
     }
     private void AssignMultiSims(int x)
     {
@@ -158,6 +165,7 @@
                 {
                     new AttackProfile()
                     {
+                        Name = "Bolt Rifle",
                         WeaponsInUnit = 10,
                         ArmorPenetration = 1,
                         Attacks = 2,
@@ -188,6 +196,9 @@
             Defender = (UnitProfile)comparison.Simulation1.Defender.Clone(),
             Attacker = (UnitProfile)comparison.Simulation1.Attacker.Clone()
         };
+        comparison.AlternateDefenseSimulation.Defender.Name = comparison.Simulation1.Defender.Name + "(1)";
+        comparison.AlternateAttackSimulation.Attacker.Name = comparison.Simulation1.Attacker.Name + "(1)";
+        comparison.AlternateAttackSimulation.Attacker.Attacks[0].Name = comparison.Simulation1.Attacker.Attacks[0].Name + "(1)";
         AssignMultiSims(1);
 
         return base.OnInitializedAsync();
