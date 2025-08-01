@@ -84,7 +84,11 @@
 </RadzenCardGroup>
 <RadzenButton Click=@(() => FightUnits()) Text="Fight all Units" ButtonStyle="ButtonStyle.Primary" />
 <TableDisplay comparison="comparison" />
-<DataGridContainer comparison="comparison"></DataGridContainer>
+@if (comparison.Simulation1.Stats.ColumnName !="")
+{
+
+    <DataGridContainer comparison="comparison"></DataGridContainer>
+}
 @code {
     public Comparison comparison { get; set; }
     public bool ShowTable { get; set; } = true;

@@ -497,6 +497,7 @@ namespace Snorehammer.Web.Services
             {
                 weaponSim.Stats.LessThanHalf = true;
             }
+            weaponSim.Stats.ColumnName = weaponSim.Weapon.Name;
         }
 
         private void CompileStatsFromWeapons(FightSimulation sim)
