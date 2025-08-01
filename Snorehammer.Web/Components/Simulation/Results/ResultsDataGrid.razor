@@ -1,5 +1,60 @@
-﻿<h3>ResultsDataGrid</h3>
+﻿@using Snorehammer.Web.FrontendModels.Stats
+<RadzenDataGrid Data="@data">
+    <Columns>
+        <RadzenDataGridColumn Title="Year" Width="120px">
+            <Template>
+                <strong>@(context.Values.All(v => v is string) ? "Company" : "Amount")</strong>
+            </Template>
+        </RadzenDataGridColumn>
+        @foreach (var column in columns)
+        {
+            <RadzenDataGridColumn @key=@column.Key Title="@column.Key" Type="column.Value"
+                                  Property="@PropertyAccess.GetDynamicPropertyExpression(column.Key, column.Value)">
+                <Template>
+                    @(context.Values.All(v => v is string) ? context[column.Key] : String.Format("{0:C}", context[column.Key]))
+                </Template>
+            </RadzenDataGridColumn>
+        }
+    </Columns>
+</RadzenDataGrid>
 
 @code {
+    [Parameter]
+    public IEnumerable<MultiFightStats> stats { get; set; }
+    public IEnumerable<IDictionary<string, object>> data { get; set; }
 
+    public IDictionary<string, Type> columns { get; set; } = new Dictionary<string, Type>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        var rnd = new Random();
+
+        //We want to take our stats object and do something similar to it, but I doubt we will need the 
+
+        // Add dynamic columns
+        foreach (var i in stats)
+        {
+            columns.Add(i..ToString(), typeof(int));
+        }
+
+        // Transpose crosstab data to "rows as columns" collection
+        data = Enumerable.Range(0, 2).Select(i =>
+        {
+            var row = new Dictionary<string, object>();
+
+            foreach (var column in columns)
+            {
+                var dataRow = query.Where(d => d.OrderYear.ToString() == column.Key).FirstOrDefault();
+
+                row.Add(
+                    column.Key,
+                    i == 0 ? dataRow.Company : dataRow.Amount
+                );
+            }
+
+            return row;
+        });
+    }
 }

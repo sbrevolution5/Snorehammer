@@ -4,6 +4,7 @@ namespace Snorehammer.Web.FrontendModels.Stats
 {
     public class MultiFightStats
     {
+        public string ColumnName { get; set; } = "";
         public float AttackNumber { get; set; } = 0;
         public float DamageNumber { get; set; } = 0;
         public float ModelsDestroyed { get; set; } = 0;
