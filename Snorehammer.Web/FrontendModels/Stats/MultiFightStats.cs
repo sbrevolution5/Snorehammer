@@ -8,6 +8,7 @@ namespace Snorehammer.Web.FrontendModels.Stats
         public float AttackNumber { get; set; } = 0;
         public float DamageNumber { get; set; } = 0;
         public float ModelsDestroyed { get; set; } = 0;
+        public float WoundsSuccessful { get; set; } = 0; 
         public float WoundsInflicted { get; set; } = 0;
         public float ArmorSavesFailed { get; set; } = 0;
         public float AttacksHit { get; set; } = 0;
@@ -25,6 +26,7 @@ namespace Snorehammer.Web.FrontendModels.Stats
             ArmorSavesFailed = (float)fightSimulations.Select(f => f.Stats.ArmorSavesFailed).Average();
             AttacksHit = (float)fightSimulations.Select(f => f.Stats.AttacksHit).Average();
             FeelNoPainMade = (float)fightSimulations.Select(f => f.Stats.FeelNoPainMade).Average();
+            WoundsSuccessful = (float)fightSimulations.Select(f => f.Stats.WoundsSuccessful).Average();
             UnitEntirelyDestroyed = fightSimulations.Where(f => f.Stats.UnitEntirelyDestroyed).Count();
             LessThanHalf = fightSimulations.Where(f => f.Stats.LessThanHalf).Count();
             UnitDamaged = fightSimulations.Where(f => f.Stats.UnitDamaged).Count();
