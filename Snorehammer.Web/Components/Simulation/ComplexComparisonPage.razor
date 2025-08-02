@@ -117,20 +117,23 @@
         comparison.AlternateAttackSimulation.SetSimNumber(x);
 
     }
-    private void FightUnits()
+    private async Task FightUnits()
     {
+        await fightSimulationService.ResetDice(comparison.Simulation1);
         comparison.Simulation1.Stats.ColumnName = "";
         StateHasChanged();
         fightSimulationService.SimulateAllFights(comparison.Simulation1);
         ViewSim1 = comparison.Simulation1.FightSimulations.First();
         if (comparison.ComparingAttackers)
         {
+            await fightSimulationService.ResetDice(comparison.AlternateAttackSimulation);
             fightSimulationService.SimulateAllFights(comparison.AlternateAttackSimulation);
             ViewSim2 = comparison.AlternateAttackSimulation.FightSimulations.First();
 
         }
         else if (comparison.ComparingDefenders)
         {
+            await fightSimulationService.ResetDice(comparison.AlternateDefenseSimulation);
             fightSimulationService.SimulateAllFights(comparison.AlternateDefenseSimulation);
             ViewSim2 = comparison.AlternateDefenseSimulation.FightSimulations.First();
 
