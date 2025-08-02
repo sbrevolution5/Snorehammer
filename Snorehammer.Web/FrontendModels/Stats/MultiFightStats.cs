@@ -17,6 +17,7 @@ namespace Snorehammer.Web.FrontendModels.Stats
         public float LessThanHalf { get; set; } = 0;
         public float UnitDamaged { get; set; } = 0;
         public float LostAModel { get; set; } = 0;
+        public List<MultiFightStats> PerWeaponStats { get; set; } = new List<MultiFightStats>();
         public void SetAverages(IEnumerable<ISimulationForStats> fightSimulations)
         {
             AttackNumber = (float)fightSimulations.Select(f => f.Stats.AttackNumber).Average();

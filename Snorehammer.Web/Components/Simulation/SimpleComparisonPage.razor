@@ -14,22 +14,21 @@
     <RadzenLabel>Compare Attackers</RadzenLabel>
     <RadzenSwitch Disabled=@comparison.ComparingAttackers @bind-Value=@comparison.ComparingDefenders />
     <RadzenLabel>Compare Defenders</RadzenLabel>
-    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
-        <EditForm Model="SelectedNumberOfSimulations">
+<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
+    <EditForm Model="SelectedNumberOfSimulations">
 
-            <RadzenSelectBar TValue="int" Size="ButtonSize.Small" @bind-Value="SelectedNumberOfSimulations" Change="x => AssignMultiSims(x)">
-                <Items>
-                    <RadzenSelectBarItem Value="1" Text="x1" />
-                    <RadzenSelectBarItem Value="5" Text="x5" />
-                    <RadzenSelectBarItem Value="10" Text="x10" />
-                    <RadzenSelectBarItem Value="100" Text="x100" />
-                    <RadzenSelectBarItem Value="1000" Text="x1000" />
-                </Items>
-            </RadzenSelectBar>
-        </EditForm>
-    </RadzenStack>
+        <RadzenSelectBar TValue="int" Size="ButtonSize.Small" @bind-Value="SelectedNumberOfSimulations" Change="x => AssignMultiSims(x)">
+            <Items>
+                <RadzenSelectBarItem Value="1" Text="x1" />
+                <RadzenSelectBarItem Value="5" Text="x5" />
+                <RadzenSelectBarItem Value="10" Text="x10" />
+                <RadzenSelectBarItem Value="100" Text="x100" />
+                <RadzenSelectBarItem Value="1000" Text="x1000" />
+            </Items>
+        </RadzenSelectBar>
+    </EditForm>
 </RadzenStack>
-
+</RadzenStack>
 <RadzenCard Variant="Variant.Text">
 
     <h1>Attacker</h1>
@@ -48,7 +47,10 @@
         }
         else
         {
-            <AttackInput @bind-attack="comparison.Simulation1.Attacker.Attacks[0]" />
+            <RadzenCard>
+
+                <AttackInput @bind-attack="comparison.Simulation1.Attacker.Attacks[0]" />
+            </RadzenCard>
 
         }
     </RadzenCardGroup>
@@ -84,7 +86,7 @@
     }
 </RadzenCardGroup>
 <RadzenButton Click=@(() => FightUnits()) Text="Fight all Units" ButtonStyle="ButtonStyle.Primary" />
-@if (comparison.Simulation1.Stats.ColumnName !="")
+@if (comparison.Simulation1.Stats.ColumnName != "")
 {
     <DataGrid comparison="comparison"></DataGrid>
 
