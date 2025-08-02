@@ -4,6 +4,29 @@
 {
 
     <RadzenDataGrid Data="comparisonStats">
+        <Template Context="MultiFightStats">
+            <RadzenDataGrid Data="MultiFightStats.PerWeaponStats">
+                <Columns>
+
+                    <RadzenDataGridColumn Property="@nameof(MultiFightStats.ColumnName)" Title="Name"></RadzenDataGridColumn>
+                    <RadzenDataGridColumn Property="@nameof(MultiFightStats.AttackNumber)" Title="Attacks Made"></RadzenDataGridColumn>
+                    <RadzenDataGridColumn Property="@nameof(MultiFightStats.AttacksHit)" Title="Attacks Hit"></RadzenDataGridColumn>
+                    <RadzenDataGridColumn Property="@nameof(MultiFightStats.WoundsSuccessful)" Title="Wounds Rolls Successful"></RadzenDataGridColumn>
+                    <RadzenDataGridColumn Property="@nameof(MultiFightStats.ArmorSavesFailed)" Title="Armor Saves Failed"></RadzenDataGridColumn>
+                    <RadzenDataGridColumn Property="@nameof(MultiFightStats.WoundsInflicted)" Title="Damage Before FNP"></RadzenDataGridColumn>
+                    <RadzenDataGridColumn Property="@nameof(MultiFightStats.FeelNoPainMade)" Title="Feel No Pain Successful"></RadzenDataGridColumn>
+                    <RadzenDataGridColumn Property="@nameof(MultiFightStats.DamageNumber)" Title="Total Damage"></RadzenDataGridColumn>
+                    @if (comparison.Simulation1.Rounds > 1)
+                    {
+
+                        <RadzenDataGridColumn Property="@nameof(MultiFightStats.UnitDamaged)" Title="Times unit was damaged"></RadzenDataGridColumn>
+                        <RadzenDataGridColumn Property="@nameof(MultiFightStats.LostAModel)" Title="Times 1 or more models lost"></RadzenDataGridColumn>
+                        <RadzenDataGridColumn Property="@nameof(MultiFightStats.LessThanHalf)" Title="Times Unit left below half"></RadzenDataGridColumn>
+                        <RadzenDataGridColumn Property="@nameof(MultiFightStats.UnitEntirelyDestroyed)" Title="Times unit was destroyed"></RadzenDataGridColumn>
+                    }
+                </Columns>
+            </RadzenDataGrid>
+        </Template>
         <Columns>
             <RadzenDataGridColumn Property="@nameof(MultiFightStats.ColumnName)" Title="Name"></RadzenDataGridColumn>
             <RadzenDataGridColumn Property="@nameof(MultiFightStats.AttackNumber)" Title="Attacks Made"></RadzenDataGridColumn>

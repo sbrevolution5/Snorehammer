@@ -47,7 +47,7 @@ namespace Snorehammer.Web.Services
                 var multiStats = new MultiFightStats();
                 //then run set averages on each list and add to overall simulation
                 multiStats.SetAverages(singleWeaponList);
-                multiSim.PerWeaponStats.Add(multiStats);
+                multiSim.Stats.PerWeaponStats.Add(multiStats);
             }
         }
         public void SimulateFight(FightSimulation sim)
