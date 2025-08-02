@@ -323,7 +323,7 @@ namespace Snorehammer.Web.Services
                 }
             }
             sim.Stats.ArmorSavesFailed = sim.ArmorDice.Where(d => !d.Success).Count();
-            sim.Stats.WoundsInflicted = sim.ArmorDice.Count();
+            sim.Stats.WoundsSuccessful = sim.ArmorDice.Count();
         }
 
         public int DetermineArmorSave(WeaponSimulation sim)
@@ -509,6 +509,7 @@ namespace Snorehammer.Web.Services
             sim.Stats.FeelNoPainMade = sim.WeaponSimulations.Select(s => s.Stats.FeelNoPainMade).Sum();
             sim.Stats.ArmorSavesFailed = sim.WeaponSimulations.Select(s => s.Stats.ArmorSavesFailed).Sum();
             sim.Stats.AttacksHit = sim.WeaponSimulations.Select(s => s.Stats.AttacksHit).Sum();
+            sim.Stats.WoundsSuccessful = sim.WeaponSimulations.Select(s => s.Stats.WoundsSuccessful).Sum();
             sim.Stats.WoundsInflicted = sim.WeaponSimulations.Select(s => s.Stats.WoundsInflicted).Sum();
             sim.Stats.LostAModel = sim.WeaponSimulations.Where(s => s.Stats.LostAModel).Any();
             sim.Stats.UnitDamaged = sim.WeaponSimulations.Where(s => s.Stats.UnitDamaged).Any();

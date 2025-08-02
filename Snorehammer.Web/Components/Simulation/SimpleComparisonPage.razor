@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using Snorehammer.Web.Components.Simulation.Results
+@using Snorehammer.Web.Components.Simulation.Results.Grid
 @using Snorehammer.Web.Components.Unit
 @using Snorehammer.Web.FrontendModels
 @using Snorehammer.Web.FrontendModels.Profiles
@@ -83,11 +84,10 @@
     }
 </RadzenCardGroup>
 <RadzenButton Click=@(() => FightUnits()) Text="Fight all Units" ButtonStyle="ButtonStyle.Primary" />
-<TableDisplay comparison="comparison" />
 @if (comparison.Simulation1.Stats.ColumnName !="")
 {
+    <DataGrid comparison="comparison"></DataGrid>
 
-    <DataGridContainer comparison="comparison"></DataGridContainer>
 }
 @code {
     public Comparison comparison { get; set; }
@@ -122,6 +122,8 @@
     private async void FightUnits()
     {
         await fightSimulationService.ResetDice(comparison.Simulation1);
+        comparison.Simulation1.Stats.ColumnName = "";
+        StateHasChanged();
         fightSimulationService.SimulateAllFights(comparison.Simulation1);
         ViewSim1 = comparison.Simulation1.FightSimulations.First();
         //if only a single sim, show attacker as column name

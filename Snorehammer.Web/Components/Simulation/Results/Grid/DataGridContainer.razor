@@ -1,0 +1,26 @@
+﻿@using Snorehammer.Web.FrontendModels.Stats
+<RadzenCard>
+    <DataGrid stats="@DataFromComparison()"/>
+</RadzenCard>
+
+@code {
+    [Parameter]
+    public Snorehammer.Web.FrontendModels.Comparison comparison { get; set; }
+    private List<MultiFightStats> DataFromComparison()
+    {
+        var res = new List<MultiFightStats>();
+        @if (comparison.Simulation1.Rounds == 1)
+        {
+            res.Add(comparison.Simulation1.Stats);
+            @if (comparison.ComparingAttackers)
+            {
+                res.Add(comparison.AlternateAttackSimulation.Stats);
+            }
+            else if (comparison.ComparingDefenders)
+            {
+                res.Add(comparison.AlternateDefenseSimulation.Stats);
+            }
+        }
+        return res;
+    }
+}
