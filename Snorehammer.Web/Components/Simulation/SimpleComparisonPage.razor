@@ -14,20 +14,20 @@
     <RadzenLabel>Compare Attackers</RadzenLabel>
     <RadzenSwitch Disabled=@comparison.ComparingAttackers @bind-Value=@comparison.ComparingDefenders />
     <RadzenLabel>Compare Defenders</RadzenLabel>
-<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
-    <EditForm Model="SelectedNumberOfSimulations">
+    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
+        <EditForm Model="SelectedNumberOfSimulations">
 
-        <RadzenSelectBar TValue="int" Size="ButtonSize.Small" @bind-Value="SelectedNumberOfSimulations" Change="x => AssignMultiSims(x)">
-            <Items>
-                <RadzenSelectBarItem Value="1" Text="x1" />
-                <RadzenSelectBarItem Value="5" Text="x5" />
-                <RadzenSelectBarItem Value="10" Text="x10" />
-                <RadzenSelectBarItem Value="100" Text="x100" />
-                <RadzenSelectBarItem Value="1000" Text="x1000" />
-            </Items>
-        </RadzenSelectBar>
-    </EditForm>
-</RadzenStack>
+            <RadzenSelectBar TValue="int" Size="ButtonSize.Small" @bind-Value="SelectedNumberOfSimulations" Change="x => AssignMultiSims(x)">
+                <Items>
+                    <RadzenSelectBarItem Value="1" Text="x1" />
+                    <RadzenSelectBarItem Value="5" Text="x5" />
+                    <RadzenSelectBarItem Value="10" Text="x10" />
+                    <RadzenSelectBarItem Value="100" Text="x100" />
+                    <RadzenSelectBarItem Value="1000" Text="x1000" />
+                </Items>
+            </RadzenSelectBar>
+        </EditForm>
+    </RadzenStack>
 </RadzenStack>
 <RadzenCard Variant="Variant.Text">
 
@@ -35,11 +35,11 @@
     <RadzenCardGroup>
         @if (comparison.ComparingAttackers)
         {
-            <RadzenCard>
+            <RadzenCard Variant="Variant.Text">
                 <AttackInput @bind-attack="comparison.Simulation1.Attacker.Attacks[0]" />
                 <RadzenButton Click=@(() => SetAttacker(comparison.AlternateAttackSimulation.Attacker.Attacks[0], comparison.Simulation1)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Attacker 2 </span></RadzenButton>
             </RadzenCard>
-            <RadzenCard>
+            <RadzenCard Variant="Variant.Text">
 
                 <AttackInput @bind-attack="comparison.AlternateAttackSimulation.Attacker.Attacks[0]" />
                 <RadzenButton Click=@(() => SetAttacker(comparison.Simulation1.Attacker.Attacks[0], comparison.AlternateAttackSimulation)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Attacker 1 </span></RadzenButton>
@@ -47,7 +47,7 @@
         }
         else
         {
-            <RadzenCard>
+            <RadzenCard Variant="Variant.Text">
 
                 <AttackInput @bind-attack="comparison.Simulation1.Attacker.Attacks[0]" />
             </RadzenCard>
@@ -58,18 +58,20 @@
     <RadzenCardGroup>
         @if (comparison.ComparingDefenders)
         {
-            <RadzenCard>
+            <RadzenCard Variant="Variant.Text">
                 <UnitInput @bind-Unit="comparison.Simulation1.Defender" Attacker=false />
                 <RadzenButton Click=@(() => SetDefender(comparison.AlternateDefenseSimulation.Defender, comparison.Simulation1)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Defender 2 </span></RadzenButton>
             </RadzenCard>
-            <RadzenCard>
+            <RadzenCard Variant="Variant.Text">
                 <UnitInput @bind-Unit="comparison.AlternateDefenseSimulation.Defender" Attacker=false />
                 <RadzenButton Click=@(() => SetDefender(comparison.Simulation1.Defender, comparison.AlternateDefenseSimulation)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Defender 1 </span></RadzenButton>
             </RadzenCard>
         }
         else
         {
-            <UnitInput @bind-Unit="comparison.Simulation1.Defender" Attacker=false />
+            <RadzenCard Variant="Variant.Text">
+                <UnitInput @bind-Unit="comparison.Simulation1.Defender" Attacker=false />
+            </RadzenCard>
         }
     </RadzenCardGroup>
 </RadzenCard>
