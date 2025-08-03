@@ -98,16 +98,47 @@
             {
                 args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.AttackNumber,comparisonStats.Select(s=> s.AttackNumber))}");
             }
+            else if (args.Column.Property == nameof(MultiFightStats.AttacksHit))
+            {
+                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.AttacksHit,comparisonStats.Select(s=> s.AttacksHit))}");
+            }
+            else if (args.Column.Property == nameof(MultiFightStats.WoundsSuccessful))
+            {
+                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.WoundsSuccessful,comparisonStats.Select(s=> s.WoundsSuccessful))}");
+            }
+            else if (args.Column.Property == nameof(MultiFightStats.ArmorSavesFailed))
+            {
+                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.ArmorSavesFailed, comparisonStats.Select(s => s.ArmorSavesFailed))}");
+            }
+            else if (args.Column.Property == nameof(MultiFightStats.WoundsInflicted))
+            {
+                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.WoundsInflicted, comparisonStats.Select(s => s.WoundsInflicted))}");
+            }
+            else if (args.Column.Property == nameof(MultiFightStats.FeelNoPainMade))
+            {
+                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.FeelNoPainMade, comparisonStats.Select(s => s.FeelNoPainMade))}");
+            }
+            else if (args.Column.Property == nameof(MultiFightStats.DamageNumber))
+            {
+                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.DamageNumber, comparisonStats.Select(s => s.DamageNumber))}");
+            }
+            else if (args.Column.Property == nameof(MultiFightStats.UnitDamaged))
+            {
+                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.UnitDamaged, comparisonStats.Select(s => s.UnitDamaged))}");
+            }
+            else if (args.Column.Property == nameof(MultiFightStats.LostAModel))
+            {
+                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.LostAModel, comparisonStats.Select(s => s.LostAModel))}");
+            }
+            else if (args.Column.Property == nameof(MultiFightStats.LessThanHalf))
+            {
+                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.LessThanHalf, comparisonStats.Select(s => s.LessThanHalf))}");
+            }
+            else if (args.Column.Property == nameof(MultiFightStats.UnitEntirelyDestroyed))
+            {
+                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.UnitEntirelyDestroyed, comparisonStats.Select(s => s.UnitEntirelyDestroyed))}");
+            }
         }
-
-        // if (args.Column.Property == "OrderID")
-        // {
-        //     if (args.Data.OrderID == 10248 && args.Data.ProductID == 11 || args.Data.OrderID == 10250 && args.Data.ProductID == 41)
-        //     {
-        //         args.Attributes.Add("rowspan", 3);
-        //     }
-
-
     }
 
     private string ConditionalClassList(float thisSim, IEnumerable<float> allSims)
