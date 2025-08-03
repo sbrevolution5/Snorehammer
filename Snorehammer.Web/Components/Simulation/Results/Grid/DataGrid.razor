@@ -3,12 +3,10 @@
 @if (comparisonStats is not null)
 {
 
-    <RadzenDataGrid Data="comparisonStats" AllowSorting="true" CellRender="@CellRender">
+    <RadzenDataGrid Data="comparisonStats"  GridLines="DataGridGridLines.Both" AllowSorting="true" CellRender="@CellRender">
         <Template Context="MultiFightStats">
-            <RadzenDataGrid Data="MultiFightStats.PerWeaponStats" AllowSorting="true" CellRender="@CellRender">
-
+            <RadzenDataGrid Data="MultiFightStats.PerWeaponStats" GridLines="DataGridGridLines.Both" AllowSorting="true" CellRender="@CellRender">
                 <Columns>
-
                     <RadzenDataGridColumn Property="@nameof(MultiFightStats.ColumnName)" Title="Name"></RadzenDataGridColumn>
                     <RadzenDataGridColumn Property="@nameof(MultiFightStats.AttackNumber)"
                                           class="@ConditionalClassList(MultiFightStats.AttackNumber, MultiFightStats.PerWeaponStats.Select(s => s.AttackNumber))"
