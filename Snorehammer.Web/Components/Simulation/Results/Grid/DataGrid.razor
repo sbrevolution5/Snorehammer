@@ -3,9 +3,9 @@
 @if (comparisonStats is not null)
 {
 
-    <RadzenDataGrid Data="comparisonStats">
+    <RadzenDataGrid Data="comparisonStats" AllowSorting="true">
         <Template Context="MultiFightStats">
-            <RadzenDataGrid Data="MultiFightStats.PerWeaponStats">
+            <RadzenDataGrid Data="MultiFightStats.PerWeaponStats" AllowSorting="true">
                 <Columns>
 
                     <RadzenDataGridColumn Property="@nameof(MultiFightStats.ColumnName)" Title="Name"></RadzenDataGridColumn>
@@ -68,4 +68,5 @@
             }
         }
     }
+    
 }
