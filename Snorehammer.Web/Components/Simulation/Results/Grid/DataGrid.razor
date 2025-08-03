@@ -5,7 +5,7 @@
 
     <RadzenDataGrid Data="comparisonStats" AllowSorting="true" CellRender="@CellRender">
         <Template Context="MultiFightStats">
-            <RadzenDataGrid Data="MultiFightStats.PerWeaponStats" AllowSorting="true">
+            <RadzenDataGrid Data="MultiFightStats.PerWeaponStats" AllowSorting="true" CellRender="@CellRender">
                 <Columns>
 
                     <RadzenDataGridColumn Property="@nameof(MultiFightStats.ColumnName)" Title="Name"></RadzenDataGridColumn>
@@ -92,51 +92,60 @@
     }
     void CellRender(DataGridCellRenderEventArgs<MultiFightStats> args)
     {
+        var statsList = new List<MultiFightStats>();
+        if (args.Data.PerWeaponStats is not null)
+        {
+            statsList = comparisonStats;
+        }
+        else
+        {
+            statsList = comparisonStats.SelectMany(s => s.PerWeaponStats).ToList();
+        }
         if (args.Column.Property != nameof(MultiFightStats.ColumnName))
         {
             if (args.Column.Property == nameof(MultiFightStats.AttackNumber))
             {
-                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.AttackNumber,comparisonStats.Select(s=> s.AttackNumber))}");
+                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.AttackNumber,statsList.Select(s=> s.AttackNumber))}");
             }
             else if (args.Column.Property == nameof(MultiFightStats.AttacksHit))
             {
-                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.AttacksHit,comparisonStats.Select(s=> s.AttacksHit))}");
+                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.AttacksHit,statsList.Select(s=> s.AttacksHit))}");
             }
             else if (args.Column.Property == nameof(MultiFightStats.WoundsSuccessful))
             {
-                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.WoundsSuccessful,comparisonStats.Select(s=> s.WoundsSuccessful))}");
+                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.WoundsSuccessful,statsList.Select(s=> s.WoundsSuccessful))}");
             }
             else if (args.Column.Property == nameof(MultiFightStats.ArmorSavesFailed))
             {
-                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.ArmorSavesFailed, comparisonStats.Select(s => s.ArmorSavesFailed))}");
+                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.ArmorSavesFailed, statsList.Select(s => s.ArmorSavesFailed))}");
             }
             else if (args.Column.Property == nameof(MultiFightStats.WoundsInflicted))
             {
-                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.WoundsInflicted, comparisonStats.Select(s => s.WoundsInflicted))}");
+                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.WoundsInflicted, statsList.Select(s => s.WoundsInflicted))}");
             }
             else if (args.Column.Property == nameof(MultiFightStats.FeelNoPainMade))
             {
-                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.FeelNoPainMade, comparisonStats.Select(s => s.FeelNoPainMade))}");
+                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.FeelNoPainMade, statsList.Select(s => s.FeelNoPainMade))}");
             }
             else if (args.Column.Property == nameof(MultiFightStats.DamageNumber))
             {
-                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.DamageNumber, comparisonStats.Select(s => s.DamageNumber))}");
+                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.DamageNumber, statsList.Select(s => s.DamageNumber))}");
             }
             else if (args.Column.Property == nameof(MultiFightStats.UnitDamaged))
             {
-                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.UnitDamaged, comparisonStats.Select(s => s.UnitDamaged))}");
+                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.UnitDamaged, statsList.Select(s => s.UnitDamaged))}");
             }
             else if (args.Column.Property == nameof(MultiFightStats.LostAModel))
             {
-                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.LostAModel, comparisonStats.Select(s => s.LostAModel))}");
+                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.LostAModel, statsList.Select(s => s.LostAModel))}");
             }
             else if (args.Column.Property == nameof(MultiFightStats.LessThanHalf))
             {
-                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.LessThanHalf, comparisonStats.Select(s => s.LessThanHalf))}");
+                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.LessThanHalf, statsList.Select(s => s.LessThanHalf))}");
             }
             else if (args.Column.Property == nameof(MultiFightStats.UnitEntirelyDestroyed))
             {
-                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.UnitEntirelyDestroyed, comparisonStats.Select(s => s.UnitEntirelyDestroyed))}");
+                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.UnitEntirelyDestroyed, statsList.Select(s => s.UnitEntirelyDestroyed))}");
             }
         }
     }
