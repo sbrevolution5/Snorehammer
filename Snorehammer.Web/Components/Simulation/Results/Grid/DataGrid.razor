@@ -103,15 +103,19 @@
             statsList = comparisonStats.SelectMany(s => s.PerWeaponStats).ToList();
         }
 
-                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.AttackNumber,statsList.Select(s=> s.AttackNumber))}");
+        if (args.Column.Property != "ColumnName")
+        {
+            if (args.Column.Property == nameof(MultiFightStats.AttackNumber))
+            {
+                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.AttackNumber, statsList.Select(s => s.AttackNumber))}");
             }
             else if (args.Column.Property == nameof(MultiFightStats.AttacksHit))
             {
-                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.AttacksHit,statsList.Select(s=> s.AttacksHit))}");
+                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.AttacksHit, statsList.Select(s => s.AttacksHit))}");
             }
             else if (args.Column.Property == nameof(MultiFightStats.WoundsSuccessful))
             {
-                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.WoundsSuccessful,statsList.Select(s=> s.WoundsSuccessful))}");
+                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.WoundsSuccessful, statsList.Select(s => s.WoundsSuccessful))}");
             }
             else if (args.Column.Property == nameof(MultiFightStats.ArmorSavesFailed))
             {
