@@ -7,19 +7,19 @@
         <RadzenSwitch @bind-Value=@attack.Melee />
         <RadzenLabel>Melee</RadzenLabel>
         <RadzenRow AlignItems="AlignItems.End" Wrap="FlexWrap.Wrap" Gap="1rem" class="rz-p-sm-12">
-            <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+            <RadzenColumn Size="12" SizeMD="4" SizeLG="2">
                 <RadzenFormField Text="Name" Variant="Variant.Flat">
 
                     <RadzenTextBox @bind-Value="attack.Name" />
                 </RadzenFormField>
             </RadzenColumn>
-            <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+            <RadzenColumn Size="12"  SizeMD="4" SizeLG="2">
                 <RadzenFormField Text="Weapons in unit" Variant="Variant.Flat">
 
                     <RadzenNumeric @bind-Value="attack.WeaponsInUnit" />
                 </RadzenFormField>
             </RadzenColumn>
-            <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+            <RadzenColumn Size="12"  SizeMD="4" SizeLG="2">
                 <RadzenCheckBox @bind-Value=@attack.IsVariableAttacks Name="Variable" />
                 <RadzenLabel Text="Roll for # of attacks" Component="Variable" class="rz-ms-2" />
                 @if (attack.IsVariableAttacks)
@@ -40,19 +40,19 @@
                     </RadzenFormField>
                 }
             </RadzenColumn>
-            <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+            <RadzenColumn Size="12"  SizeMD="4" SizeLG="2">
                 <RadzenFormField Text="To hit" Variant="Variant.Flat">
 
                     <RadzenNumeric @bind-Value="attack.Skill" />
                 </RadzenFormField>
             </RadzenColumn>
-            <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+            <RadzenColumn Size="12"  SizeMD="4" SizeLG="2">
                 <RadzenFormField Text="Strength" Variant="Variant.Flat">
 
                     <RadzenNumeric @bind-Value="attack.Strength" />
                 </RadzenFormField>
             </RadzenColumn>
-            <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+            <RadzenColumn Size="12"  SizeMD="4" SizeLG="2">
                 <RadzenCheckBox @bind-Value=@attack.IsVariableDamage Name="Variable" />
                 <RadzenLabel Text="Rolls damage" Component="Variable" class="rz-ms-2" />
                 @if (attack.IsVariableDamage)
@@ -83,77 +83,77 @@
             </HeaderTemplate>
             <ChildContent>
                 <RadzenRow AlignItems="AlignItems.End" Wrap="FlexWrap.Wrap" Gap="1rem" class="rz-p-sm-12">
-                    <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                         <RadzenCheckBox @bind-Value=@attack.Plus1Hit Name="Plus1Hit" />
                         <RadzenLabel Text="Plus 1 to Hit" Component="Plus1Hit" class="rz-ms-2" />
                     </RadzenColumn>
-                    <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                         <RadzenCheckBox @bind-Value=@attack.Minus1Hit Name="Minus1Hit" />
                         <RadzenLabel Text="Minus 1 to Hit" Component="Minus1Hit" class="rz-ms-2" />
                     </RadzenColumn>
-                    <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                         <RadzenCheckBox @bind-Value=@attack.Plus1Wound Name="Plus1Wound" />
                         <RadzenLabel Text="Plus 1 to Wound roll" Component="Plus1Wound" class="rz-ms-2" />
                     </RadzenColumn>
-                    <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                         <RadzenCheckBox Disabled=!attack.Melee @bind-Value=@attack.Lance Name="Lance" />
                         <RadzenLabel Text="Lance (assumes unit charged)" Component="Lance" class=@($"rz-ms-2 {MeleeLabel(true)}") />
                     </RadzenColumn>
-                    <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                         <RadzenCheckBox @bind-Value=@attack.Devastating Name="Devastating" />
                         <RadzenLabel Text="Devastating Wounds" Component="Devastating" class="rz-ms-2" />
                     </RadzenColumn>
-                    <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                         <RadzenCheckBox @bind-Value=@attack.Sustained Name="Sustained" />
                         <RadzenLabel Text="Sustained Hits" Component="Sustained" class="rz-ms-2" />
                         <RadzenFormField Text="" Style="width: 100%;">
                             <RadzenNumeric @bind-Value="@attack.SustainAmount" Disabled=!attack.Sustained />
                         </RadzenFormField>
                     </RadzenColumn>
-                    <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                         <RadzenCheckBox @bind-Value=@attack.Lethal Name="Lethal" />
                         <RadzenLabel Text="Lethal Hits" Component="Lethal" class="rz-ms-2" />
                     </RadzenColumn>
-                    <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                         <RadzenCheckBox Disabled=attack.Melee @bind-Value=@attack.Torrent Name="Torrent" />
                         <RadzenLabel Text="Torrent" Component="Torrent" class=@($"rz-ms-2 {MeleeLabel(false)}") />
                     </RadzenColumn>
-                    <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                         <RadzenCheckBox Disabled=attack.Melee @bind-Value=@attack.Blast Name="Blast" />
                         <RadzenLabel Text="Blast" Component="Blast" class=@($"rz-ms-2 {MeleeLabel(false)}") />
                     </RadzenColumn>
-                    <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                         <RadzenCheckBox @bind-Value=@attack.RerollHit Name="RerollHit" />
                         <RadzenLabel Text="Reroll Hit" Component="RerollHit" class="rz-ms-2" />
                     </RadzenColumn>
-                    <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                         <RadzenCheckBox @bind-Value=@attack.RerollWound Name="RerollWound" />
                         <RadzenLabel Text="Twin-linked/Reroll Wounds" Component="RerollWound" class="rz-ms-2" />
                     </RadzenColumn>
-                    <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                         <RadzenCheckBox @bind-Value=@attack.RerollDamage Name="RerollDamage" />
                         <RadzenLabel Text="Reroll Damage" Component="RerollDamage" class="rz-ms-2" />
                     </RadzenColumn>
-                    <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                         <RadzenCheckBox @bind-Value=@attack.Reroll1Hit Name="Reroll1Hit" />
                         <RadzenLabel Text="Reroll 1s for Hit" Component="Reroll1Hit" class="rz-ms-2" />
                     </RadzenColumn>
-                    <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                         <RadzenCheckBox @bind-Value=@attack.Reroll1Wound Name="Reroll1Wound" />
                         <RadzenLabel Text="Reroll 1s for Wounds" Component="Reroll1Wound" class="rz-ms-2" />
                     </RadzenColumn>
-                    <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                         <RadzenCheckBox @bind-Value=@attack.Reroll1Damage Name="Reroll1Damage" />
                         <RadzenLabel Text="Reroll 1s for Damage" Component="Reroll1Damage" class="rz-ms-2" />
                     </RadzenColumn>
-                    <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                         <RadzenCheckBox Disabled=attack.Melee @bind-Value=@attack.Melta Name="Melta" />
                         <RadzenLabel Text="Melta " Component="Melta" class=@($"rz-ms-2 {MeleeLabel(false)}") />
                         <RadzenFormField Text="Assumes attacker is within melta range" Style="width: 100%;">
                             <RadzenNumeric @bind-Value="@attack.MeltaDamage" Disabled=!attack.Melta />
                         </RadzenFormField>
                     </RadzenColumn>
-                    <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                         <RadzenCheckBox Disabled=attack.Melee @bind-Value=@attack.BigGuns Name="BigGuns" />
                         <RadzenLabel Text="Big Guns Never Tire" Component="BigGuns" class=@($"rz-ms-2 {MeleeLabel(false)}") />
                     </RadzenColumn>

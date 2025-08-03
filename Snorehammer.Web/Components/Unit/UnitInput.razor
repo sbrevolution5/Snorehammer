@@ -6,37 +6,37 @@
 
         <EditForm Model="@Unit">
             <RadzenRow AlignItems="AlignItems.End" Wrap="FlexWrap.Wrap" Gap="1rem" class="rz-p-sm-12">
-                <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+                <RadzenColumn Size="12"  SizeMD="4" SizeLG="2">
                     <RadzenFormField Text="Name" Variant="Variant.Flat">
 
                         <RadzenTextBox @bind-Value="Unit.Name" />
                     </RadzenFormField>
                 </RadzenColumn>
-                <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+                <RadzenColumn Size="12"  SizeMD="4" SizeLG="2">
                     <RadzenFormField Text="Saving Throw" Variant="Variant.Flat">
 
                         <RadzenNumeric @bind-Value="Unit.MinimumSave" />
                     </RadzenFormField>
                 </RadzenColumn>
-                <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+                <RadzenColumn Size="12"  SizeMD="4" SizeLG="2">
                     <RadzenFormField Text="Invulnerable Save" Variant="Variant.Flat">
 
                         <RadzenNumeric @bind-Value="Unit.InvulnerableSave" />
                     </RadzenFormField>
                 </RadzenColumn>
-                <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+                <RadzenColumn Size="12"  SizeMD="4" SizeLG="2">
                     <RadzenFormField Text="Toughness" Variant="Variant.Flat">
 
                         <RadzenNumeric @bind-Value="Unit.Toughness" />
                     </RadzenFormField>
                 </RadzenColumn>
-                <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+                <RadzenColumn Size="12"  SizeMD="4" SizeLG="2">
                     <RadzenFormField Text="Model Wounds" Variant="Variant.Flat">
 
                         <RadzenNumeric @bind-Value="Unit.Wounds" />
                     </RadzenFormField>
                 </RadzenColumn>
-                <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+                <RadzenColumn Size="12"  SizeMD="4" SizeLG="2">
                     <RadzenFormField Text="Number of Models" Variant="Variant.Flat">
 
                         <RadzenNumeric @bind-Value="Unit.ModelCount" />
@@ -52,7 +52,7 @@
                 <ChildContent>
                     <RadzenRow AlignItems="AlignItems.End" Wrap="FlexWrap.Wrap" Gap="1rem" class="rz-p-sm-4">
 
-                        <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                        <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                             <RadzenCheckBox @bind-Value=@Unit.ArmorReroll Name="ArmorReroll" />
                             <RadzenLabel Text="Reroll all failed armor saves" Component="ArmorReroll" class="rz-ms-2" />
                         </RadzenColumn>
@@ -60,38 +60,38 @@
                             <RadzenCheckBox @bind-Value=@Unit.ChargeBonus Name="ChargeBonus" />
                             <RadzenLabel Text="Charge Bonus" Component="ChargeBonus" class="rz-ms-2" />
                         </RadzenColumn> *@
-                        <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                        <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                             <RadzenCheckBox @bind-Value=@Unit.FightsFirst Name="FightsFirst" />
                             <RadzenLabel Text="Fights First" Component="FightsFirst" class="rz-ms-2" />
                         </RadzenColumn>
-                        <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                        <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                             <RadzenCheckBox @bind-Value=@Unit.Reroll1Save Name="Reroll1Save" />
                             <RadzenLabel Text="Reroll 1s for armor saves" Component="Reroll1Save" class="rz-ms-2" />
                         </RadzenColumn>
-                        <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                        <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                             <RadzenCheckBox @bind-Value=@Unit.Stealth Name="Stealth" />
                             <RadzenLabel Text="Stealth (do not use for melee defender)" Component="Stealth" class="rz-ms-2" />
                         </RadzenColumn>
-                        <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                        <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                             <RadzenCheckBox @bind-Value=@Unit.Minus1Hit Name="Minus1Hit" />
                             <RadzenLabel Text="Minus 1 to hit roll" Component="Minus1Hit" class="rz-ms-2" />
                         </RadzenColumn>
-                        <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                        <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                             <RadzenCheckBox @bind-Value=@Unit.Minus1Wound Name="Minus1Wound" />
                             <RadzenLabel Text="Minus 1 to wound roll" Component="Minus1Wound" class="rz-ms-2" />
                         </RadzenColumn>
-                        <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                        <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                             <RadzenCheckBox @bind-Value=@Unit.MinusOneToWoundAgainstStronger Name="minus1WoundVsStronger" />
                             <RadzenLabel Text="Minus 1 to Wound against stronger attack" Component="Minus1WoundVsStronger" class="rz-ms-2" />
                         </RadzenColumn>
-                        <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                        <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                             <RadzenCheckBox @bind-Value=@Unit.FeelNoPain Name="FeelNoPain" />
                             <RadzenLabel Text="Feel No Pain" Component="FeelNoPain" class="rz-ms-2" />
                             <RadzenFormField Text="Targetor " Style="width: 100%;">
                                 <RadzenNumeric @bind-Value="@Unit.FeelNoPainTarget" Disabled=!Unit.FeelNoPain />
                             </RadzenFormField>
                         </RadzenColumn>
-                        <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
+                        <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
 
                             <RadzenCheckBox @bind-Value=@Unit.HasCover Name="HasCover" />
                             <RadzenLabel Text="Has Cover" Component="HasCover" class="rz-ms-2" />
