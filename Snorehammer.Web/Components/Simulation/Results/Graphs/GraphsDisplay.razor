@@ -1,0 +1,43 @@
+﻿@using Snorehammer.Web.FrontendModels
+@using Snorehammer.Web.FrontendModels.Stats
+<h3>GraphsDisplay</h3>
+@*Bar chart for number of hits etc*@
+<RadzenRow>
+    <RadzenColumn Size="12" SizeLG="6">
+        <h4>Auto-size bar series</h4>
+        <RadzenChart style="height: 400px">
+            <RadzenBarSeries Data="@stats" CategoryProperty="Category" ValueProperty="Value" Title="2024" LineType="LineType.Dashed">
+            </RadzenBarSeries>
+            @* <RadzenBarSeries Data="@revenue2023" CategoryProperty="Quarter" Title="2023" ValueProperty="Revenue">
+                <RadzenSeriesDataLabels Visible="@showDataLabels" />
+            </RadzenBarSeries>
+            <RadzenValueAxis Formatter="@FormatAsUSD">
+                <RadzenGridLines Visible="true" />
+                <RadzenAxisTitle Text="Revenue in USD" />
+            </RadzenValueAxis>
+            <RadzenBarOptions Radius="5" /> *@
+        </RadzenChart>
+    </RadzenColumn>
+</RadzenRow>
+@*Pie charts for unit destroyed, at half, etc*@
+@code {
+    [Parameter]
+    public Comparison comparison { get; set; }
+    public List<GraphStat> statsA { get; set; } = new List<GraphStat>();
+    public List<GraphStat> statsB { get; set; } = new List<GraphStat>();
+    protected override Task OnInitializedAsync()
+    {
+
+        var possibleResults = comparison.Simulation1.FightSimulations.Select(f => f.Stats.AttacksHit).Distinct();
+        foreach (var res in possibleResults)
+        {
+            statsA.Add(new GraphStat()
+                {
+                    Category = res,
+                    Value = comparison.Simulation1.FightSimulations.Where(f => f.Stats.AttacksHit == res).Count()
+                });   
+        }
+        statsA = statsA.OrderBy(s => s.Category).ToList();
+        return base.OnInitializedAsync();
+    }
+}

@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using Snorehammer.Web.Components.Simulation.Results
+@using Snorehammer.Web.Components.Simulation.Results.Graphs
 @using Snorehammer.Web.Components.Simulation.Results.Grid
 @using Snorehammer.Web.Components.Unit
 @using Snorehammer.Web.FrontendModels
@@ -91,7 +92,7 @@
 @if (comparison.Simulation1.Stats.ColumnName != "")
 {
     <DataGrid comparison="comparison"></DataGrid>
-
+    <GraphsDisplay comparison="comparison"></GraphsDisplay>
 }
 @code {
     public Comparison comparison { get; set; }
