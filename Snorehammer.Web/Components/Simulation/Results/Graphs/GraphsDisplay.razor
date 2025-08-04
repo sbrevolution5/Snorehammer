@@ -2,20 +2,78 @@
 @using Snorehammer.Web.FrontendModels.Stats
 @using Snorehammer.Web.Services
 <h3>GraphsDisplay</h3>
-@*Bar chart for number of hits etc*@
-<RadzenRow>
-    <RadzenColumn Size="12" SizeLG="6">
-        <BarGraph dataA="dataA.Select(s => s.AttacksHit).ToList()" dataB="dataB.Select(s => s.AttacksHit).ToList()" GraphTitle="Attacks Hit" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
-    </RadzenColumn>
-</RadzenRow>
+<RadzenTabs>
+    <Tabs>
+        <RadzenTabsItem Text="Attacks Hit">
+
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <BarGraph dataA="dataA.Select(s => s.AttacksHit).ToList()" dataB="dataB.Select(s => s.AttacksHit).ToList()" GraphTitle="Attacks Hit" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Attacks Made">
+
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <BarGraph dataA="dataA.Select(s => s.AttackNumber).ToList()" dataB="dataB.Select(s => s.AttackNumber).ToList()" GraphTitle="Attacks Made" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Wounds Successful">
+
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <BarGraph dataA="dataA.Select(s => s.WoundsSuccessful).ToList()" dataB="dataB.Select(s => s.WoundsSuccessful).ToList()" GraphTitle="Wounds Successful" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Armor Saves Failed">
+
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <BarGraph dataA="dataA.Select(s => s.ArmorSavesFailed).ToList()" dataB="dataB.Select(s => s.ArmorSavesFailed).ToList()" GraphTitle="Armor Saves Failed" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Attacks Made">
+
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <BarGraph dataA="dataA.Select(s => s.AttackNumber).ToList()" dataB="dataB.Select(s => s.AttackNumber).ToList()" GraphTitle="Attacks Made" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Wounds Inflicted">
+
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <BarGraph dataA="dataA.Select(s => s.WoundsInflicted).ToList()" dataB="dataB.Select(s => s.WoundsInflicted).ToList()" GraphTitle="Wounds Inflicted" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Feel No Pain Saved">
+
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <BarGraph dataA="dataA.Select(s => s.FeelNoPainMade).ToList()" dataB="dataB.Select(s => s.FeelNoPainMade).ToList()" GraphTitle="Feel No Pain Saved" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Damage Taken">
+
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <BarGraph dataA="dataA.Select(s => s.DamageNumber).ToList()" dataB="dataB.Select(s => s.DamageNumber).ToList()" GraphTitle="Damage Taken" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenTabsItem>
+    </Tabs>
+</RadzenTabs>
 @*Pie charts for unit destroyed, at half, etc*@
 <RadzenRow>
     <RadzenColumn Size="12" SizeLG="6">
-        @if (multiB is not null)
-        {
-            
         <PieGraph dataA="multiA.LostAModel" dataB="multiB.LostAModel" totalSims="comparison.Simulation1.Rounds" GraphTitle="Lost A Model" statsATitle="@titleA" statsBTitle="@titleB"></PieGraph>
-        }
     </RadzenColumn>
 </RadzenRow>
 @code {
