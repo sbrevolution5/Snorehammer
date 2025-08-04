@@ -270,9 +270,9 @@
     [Parameter]
     public bool MultiSim { get; set; } = false;
     [Parameter]
-    public MultiFightStats sim1MultiStats { get; set; } = null;
+    public MultiFightStats sim1MultiStats { get; set; }
     [Parameter]
-    public MultiFightStats sim2MultiStats { get; set; } = null;
+    public MultiFightStats sim2MultiStats { get; set; }
     private string ConditionalClassList(float thisSim, float OtherSim)
     {
         if (thisSim > OtherSim)

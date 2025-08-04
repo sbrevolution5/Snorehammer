@@ -1,0 +1,156 @@
+﻿@using Snorehammer.Web.FrontendModels
+@using Snorehammer.Web.FrontendModels.Stats
+@using Snorehammer.Web.Services
+<h3>GraphsDisplay</h3>
+<RadzenTabs>
+    <Tabs>
+        <RadzenTabsItem Text="Attacks Hit">
+
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <BarGraph dataA="dataA.Select(s => s.AttacksHit).ToList()" dataB="dataB.Select(s => s.AttacksHit).ToList()" GraphTitle="Attacks Hit" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Attacks Made">
+
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <BarGraph dataA="dataA.Select(s => s.AttackNumber).ToList()" dataB="dataB.Select(s => s.AttackNumber).ToList()" GraphTitle="Attacks Made" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Wounds Successful">
+
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <BarGraph dataA="dataA.Select(s => s.WoundsSuccessful).ToList()" dataB="dataB.Select(s => s.WoundsSuccessful).ToList()" GraphTitle="Wounds Successful" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Armor Saves Failed">
+
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <BarGraph dataA="dataA.Select(s => s.ArmorSavesFailed).ToList()" dataB="dataB.Select(s => s.ArmorSavesFailed).ToList()" GraphTitle="Armor Saves Failed" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Attacks Made">
+
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <BarGraph dataA="dataA.Select(s => s.AttackNumber).ToList()" dataB="dataB.Select(s => s.AttackNumber).ToList()" GraphTitle="Attacks Made" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Wounds Inflicted">
+
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <BarGraph dataA="dataA.Select(s => s.WoundsInflicted).ToList()" dataB="dataB.Select(s => s.WoundsInflicted).ToList()" GraphTitle="Wounds Inflicted" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Feel No Pain Saved">
+
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <BarGraph dataA="dataA.Select(s => s.FeelNoPainMade).ToList()" dataB="dataB.Select(s => s.FeelNoPainMade).ToList()" GraphTitle="Feel No Pain Saved" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Damage Taken">
+
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <BarGraph dataA="dataA.Select(s => s.DamageNumber).ToList()" dataB="dataB.Select(s => s.DamageNumber).ToList()" GraphTitle="Damage Taken" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenTabsItem>
+    </Tabs>
+</RadzenTabs>
+@*Pie charts for unit destroyed, at half, etc*@
+<RadzenTabs>
+    <Tabs>
+
+        <RadzenTabsItem Text="Damaged">
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <PieGraph dataA="multiA.UnitDamaged" dataB="multiB.UnitDamaged" totalSims="comparison.Simulation1.Rounds" GraphTitle="Unit Damaged" statsATitle="@titleA" statsBTitle="@titleB"></PieGraph>
+                </RadzenColumn>
+            </RadzenRow>
+
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Lost A Model">
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <PieGraph dataA="multiA.LostAModel" dataB="multiB.LostAModel" totalSims="comparison.Simulation1.Rounds" GraphTitle="Lost A Model" statsATitle="@titleA" statsBTitle="@titleB"></PieGraph>
+                </RadzenColumn>
+            </RadzenRow>
+
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Less than half">
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <PieGraph dataA="multiA.LessThanHalf" dataB="multiB.LessThanHalf" totalSims="comparison.Simulation1.Rounds" GraphTitle="Less Than Half" statsATitle="@titleA" statsBTitle="@titleB"></PieGraph>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="UnitDestroyed">
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <PieGraph dataA="multiA.UnitEntirelyDestroyed" dataB="multiB.UnitEntirelyDestroyed" totalSims="comparison.Simulation1.Rounds" GraphTitle="Unit destroyed" statsATitle="@titleA" statsBTitle="@titleB"></PieGraph>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenTabsItem>
+    </Tabs>
+</RadzenTabs>
+@code {
+    [Parameter]
+    public Comparison comparison { get; set; }
+    public List<FightStats> dataA { get; set; }
+    public List<FightStats> dataB { get; set; }
+    public MultiFightStats multiA { get; set; }
+    public MultiFightStats? multiB { get; set; }
+    public string titleA { get; set; }
+    public string titleB { get; set; }
+    protected override Task OnInitializedAsync()
+    {
+        DataFromComparison();
+        return base.OnInitializedAsync();
+    }
+    private void DataFromComparison()
+    {
+        dataA = comparison.Simulation1.FightSimulations.Select(f => f.Stats).ToList();
+        titleA = dataA.First().ColumnName;
+        multiA = comparison.Simulation1.Stats;
+        @if (comparison.ComparingAttackers)
+        {
+            dataB = comparison.AlternateAttackSimulation.FightSimulations.Select(f => f.Stats).ToList();
+            titleB = dataB.First().ColumnName;
+            multiB = comparison.AlternateAttackSimulation.Stats;
+
+        }
+        else if (comparison.ComparingDefenders)
+        {
+            dataB = comparison.AlternateDefenseSimulation.FightSimulations.Select(f => f.Stats).ToList();
+            titleB = dataB.First().ColumnName;
+            multiB = comparison.AlternateDefenseSimulation.Stats;
+        }
+        else
+        {
+            titleB = "";
+            dataB = new List<FightStats>();
+            multiB = new MultiFightStats()
+            {
+                LessThanHalf = -1,
+                LostAModel = -1,
+                UnitDamaged = -1,
+                UnitEntirelyDestroyed = -1
+            };
+        }
+    }
+}
+
+

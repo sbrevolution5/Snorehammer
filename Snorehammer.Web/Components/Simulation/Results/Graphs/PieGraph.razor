@@ -1,0 +1,50 @@
+﻿@using Snorehammer.Web.FrontendModels.Stats
+@using Snorehammer.Web.Services
+<h4>@GraphTitle</h4>
+<RadzenRow>
+    <RadzenColumn Size="12" SizeLG="6">
+        <RadzenChart style="height: 400px">
+            <RadzenPieSeries Data="@statsA" CategoryProperty="Category" ValueProperty="Value" Title="@statsATitle">
+            </RadzenPieSeries>
+
+        </RadzenChart>
+    </RadzenColumn>
+    @if (dataB >= 0)
+    {
+        <RadzenColumn Size="12" SizeLG="6">
+
+            <RadzenChart style="height: 400px">
+
+                <RadzenPieSeries Data="@statsB" CategoryProperty="Category" ValueProperty="Value" Title="@statsBTitle">
+                </RadzenPieSeries>
+            </RadzenChart>
+        </RadzenColumn>
+    }
+</RadzenRow>
+@code {
+    [Parameter]
+    public string GraphTitle { get; set; }
+    [Parameter]
+    public string statsATitle { get; set; }
+    [Parameter]
+    public string statsBTitle { get; set; }
+    [Parameter]
+    public float dataA { get; set; }
+    [Parameter]
+    public float dataB { get; set; }
+    [Parameter]
+    public int totalSims { get; set; }
+    public List<PieGraphStat> statsA { get; set; }
+    public List<PieGraphStat> statsB { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        var graphService = new GraphCreationService();
+        statsA = graphService.MakePieGraphStats(dataA, totalSims);
+        if (dataB >= 0)
+        {
+            statsB = graphService.MakePieGraphStats(dataB, totalSims);
+        }
+        return base.OnInitializedAsync();
+    }
+}
