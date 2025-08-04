@@ -1,19 +1,26 @@
 ﻿@using Snorehammer.Web.FrontendModels.Stats
 @using Snorehammer.Web.Services
 <h4>@GraphTitle</h4>
-<RadzenChart style="height: 400px">
-    <RadzenPieSeries Data="@statsA" CategoryProperty="Category" ValueProperty="Value" Title="@statsATitle">
-    </RadzenPieSeries>
+<RadzenRow>
+    <RadzenColumn Size="12" SizeLG="6">
+        <RadzenChart style="height: 400px">
+            <RadzenPieSeries Data="@statsA" CategoryProperty="Category" ValueProperty="Value" Title="@statsATitle">
+            </RadzenPieSeries>
 
-</RadzenChart>
-@if (dataB >= 0)
-{
-    <RadzenChart style="height: 400px">
+        </RadzenChart>
+    </RadzenColumn>
+    @if (dataB >= 0)
+    {
+        <RadzenColumn Size="12" SizeLG="6">
 
-        <RadzenPieSeries Data="@statsB" CategoryProperty="Category" ValueProperty="Value" Title="@statsBTitle">
-        </RadzenPieSeries>
-    </RadzenChart>
-}
+            <RadzenChart style="height: 400px">
+
+                <RadzenPieSeries Data="@statsB" CategoryProperty="Category" ValueProperty="Value" Title="@statsBTitle">
+                </RadzenPieSeries>
+            </RadzenChart>
+        </RadzenColumn>
+    }
+</RadzenRow>
 @code {
     [Parameter]
     public string GraphTitle { get; set; }
