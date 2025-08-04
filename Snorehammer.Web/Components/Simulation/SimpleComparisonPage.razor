@@ -10,6 +10,11 @@
 @rendermode InteractiveServer
 <h3>Comparison</h3>
 
+<RadzenCard>
+    <RadzenText TextStyle="TextStyle.DisplayH1"> Don't know warhammer?  No Problem!
+</RadzenText>
+<RadzenText TextStyle="TextStyle.Body1"> Scroll down to the fight button to try it out.  The form is already filled in with a simulation.</RadzenText>
+</RadzenCard>
 <RadzenStack class="rz-p-sm-12" Orientation="Orientation.Horizontal">
     <RadzenSwitch Disabled=@comparison.ComparingDefenders @bind-Value=@comparison.ComparingAttackers />
     <RadzenLabel>Compare Attackers</RadzenLabel>
