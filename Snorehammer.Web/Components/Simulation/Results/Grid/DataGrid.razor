@@ -4,8 +4,8 @@
 {
 
     <RadzenDataGrid Data="comparisonStats"  GridLines="DataGridGridLines.Both" AllowSorting="true" CellRender="@CellRender">
-        <Template Context="MultiFightStats">
-            <RadzenDataGrid Data="MultiFightStats.PerWeaponStats" GridLines="DataGridGridLines.Both" AllowSorting="true" CellRender="@CellRender">
+        @*<Template Context="MultiFightStats">
+             <RadzenDataGrid Data="MultiFightStats.PerWeaponStats" GridLines="DataGridGridLines.Both" AllowSorting="true" CellRender="@CellRender">
                 <Columns>
                     <RadzenDataGridColumn Property="@nameof(MultiFightStats.ColumnName)" Title="Name"></RadzenDataGridColumn>
                     <RadzenDataGridColumn Property="@nameof(MultiFightStats.AttackNumber)"
@@ -47,7 +47,7 @@
                     }
                 </Columns>
             </RadzenDataGrid>
-        </Template>
+        </Template> *@
         <Columns>
             <RadzenDataGridColumn Property="@nameof(MultiFightStats.ColumnName)" Title="Name"></RadzenDataGridColumn>
             <RadzenDataGridColumn Property="@nameof(MultiFightStats.AttackNumber)" Title="Attacks Made"></RadzenDataGridColumn>
