@@ -1,43 +1,46 @@
 ﻿@using Snorehammer.Web.FrontendModels
 @using Snorehammer.Web.FrontendModels.Stats
+@using Snorehammer.Web.Services
 <h3>GraphsDisplay</h3>
 @*Bar chart for number of hits etc*@
 <RadzenRow>
     <RadzenColumn Size="12" SizeLG="6">
-        <h4>Auto-size bar series</h4>
-        <RadzenChart style="height: 400px">
-            <RadzenBarSeries Data="@stats" CategoryProperty="Category" ValueProperty="Value" Title="2024" LineType="LineType.Dashed">
-            </RadzenBarSeries>
-            @* <RadzenBarSeries Data="@revenue2023" CategoryProperty="Quarter" Title="2023" ValueProperty="Revenue">
-                <RadzenSeriesDataLabels Visible="@showDataLabels" />
-            </RadzenBarSeries>
-            <RadzenValueAxis Formatter="@FormatAsUSD">
-                <RadzenGridLines Visible="true" />
-                <RadzenAxisTitle Text="Revenue in USD" />
-            </RadzenValueAxis>
-            <RadzenBarOptions Radius="5" /> *@
-        </RadzenChart>
+        <BarGraph dataA="dataA.Select(s => s.AttacksHit).ToList()" dataB="dataB.Select(s => s.AttacksHit).ToList()" GraphTitle="Attacks Hit" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
     </RadzenColumn>
 </RadzenRow>
 @*Pie charts for unit destroyed, at half, etc*@
 @code {
     [Parameter]
     public Comparison comparison { get; set; }
-    public List<GraphStat> statsA { get; set; } = new List<GraphStat>();
-    public List<GraphStat> statsB { get; set; } = new List<GraphStat>();
+    public List<FightStats> dataA { get; set; }
+    public List<FightStats> dataB { get; set; }
+    public string titleA { get; set; }
+    public string titleB { get; set; }
     protected override Task OnInitializedAsync()
     {
-
-        var possibleResults = comparison.Simulation1.FightSimulations.Select(f => f.Stats.AttacksHit).Distinct();
-        foreach (var res in possibleResults)
-        {
-            statsA.Add(new GraphStat()
-                {
-                    Category = res,
-                    Value = comparison.Simulation1.FightSimulations.Where(f => f.Stats.AttacksHit == res).Count()
-                });   
-        }
-        statsA = statsA.OrderBy(s => s.Category).ToList();
+        DataFromComparison();
         return base.OnInitializedAsync();
     }
+    private void DataFromComparison()
+    {
+        dataA = comparison.Simulation1.FightSimulations.Select(f => f.Stats).ToList();
+        titleA = dataA.First().ColumnName;
+        @if (comparison.ComparingAttackers)
+        {
+            dataB = comparison.AlternateAttackSimulation.FightSimulations.Select(f => f.Stats).ToList();
+            titleB = dataB.First().ColumnName;
+        }
+        else if (comparison.ComparingDefenders)
+        {
+            dataB = comparison.AlternateDefenseSimulation.FightSimulations.Select(f => f.Stats).ToList();
+            titleB = dataB.First().ColumnName;
+        }
+        else
+        {
+            titleB = "";
+            dataB = new List<FightStats>();
+        }
+    }
 }
+
+

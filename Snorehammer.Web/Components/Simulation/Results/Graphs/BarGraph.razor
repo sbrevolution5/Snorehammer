@@ -1,0 +1,37 @@
+﻿@using Snorehammer.Web.FrontendModels.Stats
+@using Snorehammer.Web.Services
+<h4>@GraphTitle</h4>
+<RadzenChart style="height: 400px">
+    <RadzenBarSeries Data="@statsA" CategoryProperty="Category" ValueProperty="Value" Title="@statsATitle" LineType="LineType.Dashed">
+    </RadzenBarSeries>
+    @if (dataB.Count>0)
+    {
+
+        <RadzenBarSeries Data="@statsB" CategoryProperty="Category" Title="@statsBTitle" ValueProperty="Value">
+        </RadzenBarSeries>
+    }
+</RadzenChart>
+@code {
+    [Parameter]
+    public string GraphTitle { get; set; }
+    [Parameter]
+    public string statsATitle { get; set; }
+    [Parameter]
+    public string statsBTitle { get; set; }
+    [Parameter]
+    public List<int> dataA { get; set; }
+    [Parameter]
+    public List<int>? dataB { get; set; } = null;
+    public List<GraphStat> statsA { get; set; } = new List<GraphStat>();
+    public List<GraphStat> statsB { get; set; } = new List<GraphStat>();
+    protected override Task OnInitializedAsync()
+    {
+        var graphService = new GraphCreationService();
+        statsA = graphService.MakeGraphStats(dataA);
+        if (dataB.Count>0)
+        {
+            statsB = graphService.MakeGraphStats(dataB);
+        }
+        return base.OnInitializedAsync();
+    }
+}
