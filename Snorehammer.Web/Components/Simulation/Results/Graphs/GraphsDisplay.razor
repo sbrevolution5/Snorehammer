@@ -71,30 +71,41 @@
     </Tabs>
 </RadzenTabs>
 @*Pie charts for unit destroyed, at half, etc*@
-<RadzenRow>
-    <RadzenTabs>
+<RadzenTabs>
+    <Tabs>
+
         <RadzenTabsItem Text="Damaged">
-            <RadzenColumn Size="12" SizeLG="6">
-                <PieGraph dataA="multiA.UnitDamaged" dataB="multiB.UnitDamaged" totalSims="comparison.Simulation1.Rounds" GraphTitle="Unit Damaged" statsATitle="@titleA" statsBTitle="@titleB"></PieGraph>
-            </RadzenColumn>
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <PieGraph dataA="multiA.UnitDamaged" dataB="multiB.UnitDamaged" totalSims="comparison.Simulation1.Rounds" GraphTitle="Unit Damaged" statsATitle="@titleA" statsBTitle="@titleB"></PieGraph>
+                </RadzenColumn>
+            </RadzenRow>
+
         </RadzenTabsItem>
         <RadzenTabsItem Text="Lost A Model">
-            <RadzenColumn Size="12" SizeLG="6">
-                <PieGraph dataA="multiA.LostAModel" dataB="multiB.LostAModel" totalSims="comparison.Simulation1.Rounds" GraphTitle="Lost A Model" statsATitle="@titleA" statsBTitle="@titleB"></PieGraph>
-            </RadzenColumn>
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <PieGraph dataA="multiA.LostAModel" dataB="multiB.LostAModel" totalSims="comparison.Simulation1.Rounds" GraphTitle="Lost A Model" statsATitle="@titleA" statsBTitle="@titleB"></PieGraph>
+                </RadzenColumn>
+            </RadzenRow>
+
         </RadzenTabsItem>
         <RadzenTabsItem Text="Less than half">
-            <RadzenColumn Size="12" SizeLG="6">
-                <PieGraph dataA="multiA.LessThanHalf" dataB="multiB.LessThanHalf" totalSims="comparison.Simulation1.Rounds" GraphTitle="Less Than Half" statsATitle="@titleA" statsBTitle="@titleB"></PieGraph>
-            </RadzenColumn>
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <PieGraph dataA="multiA.LessThanHalf" dataB="multiB.LessThanHalf" totalSims="comparison.Simulation1.Rounds" GraphTitle="Less Than Half" statsATitle="@titleA" statsBTitle="@titleB"></PieGraph>
+                </RadzenColumn>
+            </RadzenRow>
         </RadzenTabsItem>
         <RadzenTabsItem Text="UnitDestroyed">
-            <RadzenColumn Size="12" SizeLG="6">
-                <PieGraph dataA="multiA.UnitEntirelyDestroyed" dataB="multiB.UnitEntirelyDestroyed" totalSims="comparison.Simulation1.Rounds" GraphTitle="Unit destroyed" statsATitle="@titleA" statsBTitle="@titleB"></PieGraph>
-            </RadzenColumn>
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <PieGraph dataA="multiA.UnitEntirelyDestroyed" dataB="multiB.UnitEntirelyDestroyed" totalSims="comparison.Simulation1.Rounds" GraphTitle="Unit destroyed" statsATitle="@titleA" statsBTitle="@titleB"></PieGraph>
+                </RadzenColumn>
+            </RadzenRow>
         </RadzenTabsItem>
-    </RadzenTabs>
-</RadzenRow>
+    </Tabs>
+</RadzenTabs>
 @code {
     [Parameter]
     public Comparison comparison { get; set; }
