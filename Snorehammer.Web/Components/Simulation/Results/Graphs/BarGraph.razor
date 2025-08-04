@@ -21,16 +21,16 @@
     [Parameter]
     public List<int> dataA { get; set; }
     [Parameter]
-    public List<int>? dataB { get; set; } = null;
-    public List<GraphStat> statsA { get; set; } = new List<GraphStat>();
-    public List<GraphStat> statsB { get; set; } = new List<GraphStat>();
+    public List<int> dataB { get; set; }
+    public List<BarGraphStat> statsA { get; set; } = new List<BarGraphStat>();
+    public List<BarGraphStat> statsB { get; set; } = new List<BarGraphStat>();
     protected override Task OnInitializedAsync()
     {
         var graphService = new GraphCreationService();
-        statsA = graphService.MakeGraphStats(dataA);
+        statsA = graphService.MakeBarGraphStats(dataA);
         if (dataB.Count>0)
         {
-            statsB = graphService.MakeGraphStats(dataB);
+            statsB = graphService.MakeBarGraphStats(dataB);
         }
         return base.OnInitializedAsync();
     }

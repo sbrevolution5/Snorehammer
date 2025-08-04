@@ -9,11 +9,22 @@
     </RadzenColumn>
 </RadzenRow>
 @*Pie charts for unit destroyed, at half, etc*@
+<RadzenRow>
+    <RadzenColumn Size="12" SizeLG="6">
+        @if (multiB is not null)
+        {
+            
+        <PieGraph dataA="multiA.LostAModel" dataB="multiB.LostAModel" totalSims="comparison.Simulation1.Rounds" GraphTitle="Lost A Model" statsATitle="@titleA" statsBTitle="@titleB"></PieGraph>
+        }
+    </RadzenColumn>
+</RadzenRow>
 @code {
     [Parameter]
     public Comparison comparison { get; set; }
     public List<FightStats> dataA { get; set; }
     public List<FightStats> dataB { get; set; }
+    public MultiFightStats multiA { get; set; }
+    public MultiFightStats? multiB { get; set; }
     public string titleA { get; set; }
     public string titleB { get; set; }
     protected override Task OnInitializedAsync()
@@ -25,20 +36,31 @@
     {
         dataA = comparison.Simulation1.FightSimulations.Select(f => f.Stats).ToList();
         titleA = dataA.First().ColumnName;
+        multiA = comparison.Simulation1.Stats;
         @if (comparison.ComparingAttackers)
         {
             dataB = comparison.AlternateAttackSimulation.FightSimulations.Select(f => f.Stats).ToList();
             titleB = dataB.First().ColumnName;
+            multiB = comparison.AlternateAttackSimulation.Stats;
+
         }
         else if (comparison.ComparingDefenders)
         {
             dataB = comparison.AlternateDefenseSimulation.FightSimulations.Select(f => f.Stats).ToList();
             titleB = dataB.First().ColumnName;
+            multiB = comparison.AlternateDefenseSimulation.Stats;
         }
         else
         {
             titleB = "";
             dataB = new List<FightStats>();
+            multiB = new MultiFightStats()
+            {
+                LessThanHalf = -1,
+                LostAModel = -1,
+                UnitDamaged = -1,
+                UnitEntirelyDestroyed = -1
+            };
         }
     }
 }
