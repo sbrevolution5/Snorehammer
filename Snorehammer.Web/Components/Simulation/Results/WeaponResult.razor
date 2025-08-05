@@ -35,7 +35,7 @@
                        DiceList="@sim.StrengthDice"
                        CriticalMatters="@(sim.Weapon.Devastating)" />
             <DicePanel sim="@sim"
-                       Title="To Wound Roll"
+                       Title="Armor Saves"
                        RollString1=@($"Target: {sim.ArmorSave}")
                        RollString2=@($"Rolling: {sim.ArmorDice.Count}")
                        DiceList="@sim.ArmorDice" />
