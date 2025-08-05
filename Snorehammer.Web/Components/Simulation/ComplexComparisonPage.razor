@@ -192,6 +192,7 @@
         comparison.AlternateAttackSimulation.Attacker.Name = comparison.Simulation1.Attacker.Name + "(1)";
         comparison.AlternateAttackSimulation.Attacker.Attacks[0].Name = comparison.Simulation1.Attacker.Attacks[0].Name + "(1)";
         AssignMultiSims(1);
+        FightUnits();
     }
     public void SetupDemo2()
     {
@@ -214,24 +215,65 @@
                 {
                     new AttackProfile()
                     {
-                        Name = "Termagant spinefists",
-                        WeaponsInUnit = 10,
-                        ArmorPenetration = 0,
+                        Name = "Soulshatter lascannon",
+                        WeaponsInUnit = 2,
+                        ArmorPenetration = 3,
                         Attacks = 2,
                         Damage = 1,
-                        Skill = 4,
-                        Strength = 3,
+                        Skill = 3,
+                        Strength = 12,
+                        VariableAttackDiceConstant = 1,
+                        VariableAttackDiceNumber = 2,
+                        VariableDamageDiceConstant = 1,
+                        VariableDamageDiceNumber = 1,
+                        VariableAttackDiceSides =6,
+                        IsVariableDamage = true
+                    },
+                    new AttackProfile()
+                    {
+                        Name = "Twin heavy bolter",
+                        WeaponsInUnit = 1,
+                        ArmorPenetration = 1,
+                        Attacks = 3,
+                        Damage = 2,
+                        Skill = 3,
+                        Strength = 5,
                         VariableAttackDiceConstant = 1,
                         VariableAttackDiceNumber = 2,
                         VariableDamageDiceConstant = 1,
                         VariableDamageDiceNumber = 1
+                    },
+                    new AttackProfile()
+                    {
+                        Name = "Combi-bolter",
+                        WeaponsInUnit = 1,
+                        ArmorPenetration = 0,
+                        Attacks = 4,
+                        Damage = 1,
+                        Skill = 3,
+                        Strength = 4,
+                        VariableAttackDiceConstant = 1,
+                        VariableAttackDiceNumber = 2,
+                        VariableDamageDiceConstant = 1,
+                        VariableDamageDiceNumber = 1
+                    },
+                    new AttackProfile()
+                    {
+                        Name= "Havoc Launcher",
+                        IsVariableAttacks=true,
+                        Blast=true,
+                        Attacks=1,
+                        Skill=3,
+                        Strength=5,
+                        ArmorPenetration = 0,
+                        Damage=1
                     }
                 },
                 InvulnerableSave = 0,
-                MinimumSave = 5,
-                Toughness = 3,
-                Wounds = 1,
-                ModelCount = 10,
+                MinimumSave = 2,
+                Toughness = 12,
+                Wounds = 16,
+                ModelCount = 1,
                 Name = "Chaos Land Raider"
             }
         };
@@ -249,6 +291,8 @@
         comparison.AlternateAttackSimulation.Attacker.Name = comparison.Simulation1.Attacker.Name + "(1)";
         comparison.AlternateAttackSimulation.Attacker.Attacks[0].Name = comparison.Simulation1.Attacker.Attacks[0].Name + "(1)";
         AssignMultiSims(1);
+        FightUnits();
+
     }
     public void SetupDemo3()
     {
@@ -258,38 +302,79 @@
 
             Defender = new UnitProfile()
             {
-                InvulnerableSave = 0,
-                MinimumSave = 3,
-                Toughness = 4,
+                InvulnerableSave = 4,
+                MinimumSave = 2,
+                Toughness = 5,
                 Wounds = 2,
-                ModelCount = 10,
-                Name = "Intercessors"
+                ModelCount = 5,
+                Name = "Terminators"
             },
             Attacker = new UnitProfile()
             {
                 Attacks = new List<AttackProfile>()
-            {
-            new AttackProfile()
-            {
-                Name = "Termagant spinefists",
-                WeaponsInUnit = 10,
-                ArmorPenetration = 0,
-                Attacks = 2,
-                Damage = 1,
-                Skill = 4,
-                Strength = 3,
-                VariableAttackDiceConstant = 1,
-                VariableAttackDiceNumber = 2,
-                VariableDamageDiceConstant = 1,
-                VariableDamageDiceNumber = 1
-            }
-            },
+                {
+                    new AttackProfile()
+                    {
+                        Name = "Soulshatter lascannon",
+                        WeaponsInUnit = 2,
+                        ArmorPenetration = 3,
+                        Attacks = 2,
+                        Damage = 1,
+                        Skill = 3,
+                        Strength = 12,
+                        VariableAttackDiceConstant = 1,
+                        VariableAttackDiceNumber = 2,
+                        VariableDamageDiceConstant = 1,
+                        VariableDamageDiceNumber = 1,
+                        VariableAttackDiceSides =6,
+                        IsVariableDamage = true
+                    },
+                    new AttackProfile()
+                    {
+                        Name = "Twin heavy bolter",
+                        WeaponsInUnit = 1,
+                        ArmorPenetration = 1,
+                        Attacks = 3,
+                        Damage = 2,
+                        Skill = 3,
+                        Strength = 5,
+                        VariableAttackDiceConstant = 1,
+                        VariableAttackDiceNumber = 2,
+                        VariableDamageDiceConstant = 1,
+                        VariableDamageDiceNumber = 1
+                    },
+                    new AttackProfile()
+                    {
+                        Name = "Combi-bolter",
+                        WeaponsInUnit = 1,
+                        ArmorPenetration = 0,
+                        Attacks = 4,
+                        Damage = 1,
+                        Skill = 3,
+                        Strength = 4,
+                        VariableAttackDiceConstant = 1,
+                        VariableAttackDiceNumber = 2,
+                        VariableDamageDiceConstant = 1,
+                        VariableDamageDiceNumber = 1
+                    },
+                    new AttackProfile()
+                    {
+                        Name= "Havoc Launcher",
+                        IsVariableAttacks=true,
+                        Blast=true,
+                        Attacks=1,
+                        Skill=3,
+                        Strength=5,
+                        ArmorPenetration = 0,
+                        Damage=1
+                    }
+                },
                 InvulnerableSave = 0,
-                MinimumSave = 5,
-                Toughness = 3,
-                Wounds = 1,
-                ModelCount = 10,
-                Name = "Termagants"
+                MinimumSave = 2,
+                Toughness = 12,
+                Wounds = 16,
+                ModelCount = 1,
+                Name = "Chaos Land Raider"
             }
         };
         comparison.AlternateAttackSimulation = new MultiFightSimulation()
@@ -306,6 +391,7 @@
         comparison.AlternateAttackSimulation.Attacker.Name = comparison.Simulation1.Attacker.Name + "(1)";
         comparison.AlternateAttackSimulation.Attacker.Attacks[0].Name = comparison.Simulation1.Attacker.Attacks[0].Name + "(1)";
         AssignMultiSims(1);
+        FightUnits();
     }
     private async Task FightUnits()
     {
