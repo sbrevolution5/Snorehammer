@@ -153,22 +153,23 @@
             Attacker = new UnitProfile()
             {
                 Attacks = new List<AttackProfile>()
-            {
-            new AttackProfile()
-            {
-                Name = "Termagant spinefists",
-                WeaponsInUnit = 10,
-                ArmorPenetration = 0,
-                Attacks = 2,
-                Damage = 1,
-                Skill = 4,
-                Strength = 3,
-                VariableAttackDiceConstant = 1,
-                VariableAttackDiceNumber = 2,
-                VariableDamageDiceConstant = 1,
-                VariableDamageDiceNumber = 1
-            }
-            },
+                {
+                    new AttackProfile()
+                    {
+                        Name = "Termagant spinefists",
+                        WeaponsInUnit = 10,
+                        ArmorPenetration = 0,
+                        Attacks = 2,
+                        Damage = 1,
+                        Skill = 4,
+                        Strength = 3,
+                        VariableAttackDiceConstant = 1,
+                        VariableAttackDiceNumber = 2,
+                        VariableDamageDiceConstant = 1,
+                        VariableDamageDiceNumber = 1,
+                        RerollWound = true
+                    }
+                },
                 InvulnerableSave = 0,
                 MinimumSave = 5,
                 Toughness = 3,
@@ -200,38 +201,38 @@
 
             Defender = new UnitProfile()
             {
-                InvulnerableSave = 0,
-                MinimumSave = 3,
-                Toughness = 4,
+                InvulnerableSave = 4,
+                MinimumSave = 2,
+                Toughness = 5,
                 Wounds = 2,
-                ModelCount = 10,
-                Name = "Intercessors"
+                ModelCount = 5,
+                Name = "Terminators"
             },
             Attacker = new UnitProfile()
             {
                 Attacks = new List<AttackProfile>()
-            {
-            new AttackProfile()
-            {
-                Name = "Termagant spinefists",
-                WeaponsInUnit = 10,
-                ArmorPenetration = 0,
-                Attacks = 2,
-                Damage = 1,
-                Skill = 4,
-                Strength = 3,
-                VariableAttackDiceConstant = 1,
-                VariableAttackDiceNumber = 2,
-                VariableDamageDiceConstant = 1,
-                VariableDamageDiceNumber = 1
-            }
-            },
+                {
+                    new AttackProfile()
+                    {
+                        Name = "Termagant spinefists",
+                        WeaponsInUnit = 10,
+                        ArmorPenetration = 0,
+                        Attacks = 2,
+                        Damage = 1,
+                        Skill = 4,
+                        Strength = 3,
+                        VariableAttackDiceConstant = 1,
+                        VariableAttackDiceNumber = 2,
+                        VariableDamageDiceConstant = 1,
+                        VariableDamageDiceNumber = 1
+                    }
+                },
                 InvulnerableSave = 0,
                 MinimumSave = 5,
                 Toughness = 3,
                 Wounds = 1,
                 ModelCount = 10,
-                Name = "Termagants"
+                Name = "Chaos Land Raider"
             }
         };
         comparison.AlternateAttackSimulation = new MultiFightSimulation()
