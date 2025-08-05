@@ -428,6 +428,8 @@
             await fightSimulationService.ResetDice(comparison.AlternateDefenseSimulation);
             fightSimulationService.SimulateAllFights(comparison.AlternateDefenseSimulation);
             ViewSim2 = comparison.AlternateDefenseSimulation.FightSimulations.First();
+            //reassign to defender's name since we are comparing them
+            comparison.Simulation1.Stats.ColumnName = comparison.Simulation1.Defender.Name;
             comparison.AlternateDefenseSimulation.Stats.ColumnName = comparison.AlternateDefenseSimulation.Defender.Name;
 
         }

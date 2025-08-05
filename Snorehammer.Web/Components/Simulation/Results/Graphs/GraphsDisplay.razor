@@ -123,19 +123,19 @@
     private void DataFromComparison()
     {
         dataA = comparison.Simulation1.FightSimulations.Select(f => f.Stats).ToList();
-        titleA = dataA.First().ColumnName;
+        titleA = comparison.Simulation1.Stats.ColumnName;
         multiA = comparison.Simulation1.Stats;
         @if (comparison.ComparingAttackers)
         {
             dataB = comparison.AlternateAttackSimulation.FightSimulations.Select(f => f.Stats).ToList();
-            titleB = dataB.First().ColumnName;
+            titleB = comparison.AlternateAttackSimulation.Stats.ColumnName;
             multiB = comparison.AlternateAttackSimulation.Stats;
 
         }
         else if (comparison.ComparingDefenders)
         {
             dataB = comparison.AlternateDefenseSimulation.FightSimulations.Select(f => f.Stats).ToList();
-            titleB = dataB.First().ColumnName;
+            titleB = comparison.AlternateDefenseSimulation.Stats.ColumnName;
             multiB = comparison.AlternateDefenseSimulation.Stats;
         }
         else
