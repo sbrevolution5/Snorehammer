@@ -39,16 +39,16 @@
                 </RadzenRow>
             </RadzenTabsItem>
         }
-        <RadzenTabsItem Text="Wounds Inflicted">
-
-            <RadzenRow>
-                <RadzenColumn Size="12" SizeLG="6">
-                    <BarGraph dataA="dataA.Select(s => s.WoundsInflicted).ToList()" dataB="dataB.Select(s => s.WoundsInflicted).ToList()" GraphTitle="Wounds Inflicted" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
-                </RadzenColumn>
-            </RadzenRow>
-        </RadzenTabsItem>
         @if (showFnp)
         {
+            <RadzenTabsItem Text="Wounds Inflicted">
+
+                <RadzenRow>
+                    <RadzenColumn Size="12" SizeLG="6">
+                        <BarGraph dataA="dataA.Select(s => s.PreFNPDamage).ToList()" dataB="dataB.Select(s => s.PreFNPDamage).ToList()" GraphTitle="Wounds Inflicted" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
+                    </RadzenColumn>
+                </RadzenRow>
+            </RadzenTabsItem>
 
             <RadzenTabsItem Text="Feel No Pain Saved">
 
@@ -127,7 +127,7 @@
         titleA = comparison.Simulation1.Stats.ColumnName;
         multiA = comparison.Simulation1.Stats;
         showFnp = comparison.Simulation1.Defender.FeelNoPain;
-        isMultiAttack = comparison.Simulation1.Attacker.Attacks.Any(a=>a.IsVariableAttacks);
+        isMultiAttack = comparison.Simulation1.Attacker.Attacks.Any(a => a.IsVariableAttacks);
         if (comparison.ComparingAttackers)
         {
             dataB = comparison.AlternateAttackSimulation.FightSimulations.Select(f => f.Stats).ToList();
