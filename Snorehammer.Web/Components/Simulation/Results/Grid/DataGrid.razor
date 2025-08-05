@@ -50,7 +50,10 @@
         </Template> *@
         <Columns>
             <RadzenDataGridColumn Property="@nameof(MultiFightStats.ColumnName)" Title="Name"></RadzenDataGridColumn>
-            <RadzenDataGridColumn Property="@nameof(MultiFightStats.AttackNumber)" Title="Attacks Made"></RadzenDataGridColumn>
+            @if (showMultiAttack)
+            {
+                <RadzenDataGridColumn Property="@nameof(MultiFightStats.AttackNumber)" Title="Attacks Made"></RadzenDataGridColumn>
+            }
             <RadzenDataGridColumn Property="@nameof(MultiFightStats.AttacksHit)" Title="Attacks Hit"></RadzenDataGridColumn>
             <RadzenDataGridColumn Property="@nameof(MultiFightStats.WoundsSuccessful)" Title="Wounds Rolls Successful"></RadzenDataGridColumn>
             <RadzenDataGridColumn Property="@nameof(MultiFightStats.ArmorSavesFailed)" Title="Armor Saves Failed"></RadzenDataGridColumn>
@@ -77,6 +80,7 @@
     public Comparison comparison { get; set; }
     public List<MultiFightStats>? comparisonStats { get; set; }
     public bool showFnp { get; set; } = false;
+    public bool showMultiAttack { get; set; } = false;
     protected override async Task OnInitializedAsync()
     {
         comparisonStats = new List<MultiFightStats>();
@@ -84,9 +88,11 @@
         {
             comparisonStats.Add(comparison.Simulation1.Stats);
             showFnp = comparison.Simulation1.Defender.FeelNoPain;
+            showMultiAttack = comparison.Simulation1.Attacker.Attacks.Select(a => a.IsVariableAttacks).Any();
             @if (comparison.ComparingAttackers)
             {
                 comparisonStats.Add(comparison.AlternateAttackSimulation.Stats);
+                showMultiAttack = comparison.AlternateAttackSimulation.Attacker.Attacks.Select(a => a.IsVariableAttacks).Any();
             }
             else if (comparison.ComparingDefenders)
             {
