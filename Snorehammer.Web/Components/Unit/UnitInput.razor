@@ -6,41 +6,48 @@
 
         <EditForm Model="@Unit">
             <RadzenRow AlignItems="AlignItems.End" Wrap="FlexWrap.Wrap" Gap="1rem" class="rz-p-sm-12">
-                <RadzenColumn Size="12"  SizeMD="4" SizeLG="2">
-                    <RadzenFormField Text="Name" Variant="Variant.Flat">
-
-                        <RadzenTextBox @bind-Value="Unit.Name" />
-                    </RadzenFormField>
+                <RadzenColumn Size="12" SizeMD="6" SizeLG="6">
+                    <RadzenStack>
+                        <RadzenFormField Text="Name" Variant="Variant.Flat">
+                            <RadzenTextBox @bind-Value="Unit.Name" />
+                        </RadzenFormField>
+                    </RadzenStack>
                 </RadzenColumn>
-                <RadzenColumn Size="12"  SizeMD="4" SizeLG="2">
-                    <RadzenFormField Text="Saving Throw" Variant="Variant.Flat">
+                <RadzenColumn Size="12" SizeMD="4" SizeLG="2">
+                    <RadzenStack>
+                        <RadzenFormField Text="Saving Throw" Variant="Variant.Flat">
 
-                        <RadzenNumeric @bind-Value="Unit.MinimumSave" />
-                    </RadzenFormField>
+                            <RadzenNumeric @bind-Value="Unit.MinimumSave" />
+                        </RadzenFormField>
+                    </RadzenStack>
                 </RadzenColumn>
-                <RadzenColumn Size="12"  SizeMD="4" SizeLG="2">
-                    <RadzenFormField Text="Invulnerable Save" Variant="Variant.Flat">
-
-                        <RadzenNumeric @bind-Value="Unit.InvulnerableSave" />
-                    </RadzenFormField>
+                <RadzenColumn Size="12" SizeMD="4" SizeLG="2">
+                    <RadzenStack>
+                        <RadzenFormField Text="Invulnerable Save" Variant="Variant.Flat">
+                            <RadzenNumeric @bind-Value="Unit.InvulnerableSave" />
+                        </RadzenFormField>
+                    </RadzenStack>
                 </RadzenColumn>
-                <RadzenColumn Size="12"  SizeMD="4" SizeLG="2">
-                    <RadzenFormField Text="Toughness" Variant="Variant.Flat">
-
-                        <RadzenNumeric @bind-Value="Unit.Toughness" />
-                    </RadzenFormField>
+                <RadzenColumn Size="12" SizeMD="4" SizeLG="2">
+                    <RadzenStack>
+                        <RadzenFormField Text="Toughness" Variant="Variant.Flat">
+                            <RadzenNumeric @bind-Value="Unit.Toughness" />
+                        </RadzenFormField>
+                    </RadzenStack>
                 </RadzenColumn>
-                <RadzenColumn Size="12"  SizeMD="4" SizeLG="2">
-                    <RadzenFormField Text="Model Wounds" Variant="Variant.Flat">
-
-                        <RadzenNumeric @bind-Value="Unit.Wounds" />
-                    </RadzenFormField>
+                <RadzenColumn Size="12" SizeMD="4" SizeLG="2">
+                    <RadzenStack>
+                        <RadzenFormField Text="Model Wounds" Variant="Variant.Flat">
+                            <RadzenNumeric @bind-Value="Unit.Wounds" />
+                        </RadzenFormField>
+                    </RadzenStack>
                 </RadzenColumn>
-                <RadzenColumn Size="12"  SizeMD="4" SizeLG="2">
-                    <RadzenFormField Text="Number of Models" Variant="Variant.Flat">
-
-                        <RadzenNumeric @bind-Value="Unit.ModelCount" />
-                    </RadzenFormField>
+                <RadzenColumn Size="12" SizeMD="4" SizeLG="2">
+                    <RadzenStack>
+                        <RadzenFormField Text="Number of Models" Variant="Variant.Flat">
+                            <RadzenNumeric @bind-Value="Unit.ModelCount" />
+                        </RadzenFormField>
+                    </RadzenStack>
                 </RadzenColumn>
             </RadzenRow>
             <RadzenPanel AllowCollapse="true" class="rz-my-10 rz-mx-auto">
@@ -101,16 +108,16 @@
             </RadzenPanel>
             @if (Attacker)
             {
-                foreach(var atk in Unit.Attacks)
+                foreach (var atk in Unit.Attacks)
                 {
                     <AttackInput attack="@atk"></AttackInput>
-                    @if(Unit.Attacks.Count() > 1)
+                    @if (Unit.Attacks.Count() > 1)
                     {
                         <RadzenButton Click="() => RemoveAttack(atk)" ButtonStyle="ButtonStyle.Danger"><RadzenIcon Icon="remove" /></RadzenButton>
                     }
                 }
                 <RadzenButton Click="() => AddAttack()" ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="add" /></RadzenButton>
-            } 
+            }
         </EditForm>
     </RadzenCard>
 }
