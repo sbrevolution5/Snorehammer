@@ -189,10 +189,7 @@
             Defender = (UnitProfile)comparison.Simulation1.Defender.Clone(),
             Attacker = (UnitProfile)comparison.Simulation1.Attacker.Clone()
         };
-        comparison.AlternateDefenseSimulation.Defender.Name = comparison.Simulation1.Defender.Name + "(1)";
-        comparison.AlternateAttackSimulation.Attacker.Name = comparison.Simulation1.Attacker.Name + "(1)";
-        comparison.AlternateAttackSimulation.Attacker.Attacks[0].Name = comparison.Simulation1.Attacker.Attacks[0].Name + "(1)";
-        AssignMultiSims(1);
+        AssignMultiSims(1000);
         await FightUnits();
     }
     public async Task SetupDemo2()
@@ -288,9 +285,7 @@
             Defender = (UnitProfile)comparison.Simulation1.Defender.Clone(),
             Attacker = (UnitProfile)comparison.Simulation1.Attacker.Clone()
         };
-        comparison.AlternateDefenseSimulation.Defender.Name = comparison.Simulation1.Defender.Name + "(1)";
-        comparison.AlternateAttackSimulation.Attacker.Name = comparison.Simulation1.Attacker.Name + "(1)";
-        AssignMultiSims(1);
+        AssignMultiSims(1000);
         await FightUnits();
 
     }
@@ -408,10 +403,7 @@
             Defender = (UnitProfile)comparison.Simulation1.Defender.Clone(),
             Attacker = (UnitProfile)comparison.Simulation1.Attacker.Clone()
         };
-        comparison.AlternateDefenseSimulation.Defender.Name = comparison.Simulation1.Defender.Name + "(1)";
-        comparison.AlternateAttackSimulation.Attacker.Name = comparison.Simulation1.Attacker.Name + "(1)";
-        comparison.AlternateAttackSimulation.Attacker.Attacks[0].Name = comparison.Simulation1.Attacker.Attacks[0].Name + "(1)";
-        AssignMultiSims(1);
+        AssignMultiSims(1000);
         await FightUnits();
     }
     private async Task FightUnits()
@@ -497,7 +489,7 @@
         comparison.AlternateDefenseSimulation.Defender.Name = comparison.Simulation1.Defender.Name + "(1)";
         comparison.AlternateAttackSimulation.Attacker.Name = comparison.Simulation1.Attacker.Name + "(1)";
         comparison.AlternateAttackSimulation.Attacker.Attacks[0].Name = comparison.Simulation1.Attacker.Attacks[0].Name + "(1)";
-        AssignMultiSims(1);
+        AssignMultiSims(1000);
         return base.OnInitializedAsync();
     }
 }
