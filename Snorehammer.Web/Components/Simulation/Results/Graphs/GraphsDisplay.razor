@@ -30,7 +30,6 @@
         </RadzenTabsItem>
         @if (isMultiAttack)
         {
-
             <RadzenTabsItem Text="Attacks Made">
 
                 <RadzenRow>
@@ -128,13 +127,13 @@
         titleA = comparison.Simulation1.Stats.ColumnName;
         multiA = comparison.Simulation1.Stats;
         showFnp = comparison.Simulation1.Defender.FeelNoPain;
-        isMultiAttack = comparison.Simulation1.Attacker.Attacks.Select(a => a.IsVariableAttacks).Any();
-        @if (comparison.ComparingAttackers)
+        isMultiAttack = comparison.Simulation1.Attacker.Attacks.Any(a=>a.IsVariableAttacks);
+        if (comparison.ComparingAttackers)
         {
             dataB = comparison.AlternateAttackSimulation.FightSimulations.Select(f => f.Stats).ToList();
             titleB = comparison.AlternateAttackSimulation.Stats.ColumnName;
             multiB = comparison.AlternateAttackSimulation.Stats;
-            isMultiAttack = comparison.AlternateAttackSimulation.Attacker.Attacks.Select(a => a.IsVariableAttacks).Any();
+            isMultiAttack = comparison.AlternateAttackSimulation.Attacker.Attacks.Any(a => a.IsVariableAttacks);
         }
         else if (comparison.ComparingDefenders)
         {

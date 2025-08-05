@@ -88,11 +88,11 @@
         {
             comparisonStats.Add(comparison.Simulation1.Stats);
             showFnp = comparison.Simulation1.Defender.FeelNoPain;
-            showMultiAttack = comparison.Simulation1.Attacker.Attacks.Select(a => a.IsVariableAttacks).Any();
+            showMultiAttack = comparison.Simulation1.Attacker.Attacks.Any(a => a.IsVariableAttacks);
             @if (comparison.ComparingAttackers)
             {
                 comparisonStats.Add(comparison.AlternateAttackSimulation.Stats);
-                showMultiAttack = comparison.AlternateAttackSimulation.Attacker.Attacks.Select(a => a.IsVariableAttacks).Any();
+                showMultiAttack = comparison.AlternateAttackSimulation.Attacker.Attacks.Any(a => a.IsVariableAttacks);
             }
             else if (comparison.ComparingDefenders)
             {
