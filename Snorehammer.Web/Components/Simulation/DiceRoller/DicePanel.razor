@@ -24,11 +24,11 @@
         <RadzenRow>
             @foreach (var die in DiceList)
             {
-                <div class="col-1">
+                <RadzenColumn>
 
                     <DieDisplay die=@die CriticalMatters=@CriticalMatters></DieDisplay>
 
-                </div>
+                </RadzenColumn>
             }
         </RadzenRow>
     </ChildContent>
