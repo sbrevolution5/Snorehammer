@@ -103,6 +103,7 @@
 <RadzenButton Click=@(() => FightUnits()) Text="Fight all Units" ButtonStyle="ButtonStyle.Primary" />
 @if (comparison.Simulation1.Stats.ColumnName != "")
 {
+    <DataGrid comparison="comparison"></DataGrid>
     <GraphsDisplay comparison="comparison"></GraphsDisplay>
 
 }
@@ -405,11 +406,11 @@
         };
         AssignMultiSims(1000);
         await FightUnits();
+        StateHasChanged();
     }
     private async Task FightUnits()
     {
         await fightSimulationService.ResetDice(comparison.Simulation1);
-        comparison.Simulation1.Stats.ColumnName = "";
         StateHasChanged();
         fightSimulationService.SimulateAllFights(comparison.Simulation1);
         ViewSim1 = comparison.Simulation1.FightSimulations.First();
