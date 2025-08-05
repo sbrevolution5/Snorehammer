@@ -12,14 +12,6 @@
                 </RadzenColumn>
             </RadzenRow>
         </RadzenTabsItem>
-        <RadzenTabsItem Text="Attacks Made">
-
-            <RadzenRow>
-                <RadzenColumn Size="12" SizeLG="6">
-                    <BarGraph dataA="dataA.Select(s => s.AttackNumber).ToList()" dataB="dataB.Select(s => s.AttackNumber).ToList()" GraphTitle="Attacks Made" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
-                </RadzenColumn>
-            </RadzenRow>
-        </RadzenTabsItem>
         <RadzenTabsItem Text="Wounds Successful">
 
             <RadzenRow>
@@ -36,30 +28,37 @@
                 </RadzenColumn>
             </RadzenRow>
         </RadzenTabsItem>
-        <RadzenTabsItem Text="Attacks Made">
+        @if (isMultiAttack)
+        {
+            <RadzenTabsItem Text="Attacks Made">
 
-            <RadzenRow>
-                <RadzenColumn Size="12" SizeLG="6">
-                    <BarGraph dataA="dataA.Select(s => s.AttackNumber).ToList()" dataB="dataB.Select(s => s.AttackNumber).ToList()" GraphTitle="Attacks Made" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
-                </RadzenColumn>
-            </RadzenRow>
-        </RadzenTabsItem>
-        <RadzenTabsItem Text="Wounds Inflicted">
+                <RadzenRow>
+                    <RadzenColumn Size="12" SizeLG="6">
+                        <BarGraph dataA="dataA.Select(s => s.AttackNumber).ToList()" dataB="dataB.Select(s => s.AttackNumber).ToList()" GraphTitle="Attacks Made" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
+                    </RadzenColumn>
+                </RadzenRow>
+            </RadzenTabsItem>
+        }
+        @if (showFnp)
+        {
+            <RadzenTabsItem Text="Wounds Inflicted">
 
-            <RadzenRow>
-                <RadzenColumn Size="12" SizeLG="6">
-                    <BarGraph dataA="dataA.Select(s => s.WoundsInflicted).ToList()" dataB="dataB.Select(s => s.WoundsInflicted).ToList()" GraphTitle="Wounds Inflicted" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
-                </RadzenColumn>
-            </RadzenRow>
-        </RadzenTabsItem>
-        <RadzenTabsItem Text="Feel No Pain Saved">
+                <RadzenRow>
+                    <RadzenColumn Size="12" SizeLG="6">
+                        <BarGraph dataA="dataA.Select(s => s.PreFNPDamage).ToList()" dataB="dataB.Select(s => s.PreFNPDamage).ToList()" GraphTitle="Wounds Inflicted" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
+                    </RadzenColumn>
+                </RadzenRow>
+            </RadzenTabsItem>
 
-            <RadzenRow>
-                <RadzenColumn Size="12" SizeLG="6">
-                    <BarGraph dataA="dataA.Select(s => s.FeelNoPainMade).ToList()" dataB="dataB.Select(s => s.FeelNoPainMade).ToList()" GraphTitle="Feel No Pain Saved" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
-                </RadzenColumn>
-            </RadzenRow>
-        </RadzenTabsItem>
+            <RadzenTabsItem Text="Feel No Pain Saved">
+
+                <RadzenRow>
+                    <RadzenColumn Size="12" SizeLG="6">
+                        <BarGraph dataA="dataA.Select(s => s.FeelNoPainMade).ToList()" dataB="dataB.Select(s => s.FeelNoPainMade).ToList()" GraphTitle="Feel No Pain Saved" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
+                    </RadzenColumn>
+                </RadzenRow>
+            </RadzenTabsItem>
+        }
         <RadzenTabsItem Text="Damage Taken">
 
             <RadzenRow>
@@ -115,6 +114,8 @@
     public MultiFightStats? multiB { get; set; }
     public string titleA { get; set; }
     public string titleB { get; set; }
+    public bool showFnp { get; set; } = false;
+    public bool isMultiAttack { get; set; } = false;
     protected override Task OnInitializedAsync()
     {
         DataFromComparison();
@@ -125,18 +126,22 @@
         dataA = comparison.Simulation1.FightSimulations.Select(f => f.Stats).ToList();
         titleA = comparison.Simulation1.Stats.ColumnName;
         multiA = comparison.Simulation1.Stats;
-        @if (comparison.ComparingAttackers)
+        showFnp = comparison.Simulation1.Defender.FeelNoPain;
+        isMultiAttack = comparison.Simulation1.Attacker.Attacks.Any(a => a.IsVariableAttacks);
+        if (comparison.ComparingAttackers)
         {
             dataB = comparison.AlternateAttackSimulation.FightSimulations.Select(f => f.Stats).ToList();
             titleB = comparison.AlternateAttackSimulation.Stats.ColumnName;
             multiB = comparison.AlternateAttackSimulation.Stats;
-
+            isMultiAttack = comparison.AlternateAttackSimulation.Attacker.Attacks.Any(a => a.IsVariableAttacks);
         }
         else if (comparison.ComparingDefenders)
         {
             dataB = comparison.AlternateDefenseSimulation.FightSimulations.Select(f => f.Stats).ToList();
             titleB = comparison.AlternateDefenseSimulation.Stats.ColumnName;
             multiB = comparison.AlternateDefenseSimulation.Stats;
+            showFnp = comparison.AlternateDefenseSimulation.Defender.FeelNoPain;
+
         }
         else
         {

@@ -3,7 +3,7 @@
 @if (comparisonStats is not null)
 {
 
-    <RadzenDataGrid Data="comparisonStats"  GridLines="DataGridGridLines.Both" AllowSorting="true" CellRender="@CellRender">
+    <RadzenDataGrid Data="comparisonStats" GridLines="DataGridGridLines.Both" AllowSorting="true" CellRender="@CellRender">
         @*<Template Context="MultiFightStats">
              <RadzenDataGrid Data="MultiFightStats.PerWeaponStats" GridLines="DataGridGridLines.Both" AllowSorting="true" CellRender="@CellRender">
                 <Columns>
@@ -50,12 +50,18 @@
         </Template> *@
         <Columns>
             <RadzenDataGridColumn Property="@nameof(MultiFightStats.ColumnName)" Title="Name"></RadzenDataGridColumn>
-            <RadzenDataGridColumn Property="@nameof(MultiFightStats.AttackNumber)" Title="Attacks Made"></RadzenDataGridColumn>
+            @if (showMultiAttack)
+            {
+                <RadzenDataGridColumn Property="@nameof(MultiFightStats.AttackNumber)" Title="Attacks Made"></RadzenDataGridColumn>
+            }
             <RadzenDataGridColumn Property="@nameof(MultiFightStats.AttacksHit)" Title="Attacks Hit"></RadzenDataGridColumn>
             <RadzenDataGridColumn Property="@nameof(MultiFightStats.WoundsSuccessful)" Title="Wounds Rolls Successful"></RadzenDataGridColumn>
             <RadzenDataGridColumn Property="@nameof(MultiFightStats.ArmorSavesFailed)" Title="Armor Saves Failed"></RadzenDataGridColumn>
-            <RadzenDataGridColumn Property="@nameof(MultiFightStats.WoundsInflicted)" Title="Damage Before FNP"></RadzenDataGridColumn>
-            <RadzenDataGridColumn Property="@nameof(MultiFightStats.FeelNoPainMade)" Title="Feel No Pain Successful"></RadzenDataGridColumn>
+            @if (showFnp)
+            {
+                <RadzenDataGridColumn Property="@nameof(MultiFightStats.WoundsInflicted)" Title="Damage Before FNP"></RadzenDataGridColumn>
+                <RadzenDataGridColumn Property="@nameof(MultiFightStats.FeelNoPainMade)" Title="Feel No Pain Successful"></RadzenDataGridColumn>
+            }
             <RadzenDataGridColumn Property="@nameof(MultiFightStats.DamageNumber)" Title="Total Damage"></RadzenDataGridColumn>
             @if (comparison.Simulation1.Rounds > 1)
             {
@@ -73,19 +79,25 @@
     [Parameter]
     public Comparison comparison { get; set; }
     public List<MultiFightStats>? comparisonStats { get; set; }
+    public bool showFnp { get; set; } = false;
+    public bool showMultiAttack { get; set; } = false;
     protected override async Task OnInitializedAsync()
     {
         comparisonStats = new List<MultiFightStats>();
         @if (comparison.Simulation1.Rounds >= 1)
         {
             comparisonStats.Add(comparison.Simulation1.Stats);
+            showFnp = comparison.Simulation1.Defender.FeelNoPain;
+            showMultiAttack = comparison.Simulation1.Attacker.Attacks.Any(a => a.IsVariableAttacks);
             @if (comparison.ComparingAttackers)
             {
                 comparisonStats.Add(comparison.AlternateAttackSimulation.Stats);
+                showMultiAttack = comparison.AlternateAttackSimulation.Attacker.Attacks.Any(a => a.IsVariableAttacks);
             }
             else if (comparison.ComparingDefenders)
             {
                 comparisonStats.Add(comparison.AlternateDefenseSimulation.Stats);
+                showFnp = comparison.AlternateDefenseSimulation.Defender.FeelNoPain;
             }
         }
     }

@@ -383,6 +383,7 @@ namespace Snorehammer.Web.Services
             }
             sim.Stats.PreFNPDamage = sim.Stats.DamageNumber;
 
+
         }
         public void RollFeelNoPain(WeaponSimulation sim)
         {
