@@ -6,20 +6,20 @@
         <RadzenLabel>Ranged</RadzenLabel>
         <RadzenSwitch @bind-Value=@attack.Melee />
         <RadzenLabel>Melee</RadzenLabel>
-        <RadzenRow AlignItems="AlignItems.End" Wrap="FlexWrap.Wrap" Gap="1rem" class="rz-p-sm-12">
-            <RadzenColumn Size="12" SizeMD="4" SizeLG="2">
+        <RadzenRow AlignItems="AlignItems.End" Wrap="FlexWrap.Wrap" Gap="1rem">
+            <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
                 <RadzenFormField Text="Name" Variant="Variant.Flat">
 
                     <RadzenTextBox @bind-Value="attack.Name" />
                 </RadzenFormField>
             </RadzenColumn>
-            <RadzenColumn Size="12"  SizeMD="4" SizeLG="2">
+            <RadzenColumn Size="12"  SizeMD="2" SizeLG="2">
                 <RadzenFormField Text="Weapons in unit" Variant="Variant.Flat">
 
                     <RadzenNumeric @bind-Value="attack.WeaponsInUnit" />
                 </RadzenFormField>
             </RadzenColumn>
-            <RadzenColumn Size="12"  SizeMD="4" SizeLG="2">
+            <RadzenColumn Size="12"  SizeMD="2" SizeLG="2">
                 <RadzenCheckBox @bind-Value=@attack.IsVariableAttacks Name="Variable" />
                 <RadzenLabel Text="Roll for # of attacks" Component="Variable" class="rz-ms-2" />
                 @if (attack.IsVariableAttacks)
@@ -40,19 +40,19 @@
                     </RadzenFormField>
                 }
             </RadzenColumn>
-            <RadzenColumn Size="12"  SizeMD="4" SizeLG="2">
+            <RadzenColumn Size="12"  SizeMD="2" SizeLG="2">
                 <RadzenFormField Text="To hit" Variant="Variant.Flat">
 
                     <RadzenNumeric @bind-Value="attack.Skill" />
                 </RadzenFormField>
             </RadzenColumn>
-            <RadzenColumn Size="12"  SizeMD="4" SizeLG="2">
+            <RadzenColumn Size="12"  SizeMD="2" SizeLG="2">
                 <RadzenFormField Text="Strength" Variant="Variant.Flat">
 
                     <RadzenNumeric @bind-Value="attack.Strength" />
                 </RadzenFormField>
             </RadzenColumn>
-            <RadzenColumn Size="12"  SizeMD="4" SizeLG="2">
+            <RadzenColumn Size="12"  SizeMD="2" SizeLG="2">
                 <RadzenCheckBox @bind-Value=@attack.IsVariableDamage Name="Variable" />
                 <RadzenLabel Text="Rolls damage" Component="Variable" class="rz-ms-2" />
                 @if (attack.IsVariableDamage)
