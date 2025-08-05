@@ -297,7 +297,10 @@
     }
     public async Task SetupDemo3()
     {
-        comparison = new Comparison();
+        comparison = new Comparison()
+        {
+            ComparingAttackers = true
+        };
         comparison.Simulation1 = new MultiFightSimulation()
         {
 
