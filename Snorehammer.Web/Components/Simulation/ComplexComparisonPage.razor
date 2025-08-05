@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using Snorehammer.Web.Components.Simulation.Results
+@using Snorehammer.Web.Components.Simulation.Results.Graphs
 @using Snorehammer.Web.Components.Simulation.Results.Grid
 @using Snorehammer.Web.Components.Unit
 @using Snorehammer.Web.FrontendModels
@@ -102,7 +103,7 @@
 <RadzenButton Click=@(() => FightUnits()) Text="Fight all Units" ButtonStyle="ButtonStyle.Primary" />
 @if (comparison.Simulation1.Stats.ColumnName != "")
 {
-    <DataGrid comparison="comparison"></DataGrid>
+    <GraphsDisplay comparison="comparison"></GraphsDisplay>
 
 }
 @code {
@@ -387,7 +388,7 @@
                         VariableAttackDiceConstant = 1,
                         VariableAttackDiceNumber = 2,
                         VariableDamageDiceConstant = 1,
-                        VariableDamageDiceNumber = 1
+                        VariableDamageDiceNumber = 1,
                         Melee=true
 
                     }
