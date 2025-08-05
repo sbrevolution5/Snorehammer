@@ -1,4 +1,4 @@
-﻿@page "/complex"
+﻿@page "/"
 @using Snorehammer.Web.Components.Simulation.Results
 @using Snorehammer.Web.Components.Simulation.Results.Grid
 @using Snorehammer.Web.Components.Unit
@@ -7,6 +7,16 @@
 @using Snorehammer.Web.FrontendModels.Simulations
 @using Snorehammer.Web.Services
 @rendermode InteractiveServer
+<RadzenCard>
+    <RadzenText TextStyle="TextStyle.H3">
+        Don't know warhammer?  No Problem!
+    </RadzenText>
+    <RadzenText TextStyle="TextStyle.Body1"> Scroll down to the fight button to try it out.  The form is already filled in with a simulation.</RadzenText>
+    <RadzenText TextStyle="TextStyle.Body2"> Or try one of these predefined scenarios:</RadzenText>
+    <RadzenRow>
+        <RadzenButton Click="@(() => SetupDemo1())" Text="Termagants vs. Intercessors" ButtonStyle="ButtonStyle.Primary"></RadzenButton>
+    </RadzenRow>
+</RadzenCard>
 <h3>ComplexComparison</h3>
 
 <RadzenStack class="rz-p-sm-12" Orientation="Orientation.Horizontal">
@@ -122,6 +132,64 @@
         comparison.AlternateDefenseSimulation.SetSimNumber(x);
         comparison.AlternateAttackSimulation.SetSimNumber(x);
 
+    }
+    public void SetupDemo1()
+    {
+        comparison = new Comparison();
+        comparison.Simulation1 = new MultiFightSimulation()
+        {
+
+            Defender = new UnitProfile()
+            {
+                InvulnerableSave = 0,
+                MinimumSave = 3,
+                Toughness = 4,
+                Wounds = 2,
+                ModelCount = 10,
+                Name = "Intercessors"
+            },
+            Attacker = new UnitProfile()
+            {
+                Attacks = new List<AttackProfile>()
+            {
+            new AttackProfile()
+            {
+                Name = "Termagant spinefists",
+                WeaponsInUnit = 10,
+                ArmorPenetration = 0,
+                Attacks = 2,
+                Damage = 1,
+                Skill = 4,
+                Strength = 3,
+                VariableAttackDiceConstant = 1,
+                VariableAttackDiceNumber = 2,
+                VariableDamageDiceConstant = 1,
+                VariableDamageDiceNumber = 1
+            }
+            },
+                InvulnerableSave = 0,
+                MinimumSave = 5,
+                Toughness = 3,
+                Wounds = 1,
+                ModelCount = 10,
+                Name = "Termagants"
+            }
+        };
+        comparison.AlternateAttackSimulation = new MultiFightSimulation()
+        {
+            Defender = (UnitProfile)comparison.Simulation1.Defender.Clone(),
+            Attacker = (UnitProfile)comparison.Simulation1.Attacker.Clone()
+        };
+        comparison.AlternateDefenseSimulation = new MultiFightSimulation()
+        {
+            Defender = (UnitProfile)comparison.Simulation1.Defender.Clone(),
+            Attacker = (UnitProfile)comparison.Simulation1.Attacker.Clone()
+        };
+        comparison.AlternateDefenseSimulation.Defender.Name = comparison.Simulation1.Defender.Name + "(1)";
+        comparison.AlternateAttackSimulation.Attacker.Name = comparison.Simulation1.Attacker.Name + "(1)";
+        comparison.AlternateAttackSimulation.Attacker.Attacks[0].Name = comparison.Simulation1.Attacker.Attacks[0].Name + "(1)";
+        AssignMultiSims(1);
+        StateHasChanged();
     }
     private async Task FightUnits()
     {
