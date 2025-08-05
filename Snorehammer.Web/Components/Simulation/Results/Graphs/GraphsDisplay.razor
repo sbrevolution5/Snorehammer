@@ -52,14 +52,18 @@
                 </RadzenColumn>
             </RadzenRow>
         </RadzenTabsItem>
-        <RadzenTabsItem Text="Feel No Pain Saved">
+        @if (showFnp)
+        {
 
-            <RadzenRow>
-                <RadzenColumn Size="12" SizeLG="6">
-                    <BarGraph dataA="dataA.Select(s => s.FeelNoPainMade).ToList()" dataB="dataB.Select(s => s.FeelNoPainMade).ToList()" GraphTitle="Feel No Pain Saved" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
-                </RadzenColumn>
-            </RadzenRow>
-        </RadzenTabsItem>
+            <RadzenTabsItem Text="Feel No Pain Saved">
+
+                <RadzenRow>
+                    <RadzenColumn Size="12" SizeLG="6">
+                        <BarGraph dataA="dataA.Select(s => s.FeelNoPainMade).ToList()" dataB="dataB.Select(s => s.FeelNoPainMade).ToList()" GraphTitle="Feel No Pain Saved" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
+                    </RadzenColumn>
+                </RadzenRow>
+            </RadzenTabsItem>
+        }
         <RadzenTabsItem Text="Damage Taken">
 
             <RadzenRow>
@@ -115,6 +119,7 @@
     public MultiFightStats? multiB { get; set; }
     public string titleA { get; set; }
     public string titleB { get; set; }
+    public bool showFnp { get; set; } = false;
     protected override Task OnInitializedAsync()
     {
         DataFromComparison();
@@ -125,6 +130,7 @@
         dataA = comparison.Simulation1.FightSimulations.Select(f => f.Stats).ToList();
         titleA = comparison.Simulation1.Stats.ColumnName;
         multiA = comparison.Simulation1.Stats;
+        showFnp = comparison.Simulation1.Defender.FeelNoPain;
         @if (comparison.ComparingAttackers)
         {
             dataB = comparison.AlternateAttackSimulation.FightSimulations.Select(f => f.Stats).ToList();
@@ -137,6 +143,8 @@
             dataB = comparison.AlternateDefenseSimulation.FightSimulations.Select(f => f.Stats).ToList();
             titleB = comparison.AlternateDefenseSimulation.Stats.ColumnName;
             multiB = comparison.AlternateDefenseSimulation.Stats;
+            showFnp = comparison.AlternateDefenseSimulation.Defender.FeelNoPain;
+
         }
         else
         {
