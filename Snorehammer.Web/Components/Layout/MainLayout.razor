@@ -13,30 +13,14 @@
         <RadzenPanelMenu>
             <RadzenPanelMenuItem Text="UnitCompare" Icon="home" Path="/" />
             <RadzenPanelMenuItem Text="Simple Comparison" Icon="cycle" Path="/simple"/>
+            <RadzenPanelMenuItem Text="About and copyright" Icon="feedback" Path="/about"/>
         </RadzenPanelMenu>
     </RadzenSidebar>
     <RadzenBody>
         <div class="rz-p-4">
             @Body
         </div>
-    </RadzenBody>
-    <RadzenFooter >
-        <RadzenStack Orientation="Orientation.Horizontal">
-            <RadzenColumn Size="3">
-
-        A site made by <a href="sethbcoding.com">Seth A Burleson </a>Copyright 2025.  
-            </RadzenColumn>
-            <RadzenColumn Size="3">
-        Warhammer 40k is a property of GamesWorkshop, and this is an unofficial tool
-            </RadzenColumn>
-            <RadzenColumn Size="3">
-                <RadzenIcon Icon="Bug_report" /><a href="https://github.com/sbrevolution5/Snorehammer/issues">Report an Issue</a>
-            </RadzenColumn>
-            <RadzenColumn Size="3">
-                <RadzenIcon Icon="Code" /> View open source code on <a href="https://github.com/sbrevolution5/Snorehammer">gitHub</a>
-            </RadzenColumn>
-        </RadzenStack>
-    </RadzenFooter>
+    </RadzenBody>        
 </RadzenLayout>
 <RadzenComponents @rendermode="InteractiveServer" />
 
