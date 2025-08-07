@@ -159,6 +159,13 @@
                         <RadzenCheckBox Disabled=attack.Melee @bind-Value=@attack.BigGuns Name="BigGuns" />
                         <RadzenLabel Text="Big Guns Never Tire" Component="BigGuns" class=@($"rz-ms-2 {MeleeLabel(false)}") />
                     </RadzenColumn>
+                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                        <RadzenCheckBox  @bind-Value=@attack.Lance Name="AntiInfantry" />
+                        <RadzenLabel Text="Anti-Infantry" Component="AntiInfantry" class="rz-ms-2" />
+                        <RadzenFormField Text="" Style="width: 100%;">
+                            <RadzenNumeric @bind-Value="@attack.AntiInfantryValue" Disabled=!attack.AntiInfantry/>
+                        </RadzenFormField>
+                    </RadzenColumn>
 
                 </RadzenRow>
             </ChildContent>
