@@ -180,7 +180,10 @@ namespace Snorehammer.Web.Services
                 {
                     sim.WoundTarget = 6;
                 }
-                sim.WoundTarget = 5;
+                else
+                {
+                    sim.WoundTarget = 5;
+                }
             }
             else
             {
@@ -188,7 +191,10 @@ namespace Snorehammer.Web.Services
                 {
                     sim.WoundTarget = 2;
                 }
-                sim.WoundTarget = 3;
+                else
+                {
+                    sim.WoundTarget = 3;
+                }
                 if (sim.Defender.MinusOneToWoundAgainstStronger)
                 {
                     sim.WoundTarget++;
@@ -201,21 +207,51 @@ namespace Snorehammer.Web.Services
             sim.ModdedWoundTarget = sim.WoundTarget;
             if (sim.Weapon.Plus1Wound || (sim.Weapon.Lance && sim.Weapon.Melee))
             {
-                sim.WoundTarget--;
+                sim.ModdedWoundTarget--;
             }
             if (sim.Defender.Stealth || sim.Defender.Minus1Hit)
             {
-                sim.WoundTarget++;
+                sim.ModdedWoundTarget++;
             }
-            if (sim.WoundTarget < 2)
+            if (sim.ModdedWoundTarget < 2)
             {
-                sim.WoundTarget = 2;
+                sim.ModdedWoundTarget = 2;
             }
-            if (sim.WoundTarget > 6)
+            if (sim.ModdedWoundTarget > 6)
             {
-                sim.WoundTarget = 6;
+                sim.ModdedWoundTarget = 6;
+            }
+            DetermineAntiWoundNumber(sim);
+        }
+
+        private void DetermineAntiWoundNumber(WeaponSimulation sim)
+        {
+            if (sim.Defender.Type == UnitType.Infantry && sim.Weapon.AntiInfantry && sim.ModdedWoundTarget > sim.Weapon.AntiInfantryValue)
+            {
+                sim.ModdedWoundTarget = sim.Weapon.AntiInfantryValue;
+            }
+            else if (sim.Defender.Type == UnitType.Monster && sim.Weapon.AntiMonster && sim.ModdedWoundTarget > sim.Weapon.AntiMonsterValue)
+            {
+                sim.ModdedWoundTarget = sim.Weapon.AntiMonsterValue;
+            }
+            else if (sim.Defender.Type == UnitType.Vehicle && sim.Weapon.AntiVehicle && sim.ModdedWoundTarget > sim.Weapon.AntiVehicleValue)
+            {
+                sim.ModdedWoundTarget = sim.Weapon.AntiVehicleValue;
+            }
+            else if (sim.Defender.Type == UnitType.Swarm && sim.Weapon.AntiSwarm && sim.ModdedWoundTarget > sim.Weapon.AntiSwarmValue)
+            {
+                sim.ModdedWoundTarget = sim.Weapon.AntiSwarmValue;
+            }
+            else if (sim.Defender.Type == UnitType.Beast && sim.Weapon.AntiBeast && sim.ModdedWoundTarget > sim.Weapon.AntiBeastValue)
+            {
+                sim.ModdedWoundTarget = sim.Weapon.AntiBeastValue;
+            }
+            else if (sim.Defender.Type == UnitType.Mounted && sim.Weapon.AntiMounted && sim.ModdedWoundTarget > sim.Weapon.AntiMountedValue)
+            {
+                sim.ModdedWoundTarget = sim.Weapon.AntiMountedValue;
             }
         }
+
         public void RollStrengthStep(WeaponSimulation sim)
         {
             DetermineModdedWoundTarget(sim);
@@ -519,11 +555,11 @@ namespace Snorehammer.Web.Services
         }
         public void ValidateResult(FightSimulation sim)
         {
-            if(sim.Stats.ArmorSavesFailed > sim.Stats.AttackNumber)
+            if (sim.Stats.ArmorSavesFailed > sim.Stats.AttackNumber)
             {
                 throw new InvalidProgramException("There are more failed armor saves than attacks");
             }
-            if(sim.Stats.LostAModel && sim.Stats.ModelsDestroyed == 0)
+            if (sim.Stats.LostAModel && sim.Stats.ModelsDestroyed == 0)
             {
                 throw new InvalidProgramException("Lost a model is true but 0 models were destroyed");
             }

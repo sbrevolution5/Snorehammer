@@ -38,6 +38,18 @@
         public int MeltaDamage { get; set; } = 1;
         public bool Melee { get; set; } = false;
         public bool BigGuns { get; set; } = false;
+        public bool AntiInfantry { get; set; } = false;
+        public int AntiInfantryValue { get; set; } = 2;
+        public bool AntiMounted { get; set; } = false;
+        public int AntiMountedValue { get; set; } = 2;
+        public bool AntiBeast { get; set; } = false;
+        public int AntiBeastValue { get; set; } = 2;
+        public bool AntiSwarm { get; set; } = false;
+        public int AntiSwarmValue { get; set; } = 2;
+        public bool AntiVehicle { get; set; } = false;
+        public int AntiVehicleValue { get; set; } = 2;
+        public bool AntiMonster { get; set; } = false;
+        public int AntiMonsterValue { get; set; } = 2;
         public object Clone()
         {
             return MemberwiseClone();

@@ -159,12 +159,51 @@
                         <RadzenCheckBox Disabled=attack.Melee @bind-Value=@attack.BigGuns Name="BigGuns" />
                         <RadzenLabel Text="Big Guns Never Tire" Component="BigGuns" class=@($"rz-ms-2 {MeleeLabel(false)}") />
                     </RadzenColumn>
-
+                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                        <RadzenFormField Visible=attack.AntiInfantry Style="width: 100%;">
+                            <RadzenNumeric @bind-Value="@attack.AntiInfantryValue"/>
+                        </RadzenFormField>
+                        <RadzenCheckBox  @bind-Value=@attack.AntiInfantry Name="AntiInfantry" />
+                        <RadzenLabel Text="Anti-Infantry" Component="AntiInfantry" class="rz-ms-2" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                        <RadzenFormField Visible=attack.AntiMonster Style="width: 100%;">
+                            <RadzenNumeric @bind-Value="@attack.AntiMonsterValue"/>
+                        </RadzenFormField>
+                        <RadzenCheckBox  @bind-Value=@attack.AntiMonster Name="AntiMonster" />
+                        <RadzenLabel Text="Anti-Monster" Component="AntiMonster" class="rz-ms-2" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                        <RadzenFormField Visible=attack.AntiVehicle Style="width: 100%;">
+                            <RadzenNumeric @bind-Value="@attack.AntiVehicleValue" />
+                        </RadzenFormField>
+                        <RadzenCheckBox  @bind-Value=@attack.AntiVehicle Name="AntiVehicle" />
+                        <RadzenLabel Text="Anti-Vehicle" Component="AntiVehicle" class="rz-ms-2" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                        <RadzenFormField Visible=attack.AntiMounted Style="width: 100%;">
+                            <RadzenNumeric @bind-Value="@attack.AntiMountedValue"/>
+                        </RadzenFormField>
+                        <RadzenCheckBox  @bind-Value=@attack.AntiMounted Name="AntiMounted" />
+                        <RadzenLabel Text="Anti-Mounted" Component="AntiMounted" class="rz-ms-2" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                        <RadzenFormField Visible=attack.AntiSwarm Style="width: 100%;">
+                            <RadzenNumeric @bind-Value="@attack.AntiSwarmValue" />
+                        </RadzenFormField>
+                        <RadzenCheckBox  @bind-Value=@attack.AntiSwarm Name="AntiSwarm" />
+                        <RadzenLabel Text="Anti-Swarm" Component="AntiSwarm" class="rz-ms-2" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                        <RadzenFormField Visible=attack.AntiBeast Style="width: 100%;">
+                            <RadzenNumeric @bind-Value="@attack.AntiBeastValue"/>
+                        </RadzenFormField>
+                        <RadzenCheckBox  @bind-Value=@attack.AntiBeast Name="AntiBeast" />
+                        <RadzenLabel Text="Anti-Beast" Component="AntiBeast" class="rz-ms-2" />
+                    </RadzenColumn>
                 </RadzenRow>
             </ChildContent>
-
         </RadzenPanel>
-
     </EditForm>
 </RadzenCard>
 @code {
