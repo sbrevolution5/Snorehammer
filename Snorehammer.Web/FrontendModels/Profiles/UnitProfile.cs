@@ -4,6 +4,7 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public UnitType Type { get; set; } = UnitType.Infantry;
         public List<AttackProfile> Attacks { get; set; }
         public int Toughness { get; set; }
         public int Wounds { get; set; }
