@@ -547,7 +547,88 @@ namespace Snorehammer.Web.Services.Tests
                 sim.Stats.ModelsDestroyed.Should().Be(1);
             }
         }
+        [TestClass]
+        public class FightSimulationWoundRollTests : FightSimulationServiceTests
+        {
+            [SetUp]
+            public override void Setup()
+            {
+                base.Setup();
+            }
+            [TearDown]
+            public override void TearDown()
+            {
+                base.TearDown();
+            }
+            [Test]
+            [TestCase(4,4,4)]
+            [TestCase(5,4,3)]
+            [TestCase(8,4,2)]
+            [TestCase(3,4,5)]
+            [TestCase(2,4,6)]
+            public void StrengthVsToughTests(int atkStr, int defTough, int expectedResult)
+            {
+                //arrange
+                weaponSim.Weapon.Strength = atkStr;
+                weaponSim.Defender.Toughness = defTough;
+                //act
+                service.DetermineModdedWoundTarget(weaponSim);
+                //assert
+                weaponSim.ModdedWoundTarget.Should().Be(expectedResult, $"str {atkStr} vs. tough {defTough}");
+            }
+            [Test]
+            [TestCase(2,10,UnitType.Infantry, 2,2)]
+            [TestCase(2,10,UnitType.Vehicle, 2,2)]
+            [TestCase(2,10,UnitType.Monster, 2,2)]
+            [TestCase(2,10,UnitType.Mounted, 2,2)]
+            [TestCase(2,10,UnitType.Swarm, 2,2)]
+            [TestCase(2,10,UnitType.Beast, 2,2)]
+            [TestCase(6,2,UnitType.Beast, 5,2)]
+            public void AntiWoundTests(int atkStr, int defTough, UnitType antiType, int antiTarget, int expectedResult)
+            {
+                //arrange
+                switch (antiType)
+                {
+                    case UnitType.Infantry:
+                        weaponSim.Defender.Type = antiType;
+                        weaponSim.Weapon.AntiInfantry = true;
+                        weaponSim.Weapon.AntiInfantryValue = antiTarget;
+                        break;
+                    case UnitType.Monster:
+                        weaponSim.Defender.Type = antiType;
+                        weaponSim.Weapon.AntiMonster = true;
+                        weaponSim.Weapon.AntiMonsterValue = antiTarget;
+                        break;
+                    case UnitType.Vehicle:
+                        weaponSim.Defender.Type = antiType;
+                        weaponSim.Weapon.AntiVehicle= true;
+                        weaponSim.Weapon.AntiVehicleValue = antiTarget;
+                        break;
+                    case UnitType.Swarm:
+                        weaponSim.Defender.Type = antiType;
+                        weaponSim.Weapon.AntiSwarm = true;
+                        weaponSim.Weapon.AntiSwarmValue = antiTarget;
+                        break;
+                    case UnitType.Beast:
+                        weaponSim.Defender.Type = antiType;
+                        weaponSim.Weapon.AntiBeast = true;
+                        weaponSim.Weapon.AntiBeastValue = antiTarget;
+                        break;
+                    case UnitType.Mounted:
+                        weaponSim.Defender.Type = antiType;
+                        weaponSim.Weapon.AntiMounted = true;
+                        weaponSim.Weapon.AntiMountedValue = antiTarget;
+                        break;
+                    default:
+                        break;
+                }
+                weaponSim.Weapon.Strength = atkStr;
+                weaponSim.Defender.Toughness = defTough;
+                //act
+                service.DetermineModdedWoundTarget(weaponSim);
+                //assert
+                weaponSim.ModdedWoundTarget.Should().Be(expectedResult, $"str {atkStr} vs. tough {defTough}, with anti value {antiTarget}");
+            }
+        }
     }
-}
-
 }
