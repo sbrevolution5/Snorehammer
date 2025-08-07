@@ -5,6 +5,18 @@
     <RadzenCard Variant="Variant.Outlined">
 
         <EditForm Model="@Unit">
+            <RadzenRow>
+                <RadzenSelectBar @bind-Value="@Unit.Type">
+                    <Items>
+                        <RadzenSelectBarItem Value="UnitType.Infantry" Text="Infantry"></RadzenSelectBarItem>
+                        <RadzenSelectBarItem Value="UnitType.Mounted" Text="Mounted"></RadzenSelectBarItem>
+                        <RadzenSelectBarItem Value="UnitType.Vehicle" Text="Vehicle"></RadzenSelectBarItem>
+                        <RadzenSelectBarItem Value="UnitType.Swarm" Text="Swarm"></RadzenSelectBarItem>
+                        <RadzenSelectBarItem Value="UnitType.Beast" Text="Beast"></RadzenSelectBarItem>
+                        <RadzenSelectBarItem Value="UnitType.Monster" Text="Monster"></RadzenSelectBarItem>
+                    </Items>
+                </RadzenSelectBar>
+            </RadzenRow>
             <RadzenRow AlignItems="AlignItems.End" Wrap="FlexWrap.Wrap" Gap="1rem" class="rz-p-sm-12">
                 <RadzenColumn Size="12" SizeMD="6" SizeLG="6">
                     <RadzenStack>
