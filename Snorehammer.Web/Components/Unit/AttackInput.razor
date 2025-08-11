@@ -25,8 +25,10 @@
             </RadzenColumn>
             <RadzenColumn Size="12" SizeMD="2" SizeLG="2">
                 <RadzenStack>
-                    <RadzenCheckBox @bind-Value=@attack.IsVariableAttacks Name="Variable" />
-                    <RadzenLabel Text="Roll for # of attacks" Component="Variable" class="rz-ms-2" />
+                    <RadzenRow JustifyContent="JustifyContent.Center">
+                        <RadzenCheckBox @bind-Value=@attack.IsVariableAttacks Name="Variable" />
+                        <RadzenLabel Text="Roll for # of attacks" Component="Variable" class="rz-ms-2" />
+                    </RadzenRow>
                     @if (attack.IsVariableAttacks)
                     {
                         <RadzenFormField Text="Attacks (X * [d]y + z)" Variant="Variant.Flat">
@@ -59,8 +61,10 @@
             </RadzenColumn>
             <RadzenColumn Size="12" SizeMD="2" SizeLG="2">
                 <RadzenStack>
-                    <RadzenCheckBox @bind-Value=@attack.IsVariableDamage Name="Variable" />
-                    <RadzenLabel Text="Rolls damage" Component="Variable" class="rz-ms-2" />
+                    <RadzenRow JustifyContent="JustifyContent.Center">
+                        <RadzenCheckBox @bind-Value=@attack.IsVariableDamage Name="Variable" />
+                        <RadzenLabel Text="Rolls damage" Component="Variable" class="rz-ms-2" />
+                    </RadzenRow>
                     @if (attack.IsVariableDamage)
                     {
                         <RadzenFormField Text="Damage (X * [d]y + z)" Variant="Variant.Flat">
