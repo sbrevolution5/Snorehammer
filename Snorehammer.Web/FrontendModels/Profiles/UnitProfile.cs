@@ -12,6 +12,7 @@ namespace Snorehammer.Web.FrontendModels.Profiles
         public int Wounds { get; set; }
         public int MinimumSave { get; set; }
         public int InvulnerableSave { get; set; }
+        public bool HasInvulnerableSave { get; set; } = false;
         public int ModelCount { get; set; }
         public bool ArmorReroll { get; set; }
         public bool Reroll1Save { get; set; }
