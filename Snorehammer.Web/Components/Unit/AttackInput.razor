@@ -135,6 +135,11 @@
                                     <RadzenCheckBox @bind-Value=@attack.Lethal Name="Lethal" />
                                     <RadzenLabel Text="Lethal Hits" Component="Lethal" class="rz-ms-2" />
                                 </RadzenColumn>
+                                <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                                    <RadzenCheckBox @bind-Value=@attack.RapidFire Name="Rapid Fire" />
+                                    <RadzenLabel Text="Rapid Fire" Component="Rapid Fire" class="rz-ms-2" />
+                                </RadzenColumn>
+
                             </ChildContent>
                             <SummaryTemplate>
                                 @HitSummary()
