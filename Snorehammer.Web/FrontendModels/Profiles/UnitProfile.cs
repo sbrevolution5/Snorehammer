@@ -1,11 +1,13 @@
-﻿namespace Snorehammer.Web.FrontendModels.Profiles
+﻿using Snorehammer.Web.Extensions;
+
+namespace Snorehammer.Web.FrontendModels.Profiles
 {
     public class UnitProfile : ICloneable
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public UnitType Type { get; set; } = UnitType.Infantry;
-        public List<AttackProfile> Attacks { get; set; }
+        public List<AttackProfile> Attacks { get; set; } = new List<AttackProfile>();
         public int Toughness { get; set; }
         public int Wounds { get; set; }
         public int MinimumSave { get; set; }
@@ -25,7 +27,12 @@
         public bool MinusOneToWoundAgainstStronger { get; set; } = false;
         public object Clone()
         {
-            return this.MemberwiseClone();
+            UnitProfile res = (UnitProfile)this.MemberwiseClone();
+            if (res.Attacks.Any())
+            {
+                res.Attacks = (List<AttackProfile>)this.Attacks.Clone();
+            }
+            return res;
         }
     }
 }
