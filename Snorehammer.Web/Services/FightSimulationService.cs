@@ -370,7 +370,10 @@ namespace Snorehammer.Web.Services
         public int DetermineArmorSave(WeaponSimulation sim)
         {
             int moddedSave = sim.Defender.MinimumSave + sim.Weapon.ArmorPenetration;
-
+            if (!sim.Defender.HasInvulnerableSave)
+            {
+                sim.Defender.InvulnerableSave = 0;
+            }
             if (sim.Defender.HasCover)
             {
                 if ((sim.Defender.MinimumSave >= 4 && sim.Weapon.ArmorPenetration == 0) || sim.Weapon.ArmorPenetration > 0)
