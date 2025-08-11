@@ -1,5 +1,6 @@
 ﻿@using Snorehammer.Web.FrontendModels
 @using Snorehammer.Web.FrontendModels.Profiles
+@using System.Text
 <RadzenCard Variant="Variant.Outlined">
 
     <EditForm Model="@attack">
@@ -159,48 +160,59 @@
                         <RadzenCheckBox Disabled=attack.Melee @bind-Value=@attack.BigGuns Name="BigGuns" />
                         <RadzenLabel Text="Big Guns Never Tire" Component="BigGuns" class=@($"rz-ms-2 {MeleeLabel(false)}") />
                     </RadzenColumn>
-                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
-                        <RadzenFormField Visible=attack.AntiInfantry Style="width: 100%;">
-                            <RadzenNumeric @bind-Value="@attack.AntiInfantryValue"/>
-                        </RadzenFormField>
-                        <RadzenCheckBox  @bind-Value=@attack.AntiInfantry Name="AntiInfantry" />
-                        <RadzenLabel Text="Anti-Infantry" Component="AntiInfantry" class="rz-ms-2" />
-                    </RadzenColumn>
-                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
-                        <RadzenFormField Visible=attack.AntiMonster Style="width: 100%;">
-                            <RadzenNumeric @bind-Value="@attack.AntiMonsterValue"/>
-                        </RadzenFormField>
-                        <RadzenCheckBox  @bind-Value=@attack.AntiMonster Name="AntiMonster" />
-                        <RadzenLabel Text="Anti-Monster" Component="AntiMonster" class="rz-ms-2" />
-                    </RadzenColumn>
-                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
-                        <RadzenFormField Visible=attack.AntiVehicle Style="width: 100%;">
-                            <RadzenNumeric @bind-Value="@attack.AntiVehicleValue" />
-                        </RadzenFormField>
-                        <RadzenCheckBox  @bind-Value=@attack.AntiVehicle Name="AntiVehicle" />
-                        <RadzenLabel Text="Anti-Vehicle" Component="AntiVehicle" class="rz-ms-2" />
-                    </RadzenColumn>
-                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
-                        <RadzenFormField Visible=attack.AntiMounted Style="width: 100%;">
-                            <RadzenNumeric @bind-Value="@attack.AntiMountedValue"/>
-                        </RadzenFormField>
-                        <RadzenCheckBox  @bind-Value=@attack.AntiMounted Name="AntiMounted" />
-                        <RadzenLabel Text="Anti-Mounted" Component="AntiMounted" class="rz-ms-2" />
-                    </RadzenColumn>
-                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
-                        <RadzenFormField Visible=attack.AntiSwarm Style="width: 100%;">
-                            <RadzenNumeric @bind-Value="@attack.AntiSwarmValue" />
-                        </RadzenFormField>
-                        <RadzenCheckBox  @bind-Value=@attack.AntiSwarm Name="AntiSwarm" />
-                        <RadzenLabel Text="Anti-Swarm" Component="AntiSwarm" class="rz-ms-2" />
-                    </RadzenColumn>
-                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
-                        <RadzenFormField Visible=attack.AntiBeast Style="width: 100%;">
-                            <RadzenNumeric @bind-Value="@attack.AntiBeastValue"/>
-                        </RadzenFormField>
-                        <RadzenCheckBox  @bind-Value=@attack.AntiBeast Name="AntiBeast" />
-                        <RadzenLabel Text="Anti-Beast" Component="AntiBeast" class="rz-ms-2" />
-                    </RadzenColumn>
+                    <RadzenFieldset AllowCollapse="true" >
+                        <HeaderTemplate>
+                            <b>Anti-X</b>
+                        </HeaderTemplate>
+                        <ChildContent>
+
+                            <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                                <RadzenFormField Visible=attack.AntiInfantry Style="width: 100%;">
+                                    <RadzenNumeric @bind-Value="@attack.AntiInfantryValue" />
+                                </RadzenFormField>
+                                <RadzenCheckBox @bind-Value=@attack.AntiInfantry Name="AntiInfantry" />
+                                <RadzenLabel Text="Anti-Infantry" Component="AntiInfantry" class="rz-ms-2" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                                <RadzenFormField Visible=attack.AntiMonster Style="width: 100%;">
+                                    <RadzenNumeric @bind-Value="@attack.AntiMonsterValue" />
+                                </RadzenFormField>
+                                <RadzenCheckBox @bind-Value=@attack.AntiMonster Name="AntiMonster" />
+                                <RadzenLabel Text="Anti-Monster" Component="AntiMonster" class="rz-ms-2" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                                <RadzenFormField Visible=attack.AntiVehicle Style="width: 100%;">
+                                    <RadzenNumeric @bind-Value="@attack.AntiVehicleValue" />
+                                </RadzenFormField>
+                                <RadzenCheckBox @bind-Value=@attack.AntiVehicle Name="AntiVehicle" />
+                                <RadzenLabel Text="Anti-Vehicle" Component="AntiVehicle" class="rz-ms-2" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                                <RadzenFormField Visible=attack.AntiMounted Style="width: 100%;">
+                                    <RadzenNumeric @bind-Value="@attack.AntiMountedValue" />
+                                </RadzenFormField>
+                                <RadzenCheckBox @bind-Value=@attack.AntiMounted Name="AntiMounted" />
+                                <RadzenLabel Text="Anti-Mounted" Component="AntiMounted" class="rz-ms-2" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                                <RadzenFormField Visible=attack.AntiSwarm Style="width: 100%;">
+                                    <RadzenNumeric @bind-Value="@attack.AntiSwarmValue" />
+                                </RadzenFormField>
+                                <RadzenCheckBox @bind-Value=@attack.AntiSwarm Name="AntiSwarm" />
+                                <RadzenLabel Text="Anti-Swarm" Component="AntiSwarm" class="rz-ms-2" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                                <RadzenFormField Visible=attack.AntiBeast Style="width: 100%;">
+                                    <RadzenNumeric @bind-Value="@attack.AntiBeastValue" />
+                                </RadzenFormField>
+                                <RadzenCheckBox @bind-Value=@attack.AntiBeast Name="AntiBeast" />
+                                <RadzenLabel Text="Anti-Beast" Component="AntiBeast" class="rz-ms-2" />
+                            </RadzenColumn>
+                        </ChildContent>
+                        <SummaryTemplate>
+                            @AntiSummary()
+                        </SummaryTemplate>
+                    </RadzenFieldset>
                 </RadzenRow>
             </ChildContent>
         </RadzenPanel>
@@ -211,6 +223,40 @@
     public AttackProfile attack { get; set; }
     [Parameter]
     public EventCallback<AttackProfile> AttackChanged { get; set; }
+    public string AntiSummary()
+    {
+        var sb = new StringBuilder();
+        if (attack.AntiBeast)
+        {
+            sb.Append($"Anti-Beast {attack.AntiBeastValue}  ");
+        }
+        if (attack.AntiInfantry)
+        {
+            sb.Append($"Anti-Infantry {attack.AntiInfantryValue}  ");
+        }
+        if (attack.AntiMonster)
+        {
+            sb.Append($"Anti-Monster {attack.AntiMonsterValue}  ");
+        }
+        if (attack.AntiVehicle)
+        {
+            sb.Append($"Anti-Vehicle {attack.AntiVehicleValue}  ");
+        }
+        if (attack.AntiMounted)
+        {
+            sb.Append($"Anti-Mounted {attack.AntiMountedValue}  ");
+        }
+        if (attack.AntiSwarm)
+        {
+            sb.Append($"Anti-Swarm {attack.AntiSwarmValue}  ");
+        }
+        var res = sb.ToString();
+        if (string.IsNullOrEmpty(res))
+        {
+            return "n/a";
+        }
+        return res;
+    }
     public string MeleeLabel(bool enabledMelee)
     {
         if (enabledMelee)
