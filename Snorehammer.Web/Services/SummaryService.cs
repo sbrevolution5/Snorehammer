@@ -295,5 +295,42 @@ namespace Snorehammer.Web.Services
             }
             return res;
         }
+        public string AbilitySummary(AttackProfile attack) {
+            var sb = new StringBuilder();
+            var hit = HitSummary(attack);
+            if (hit != "no modifiers") {
+                sb.AppendLine(hit);
+            }
+            var wound = WoundSummary(attack);
+            if (wound != "no modifiers") {
+                sb.AppendLine(wound);
+            }
+            var damage = DamageSummary(attack);
+            if (damage != "no modifiers") {
+                sb.AppendLine(damage);
+            }
+            var anti = AntiSummary(attack);
+            if (anti != "no Anti-")
+            {
+                sb.AppendLine(anti);
+            }
+            return sb.ToString();
+        }
+        public string AbilitySummary(UnitProfile unit) {
+            var sb = new StringBuilder();
+            var hit = HitSummary(unit);
+            if (hit != "no modifiers") {
+                sb.AppendLine(hit);
+            }
+            var wound = WoundSummary(unit);
+            if (wound != "no modifiers") {
+                sb.AppendLine(wound);
+            }
+            var damage = ArmorSummary(unit);
+            if (damage != "no modifiers") {
+                sb.AppendLine(damage);
+            }
+            return sb.ToString();
+        }
     }
 }

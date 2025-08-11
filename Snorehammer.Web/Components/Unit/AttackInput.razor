@@ -254,6 +254,9 @@
                     </RadzenColumn>
                 </RadzenRow>
             </ChildContent>
+            <SummaryTemplate>
+                @AbilitySummary()
+            </SummaryTemplate>
         </RadzenPanel>
     </EditForm>
 </RadzenCard>
@@ -263,6 +266,10 @@
     [Parameter]
     public EventCallback<AttackProfile> AttackChanged { get; set; }
     public SummaryService summaryService { get; set; } = new SummaryService();
+    public string AbilitySummary()
+    {
+        return summaryService.AbilitySummary(attack);
+    }
     public string HitSummary()
     {
         return summaryService.HitSummary(attack);

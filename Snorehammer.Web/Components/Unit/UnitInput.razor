@@ -148,6 +148,9 @@
                         
                     </RadzenRow>
                 </ChildContent>
+                <SummaryTemplate>
+                    @AbilitySummary()
+                </SummaryTemplate>
             </RadzenPanel>
             @if (Attacker)
             {
@@ -178,6 +181,10 @@
     {
         loaded = true;
         return base.OnInitializedAsync();
+    }
+    public string AbilitySummary()
+    {
+        return summaryService.AbilitySummary(Unit);
     }
     public string HitSummary()
     {
