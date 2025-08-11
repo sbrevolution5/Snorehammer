@@ -60,6 +60,23 @@ namespace Snorehammer.Web.Services
                 sb.Append("Big Guns (-1)");
                 first = false;
             }
+            if (attack.Sustained)
+            {
+                if (!first)
+                {
+                    sb.Append(" | ");
+                }
+                sb.Append($"Sustained {attack.SustainAmount}");
+                first = false;
+            }
+            if (attack.Lethal)
+            {
+                if (!first)
+                {
+                    sb.Append(" | ");
+                }
+                sb.Append($"Lethal Hits");
+            }
             var res = sb.ToString();
             if (string.IsNullOrEmpty(res))
             {
