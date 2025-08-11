@@ -31,8 +31,8 @@
             <DicePanel sim="@sim"
                        Title="To Wound Roll"
                        RollString1=@($"Target: {(sim.ModdedWoundTarget > 0 ? sim.ModdedWoundTarget :sim.WoundTarget)}")
-                       RollString2=@($"Rolling: {sim.StrengthDice.Count}")
-                       DiceList="@sim.StrengthDice"
+                       RollString2=@($"Rolling: {sim.WoundDice.Count}")
+                       DiceList="@sim.WoundDice"
                        CriticalMatters="@(sim.Weapon.Devastating)" />
             <DicePanel sim="@sim"
                        Title="Armor Saves"
@@ -47,7 +47,7 @@
                 <DicePanel sim="@sim"
                            Title="Damage Roll"
                            RollString1=@($"Rolling: {sim.Weapon.VariableDamageDiceNumber} d{sim.Weapon.VariableDamageDiceSides} + {sim.Weapon.VariableDamageDiceConstant}" + (sim.Weapon.Melta ? $" + {@sim.Weapon.MeltaDamage}" : ""))
-                           DiceList="@sim.WoundDice" />
+                           DiceList="@sim.DamageDice" />
             }
             @if (sim.Defender.FeelNoPain)
             {

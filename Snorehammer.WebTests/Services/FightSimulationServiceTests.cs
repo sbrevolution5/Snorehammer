@@ -497,7 +497,7 @@ namespace Snorehammer.Web.Services.Tests
                     woundDiceList.Add(new Dice(1, woundRandom));
                 }
                 sim.WeaponSimulations[0].ArmorDice = diceList;
-                sim.WeaponSimulations[0].WoundDice = woundDiceList;
+                sim.WeaponSimulations[0].DamageDice = woundDiceList;
                 sim.WeaponSimulations[0].Stats.DamageNumber = 3;
                 sim.WeaponSimulations[0].Stats.ArmorSavesFailed = sim.WeaponSimulations[0].ArmorDice.Where(d => !d.Success).Count();
                 sim.WeaponSimulations[0].Stats.WoundsInflicted = (int)sim.Stats.DamageNumber;
@@ -533,7 +533,7 @@ namespace Snorehammer.Web.Services.Tests
                 }
                 sim.WeaponSimulations[0].ArmorDice = diceList;
                 sim.WeaponSimulations[0].FeelNoPainDice = fnpDiceList;
-                sim.WeaponSimulations[0].WoundDice = woundDiceList;
+                sim.WeaponSimulations[0].DamageDice = woundDiceList;
                 sim.WeaponSimulations[0].Stats.DamageNumber = 7;
                 sim.WeaponSimulations[0].Stats.ArmorSavesFailed = sim.WeaponSimulations[0].ArmorDice.Where(d => !d.Success).Count();
                 sim.WeaponSimulations[0].Stats.FeelNoPainMade = sim.WeaponSimulations[0].FeelNoPainDice.Where(d => d.Success).Count();

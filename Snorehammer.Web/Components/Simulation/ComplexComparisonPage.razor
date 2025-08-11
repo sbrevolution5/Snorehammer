@@ -89,6 +89,17 @@
         }
     </RadzenCardGroup>
 </RadzenCard>
+<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
+    <EditForm Model="DiceOrder">
+        <RadzenSelectBar TValue="int" Size="ButtonSize.Small" @bind-Value="DiceOrder" Change="x => OrderDice(x)">
+            <Items>
+                <RadzenSelectBarItem Value="1" Text="Random" />
+                <RadzenSelectBarItem Value="2" Text="Ascending" />
+                <RadzenSelectBarItem Value="3" Text="Descending" />
+            </Items>
+        </RadzenSelectBar>
+    </EditForm>
+</RadzenStack>
 <RadzenCardGroup>
     <FightResult sim="ViewSim1"></FightResult>
     @if (comparison.ComparingAttackers)
@@ -115,6 +126,56 @@
     private FightSimulationService fightSimulationService = new FightSimulationService();
     private FightSimulation ViewSim1;
     private FightSimulation ViewSim2;
+    private int DiceOrder { get; set; } = 1;
+    private void OrderDice(int x)
+    {
+        DiceOrder = x;
+        if (x == 2)
+        {
+            if (ViewSim1 is not null)
+            {
+                ViewSim1.WeaponSimulations.ForEach(x => sortSim(x, true));
+            }
+            if (ViewSim2 is not null)
+            {
+                ViewSim2.WeaponSimulations.ForEach(x => sortSim(x, true));
+            }
+        }
+        else if (x == 3)
+        {
+            if (ViewSim1 is not null)
+            {
+                ViewSim1.WeaponSimulations.ForEach(x => sortSim(x, false));
+            }
+            if (ViewSim2 is not null)
+            {
+                ViewSim2.WeaponSimulations.ForEach(x => sortSim(x, false));
+            }
+        }
+        StateHasChanged();
+    }
+    private WeaponSimulation sortSim(WeaponSimulation sim, bool ascending)
+    {
+        if (ascending)
+        {
+            sim.AttackDice.OrderBy(x => x.Result);
+            sim.ToHitDice.OrderBy(x => x.Result);
+            sim.WoundDice.OrderBy(x => x.Result);
+            sim.ArmorDice.OrderBy(x => x.Result);
+            sim.DamageDice.OrderBy(x => x.Result);
+            sim.FeelNoPainDice.OrderBy(x => x.Result);
+        }
+        else
+        {
+            sim.AttackDice.OrderByDescending(x => x.Result);
+            sim.ToHitDice.OrderByDescending(x => x.Result);
+            sim.WoundDice.OrderByDescending(x => x.Result);
+            sim.ArmorDice.OrderByDescending(x => x.Result);
+            sim.DamageDice.OrderByDescending(x => x.Result);
+            sim.FeelNoPainDice.OrderByDescending(x => x.Result);
+        }
+        return sim;
+    }
     private void SetAttacker(AttackProfile source, MultiFightSimulation destination)
     {
         destination.Attacker = (UnitProfile)source.Clone();
@@ -439,6 +500,7 @@
             comparison.AlternateDefenseSimulation.Stats.ColumnName = comparison.AlternateDefenseSimulation.Defender.Name;
 
         }
+        OrderDice(DiceOrder);
         StateHasChanged();
     }
     protected override Task OnInitializedAsync()
