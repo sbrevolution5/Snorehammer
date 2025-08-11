@@ -50,6 +50,8 @@
         public int AntiVehicleValue { get; set; } = 2;
         public bool AntiMonster { get; set; } = false;
         public int AntiMonsterValue { get; set; } = 2;
+        public bool RapidFire { get; set; } = false;
+        public int RapidFireBonus { get; set; } = 1;
         public object Clone()
         {
             return MemberwiseClone();

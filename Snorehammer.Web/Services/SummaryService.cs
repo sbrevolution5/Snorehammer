@@ -109,6 +109,15 @@ namespace Snorehammer.Web.Services
                     sb.Append(" | ");
                 }
                 sb.Append("Lethal Hits");
+                first = false;
+            }
+            if (attack.RapidFire)
+            {
+                if (!first)
+                {
+                    sb.Append(" | ");
+                }
+                sb.Append($"Rapid Fire {attack.RapidFireBonus}");
             }
             var res = sb.ToString();
             if (string.IsNullOrEmpty(res))
@@ -295,18 +304,22 @@ namespace Snorehammer.Web.Services
             }
             return res;
         }
-        public string AbilitySummary(AttackProfile attack) {
+        public string AbilitySummary(AttackProfile attack)
+        {
             var sb = new StringBuilder();
             var hit = HitSummary(attack);
-            if (hit != "no modifiers") {
+            if (hit != "no modifiers")
+            {
                 sb.AppendLine(hit);
             }
             var wound = WoundSummary(attack);
-            if (wound != "no modifiers") {
+            if (wound != "no modifiers")
+            {
                 sb.AppendLine(wound);
             }
             var damage = DamageSummary(attack);
-            if (damage != "no modifiers") {
+            if (damage != "no modifiers")
+            {
                 sb.AppendLine(damage);
             }
             var anti = AntiSummary(attack);
@@ -316,18 +329,22 @@ namespace Snorehammer.Web.Services
             }
             return sb.ToString();
         }
-        public string AbilitySummary(UnitProfile unit) {
+        public string AbilitySummary(UnitProfile unit)
+        {
             var sb = new StringBuilder();
             var hit = HitSummary(unit);
-            if (hit != "no modifiers") {
+            if (hit != "no modifiers")
+            {
                 sb.AppendLine(hit);
             }
             var wound = WoundSummary(unit);
-            if (wound != "no modifiers") {
+            if (wound != "no modifiers")
+            {
                 sb.AppendLine(wound);
             }
             var damage = ArmorSummary(unit);
-            if (damage != "no modifiers") {
+            if (damage != "no modifiers")
+            {
                 sb.AppendLine(damage);
             }
             return sb.ToString();
