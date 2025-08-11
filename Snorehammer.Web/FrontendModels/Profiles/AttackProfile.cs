@@ -54,7 +54,7 @@
         public int RapidFireBonus { get; set; } = 1;
         public object Clone()
         {
-            return MemberwiseClone();
+            return this.MemberwiseClone();
         }
 
     }
