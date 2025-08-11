@@ -71,65 +71,70 @@
                 </HeaderTemplate>
                 <ChildContent>
                     <RadzenRow AlignItems="AlignItems.Start" Wrap="FlexWrap.Wrap" Gap="1rem" class="rz-p-sm-4">
-                    <RadzenFieldset AllowCollapse="true">
-                        <HeaderTemplate>
-                            <b>Hit Roll</b>
-                        </HeaderTemplate>
-                        <ChildContent>
-                                <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
-                                    <RadzenCheckBox @bind-Value=@Unit.Stealth Name="Stealth" />
-                                    <RadzenLabel Text="Stealth (do not use for melee defender)" Component="Stealth" class="rz-ms-2" />
-                                </RadzenColumn>
-                                <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
-                                    <RadzenCheckBox @bind-Value=@Unit.Minus1Hit Name="Minus1Hit" />
-                                    <RadzenLabel Text="Minus 1 to hit roll" Component="Minus1Hit" class="rz-ms-2" />
-                                </RadzenColumn>
-                        </ChildContent>
-                        <SummaryTemplate>
-                            @HitSummary()
-                        </SummaryTemplate>
-                    </RadzenFieldset>
-                        <RadzenFieldset AllowCollapse="true">
-                        <HeaderTemplate>
-                            <b>Wound Roll</b>
-                        </HeaderTemplate>
-                        <ChildContent>
-                                <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
-                                    <RadzenCheckBox @bind-Value=@Unit.Minus1Wound Name="Minus1Wound" />
-                                    <RadzenLabel Text="Minus 1 to wound roll" Component="Minus1Wound" class="rz-ms-2" />
-                                </RadzenColumn>
-                                <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
-                                    <RadzenCheckBox @bind-Value=@Unit.MinusOneToWoundAgainstStronger Name="minus1WoundVsStronger" />
-                                    <RadzenLabel Text="Minus 1 to Wound against stronger attack" Component="Minus1WoundVsStronger" class="rz-ms-2" />
-                                </RadzenColumn>
-                        </ChildContent>
-                        <SummaryTemplate>
-                            @WoundSummary()
-                        </SummaryTemplate>
-                    </RadzenFieldset>                    
-                        <RadzenFieldset AllowCollapse="true">
-                        <HeaderTemplate>
-                            <b>Armor Roll</b>
-                        </HeaderTemplate>
-                        <ChildContent>
-                                <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
-                                    <RadzenCheckBox @bind-Value=@Unit.ArmorReroll Name="ArmorReroll" />
-                                    <RadzenLabel Text="Reroll all failed armor saves" Component="ArmorReroll" class="rz-ms-2" />
-                                </RadzenColumn>
-                                <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
-                                    <RadzenCheckBox @bind-Value=@Unit.Reroll1Save Name="Reroll1Save" />
-                                    <RadzenLabel Text="Reroll 1s for armor saves" Component="Reroll1Save" class="rz-ms-2" />
-                                </RadzenColumn>
-                                <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
-                                    <RadzenCheckBox @bind-Value=@Unit.HasCover Name="HasCover" />
-                                    <RadzenLabel Text="Has Cover" Component="HasCover" class="rz-ms-2" />
-                                </RadzenColumn>
-                        </ChildContent>
-                        <SummaryTemplate>
-                            @ArmorSummary()
-                        </SummaryTemplate>
-                    </RadzenFieldset>                    
-                        
+                        <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+                            <RadzenFieldset AllowCollapse="true">
+                                <HeaderTemplate>
+                                    <b>Hit Roll</b>
+                                </HeaderTemplate>
+                                <ChildContent>
+                                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                                        <RadzenCheckBox @bind-Value=@Unit.Stealth Name="Stealth" />
+                                        <RadzenLabel Text="Stealth (do not use for melee defender)" Component="Stealth" class="rz-ms-2" />
+                                    </RadzenColumn>
+                                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                                        <RadzenCheckBox @bind-Value=@Unit.Minus1Hit Name="Minus1Hit" />
+                                        <RadzenLabel Text="Minus 1 to hit roll" Component="Minus1Hit" class="rz-ms-2" />
+                                    </RadzenColumn>
+                                </ChildContent>
+                                <SummaryTemplate>
+                                    @HitSummary()
+                                </SummaryTemplate>
+                            </RadzenFieldset>
+                        </RadzenColumn>
+                        <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+                            <RadzenFieldset AllowCollapse="true">
+                                <HeaderTemplate>
+                                    <b>Wound Roll</b>
+                                </HeaderTemplate>
+                                <ChildContent>
+                                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                                        <RadzenCheckBox @bind-Value=@Unit.Minus1Wound Name="Minus1Wound" />
+                                        <RadzenLabel Text="Minus 1 to wound roll" Component="Minus1Wound" class="rz-ms-2" />
+                                    </RadzenColumn>
+                                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                                        <RadzenCheckBox @bind-Value=@Unit.MinusOneToWoundAgainstStronger Name="minus1WoundVsStronger" />
+                                        <RadzenLabel Text="Minus 1 to Wound against stronger attack" Component="Minus1WoundVsStronger" class="rz-ms-2" />
+                                    </RadzenColumn>
+                                </ChildContent>
+                                <SummaryTemplate>
+                                    @WoundSummary()
+                                </SummaryTemplate>
+                            </RadzenFieldset>
+                        </RadzenColumn>
+                        <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+                            <RadzenFieldset AllowCollapse="true">
+                                <HeaderTemplate>
+                                    <b>Armor Roll</b>
+                                </HeaderTemplate>
+                                <ChildContent>
+                                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                                        <RadzenCheckBox @bind-Value=@Unit.ArmorReroll Name="ArmorReroll" />
+                                        <RadzenLabel Text="Reroll all failed armor saves" Component="ArmorReroll" class="rz-ms-2" />
+                                    </RadzenColumn>
+                                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                                        <RadzenCheckBox @bind-Value=@Unit.Reroll1Save Name="Reroll1Save" />
+                                        <RadzenLabel Text="Reroll 1s for armor saves" Component="Reroll1Save" class="rz-ms-2" />
+                                    </RadzenColumn>
+                                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                                        <RadzenCheckBox @bind-Value=@Unit.HasCover Name="HasCover" />
+                                        <RadzenLabel Text="Has Cover" Component="HasCover" class="rz-ms-2" />
+                                    </RadzenColumn>
+                                </ChildContent>
+                                <SummaryTemplate>
+                                    @ArmorSummary()
+                                </SummaryTemplate>
+                            </RadzenFieldset>
+                        </RadzenColumn>
                         @* <RadzenColumn Size="2" class="rz-p-3 rz-text-align-center">
                             <RadzenCheckBox @bind-Value=@Unit.ChargeBonus Name="ChargeBonus" />
                             <RadzenLabel Text="Charge Bonus" Component="ChargeBonus" class="rz-ms-2" />
@@ -145,7 +150,7 @@
                                 <RadzenNumeric @bind-Value="@Unit.FeelNoPainTarget" Disabled=!Unit.FeelNoPain />
                             </RadzenFormField>
                         </RadzenColumn>
-                        
+
                     </RadzenRow>
                 </ChildContent>
                 <SummaryTemplate>
