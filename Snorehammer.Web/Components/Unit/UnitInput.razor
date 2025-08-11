@@ -29,15 +29,16 @@
                 <RadzenColumn Size="12" SizeMD="4" SizeLG="2">
                     <RadzenStack>
                         <RadzenFormField Text="Saving Throw" Variant="Variant.Flat">
-
                             <RadzenNumeric @bind-Value="Unit.MinimumSave" />
                         </RadzenFormField>
                     </RadzenStack>
                 </RadzenColumn>
                 <RadzenColumn Size="12" SizeMD="4" SizeLG="2">
+                    <RadzenCheckBox @bind-Value=@Unit.HasInvulnerableSave Name="HasInvuln" />
+                    <RadzenLabel Text="Has Invulnerable Save" Component="HasInvuln" class="rz-ms-2" />
                     <RadzenStack>
                         <RadzenFormField Text="Invulnerable Save" Variant="Variant.Flat">
-                            <RadzenNumeric @bind-Value="Unit.InvulnerableSave" />
+                            <RadzenNumeric @bind-Value="Unit.InvulnerableSave" Disabled="@Unit.HasInvulnerableSave"/>
                         </RadzenFormField>
                     </RadzenStack>
                 </RadzenColumn>
