@@ -18,7 +18,7 @@
                     </Items>
                 </RadzenSelectBar>
             </RadzenRow>
-            <RadzenRow AlignItems="AlignItems.Start" Wrap="FlexWrap.Wrap" Gap="1rem" class="rz-p-sm-12">
+            <RadzenRow AlignItems="AlignItems.Normal" Wrap="FlexWrap.Wrap" Gap="1rem" class="rz-p-sm-12">
                 <RadzenColumn Size="12" SizeMD="6" SizeLG="6">
                     <RadzenStack>
                         <RadzenFormField Text="Name" Variant="Variant.Flat">
@@ -34,11 +34,13 @@
                     </RadzenStack>
                 </RadzenColumn>
                 <RadzenColumn Size="12" SizeMD="4" SizeLG="2">
-                    <RadzenCheckBox @bind-Value=@Unit.HasInvulnerableSave Name="HasInvuln" />
-                    <RadzenLabel Text="Has Invulnerable Save" Component="HasInvuln" class="rz-ms-2" />
+                    <RadzenRow>
+                        <RadzenCheckBox @bind-Value=@Unit.HasInvulnerableSave Name="HasInvuln" />
+                        <RadzenLabel Text="Invulnerable Save" Component="HasInvuln" class="rz-ms-2" />
+                    </RadzenRow>
                     <RadzenStack>
                         <RadzenFormField Text="Invulnerable Save" Variant="Variant.Flat">
-                            <RadzenNumeric @bind-Value="Unit.InvulnerableSave" Disabled="@Unit.HasInvulnerableSave"/>
+                            <RadzenNumeric @bind-Value="Unit.InvulnerableSave" Disabled="@Unit.HasInvulnerableSave" />
                         </RadzenFormField>
                     </RadzenStack>
                 </RadzenColumn>
