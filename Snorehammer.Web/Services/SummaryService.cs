@@ -93,6 +93,92 @@ namespace Snorehammer.Web.Services
             }
             return res;
         }
+        public string WoundSummary(AttackProfile attack)
+        {
+            var sb = new StringBuilder();
+            var first = true;
+            if (attack.RerollWound)
+            {
+                sb.Append("Twin-Linked/Reroll all wounds");
+                first = false;
+            }
+            if (attack.Plus1Wound)
+            {
+                if (!first)
+                {
+                    sb.Append(" | ");
+                }
+                sb.Append("+1 to Wound");
+                first = false;
+            }
+
+            if (attack.Lance && attack.Melee)
+            {
+                if (!first)
+                {
+                    sb.Append(" | ");
+                }
+                sb.Append("Lance");
+                first = false;
+            }
+            if (attack.Devastating)
+            {
+                if (!first)
+                {
+                    sb.Append(" | ");
+                }
+                sb.Append("Devastating Wounds");
+                first = false;
+            }
+            if (attack.Reroll1Wound)
+            {
+                if (!first)
+                {
+                    sb.Append(" | ");
+                }
+                sb.Append("Reroll 1s to Wound");
+            }
+            var res = sb.ToString();
+            if (string.IsNullOrEmpty(res))
+            {
+                return "no modifiers";
+            }
+            return res;
+        }
+        public string DamageSummary(AttackProfile attack)
+        {
+            var sb = new StringBuilder();
+            var first = true;
+            if (attack.RerollDamage)
+            {
+                sb.Append("Reroll all damage");
+                first = false;
+            }
+            if (attack.Reroll1Damage)
+            {
+                if (!first)
+                {
+                    sb.Append(" | ");
+                }
+                sb.Append("Reroll 1s for damage");
+                first = false;
+            }
+
+            if (attack.Melta)
+            {
+                if (!first)
+                {
+                    sb.Append(" | ");
+                }
+                sb.Append($"Melta {attack.MeltaDamage}");
+            }
+            var res = sb.ToString();
+            if (string.IsNullOrEmpty(res))
+            {
+                return "no modifiers";
+            }
+            return res;
+        }
         public string AntiSummary(AttackProfile attack)
         {
             var sb = new StringBuilder();

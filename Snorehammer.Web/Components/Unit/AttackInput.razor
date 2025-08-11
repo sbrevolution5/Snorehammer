@@ -140,6 +140,10 @@
                         </HeaderTemplate>
                         <ChildContent>
                             <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                                <RadzenCheckBox @bind-Value=@attack.RerollWound Name="RerollWound" />
+                                <RadzenLabel Text="Twin-linked/Reroll Wounds" Component="RerollWound" class="rz-ms-2" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                                 <RadzenCheckBox @bind-Value=@attack.Plus1Wound Name="Plus1Wound" />
                                 <RadzenLabel Text="Plus 1 to Wound roll" Component="Plus1Wound" class="rz-ms-2" />
                             </RadzenColumn>
@@ -151,39 +155,41 @@
                                 <RadzenCheckBox @bind-Value=@attack.Devastating Name="Devastating" />
                                 <RadzenLabel Text="Devastating Wounds" Component="Devastating" class="rz-ms-2" />
                             </RadzenColumn>
+                            
+                            <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                                <RadzenCheckBox @bind-Value=@attack.Reroll1Wound Name="Reroll1Wound" />
+                                <RadzenLabel Text="Reroll 1s for Wounds" Component="Reroll1Wound" class="rz-ms-2" />
+                            </RadzenColumn>
                         </ChildContent>
-                        <SummaryTemplate></SummaryTemplate>
+                        <SummaryTemplate>
+                            @WoundSummary()
+                        </SummaryTemplate>
                     </RadzenFieldset>
-                    
-                    
-                    
-                    
-                    
-                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
-                        <RadzenCheckBox @bind-Value=@attack.RerollWound Name="RerollWound" />
-                        <RadzenLabel Text="Twin-linked/Reroll Wounds" Component="RerollWound" class="rz-ms-2" />
-                    </RadzenColumn>
-                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
-                        <RadzenCheckBox @bind-Value=@attack.RerollDamage Name="RerollDamage" />
-                        <RadzenLabel Text="Reroll Damage" Component="RerollDamage" class="rz-ms-2" />
-                    </RadzenColumn>
-                    
-                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
-                        <RadzenCheckBox @bind-Value=@attack.Reroll1Wound Name="Reroll1Wound" />
-                        <RadzenLabel Text="Reroll 1s for Wounds" Component="Reroll1Wound" class="rz-ms-2" />
-                    </RadzenColumn>
-                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
-                        <RadzenCheckBox @bind-Value=@attack.Reroll1Damage Name="Reroll1Damage" />
-                        <RadzenLabel Text="Reroll 1s for Damage" Component="Reroll1Damage" class="rz-ms-2" />
-                    </RadzenColumn>
-                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
-                        <RadzenCheckBox Disabled=attack.Melee @bind-Value=@attack.Melta Name="Melta" />
-                        <RadzenLabel Text="Melta " Component="Melta" class=@($"rz-ms-2 {MeleeLabel(false)}") />
-                        <RadzenFormField Text="Assumes attacker is within melta range" Style="width: 100%;">
-                            <RadzenNumeric @bind-Value="@attack.MeltaDamage" Disabled=!attack.Melta />
-                        </RadzenFormField>
-                    </RadzenColumn>
-                    
+                    <RadzenFieldset>
+                        <HeaderTemplate>
+                            <b>Damage</b>
+                        </HeaderTemplate>
+                        <ChildContent>
+                            <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                                <RadzenCheckBox @bind-Value=@attack.RerollDamage Name="RerollDamage" />
+                                <RadzenLabel Text="Reroll Damage" Component="RerollDamage" class="rz-ms-2" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                                <RadzenCheckBox @bind-Value=@attack.Reroll1Damage Name="Reroll1Damage" />
+                                <RadzenLabel Text="Reroll 1s for Damage" Component="Reroll1Damage" class="rz-ms-2" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                                <RadzenCheckBox Disabled=attack.Melee @bind-Value=@attack.Melta Name="Melta" />
+                                <RadzenLabel Text="Melta " Component="Melta" class=@($"rz-ms-2 {MeleeLabel(false)}") />
+                                <RadzenFormField Text="Assumes attacker is within melta range" Style="width: 100%;">
+                                    <RadzenNumeric @bind-Value="@attack.MeltaDamage" Disabled=!attack.Melta />
+                                </RadzenFormField>
+                            </RadzenColumn>
+                        </ChildContent>
+                        <SummaryTemplate>
+                            @DamageSummary()
+                        </SummaryTemplate>
+                    </RadzenFieldset>                    
                     <RadzenFieldset AllowCollapse="true">
                         <HeaderTemplate>
                             <b>Anti-X</b>
@@ -255,6 +261,14 @@
     public string AntiSummary()
     {
         return summaryService.AntiSummary(attack);
+    }
+    public string WoundSummary()
+    {
+        return summaryService.WoundSummary(attack);
+    }
+    public string DamageSummary()
+    {
+        return summaryService.DamageSummary(attack);
     }
     public string MeleeLabel(bool enabledMelee)
     {
