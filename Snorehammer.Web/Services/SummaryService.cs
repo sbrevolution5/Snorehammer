@@ -5,6 +5,30 @@ namespace Snorehammer.Web.Services
 {
     public class SummaryService
     {
+        public string HitSummary(UnitProfile unit)
+        {
+            var sb = new StringBuilder();
+            var first = true;
+            if (unit.Stealth)
+            {
+                sb.Append("Stealth");
+                first = false;
+            }
+            if (unit.Minus1Hit)
+            {
+                if (!first)
+                {
+                    sb.Append(" | ");
+                }
+                sb.Append("-1 to hit");
+            }
+            var res = sb.ToString();
+            if (string.IsNullOrEmpty(res))
+            {
+                return "no modifiers";
+            }
+            return res;
+        }
         public string HitSummary(AttackProfile attack)
         {
             var sb = new StringBuilder();
@@ -32,7 +56,7 @@ namespace Snorehammer.Web.Services
                 sb.Append("-1 to hit");
                 first = false;
             }
-            
+
             if (attack.Torrent && !attack.Melee)
             {
                 if (!first)
@@ -93,6 +117,30 @@ namespace Snorehammer.Web.Services
             }
             return res;
         }
+        public string WoundSummary(UnitProfile unit)
+        {
+            var sb = new StringBuilder();
+            var first = true;
+            if (unit.Minus1Wound)
+            {
+                sb.Append("-1 to wound");
+                first = false;
+            }
+            if (unit.MinusOneToWoundAgainstStronger)
+            {
+                if (!first)
+                {
+                    sb.Append(" | ");
+                }
+                sb.Append("-1 to Wound when Strength > toughness");
+            }
+            var res = sb.ToString();
+            if (string.IsNullOrEmpty(res))
+            {
+                return "no modifiers";
+            }
+            return res;
+        }
         public string WoundSummary(AttackProfile attack)
         {
             var sb = new StringBuilder();
@@ -137,6 +185,40 @@ namespace Snorehammer.Web.Services
                     sb.Append(" | ");
                 }
                 sb.Append("Reroll 1s to Wound");
+            }
+            var res = sb.ToString();
+            if (string.IsNullOrEmpty(res))
+            {
+                return "no modifiers";
+            }
+            return res;
+        }
+        public string ArmorSummary(UnitProfile unit)
+        {
+            var sb = new StringBuilder();
+            var first = true;
+            if (unit.ArmorReroll)
+            {
+                sb.Append("Reroll Armor Saves");
+                first = false;
+            }
+            if (unit.Reroll1Save)
+            {
+                if (!first)
+                {
+                    sb.Append(" | ");
+                }
+                sb.Append("Reroll 1s to Save");
+                first = false;
+            }
+            if (unit.HasCover)
+            {
+                if (!first)
+                {
+                    sb.Append(" | ");
+                }
+                sb.Append("Cover");
+                first = false;
             }
             var res = sb.ToString();
             if (string.IsNullOrEmpty(res))
