@@ -69,13 +69,22 @@ namespace Snorehammer.Web.Services
                 sb.Append($"Sustained {attack.SustainAmount}");
                 first = false;
             }
+            if (attack.Blast)
+            {
+                if (!first)
+                {
+                    sb.Append(" | ");
+                }
+                sb.Append("Blast");
+                first = false;
+            }
             if (attack.Lethal)
             {
                 if (!first)
                 {
                     sb.Append(" | ");
                 }
-                sb.Append($"Lethal Hits");
+                sb.Append("Lethal Hits");
             }
             var res = sb.ToString();
             if (string.IsNullOrEmpty(res))
