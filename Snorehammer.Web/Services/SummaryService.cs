@@ -349,5 +349,36 @@ namespace Snorehammer.Web.Services
             }
             return sb.ToString();
         }
+        public string AttackSummary(AttackProfile attack)
+        {
+            var sb = new StringBuilder();
+            sb.Append("Attacks | Strength | AP | Damage \n");
+            if (attack.IsVariableAttacks)
+            {
+                sb.Append($"{attack.VariableAttackDiceNumber}d{attack.VariableAttackDiceSides} + {attack.VariableAttackDiceConstant}");
+            }
+            else
+            {
+                sb.Append($"{attack.Attacks}");
+            }
+            sb.Append($" | {attack.Strength}");
+            if (attack.ArmorPenetration > 0)
+            {
+                sb.Append($" | -{attack.ArmorPenetration}");
+            }
+            else
+            {
+                sb.Append($" | 0");
+            }
+            if (attack.IsVariableDamage)
+            {
+                sb.Append($" | {attack.VariableDamageDiceNumber}d{attack.VariableDamageDiceSides} + {attack.VariableDamageDiceConstant}");
+            }
+            else
+            {
+                sb.Append($" | {attack.Damage}");
+            }
+            return sb.ToString();
+        }
     }
 }
