@@ -175,10 +175,10 @@
                     <AttackInput attack="@atk"></AttackInput>
                     @if (Unit.Attacks.Count() > 1)
                     {
-                        <RadzenButton Click="() => RemoveAttack(atk)" ButtonStyle="ButtonStyle.Danger"><RadzenIcon Icon="remove" /></RadzenButton>
+                        <RadzenButton Click="() => RemoveAttack(atk)" ButtonStyle="ButtonStyle.Danger" class="rz-w-stretch rz-m-5"><RadzenIcon Icon="remove" /></RadzenButton>
                     }
                 }
-                <RadzenButton Click="() => AddAttack()" ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="add" /></RadzenButton>
+                <RadzenButton Click="() => AddAttack()" ButtonStyle="ButtonStyle.Primary" class="rz-w-stretch rz-m-5"><RadzenIcon Icon="add" /></RadzenButton>
             }
         </EditForm>
     </RadzenCard>
