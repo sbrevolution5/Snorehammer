@@ -11,6 +11,10 @@ namespace Snorehammer.Web.FrontendModels.Simulations
         public List<WeaponSimulation> WeaponSimulations { get; set; } = new List<WeaponSimulation>();
         public FightStats Stats { get; set; } = new FightStats();
         public void Reset() {
+            foreach (var sim in WeaponSimulations)
+            {
+                sim.ClearDiceLists();
+            }
             Stats.UnitEntirelyDestroyed = false;
             Stats.LessThanHalf = false;
             Stats.UnitDamaged = false;
