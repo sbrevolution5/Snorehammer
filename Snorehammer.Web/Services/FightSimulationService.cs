@@ -56,6 +56,9 @@ namespace Snorehammer.Web.Services
             sim.Reset();
             foreach (var weapon in sim.WeaponSimulations)
             {
+                if (sim.Attacker.Overwatch) {
+                    weapon.Weapon.Overwatch = true;
+                }
                 if (weapon.Weapon.IsVariableAttacks)
                 {
                     RollAttackDice(weapon);
@@ -103,7 +106,7 @@ namespace Snorehammer.Web.Services
             {
                 sim.HitTarget = 2;
             }
-            if (sim.HitTarget > 6)
+            if (sim.HitTarget > 6 || sim.Weapon.Overwatch)
             {
                 sim.HitTarget = 6;
             }

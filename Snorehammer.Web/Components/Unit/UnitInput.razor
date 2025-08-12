@@ -153,6 +153,10 @@
                                 <RadzenNumeric @bind-Value="@Unit.FeelNoPainTarget" Disabled=!Unit.FeelNoPain />
                             </RadzenFormField>
                         </RadzenColumn>
+                        <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                            <RadzenCheckBox @bind-Value=@Unit.Overwatch Name="Overwatch" />
+                            <RadzenLabel Text="Overwatch mode" Component="Overwatch" class="rz-ms-2" />
+                        </RadzenColumn>
 
                     </RadzenRow>
                 </ChildContent>

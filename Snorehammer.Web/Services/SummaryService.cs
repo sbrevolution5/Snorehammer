@@ -347,6 +347,19 @@ namespace Snorehammer.Web.Services
             {
                 sb.AppendLine(damage);
             }
+            if (unit.FightsFirst)
+            {
+                sb.AppendLine("Fights First");
+            }
+            if (unit.FeelNoPain)
+            {
+                sb.AppendLine($"Feel No Pain {unit.FeelNoPainTarget}+");
+            }
+            if (unit.Overwatch)
+            {
+                sb.AppendLine("Overwatch mode");
+            }
+            sb.AppendLine();
             return sb.ToString();
         }
     }
