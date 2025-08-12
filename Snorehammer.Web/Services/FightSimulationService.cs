@@ -56,7 +56,8 @@ namespace Snorehammer.Web.Services
             sim.Reset();
             foreach (var weapon in sim.WeaponSimulations)
             {
-                if (sim.Attacker.Overwatch) {
+                if (sim.Attacker.Overwatch)
+                {
                     weapon.Weapon.Overwatch = true;
                 }
                 if (weapon.Weapon.IsVariableAttacks)
@@ -119,7 +120,7 @@ namespace Snorehammer.Web.Services
                 sim.BlastBonus = sim.Defender.ModelCount / 5;
             }
             sim.Stats.AttackNumber = sim.Weapon.Attacks * sim.Weapon.WeaponsInUnit;
-            
+
             if (sim.AttackDice.Count != 0)
             {
                 sim.Stats.AttackNumber = sim.AttackDice.Sum(d => d.Result) + (sim.Weapon.VariableAttackDiceConstant * sim.Weapon.WeaponsInUnit);
@@ -275,7 +276,6 @@ namespace Snorehammer.Web.Services
             }
             if (sim.Weapon.Lethal)
             {
-
                 for (int i = 0; i < sim.ToHitDice.Where(d => d.Critical).Count(); i++)
                 {
                     //skips rolling and sets result to a 7
@@ -365,6 +365,7 @@ namespace Snorehammer.Web.Services
                 {
                     sim.Stats.DamageNumber += failedsaves * sim.Weapon.MeltaDamage;
                 }
+                sim.Stats.WoundsInflicted = sim.Stats.DamageNumber;
             }
             sim.Stats.ArmorSavesFailed = sim.ArmorDice.Where(d => !d.Success).Count();
             sim.Stats.WoundsSuccessful = sim.ArmorDice.Count();
@@ -428,8 +429,7 @@ namespace Snorehammer.Web.Services
                 sim.Stats.DamageNumber += sim.Weapon.MeltaDamage * sim.Stats.ArmorSavesFailed;
             }
             sim.Stats.PreFNPDamage = sim.Stats.DamageNumber;
-
-
+            sim.Stats.WoundsInflicted = sim.Stats.DamageNumber;
         }
         public void RollFeelNoPain(WeaponSimulation sim)
         {
