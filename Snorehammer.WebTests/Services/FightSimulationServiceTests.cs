@@ -561,11 +561,11 @@ namespace Snorehammer.Web.Services.Tests
                 base.TearDown();
             }
             [Test]
-            [TestCase(4,4,4)]
-            [TestCase(5,4,3)]
-            [TestCase(8,4,2)]
-            [TestCase(3,4,5)]
-            [TestCase(2,4,6)]
+            [TestCase(4, 4, 4)]
+            [TestCase(5, 4, 3)]
+            [TestCase(8, 4, 2)]
+            [TestCase(3, 4, 5)]
+            [TestCase(2, 4, 6)]
             public void StrengthVsToughTests(int atkStr, int defTough, int expectedResult)
             {
                 //arrange
@@ -577,13 +577,13 @@ namespace Snorehammer.Web.Services.Tests
                 weaponSim.ModdedWoundTarget.Should().Be(expectedResult, $"str {atkStr} vs. tough {defTough}");
             }
             [Test]
-            [TestCase(2,10,UnitType.Infantry, 2,2)]
-            [TestCase(2,10,UnitType.Vehicle, 2,2)]
-            [TestCase(2,10,UnitType.Monster, 2,2)]
-            [TestCase(2,10,UnitType.Mounted, 2,2)]
-            [TestCase(2,10,UnitType.Swarm, 2,2)]
-            [TestCase(2,10,UnitType.Beast, 2,2)]
-            [TestCase(6,2,UnitType.Beast, 5,2)]
+            [TestCase(2, 10, UnitType.Infantry, 2, 2)]
+            [TestCase(2, 10, UnitType.Vehicle, 2, 2)]
+            [TestCase(2, 10, UnitType.Monster, 2, 2)]
+            [TestCase(2, 10, UnitType.Mounted, 2, 2)]
+            [TestCase(2, 10, UnitType.Swarm, 2, 2)]
+            [TestCase(2, 10, UnitType.Beast, 2, 2)]
+            [TestCase(6, 2, UnitType.Beast, 5, 2)]
             public void AntiWoundTests(int atkStr, int defTough, UnitType antiType, int antiTarget, int expectedResult)
             {
                 //arrange
@@ -601,7 +601,7 @@ namespace Snorehammer.Web.Services.Tests
                         break;
                     case UnitType.Vehicle:
                         weaponSim.Defender.Type = antiType;
-                        weaponSim.Weapon.AntiVehicle= true;
+                        weaponSim.Weapon.AntiVehicle = true;
                         weaponSim.Weapon.AntiVehicleValue = antiTarget;
                         break;
                     case UnitType.Swarm:
@@ -628,6 +628,56 @@ namespace Snorehammer.Web.Services.Tests
                 service.DetermineModdedWoundTarget(weaponSim);
                 //assert
                 weaponSim.ModdedWoundTarget.Should().Be(expectedResult, $"str {atkStr} vs. tough {defTough}, with anti value {antiTarget}");
+            }
+        }
+        [TestClass]
+        public class FightSimulationHalfTests : FightSimulationServiceTests
+        {
+
+            private List<Dice> diceList;
+            private List<Dice> fnpDiceList;
+            private List<Dice> woundDiceList;
+            private Random random = A.Fake<Random>();
+            private Random fnpRandom = A.Fake<Random>();
+            private Random woundRandom = A.Fake<Random>();
+            [SetUp]
+            public override void Setup()
+            {
+                base.Setup();
+                diceList = new List<Dice>();
+                fnpDiceList = new List<Dice>();
+                woundDiceList = new List<Dice>();
+            }
+            [TearDown]
+            public override void TearDown()
+            {
+                base.TearDown();
+                diceList = null;
+                fnpDiceList = null;
+                woundDiceList = null;
+            }
+            [Test]
+            public void FightSimulationHalfTest()
+            {
+
+                //arrange
+                sim.WeaponSimulations[0].Weapon.Damage = 3;
+                sim.WeaponSimulations[0].Stats.AttackNumber = 1;
+                sim.WeaponSimulations[0].Weapon.WeaponsInUnit = 1;
+                sim.WeaponSimulations[0].Defender.TakesHalfDamage = true;
+                sim.WeaponSimulations[0].Defender.Wounds = 3;
+                sim.Stats.AttackNumber = 1;
+                A.CallTo(() => random.Next(A<int>.That.IsEqualTo(1), A<int>.That.IsEqualTo(7))).Returns(2);
+                diceList.Add(new Dice(unitProfile.MinimumSave, random));
+                sim.WeaponSimulations[0].ArmorDice = diceList;
+                sim.WeaponSimulations[0].Stats.ArmorSavesFailed = sim.WeaponSimulations[0].ArmorDice.Where(d => !d.Success).Count();
+                sim.WeaponSimulations[0].Stats.DamageNumber = 3;
+                sim.WeaponSimulations[0].Stats.WoundsInflicted = sim.WeaponSimulations[0].Stats.DamageNumber;
+                //act
+                service.DealDamage(sim);
+                var res = service.GenerateWinnerMessage(sim);
+                //assert
+                weaponSim.Stats.ModelsDestroyed.Should().Be(0, "no models destroyed because 3 damage halved becomes 2, leaving a wound on model");
             }
         }
     }

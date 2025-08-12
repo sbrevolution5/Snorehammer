@@ -491,6 +491,13 @@ namespace Snorehammer.Web.Services
                             weaponDamage = DamageDiceCopy.First().Result + weaponSim.Weapon.VariableDamageDiceConstant;
                             DamageDiceCopy.Remove(DamageDiceCopy.First());
                         }
+                        if (weaponSim.Defender.TakesHalfDamage) {
+
+                            var floatWeaponDamage = (float)weaponDamage;
+                            floatWeaponDamage = floatWeaponDamage / 2;
+                            weaponDamage = (int)Math.Ceiling(floatWeaponDamage);
+                            
+                        }
                         if (weaponSim.Weapon.Melta && !weaponSim.Weapon.Melee)
                         {
                             weaponDamage += weaponSim.Weapon.MeltaDamage;
