@@ -3,13 +3,12 @@
 @*Temporarily just using a text result*@
 @if (die.ConstantDisplay)
 {
-    <RadzenCard class=@($"rz-p-1 rz-m-1 rz-text-align-center") style="height: 40px; width: 40px;">
+    <RadzenCard class=@($"rz-background-color-secondary rz-p-1 rz-m-1 rz-text-align-center")  style="height: 40px; width: 40px;">
         + @value
     </RadzenCard>
 }
 else
 {
-
     <RadzenCard class=@($"{colorCode} rz-p-1 rz-m-1 rz-text-align-center") style="height: 40px; width: 40px;">
         @value
     </RadzenCard>

@@ -15,11 +15,13 @@
             {
                 <DicePanel sim="@sim"
                            Title="Number of Attacks"
-                           RollString1=@($"Rolling: {sim.Weapon.VariableAttackDiceNumber} d{sim.Weapon.VariableAttackDiceSides} + {sim.Weapon.VariableAttackDiceConstant}" + (sim.BlastBonus > 0 ? $" + {@sim.BlastBonus}" : "") + $" x {sim.Weapon.WeaponsInUnit}")
+                           RollString1=@($"Rolling: {sim.Weapon.VariableAttackDiceNumber} d{sim.Weapon.VariableAttackDiceSides} + {sim.Weapon.VariableAttackDiceConstant}" + (sim.BlastBonus > 0 ? "":$" + {@sim.BlastBonus}" ) + $" x {sim.Weapon.WeaponsInUnit}")
                            RollString2=@($"Total: {sim.Stats.AttackNumber}")
                            DiceList="@sim.AttackDice" 
                            HasConstant="@VariableAttackWithConstant"
-                           ConstantValue="sim.Weapon.VariableAttackDiceConstant"/>
+                           DiceNum="sim.Weapon.VariableAttackDiceNumber"
+                           ConstantValue="sim.Weapon.VariableAttackDiceConstant"
+                           VariableSetCount="sim.Weapon.WeaponsInUnit"/>
             }
             <DicePanel sim="@sim"
                        Title="To Hit Roll"
@@ -46,7 +48,9 @@
                            RollString1=@($"Rolling: {sim.Weapon.VariableDamageDiceNumber} d{sim.Weapon.VariableDamageDiceSides} + {sim.Weapon.VariableDamageDiceConstant}" + (sim.Weapon.Melta ? $" + {@sim.Weapon.MeltaDamage}" : ""))
                            DiceList="@sim.WoundDice" 
                            HasConstant="true"
-                           ConstantValue="@TotalDamageConstant"/>
+                           DiceNum="sim.Weapon.VariableDamageDiceNumber"
+                           ConstantValue="@TotalDamageConstant"
+                           VariableSetCount="sim.Stats.ArmorSavesFailed"/>
             }
             @if (sim.Defender.FeelNoPain)
             {
