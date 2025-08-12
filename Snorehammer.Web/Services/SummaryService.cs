@@ -369,7 +369,6 @@ namespace Snorehammer.Web.Services
         public string AttackSummary(AttackProfile attack)
         {
             var sb = new StringBuilder();
-            sb.Append("Attacks | Strength | AP | Damage \n");
             if (attack.IsVariableAttacks)
             {
                 sb.Append($"{attack.VariableAttackDiceNumber}d{attack.VariableAttackDiceSides} + {attack.VariableAttackDiceConstant}");
