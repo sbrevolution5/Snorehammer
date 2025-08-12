@@ -27,6 +27,7 @@
         public bool Critical { get; set; }
         public bool AutoFailed { get; set; } = false;
         public int CriticalThreshold { get; set; }
+        public bool ConstantDisplay { get; set; } = false;
         public void Reroll(Random random)
         {
             Result = random.Next(1, Sides + 1);
