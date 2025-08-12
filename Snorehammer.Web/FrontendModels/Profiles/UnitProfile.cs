@@ -26,6 +26,7 @@ namespace Snorehammer.Web.FrontendModels.Profiles
         public int FeelNoPainTarget { get; set; } = 6;
         public bool HasCover { get; set; } = false;
         public bool MinusOneToWoundAgainstStronger { get; set; } = false;
+        public bool TakesHalfDamage { get; set; } = false;
         public object Clone()
         {
             UnitProfile res = (UnitProfile)this.MemberwiseClone();
