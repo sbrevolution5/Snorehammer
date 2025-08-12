@@ -22,7 +22,7 @@ namespace Snorehammer.Web.FrontendModels.Profiles
         public bool Stealth { get; set; } = false;
         public bool ChargeBonus { get; set; } = false;
         public bool FightsFirst { get; set; } = false;
-
+        public bool Overwatch { get; set; } = false;
         public int FeelNoPainTarget { get; set; } = 6;
         public bool HasCover { get; set; } = false;
         public bool MinusOneToWoundAgainstStronger { get; set; } = false;
