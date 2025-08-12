@@ -365,6 +365,7 @@ namespace Snorehammer.Web.Services
                 {
                     sim.Stats.DamageNumber += failedsaves * sim.Weapon.MeltaDamage;
                 }
+                sim.Stats.WoundsInflicted = sim.Stats.DamageNumber;
             }
             sim.Stats.ArmorSavesFailed = sim.ArmorDice.Where(d => !d.Success).Count();
             sim.Stats.WoundsSuccessful = sim.ArmorDice.Count();
@@ -428,6 +429,7 @@ namespace Snorehammer.Web.Services
                 sim.Stats.DamageNumber += sim.Weapon.MeltaDamage * sim.Stats.ArmorSavesFailed;
             }
             sim.Stats.PreFNPDamage = sim.Stats.DamageNumber;
+            sim.Stats.WoundsInflicted = sim.Stats.DamageNumber;
 
 
         }
