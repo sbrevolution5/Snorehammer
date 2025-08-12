@@ -25,7 +25,7 @@
             @if (HasConstant)
             {
                 var diceCopy = new List<Dice>(DiceList);
-                for (int i = 0; i < DiceList.Count; i+=DiceNum)
+                for (int i = 0; i < DiceList.Count; i += DiceNum)
                 {
                     //display the next x dice, where x is dice num, then the constant
                     var perRoll = diceCopy.Take(DiceNum);
@@ -36,7 +36,9 @@
                             <DieDisplay die=@die CriticalMatters=@CriticalMatters></DieDisplay>
                         </RadzenColumn>
                     }
-                    <DieDisplay die=@ConstantDie ></DieDisplay>
+                    <RadzenColumn>
+                        <DieDisplay die=@ConstantDie></DieDisplay>
+                    </RadzenColumn>
                 }
             }
             else
@@ -91,9 +93,9 @@
         if (HasConstant)
         {
             ConstantDie = new Dice()
-                {
-                    Result = ConstantValue
-                };
+            {
+                Result = ConstantValue
+            };
         }
         return base.OnInitializedAsync();
     }
