@@ -22,25 +22,33 @@
 </RadzenCard>
 <h3>ComplexComparison</h3>
 
-<RadzenStack class="rz-p-sm-12" Orientation="Orientation.Horizontal">
-    <RadzenSwitch Disabled=@comparison.ComparingDefenders @bind-Value=@comparison.ComparingAttackers />
-    <RadzenLabel>Compare Attackers</RadzenLabel>
-    <RadzenSwitch Disabled=@comparison.ComparingAttackers @bind-Value=@comparison.ComparingDefenders />
-    <RadzenLabel>Compare Defenders</RadzenLabel>
-    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
-        <EditForm Model="SelectedNumberOfSimulations">
+<RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap">
+    <RadzenColumn Size="6" SizeMD="3" SizeLG="2">
 
-            <RadzenSelectBar TValue="int" Size="ButtonSize.Small" @bind-Value="SelectedNumberOfSimulations" Change="x => AssignMultiSims(x)">
-                <Items>
-                    <RadzenSelectBarItem Value="1" Text="x1" />
-                    <RadzenSelectBarItem Value="5" Text="x5" />
-                    <RadzenSelectBarItem Value="10" Text="x10" />
-                    <RadzenSelectBarItem Value="100" Text="x100" />
-                    <RadzenSelectBarItem Value="1000" Text="x1000" />
-                </Items>
-            </RadzenSelectBar>
-        </EditForm>
-    </RadzenStack>
+        <RadzenSwitch Disabled=@comparison.ComparingDefenders @bind-Value=@comparison.ComparingAttackers />
+        <RadzenLabel>Compare Attackers</RadzenLabel>
+    </RadzenColumn>
+    <RadzenColumn Size="6" SizeMD="3" SizeLG="2">
+
+        <RadzenSwitch Disabled=@comparison.ComparingAttackers @bind-Value=@comparison.ComparingDefenders />
+        <RadzenLabel>Compare Defenders</RadzenLabel>
+    </RadzenColumn>
+    <RadzenColumn Size="12" SizeMD="6" SizeLG="6">
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
+            <EditForm Model="SelectedNumberOfSimulations">
+
+                <RadzenSelectBar TValue="int" Size="ButtonSize.Small" @bind-Value="SelectedNumberOfSimulations" Change="x => AssignMultiSims(x)">
+                    <Items>
+                        <RadzenSelectBarItem Value="1" Text="x1" />
+                        <RadzenSelectBarItem Value="5" Text="x5" />
+                        <RadzenSelectBarItem Value="10" Text="x10" />
+                        <RadzenSelectBarItem Value="100" Text="x100" />
+                        <RadzenSelectBarItem Value="1000" Text="x1000" />
+                    </Items>
+                </RadzenSelectBar>
+            </EditForm>
+        </RadzenStack>
+        </RadzenColumn>
 </RadzenStack>
 
 <RadzenCard Variant="Variant.Text">
