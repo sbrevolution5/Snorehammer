@@ -21,7 +21,7 @@
                            RollString1=@($"Rolling: {sim.Weapon.VariableAttackDiceNumber} d{sim.Weapon.VariableAttackDiceSides} + {sim.Weapon.VariableAttackDiceConstant}" + (sim.BlastBonus > 0 ? $" + {@sim.BlastBonus}" : "") + $" x {sim.Weapon.WeaponsInUnit}")
                            RollString2=@($"Total: {sim.Stats.AttackNumber}")
                            DiceList="@sim.AttackDice" 
-                           HasConstant="@constantAtk"/>
+                           HasConstant="@ConstantAtk"/>
             }
             <DicePanel sim="@sim"
                        Title="To Hit Roll"
