@@ -52,6 +52,8 @@
         public int AntiMonsterValue { get; set; } = 2;
         public bool RapidFire { get; set; } = false;
         public int RapidFireBonus { get; set; } = 1;
+        //Overwatch should only be set based on the unit class
+        public bool Overwatch { get; set; } = false;
         public object Clone()
         {
             return this.MemberwiseClone();
