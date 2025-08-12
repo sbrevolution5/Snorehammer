@@ -5,65 +5,69 @@
 @using Snorehammer.Web.FrontendModels.Simulations
 @using Snorehammer.Web.Services
 @rendermode InteractiveServer
-<RadzenCard>
-    @if (sim is not null)
-    {
-        <RadzenCard Variant="Variant.Text">
+@if (sim is not null)
+{
+    <RadzenPanel AllowCollapse="true">
+        <HeaderTemplate>
             <h1>Results for @sim.Weapon.Name</h1>
-            <br />
-            @if (sim.Weapon.IsVariableAttacks)
-            {
-                <DicePanel sim="@sim"
-                           Title="Number of Attacks"
-                           RollString1=@($"Rolling: {sim.Weapon.VariableAttackDiceNumber} d{sim.Weapon.VariableAttackDiceSides} + {sim.Weapon.VariableAttackDiceConstant}" + (sim.BlastBonus > 0 ? "":$" + {@sim.BlastBonus}" ) + $" x {sim.Weapon.WeaponsInUnit}")
-                           RollString2=@($"Total: {sim.Stats.AttackNumber}")
-                           DiceList="@sim.AttackDice" 
-                           HasConstant="@VariableAttackWithConstant"
-                           DiceNum="sim.Weapon.VariableAttackDiceNumber"
-                           ConstantValue="sim.Weapon.VariableAttackDiceConstant"
-                           VariableSetCount="sim.Weapon.WeaponsInUnit"/>
-            }
-            <DicePanel sim="@sim"
-                       Title="To Hit Roll"
-                       RollString1=@($"Target: {sim.Weapon.Skill}")
-                       RollString2=@($"Rolling {sim.Stats.AttackNumber}")
-                       DiceList="@sim.ToHitDice"
-                       CriticalMatters="@(sim.Weapon.Sustained || sim.Weapon.Lethal)" />
-            <DicePanel sim="@sim"
-                       Title="To Wound Roll"
-                       RollString1=@($"Target: {(sim.ModdedWoundTarget > 0 ? sim.ModdedWoundTarget :sim.WoundTarget)}")
-                       RollString2=@($"Rolling: {sim.StrengthDice.Count}")
-                       DiceList="@sim.StrengthDice"
-                       CriticalMatters="@(sim.Weapon.Devastating)" />
-            <DicePanel sim="@sim"
-                       Title="Armor Saves"
-                       RollString1=@($"Target: {sim.ArmorSave}")
-                       RollString2=@($"Rolling: {sim.ArmorDice.Count}")
-                       DiceList="@sim.ArmorDice" />
 
-            @if (sim.Weapon.IsVariableDamage)
-            {
+        </HeaderTemplate>
+        <ChildContent>
+            <RadzenCard Variant="Variant.Text">
+                @if (sim.Weapon.IsVariableAttacks)
+                {
+                    <DicePanel sim="@sim"
+                               Title="Number of Attacks"
+                               RollString1=@($"Rolling: {sim.Weapon.VariableAttackDiceNumber} d{sim.Weapon.VariableAttackDiceSides} + {sim.Weapon.VariableAttackDiceConstant}" + (sim.BlastBonus > 0 ? "":$" + {@sim.BlastBonus}" ) + $" x {sim.Weapon.WeaponsInUnit}")
+                               RollString2=@($"Total: {sim.Stats.AttackNumber}")
+                               DiceList="@sim.AttackDice"
+                               HasConstant="@VariableAttackWithConstant"
+                               DiceNum="sim.Weapon.VariableAttackDiceNumber"
+                               ConstantValue="sim.Weapon.VariableAttackDiceConstant"
+                               VariableSetCount="sim.Weapon.WeaponsInUnit" />
+                }
                 <DicePanel sim="@sim"
-                           Title="Damage Roll"
-                           RollString1=@($"Rolling: {sim.Weapon.VariableDamageDiceNumber} d{sim.Weapon.VariableDamageDiceSides} + {sim.Weapon.VariableDamageDiceConstant}" + (sim.Weapon.Melta ? $" + {@sim.Weapon.MeltaDamage}" : ""))
-                           DiceList="@sim.WoundDice" 
-                           HasConstant="true"
-                           DiceNum="sim.Weapon.VariableDamageDiceNumber"
-                           ConstantValue="@TotalDamageConstant"
-                           VariableSetCount="sim.Stats.ArmorSavesFailed"/>
-            }
-            @if (sim.Defender.FeelNoPain)
-            {
+                           Title="To Hit Roll"
+                           RollString1=@($"Target: {sim.Weapon.Skill}")
+                           RollString2=@($"Rolling {sim.Stats.AttackNumber}")
+                           DiceList="@sim.ToHitDice"
+                           CriticalMatters="@(sim.Weapon.Sustained || sim.Weapon.Lethal)" />
                 <DicePanel sim="@sim"
-                           Title="Feel No Pain Roll"
-                           RollString1=@($"Target: {sim.Defender.FeelNoPainTarget}")
-                           RollString2=@($"Rolling: {sim.Stats.DamageNumber}")
-                           DiceList="@sim.FeelNoPainDice" />
-            }
-        </RadzenCard>
-       
-    }
-</RadzenCard>
+                           Title="To Wound Roll"
+                           RollString1=@($"Target: {(sim.ModdedWoundTarget > 0 ? sim.ModdedWoundTarget :sim.WoundTarget)}")
+                           RollString2=@($"Rolling: {sim.StrengthDice.Count}")
+                           DiceList="@sim.StrengthDice"
+                           CriticalMatters="@(sim.Weapon.Devastating)" />
+                <DicePanel sim="@sim"
+                           Title="Armor Saves"
+                           RollString1=@($"Target: {sim.ArmorSave}")
+                           RollString2=@($"Rolling: {sim.ArmorDice.Count}")
+                           DiceList="@sim.ArmorDice" />
+
+                @if (sim.Weapon.IsVariableDamage)
+                {
+                    <DicePanel sim="@sim"
+                               Title="Damage Roll"
+                               RollString1=@($"Rolling: {sim.Weapon.VariableDamageDiceNumber} d{sim.Weapon.VariableDamageDiceSides} + {sim.Weapon.VariableDamageDiceConstant}" + (sim.Weapon.Melta ? $" + {@sim.Weapon.MeltaDamage}" : ""))
+                               DiceList="@sim.WoundDice"
+                               HasConstant="true"
+                               DiceNum="sim.Weapon.VariableDamageDiceNumber"
+                               ConstantValue="@TotalDamageConstant"
+                               VariableSetCount="sim.Stats.ArmorSavesFailed" />
+                }
+                @if (sim.Defender.FeelNoPain)
+                {
+                    <DicePanel sim="@sim"
+                               Title="Feel No Pain Roll"
+                               RollString1=@($"Target: {sim.Defender.FeelNoPainTarget}")
+                               RollString2=@($"Rolling: {sim.Stats.DamageNumber}")
+                               DiceList="@sim.FeelNoPainDice" />
+                }
+            </RadzenCard>
+        </ChildContent>
+    </RadzenPanel>
+
+}
 
 @code {
     [Parameter]
@@ -79,8 +83,8 @@
         {
             VariableAttackWithConstant = true;
         }
-        if ((sim.Weapon.IsVariableDamage && sim.Weapon.VariableDamageDiceConstant > 0) || 
-            (sim.Weapon.Melta && sim.Weapon.MeltaDamage >0))
+        if ((sim.Weapon.IsVariableDamage && sim.Weapon.VariableDamageDiceConstant > 0) ||
+            (sim.Weapon.Melta && sim.Weapon.MeltaDamage > 0))
         {
             VariableDamageWithConstant = true;
             TotalDamageConstant = sim.Weapon.VariableAttackDiceConstant;
