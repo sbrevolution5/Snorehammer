@@ -359,6 +359,10 @@ namespace Snorehammer.Web.Services
             {
                 sb.AppendLine("Overwatch mode");
             }
+            if (unit.TakesHalfDamage)
+            {
+                sb.AppendLine("Takes Half Damage");
+            }
             sb.AppendLine();
             return sb.ToString();
         }

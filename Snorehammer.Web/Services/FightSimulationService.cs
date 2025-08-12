@@ -491,6 +491,14 @@ namespace Snorehammer.Web.Services
                             weaponDamage = DamageDiceCopy.First().Result + weaponSim.Weapon.VariableDamageDiceConstant;
                             DamageDiceCopy.Remove(DamageDiceCopy.First());
                         }
+                        if (weaponSim.Defender.TakesHalfDamage)
+                        {
+
+                            var floatWeaponDamage = (float)weaponDamage;
+                            floatWeaponDamage = floatWeaponDamage / 2;
+                            weaponDamage = (int)Math.Ceiling(floatWeaponDamage);
+
+                        }
                         if (weaponSim.Weapon.Melta && !weaponSim.Weapon.Melee)
                         {
                             weaponDamage += weaponSim.Weapon.MeltaDamage;
@@ -592,6 +600,10 @@ namespace Snorehammer.Web.Services
             if (sim.Stats.WoundsInflicted > 0)
             {
                 res.Append($"{sim.Stats.WoundsInflicted} wounds inflicted to defender.\n");
+                if (sim.Defender.TakesHalfDamage)
+                {
+                    res.Append("Damage was halved. \n");
+                }
                 if (sim.Stats.ModelsDestroyed >= sim.Defender.ModelCount)
                 {
                     res.Append("The entire unit was destroyed.\n");
