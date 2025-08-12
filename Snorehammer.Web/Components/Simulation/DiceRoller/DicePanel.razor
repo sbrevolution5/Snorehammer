@@ -88,7 +88,7 @@
     [Parameter]
     public int VariableSetCount { get; set; } = 0;
     public Dice ConstantDie { get; set; }
-    protected override Task OnInitializedAsync()
+    protected override Task OnParametersSetAsync()
     {
         if (HasConstant)
         {
@@ -98,6 +98,6 @@
                 ConstantDisplay = true
             };
         }
-        return base.OnInitializedAsync();
+        return base.OnParametersSetAsync();
     }
 }
