@@ -20,7 +20,8 @@
                            Title="Number of Attacks"
                            RollString1=@($"Rolling: {sim.Weapon.VariableAttackDiceNumber} d{sim.Weapon.VariableAttackDiceSides} + {sim.Weapon.VariableAttackDiceConstant}" + (sim.BlastBonus > 0 ? $" + {@sim.BlastBonus}" : "") + $" x {sim.Weapon.WeaponsInUnit}")
                            RollString2=@($"Total: {sim.Stats.AttackNumber}")
-                           DiceList="@sim.AttackDice" />
+                           DiceList="@sim.AttackDice" 
+                           HasConstant="@constantAtk"/>
             }
             <DicePanel sim="@sim"
                        Title="To Hit Roll"
@@ -67,5 +68,14 @@
     public WeaponSimulation sim { get; set; }
     private bool FightComplete { get; set; } = false;
     private bool simulating { get; set; } = true;
+    private bool ConstantAtk { get; set; } = false;
+    protected override Task OnInitializedAsync()
+    {
+        if (sim.Weapon.IsVariableAttacks && sim.Weapon.VariableAttackDiceConstant > 0)
+        {
+            ConstantAtk = true;
+        }
+        return base.OnInitializedAsync();
+    }
 }
 
