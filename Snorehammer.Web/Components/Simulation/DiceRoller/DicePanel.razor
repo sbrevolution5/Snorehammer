@@ -22,13 +22,32 @@
             </RadzenColumn>
         </RadzenRow>
         <RadzenRow>
-            @foreach (var die in DiceList)
+            @if (HasConstant)
             {
-                <RadzenColumn>
+                for (int i = 0; i < VariableSetCount; i++)
+                {
+                    //display the next x dice, where x is dice num, then the constant
+                    var perRoll = DiceList.Skip(i*DiceNum).Take(DiceNum);
+                    foreach (var die in perRoll)
+                    {
+                        <RadzenColumn>
+                            <DieDisplay die=@die CriticalMatters=@CriticalMatters></DieDisplay>
+                        </RadzenColumn>
+                    }
+                    <RadzenColumn>
+                        <DieDisplay die=@ConstantDie></DieDisplay>
+                    </RadzenColumn>
+                }
+            }
+            else
+            {
 
-                    <DieDisplay die=@die CriticalMatters=@CriticalMatters></DieDisplay>
-
-                </RadzenColumn>
+                @foreach (var die in DiceList)
+                {
+                    <RadzenColumn>
+                        <DieDisplay die=@die CriticalMatters=@CriticalMatters></DieDisplay>
+                    </RadzenColumn>
+                }
             }
         </RadzenRow>
     </ChildContent>
@@ -47,7 +66,7 @@
         </RadzenCard>
     </SummaryTemplate>
 </RadzenPanel>
-@code{
+@code {
     [Parameter]
     public WeaponSimulation sim { get; set; }
     [Parameter]
@@ -60,4 +79,25 @@
     public List<Dice> DiceList { get; set; }
     [Parameter]
     public bool CriticalMatters { get; set; } = false;
+    [Parameter]
+    public bool HasConstant { get; set; } = false;
+    [Parameter]
+    public int DiceNum { get; set; } = 0;
+    [Parameter]
+    public int ConstantValue { get; set; } = 0;
+    [Parameter]
+    public int VariableSetCount { get; set; } = 0;
+    public Dice ConstantDie { get; set; }
+    protected override Task OnParametersSetAsync()
+    {
+        if (HasConstant)
+        {
+            ConstantDie = new Dice()
+            {
+                Result = ConstantValue,
+                ConstantDisplay = true
+            };
+        }
+        return base.OnParametersSetAsync();
+    }
 }

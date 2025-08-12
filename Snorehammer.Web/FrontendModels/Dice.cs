@@ -2,6 +2,9 @@
 {
     public class Dice
     {
+        public Dice()
+        {
+        }
         public Dice(int target, Random random, int sides = 6, int criticalThreshold = 6)
         {
             Target = target;
@@ -27,6 +30,7 @@
         public bool Critical { get; set; }
         public bool AutoFailed { get; set; } = false;
         public int CriticalThreshold { get; set; }
+        public bool ConstantDisplay { get; set; } = false;
         public void Reroll(Random random)
         {
             Result = random.Next(1, Sides + 1);

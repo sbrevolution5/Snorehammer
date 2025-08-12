@@ -1,9 +1,18 @@
 ﻿@using Snorehammer.Web.FrontendModels
 @* Needs a color and image file  *@
 @*Temporarily just using a text result*@
-<RadzenCard class=@($"{colorCode} rz-p-1 rz-m-1 rz-text-align-center") style="height: 40px; width: 40px;">
-@value
-</RadzenCard>
+@if (die.ConstantDisplay)
+{
+    <RadzenCard class=@($"rz-background-color-secondary rz-p-1 rz-m-1 rz-text-align-center")  style="height: 40px; width: 40px;">
+        + @value
+    </RadzenCard>
+}
+else
+{
+    <RadzenCard class=@($"{colorCode} rz-p-1 rz-m-1 rz-text-align-center") style="height: 40px; width: 40px;">
+        @value
+    </RadzenCard>
+}
 @code {
     [Parameter]
     public Dice die { get; set; }
