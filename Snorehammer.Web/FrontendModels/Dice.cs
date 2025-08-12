@@ -2,6 +2,9 @@
 {
     public class Dice
     {
+        public Dice()
+        {
+        }
         public Dice(int target, Random random, int sides = 6, int criticalThreshold = 6)
         {
             Target = target;
