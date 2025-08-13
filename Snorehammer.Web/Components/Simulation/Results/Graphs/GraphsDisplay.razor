@@ -21,7 +21,7 @@
     public GraphData unitGraphData { get; set; }
     public GraphData weaponGraphData { get; set; }
     public string weapon1Dropdown { get; set; }
-    public IEnumerable<GroupData> GroupedWeapons { get; set; }
+    private IEnumerable<GroupData> GroupedWeapons { get; set; }
     protected override Task OnInitializedAsync()
     {
         unitGraphData = DataFromComparison();
