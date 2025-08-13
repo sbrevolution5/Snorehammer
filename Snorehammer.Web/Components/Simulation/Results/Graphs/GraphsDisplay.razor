@@ -19,8 +19,49 @@
 @code {
     [Parameter]
     public Comparison comparison { get; set; }
+    public Comparison WeaponComparison { get; set; }
     public string weapon1Dropdown { get; set; }
     public IEnumerable<AttackProfile> WeaponChoices { get; set; }
+    protected override Task OnInitializedAsync()
+    {
+        DataFromComparison();
+        return base.OnInitializedAsync();
+    }
+    private void DataFromComparison()
+    {
+        dataA = comparison.Simulation1.FightSimulations.Select(f => f.Stats).ToList();
+        titleA = comparison.Simulation1.Stats.ColumnName;
+        multiA = comparison.Simulation1.Stats;
+        showFnp = comparison.Simulation1.Defender.FeelNoPain;
+        isMultiAttack = comparison.Simulation1.Attacker.Attacks.Any(a => a.IsVariableAttacks);
+        if (comparison.ComparingAttackers)
+        {
+            dataB = comparison.AlternateAttackSimulation.FightSimulations.Select(f => f.Stats).ToList();
+            titleB = comparison.AlternateAttackSimulation.Stats.ColumnName;
+            multiB = comparison.AlternateAttackSimulation.Stats;
+            isMultiAttack = comparison.AlternateAttackSimulation.Attacker.Attacks.Any(a => a.IsVariableAttacks);
+        }
+        else if (comparison.ComparingDefenders)
+        {
+            dataB = comparison.AlternateDefenseSimulation.FightSimulations.Select(f => f.Stats).ToList();
+            titleB = comparison.AlternateDefenseSimulation.Stats.ColumnName;
+            multiB = comparison.AlternateDefenseSimulation.Stats;
+            showFnp = comparison.AlternateDefenseSimulation.Defender.FeelNoPain;
+
+        }
+        else
+        {
+            titleB = "";
+            dataB = new List<FightStats>();
+            multiB = new MultiFightStats()
+            {
+                LessThanHalf = -1,
+                LostAModel = -1,
+                UnitDamaged = -1,
+                UnitEntirelyDestroyed = -1
+            };
+        }
+    }
     protected override Task OnParametersSetAsync()
     {
         WeaponChoices = comparison.Simulation1.Attacker.Attacks;

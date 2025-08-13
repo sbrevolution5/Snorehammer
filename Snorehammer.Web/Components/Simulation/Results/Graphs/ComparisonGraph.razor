@@ -74,7 +74,7 @@
         <RadzenTabsItem Text="Damaged">
             <RadzenRow>
                 <RadzenColumn Size="12" SizeLG="6">
-                    <PieGraph dataA="multiA.UnitDamaged" dataB="multiB.UnitDamaged" totalSims="comparison.Simulation1.Rounds" GraphTitle="Unit Damaged" statsATitle="@titleA" statsBTitle="@titleB"></PieGraph>
+                    <PieGraph dataA="multiA.UnitDamaged" dataB="multiB.UnitDamaged" totalSims="TotalSims" GraphTitle="Unit Damaged" statsATitle="@titleA" statsBTitle="@titleB"></PieGraph>
                 </RadzenColumn>
             </RadzenRow>
 
@@ -82,7 +82,7 @@
         <RadzenTabsItem Text="Lost A Model">
             <RadzenRow>
                 <RadzenColumn Size="12" SizeLG="6">
-                    <PieGraph dataA="multiA.LostAModel" dataB="multiB.LostAModel" totalSims="comparison.Simulation1.Rounds" GraphTitle="Lost A Model" statsATitle="@titleA" statsBTitle="@titleB"></PieGraph>
+                    <PieGraph dataA="multiA.LostAModel" dataB="multiB.LostAModel" totalSims="TotalSims" GraphTitle="Lost A Model" statsATitle="@titleA" statsBTitle="@titleB"></PieGraph>
                 </RadzenColumn>
             </RadzenRow>
 
@@ -90,14 +90,14 @@
         <RadzenTabsItem Text="Less than half">
             <RadzenRow>
                 <RadzenColumn Size="12" SizeLG="6">
-                    <PieGraph dataA="multiA.LessThanHalf" dataB="multiB.LessThanHalf" totalSims="comparison.Simulation1.Rounds" GraphTitle="Less Than Half" statsATitle="@titleA" statsBTitle="@titleB"></PieGraph>
+                    <PieGraph dataA="multiA.LessThanHalf" dataB="multiB.LessThanHalf" totalSims="TotalSims" GraphTitle="Less Than Half" statsATitle="@titleA" statsBTitle="@titleB"></PieGraph>
                 </RadzenColumn>
             </RadzenRow>
         </RadzenTabsItem>
         <RadzenTabsItem Text="UnitDestroyed">
             <RadzenRow>
                 <RadzenColumn Size="12" SizeLG="6">
-                    <PieGraph dataA="multiA.UnitEntirelyDestroyed" dataB="multiB.UnitEntirelyDestroyed" totalSims="comparison.Simulation1.Rounds" GraphTitle="Unit destroyed" statsATitle="@titleA" statsBTitle="@titleB"></PieGraph>
+                    <PieGraph dataA="multiA.UnitEntirelyDestroyed" dataB="multiB.UnitEntirelyDestroyed" totalSims="TotalSims" GraphTitle="Unit destroyed" statsATitle="@titleA" statsBTitle="@titleB"></PieGraph>
                 </RadzenColumn>
             </RadzenRow>
         </RadzenTabsItem>
@@ -105,9 +105,11 @@
 </RadzenTabs>
 @code {
     [Parameter]
-    public Comparison comparison { get; set; }
     public List<FightStats> dataA { get; set; }
+    [Parameter]
     public List<FightStats> dataB { get; set; }
+    [Parameter]
+    public int TotalSims { get; set; }
     public MultiFightStats multiA { get; set; }
     public MultiFightStats? multiB { get; set; }
     public string titleA { get; set; }
