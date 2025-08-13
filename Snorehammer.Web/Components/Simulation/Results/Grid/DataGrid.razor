@@ -5,22 +5,28 @@
 
     <RadzenDataGrid Data="comparisonStats" GridLines="DataGridGridLines.Both" AllowSorting="true" CellRender="@CellRender">
         <Template Context="MultiFightStats">
-             <RadzenDataGrid Data="MultiFightStats.PerWeaponStats" GridLines="DataGridGridLines.Both" AllowSorting="true" CellRender="@CellRender">
+            <RadzenDataGrid Data="MultiFightStats.PerWeaponStats" GridLines="DataGridGridLines.Both" AllowSorting="true" CellRender="@CellRender">
                 <Columns>
                     <RadzenDataGridColumn Property="@nameof(MultiFightStats.ColumnName)" Title="Name"></RadzenDataGridColumn>
-                    <RadzenDataGridColumn Property="@nameof(MultiFightStats.AttackNumber)"
-                                          Title="Attacks Made"></RadzenDataGridColumn>
+                    @if (showMultiAttack)
+                    {
+                        <RadzenDataGridColumn Property="@nameof(MultiFightStats.AttackNumber)"
+                                              Title="Attacks Made"></RadzenDataGridColumn>
+                    }
                     <RadzenDataGridColumn Property="@nameof(MultiFightStats.AttacksHit)"
                                           Title="Attacks Hit"></RadzenDataGridColumn>
                     <RadzenDataGridColumn Property="@nameof(MultiFightStats.WoundsSuccessful)"
-                                          
                                           Title="Wounds Rolls Successful"></RadzenDataGridColumn>
                     <RadzenDataGridColumn Property="@nameof(MultiFightStats.ArmorSavesFailed)"
                                           Title="Armor Saves Failed"></RadzenDataGridColumn>
-                    <RadzenDataGridColumn Property="@nameof(MultiFightStats.WoundsInflicted)"
-                                          Title="Damage Before FNP"></RadzenDataGridColumn>
-                    <RadzenDataGridColumn Property="@nameof(MultiFightStats.FeelNoPainMade)"
-                                          Title="FNP Successful"></RadzenDataGridColumn>
+                    @if (showFnp)
+                    {
+
+                        <RadzenDataGridColumn Property="@nameof(MultiFightStats.WoundsInflicted)"
+                                              Title="Damage Before FNP"></RadzenDataGridColumn>
+                        <RadzenDataGridColumn Property="@nameof(MultiFightStats.FeelNoPainMade)"
+                                              Title="FNP Successful"></RadzenDataGridColumn>
+                    }
                     <RadzenDataGridColumn Property="@nameof(MultiFightStats.DamageNumber)"
                                           Title="Total Damage"></RadzenDataGridColumn>
                     @if (comparison.Simulation1.Rounds > 1)
