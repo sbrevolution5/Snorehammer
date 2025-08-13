@@ -1,153 +1,91 @@
 ﻿@using Snorehammer.Web.FrontendModels
+@using Snorehammer.Web.FrontendModels.Profiles
 @using Snorehammer.Web.FrontendModels.Stats
 @using Snorehammer.Web.Services
-<h3>GraphsDisplay</h3>
-<RadzenTabs>
-    <Tabs>
-        <RadzenTabsItem Text="Attacks Hit">
+<RadzenStack>
 
-            <RadzenRow>
-                <RadzenColumn Size="12" SizeLG="6">
-                    <BarGraph dataA="dataA.Select(s => s.AttacksHit).ToList()" dataB="dataB.Select(s => s.AttacksHit).ToList()" GraphTitle="Attacks Hit" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
-                </RadzenColumn>
-            </RadzenRow>
-        </RadzenTabsItem>
-        <RadzenTabsItem Text="Wounds Successful">
+    <RadzenText>Compare Units</RadzenText>
+    <ComparisonGraph graphData="unitGraphData"></ComparisonGraph>
+</RadzenStack>
+<RadzenStack>
+    <RadzenText>Compare Weapons </RadzenText>
+    <RadzenRow>
+        <RadzenLabel>Weapon 1</RadzenLabel>
+        <RadzenDropDown @bind-Value=@weapon1Dropdown SelectedItemChanged=@(() => WeaponGraphChanged()) Data=@GroupedWeapons>
+            <Template>
+                <span style="display:inline-block; font-weight: @(context.UnitName != null ? "bold" : "normal");">
+                    @(context.UnitName ?? $"{context.AttackName}")
+                </span>
+            </Template>
+        </RadzenDropDown>
+        <RadzenLabel>Weapon 2</RadzenLabel>
+        <RadzenDropDown @bind-Value=@weapon2Dropdown SelectedItemChanged=@(() => WeaponGraphChanged()) Data=@GroupedWeapons>
+            <Template>
+                <span style="display:inline-block; font-weight: @(context.UnitName != null ? "bold" : "normal");">
+                    @(context.UnitName ?? $"{context.AttackName}")
+                </span>
+            </Template>
+        </RadzenDropDown>
 
-            <RadzenRow>
-                <RadzenColumn Size="12" SizeLG="6">
-                    <BarGraph dataA="dataA.Select(s => s.WoundsSuccessful).ToList()" dataB="dataB.Select(s => s.WoundsSuccessful).ToList()" GraphTitle="Wounds Successful" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
-                </RadzenColumn>
-            </RadzenRow>
-        </RadzenTabsItem>
-        <RadzenTabsItem Text="Armor Saves Failed">
+    </RadzenRow>
+    @if (weaponGraphData is not null)
+    {
 
-            <RadzenRow>
-                <RadzenColumn Size="12" SizeLG="6">
-                    <BarGraph dataA="dataA.Select(s => s.ArmorSavesFailed).ToList()" dataB="dataB.Select(s => s.ArmorSavesFailed).ToList()" GraphTitle="Armor Saves Failed" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
-                </RadzenColumn>
-            </RadzenRow>
-        </RadzenTabsItem>
-        @if (isMultiAttack)
-        {
-            <RadzenTabsItem Text="Attacks Made">
-
-                <RadzenRow>
-                    <RadzenColumn Size="12" SizeLG="6">
-                        <BarGraph dataA="dataA.Select(s => s.AttackNumber).ToList()" dataB="dataB.Select(s => s.AttackNumber).ToList()" GraphTitle="Attacks Made" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
-                    </RadzenColumn>
-                </RadzenRow>
-            </RadzenTabsItem>
-        }
-        @if (showFnp)
-        {
-            <RadzenTabsItem Text="Wounds Inflicted">
-
-                <RadzenRow>
-                    <RadzenColumn Size="12" SizeLG="6">
-                        <BarGraph dataA="dataA.Select(s => s.PreFNPDamage).ToList()" dataB="dataB.Select(s => s.PreFNPDamage).ToList()" GraphTitle="Wounds Inflicted" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
-                    </RadzenColumn>
-                </RadzenRow>
-            </RadzenTabsItem>
-
-            <RadzenTabsItem Text="Feel No Pain Saved">
-
-                <RadzenRow>
-                    <RadzenColumn Size="12" SizeLG="6">
-                        <BarGraph dataA="dataA.Select(s => s.FeelNoPainMade).ToList()" dataB="dataB.Select(s => s.FeelNoPainMade).ToList()" GraphTitle="Feel No Pain Saved" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
-                    </RadzenColumn>
-                </RadzenRow>
-            </RadzenTabsItem>
-        }
-        <RadzenTabsItem Text="Damage Taken">
-
-            <RadzenRow>
-                <RadzenColumn Size="12" SizeLG="6">
-                    <BarGraph dataA="dataA.Select(s => s.DamageNumber).ToList()" dataB="dataB.Select(s => s.DamageNumber).ToList()" GraphTitle="Damage Taken" statsATitle="@titleA" statsBTitle="@titleB"></BarGraph>
-                </RadzenColumn>
-            </RadzenRow>
-        </RadzenTabsItem>
-    </Tabs>
-</RadzenTabs>
-@*Pie charts for unit destroyed, at half, etc*@
-<RadzenTabs>
-    <Tabs>
-
-        <RadzenTabsItem Text="Damaged">
-            <RadzenRow>
-                <RadzenColumn Size="12" SizeLG="6">
-                    <PieGraph dataA="multiA.UnitDamaged" dataB="multiB.UnitDamaged" totalSims="comparison.Simulation1.Rounds" GraphTitle="Unit Damaged" statsATitle="@titleA" statsBTitle="@titleB"></PieGraph>
-                </RadzenColumn>
-            </RadzenRow>
-
-        </RadzenTabsItem>
-        <RadzenTabsItem Text="Lost A Model">
-            <RadzenRow>
-                <RadzenColumn Size="12" SizeLG="6">
-                    <PieGraph dataA="multiA.LostAModel" dataB="multiB.LostAModel" totalSims="comparison.Simulation1.Rounds" GraphTitle="Lost A Model" statsATitle="@titleA" statsBTitle="@titleB"></PieGraph>
-                </RadzenColumn>
-            </RadzenRow>
-
-        </RadzenTabsItem>
-        <RadzenTabsItem Text="Less than half">
-            <RadzenRow>
-                <RadzenColumn Size="12" SizeLG="6">
-                    <PieGraph dataA="multiA.LessThanHalf" dataB="multiB.LessThanHalf" totalSims="comparison.Simulation1.Rounds" GraphTitle="Less Than Half" statsATitle="@titleA" statsBTitle="@titleB"></PieGraph>
-                </RadzenColumn>
-            </RadzenRow>
-        </RadzenTabsItem>
-        <RadzenTabsItem Text="UnitDestroyed">
-            <RadzenRow>
-                <RadzenColumn Size="12" SizeLG="6">
-                    <PieGraph dataA="multiA.UnitEntirelyDestroyed" dataB="multiB.UnitEntirelyDestroyed" totalSims="comparison.Simulation1.Rounds" GraphTitle="Unit destroyed" statsATitle="@titleA" statsBTitle="@titleB"></PieGraph>
-                </RadzenColumn>
-            </RadzenRow>
-        </RadzenTabsItem>
-    </Tabs>
-</RadzenTabs>
+        <ComparisonGraph graphData="weaponGraphData"></ComparisonGraph>
+    }
+</RadzenStack>
 @code {
     [Parameter]
     public Comparison comparison { get; set; }
-    public List<FightStats> dataA { get; set; }
-    public List<FightStats> dataB { get; set; }
-    public MultiFightStats multiA { get; set; }
-    public MultiFightStats? multiB { get; set; }
-    public string titleA { get; set; }
-    public string titleB { get; set; }
-    public bool showFnp { get; set; } = false;
-    public bool isMultiAttack { get; set; } = false;
+    public GraphData unitGraphData { get; set; }
+    public GraphData weaponGraphData { get; set; }
+    private GroupData weapon1Dropdown { get; set; }
+    private GroupData weapon2Dropdown { get; set; }
+    private IEnumerable<GroupData> GroupedWeapons { get; set; }
     protected override Task OnInitializedAsync()
     {
-        DataFromComparison();
+        unitGraphData = DataFromComparison();
+
         return base.OnInitializedAsync();
     }
-    private void DataFromComparison()
+    protected void WeaponGraphChanged()
     {
-        dataA = comparison.Simulation1.FightSimulations.Select(f => f.Stats).ToList();
-        titleA = comparison.Simulation1.Stats.ColumnName;
-        multiA = comparison.Simulation1.Stats;
-        showFnp = comparison.Simulation1.Defender.FeelNoPain;
-        isMultiAttack = comparison.Simulation1.Attacker.Attacks.Any(a => a.IsVariableAttacks);
+        if (weapon1Dropdown is not null && weapon2Dropdown is not null)
+        {
+            if (!string.IsNullOrEmpty(weapon1Dropdown.AttackName) && !string.IsNullOrEmpty(weapon2Dropdown.AttackName))
+            {
+                weaponGraphData = DataFromWeapons();
+            }
+        }
+    }
+    private GraphData DataFromComparison()
+    {
+        var graphData = new GraphData();
+        graphData.dataA = comparison.Simulation1.FightSimulations.Select(f => f.Stats).ToList();
+        graphData.titleA = comparison.Simulation1.Stats.ColumnName;
+        graphData.multiA = comparison.Simulation1.Stats;
+        graphData.showFnp = comparison.Simulation1.Defender.FeelNoPain;
+        graphData.isMultiAttack = comparison.Simulation1.Attacker.Attacks.Any(a => a.IsVariableAttacks);
         if (comparison.ComparingAttackers)
         {
-            dataB = comparison.AlternateAttackSimulation.FightSimulations.Select(f => f.Stats).ToList();
-            titleB = comparison.AlternateAttackSimulation.Stats.ColumnName;
-            multiB = comparison.AlternateAttackSimulation.Stats;
-            isMultiAttack = comparison.AlternateAttackSimulation.Attacker.Attacks.Any(a => a.IsVariableAttacks);
+            graphData.dataB = comparison.AlternateAttackSimulation.FightSimulations.Select(f => f.Stats).ToList();
+            graphData.titleB = comparison.AlternateAttackSimulation.Stats.ColumnName;
+            graphData.multiB = comparison.AlternateAttackSimulation.Stats;
+            graphData.isMultiAttack = comparison.AlternateAttackSimulation.Attacker.Attacks.Any(a => a.IsVariableAttacks);
         }
         else if (comparison.ComparingDefenders)
         {
-            dataB = comparison.AlternateDefenseSimulation.FightSimulations.Select(f => f.Stats).ToList();
-            titleB = comparison.AlternateDefenseSimulation.Stats.ColumnName;
-            multiB = comparison.AlternateDefenseSimulation.Stats;
-            showFnp = comparison.AlternateDefenseSimulation.Defender.FeelNoPain;
+            graphData.dataB = comparison.AlternateDefenseSimulation.FightSimulations.Select(f => f.Stats).ToList();
+            graphData.titleB = comparison.AlternateDefenseSimulation.Stats.ColumnName;
+            graphData.multiB = comparison.AlternateDefenseSimulation.Stats;
+            graphData.showFnp = comparison.AlternateDefenseSimulation.Defender.FeelNoPain;
 
         }
         else
         {
-            titleB = "";
-            dataB = new List<FightStats>();
-            multiB = new MultiFightStats()
+            graphData.titleB = "";
+            graphData.dataB = new List<FightStats>();
+            graphData.multiB = new MultiFightStats()
             {
                 LessThanHalf = -1,
                 LostAModel = -1,
@@ -155,7 +93,81 @@
                 UnitEntirelyDestroyed = -1
             };
         }
+        return graphData;
+    }
+    private GraphData DataFromWeapons()
+    {
+        //if we aren't comparing, we should show the data between two different weapons on the same unit.
+        var graphData = new GraphData();
+        graphData.showFnp = comparison.Simulation1.Defender.FeelNoPain;
+        graphData.isMultiAttack = comparison.Simulation1.Attacker.Attacks.Any(a => a.IsVariableAttacks);
+        //if we compare attackers, we should show the data from separate simulations
+        if (comparison.ComparingAttackers)
+        {
+            graphData.dataA = comparison.Simulation1.FightSimulations.SelectMany(f => f.WeaponSimulations.Select(w => w.Stats)).Where(s => s.ColumnName == weapon1Dropdown.AttackName).ToList();
+            graphData.titleA = graphData.dataA.FirstOrDefault().ColumnName;
+            graphData.multiA = comparison.Simulation1.Stats.PerWeaponStats.First(s => s.ColumnName == weapon1Dropdown.AttackName);
+            graphData.dataB = comparison.AlternateAttackSimulation.FightSimulations.SelectMany(f => f.WeaponSimulations.Select(w => w.Stats)).Where(s => s.ColumnName == weapon2Dropdown.AttackName).ToList();
+            graphData.titleB = graphData.dataB.FirstOrDefault().ColumnName;
+            graphData.multiB = comparison.AlternateAttackSimulation.Stats.PerWeaponStats.First(s => s.ColumnName == weapon2Dropdown.AttackName);
+        }
+        //if we compare defenders, we should show data from one weapon against two different defenders
+        else if (comparison.ComparingDefenders)
+        {
+            graphData.dataA = comparison.Simulation1.FightSimulations.SelectMany(f => f.WeaponSimulations.Select(w => w.Stats)).Where(s => s.ColumnName == weapon1Dropdown.AttackName).ToList();
+            graphData.titleA = graphData.dataA.FirstOrDefault().ColumnName;
+            graphData.multiA = comparison.Simulation1.Stats.PerWeaponStats.First(s => s.ColumnName == weapon1Dropdown.AttackName);
+            graphData.dataB = comparison.AlternateDefenseSimulation.FightSimulations.SelectMany(f => f.WeaponSimulations.Select(w => w.Stats)).Where(s => s.ColumnName == weapon2Dropdown.AttackName).ToList();
+            graphData.titleB = graphData.dataB.FirstOrDefault().ColumnName;
+            graphData.multiB = comparison.AlternateDefenseSimulation.Stats.PerWeaponStats.First(s => s.ColumnName == weapon2Dropdown.AttackName);
+        }
+        else
+        {
+            graphData.dataA = comparison.Simulation1.FightSimulations.SelectMany(f => f.WeaponSimulations.Select(w => w.Stats)).Where(s => s.ColumnName == weapon1Dropdown.AttackName).ToList();
+            graphData.titleA = graphData.dataA.FirstOrDefault().ColumnName;
+            graphData.multiA = comparison.Simulation1.Stats.PerWeaponStats.First(s => s.ColumnName == weapon1Dropdown.AttackName);
+            graphData.dataB = comparison.Simulation1.FightSimulations.SelectMany(f => f.WeaponSimulations.Select(w => w.Stats)).Where(s => s.ColumnName == weapon2Dropdown.AttackName).ToList();
+            graphData.titleB = graphData.dataB.FirstOrDefault().ColumnName;
+            graphData.multiB = comparison.Simulation1.Stats.PerWeaponStats.First(s => s.ColumnName == weapon2Dropdown.AttackName);
+        }
+        return graphData;
+    }
+    protected override Task OnParametersSetAsync()
+    {
+        GroupWeapons();
+        return base.OnParametersSetAsync();
+    }
+    private void GroupWeapons()
+    {
+        var attacks = new List<AttackProfile>();
+        //for each simulation, get a list of the attacker's weapons
+        attacks.AddRange(comparison.Simulation1.Attacker.Attacks);
+        if (comparison.ComparingAttackers)
+        {
+            attacks.AddRange(comparison.AlternateAttackSimulation.Attacker.Attacks);
+        }
+        GroupedWeapons = attacks.GroupBy(a => a.UnitName)
+            .SelectMany(g => new GroupData[] {
+                new GroupData() { UnitName = g.Key }
+            }
+                .Concat(g.Select(a =>
+                    new GroupData()
+                    {
+                        AttackId = a.Id,
+                        AttackName = a.Name
+                    })
+                )
+            ).ToList();
+        //group by unit name
+    }
+    private class GroupData
+    {
+        public string UnitName { get; set; }
+        public string AttackName { get; set; }
+        public int AttackId { get; set; }
     }
 }
+
+
 
 

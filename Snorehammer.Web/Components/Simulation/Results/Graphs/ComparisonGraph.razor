@@ -1,0 +1,115 @@
+﻿@using Snorehammer.Web.FrontendModels
+@using Snorehammer.Web.FrontendModels.Stats
+<RadzenTabs>
+    <Tabs>
+        <RadzenTabsItem Text="Attacks Hit">
+
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <BarGraph dataA="graphData.dataA.Select(s => s.AttacksHit).ToList()" dataB="graphData.dataB.Select(s => s.AttacksHit).ToList()" GraphTitle="Attacks Hit" statsATitle="@graphData.titleA" statsBTitle="@graphData.titleB"></BarGraph>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Wounds Successful">
+
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <BarGraph dataA="graphData.dataA.Select(s => s.WoundsSuccessful).ToList()" dataB="graphData.dataB.Select(s => s.WoundsSuccessful).ToList()" GraphTitle="Wounds Successful" statsATitle="@graphData.titleA" statsBTitle="@graphData.titleB"></BarGraph>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Armor Saves Failed">
+
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <BarGraph dataA="graphData.dataA.Select(s => s.ArmorSavesFailed).ToList()" dataB="graphData.dataB.Select(s => s.ArmorSavesFailed).ToList()" GraphTitle="Armor Saves Failed" statsATitle="@graphData.titleA" statsBTitle="@graphData.titleB"></BarGraph>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenTabsItem>
+        @if (graphData.isMultiAttack)
+        {
+            <RadzenTabsItem Text="Attacks Made">
+
+                <RadzenRow>
+                    <RadzenColumn Size="12" SizeLG="6">
+                        <BarGraph dataA="graphData.dataA.Select(s => s.AttackNumber).ToList()" dataB="graphData.dataB.Select(s => s.AttackNumber).ToList()" GraphTitle="Attacks Made" statsATitle="@graphData.titleA" statsBTitle="@graphData.titleB"></BarGraph>
+                    </RadzenColumn>
+                </RadzenRow>
+            </RadzenTabsItem>
+        }
+        @if (graphData.showFnp)
+        {
+            <RadzenTabsItem Text="Wounds Inflicted">
+
+                <RadzenRow>
+                    <RadzenColumn Size="12" SizeLG="6">
+                        <BarGraph dataA="graphData.dataA.Select(s => s.PreFNPDamage).ToList()" dataB="graphData.dataB.Select(s => s.PreFNPDamage).ToList()" GraphTitle="Wounds Inflicted" statsATitle="@graphData.titleA" statsBTitle="@graphData.titleB"></BarGraph>
+                    </RadzenColumn>
+                </RadzenRow>
+            </RadzenTabsItem>
+
+            <RadzenTabsItem Text="Feel No Pain Saved">
+
+                <RadzenRow>
+                    <RadzenColumn Size="12" SizeLG="6">
+                        <BarGraph dataA="graphData.dataA.Select(s => s.FeelNoPainMade).ToList()" dataB="graphData.dataB.Select(s => s.FeelNoPainMade).ToList()" GraphTitle="Feel No Pain Saved" statsATitle="@graphData.titleA" statsBTitle="@graphData.titleB"></BarGraph>
+                    </RadzenColumn>
+                </RadzenRow>
+            </RadzenTabsItem>
+        }
+        <RadzenTabsItem Text="Damage Taken">
+
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <BarGraph dataA="graphData.dataA.Select(s => s.DamageNumber).ToList()" dataB="graphData.dataB.Select(s => s.DamageNumber).ToList()" GraphTitle="Damage Taken" statsATitle="@graphData.titleA" statsBTitle="@graphData.titleB"></BarGraph>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenTabsItem>
+    </Tabs>
+</RadzenTabs>
+@*Pie charts for unit destroyed, at half, etc*@
+<RadzenTabs>
+    <Tabs>
+
+        <RadzenTabsItem Text="Damaged">
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <PieGraph dataA="graphData.multiA.UnitDamaged" dataB="graphData.multiB.UnitDamaged" totalSims="graphData.TotalSims" GraphTitle="Unit Damaged" statsATitle="@graphData.titleA" statsBTitle="@graphData.titleB"></PieGraph>
+                </RadzenColumn>
+            </RadzenRow>
+
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Lost A Model">
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <PieGraph dataA="graphData.multiA.LostAModel" dataB="graphData.multiB.LostAModel" totalSims="graphData.TotalSims" GraphTitle="Lost A Model" statsATitle="@graphData.titleA" statsBTitle="@graphData.titleB"></PieGraph>
+                </RadzenColumn>
+            </RadzenRow>
+
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Less than half">
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <PieGraph dataA="graphData.multiA.LessThanHalf" dataB="graphData.multiB.LessThanHalf" totalSims="graphData.TotalSims" GraphTitle="Less Than Half" statsATitle="@graphData.titleA" statsBTitle="@graphData.titleB"></PieGraph>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="UnitDestroyed">
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeLG="6">
+                    <PieGraph dataA="graphData.multiA.UnitEntirelyDestroyed" dataB="graphData.multiB.UnitEntirelyDestroyed" totalSims="graphData.TotalSims" GraphTitle="Unit destroyed" statsATitle="@graphData.titleA" statsBTitle="@graphData.titleB"></PieGraph>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenTabsItem>
+    </Tabs>
+</RadzenTabs>
+@code {
+    [Parameter]
+    public GraphData graphData { get; set; }
+    protected override void OnParametersSet()
+    {
+        StateHasChanged();
+        base.OnParametersSet();
+    }
+
+}
