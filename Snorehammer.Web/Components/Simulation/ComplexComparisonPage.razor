@@ -8,9 +8,9 @@
 @using Snorehammer.Web.FrontendModels.Simulations
 @using Snorehammer.Web.Services
 @rendermode InteractiveServer
-<RadzenToc Selector=".tocBody" Orientation=Orientation.Horizontal style="position: sticky; top: 0; right: 0; z-index:1;" class="rz-display-none rz-display-md-flex">
-    <RadzenTocItem Text="Attacker Input" Selector="#attackerInput"></RadzenTocItem>
-    <RadzenTocItem Text="Defender Input" Selector="#defenderInput"></RadzenTocItem>
+<RadzenToc Orientation=Orientation.Horizontal style="position: sticky; top: 0; right: 0; z-index:1;" class="rz-display-none rz-display-md-flex">
+    <RadzenTocItem Text="Attacker Input" Selector="#attacker"></RadzenTocItem>
+    <RadzenTocItem Text="Defender Input" Selector="#defender"></RadzenTocItem>
     <RadzenTocItem Text="Fight results" Selector="#fightResults"></RadzenTocItem>
     <RadzenTocItem Text="Fight Stats" Selector="#fightStats"></RadzenTocItem>
 </RadzenToc>
@@ -26,7 +26,6 @@
         <RadzenButton Click="@(() => SetupDemo3())" Text="Comparison of Space marines or blood claws (light infantry) vs. Genestealers (Melee bugs)" ButtonStyle="ButtonStyle.Primary"></RadzenButton>
     </RadzenRow>
 </RadzenCard>
-<RadzenBody class="tocBody">
     <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap">
         <RadzenColumn Size="6" SizeMD="3" SizeLG="2">
 
@@ -57,7 +56,7 @@
     </RadzenStack>
 
     <RadzenCard Variant="Variant.Text">
-        <RadzenText TextStyle="TextStyle.DisplayH1" Anchor="toc#attackerInput">Attacker</RadzenText>
+        <RadzenText TextStyle="TextStyle.DisplayH3" id="attacker">Attacker</RadzenText>
         <RadzenCardGroup>
             @if (comparison.ComparingAttackers)
             {
@@ -79,7 +78,7 @@
                 </RadzenCard>
             }
         </RadzenCardGroup>
-        <RadzenText TextStyle="TextStyle.DisplayH1" Anchor="toc#defenderInput">Defender</RadzenText>
+        <RadzenText TextStyle="TextStyle.DisplayH3" id="defender">Defender</RadzenText>
         <RadzenCardGroup>
             @if (comparison.ComparingDefenders)
             {
@@ -101,7 +100,7 @@
         </RadzenCardGroup>
     </RadzenCard>
     <RadzenCardGroup>
-        <RadzenText TextStyle="TextStyle.DisplayH1" Anchor="toc#fightResults">Fight Results</RadzenText>
+        <RadzenText TextStyle="TextStyle.DisplayH3" id="fightResults">Fight Results</RadzenText>
         <FightResult sim="ViewSim1"></FightResult>
         @if (comparison.ComparingAttackers)
         {
@@ -113,7 +112,7 @@
         }
     </RadzenCardGroup>
     <RadzenButton Click=@(() => FightUnits()) Text="Fight all Units" ButtonStyle="ButtonStyle.Primary" />
-    <RadzenText TextStyle="TextStyle.DisplayH1" Anchor="toc#fightStats">Fight Stats</RadzenText>
+    <RadzenText TextStyle="TextStyle.DisplayH3" id="fightStats">Fight Stats</RadzenText>
 
     @if (comparison.Simulation1.Stats.ColumnName != "")
     {
@@ -121,7 +120,6 @@
         <GraphsDisplay comparison="comparison"></GraphsDisplay>
 
     }
-</RadzenBody>
 @code {
 
     public Comparison comparison { get; set; }
