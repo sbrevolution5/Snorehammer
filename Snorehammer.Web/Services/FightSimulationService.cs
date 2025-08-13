@@ -44,6 +44,7 @@ namespace Snorehammer.Web.Services
             List<List<WeaponSimulation>> listPerWeapon = new List<List<WeaponSimulation>>();
             foreach (var weapon in multiSim.Attacker.Attacks)
             {
+                weapon.UnitName = multiSim.Attacker.Name;
                 //need to combine the fights per weapon into a list with only that weapon.  
                 var singleWeaponList = multiSim.FightSimulations.SelectMany(f => f.WeaponSimulations.Where(w => w.Id == weapon.Id)).ToList();
                 listPerWeapon.Add(singleWeaponList);
