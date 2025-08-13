@@ -31,7 +31,9 @@ namespace Snorehammer.Web.Services
                 var i = 0;
                 foreach (var weapon in sim.Attacker.Attacks)
                 {
-                    sim.WeaponSimulations.Add(new WeaponSimulation((AttackProfile)weapon.Clone(), (UnitProfile)sim.Defender.Clone(), i));
+                    weapon.Id = i;
+                    sim.WeaponSimulations.Add(
+                        new WeaponSimulation((AttackProfile)weapon.Clone(), (UnitProfile)sim.Defender.Clone(), i));
                     i++;
                 }
                 SimulateFight(sim);
@@ -43,7 +45,8 @@ namespace Snorehammer.Web.Services
             foreach (var weapon in multiSim.Attacker.Attacks)
             {
                 //need to combine the fights per weapon into a list with only that weapon.  
-                var singleWeaponList = multiSim.FightSimulations.SelectMany(f => f.WeaponSimulations.Where(w => w.Weapon.Id == weapon.Id));
+                var singleWeaponList = multiSim.FightSimulations.SelectMany(f => f.WeaponSimulations.Where(w => w.Id == weapon.Id)).ToList();
+                listPerWeapon.Add(singleWeaponList);
                 //then add a per weapon stats object for each weapon
                 var multiStats = new MultiFightStats();
                 //then run set averages on each list and add to overall simulation
@@ -534,6 +537,7 @@ namespace Snorehammer.Web.Services
 
         private void SetDamageStatsAfterWound(WeaponSimulation weaponSim)
         {
+            weaponSim.Stats.ColumnName = weaponSim.Weapon.Name;
             if (weaponSim.Stats.ModelsDestroyed >= weaponSim.Defender.ModelCount)
             {
                 weaponSim.Stats.UnitEntirelyDestroyed = true;

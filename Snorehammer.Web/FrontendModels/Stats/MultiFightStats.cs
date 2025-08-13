@@ -21,6 +21,7 @@ namespace Snorehammer.Web.FrontendModels.Stats
         public List<MultiFightStats> PerWeaponStats { get; set; } = new List<MultiFightStats>();
         public void SetAverages(IEnumerable<ISimulationForStats> fightSimulations)
         {
+            ColumnName = fightSimulations.Select(f => f.Stats.ColumnName).First();
             AttackNumber = (float)fightSimulations.Select(f => f.Stats.AttackNumber).Average();
             DamageNumber = (float)fightSimulations.Select(f => f.Stats.DamageNumber).Average();
             ModelsDestroyed = (float)fightSimulations.Select(f => f.Stats.ModelsDestroyed).Average();

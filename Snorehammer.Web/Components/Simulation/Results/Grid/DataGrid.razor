@@ -4,50 +4,46 @@
 {
 
     <RadzenDataGrid Data="comparisonStats" GridLines="DataGridGridLines.Both" AllowSorting="true" CellRender="@CellRender">
-        @*<Template Context="MultiFightStats">
-             <RadzenDataGrid Data="MultiFightStats.PerWeaponStats" GridLines="DataGridGridLines.Both" AllowSorting="true" CellRender="@CellRender">
+        <Template Context="MultiFightStats">
+            <RadzenDataGrid Data="MultiFightStats.PerWeaponStats" GridLines="DataGridGridLines.Both" AllowSorting="true" CellRender="@CellRender">
                 <Columns>
                     <RadzenDataGridColumn Property="@nameof(MultiFightStats.ColumnName)" Title="Name"></RadzenDataGridColumn>
-                    <RadzenDataGridColumn Property="@nameof(MultiFightStats.AttackNumber)"
-                                          class="@ConditionalClassList(MultiFightStats.AttackNumber, MultiFightStats.PerWeaponStats.Select(s => s.AttackNumber))"
-                                          Title="Attacks Made"></RadzenDataGridColumn>
+                    @if (showMultiAttack)
+                    {
+                        <RadzenDataGridColumn Property="@nameof(MultiFightStats.AttackNumber)"
+                                              Title="Attacks Made"></RadzenDataGridColumn>
+                    }
                     <RadzenDataGridColumn Property="@nameof(MultiFightStats.AttacksHit)"
-                                          class="@ConditionalClassList(MultiFightStats.AttacksHit, MultiFightStats.PerWeaponStats.Select(s => s.AttacksHit))"
                                           Title="Attacks Hit"></RadzenDataGridColumn>
                     <RadzenDataGridColumn Property="@nameof(MultiFightStats.WoundsSuccessful)"
-                                          class="@ConditionalClassList(MultiFightStats.WoundsSuccessful, MultiFightStats.PerWeaponStats.Select(s => s.WoundsSuccessful))"
                                           Title="Wounds Rolls Successful"></RadzenDataGridColumn>
                     <RadzenDataGridColumn Property="@nameof(MultiFightStats.ArmorSavesFailed)"
-                                          class="@ConditionalClassList(MultiFightStats.ArmorSavesFailed, MultiFightStats.PerWeaponStats.Select(s => s.ArmorSavesFailed))"
                                           Title="Armor Saves Failed"></RadzenDataGridColumn>
-                    <RadzenDataGridColumn Property="@nameof(MultiFightStats.WoundsInflicted)"
-                                          class="@ConditionalClassList(MultiFightStats.WoundsInflicted, MultiFightStats.PerWeaponStats.Select(s => s.WoundsInflicted))"
-                                          Title="Damage Before FNP"></RadzenDataGridColumn>
-                    <RadzenDataGridColumn Property="@nameof(MultiFightStats.FeelNoPainMade)"
-                                          class="@ConditionalClassList(MultiFightStats.FeelNoPainMade, MultiFightStats.PerWeaponStats.Select(s => s.FeelNoPainMade))"
-                                          Title="FNP Successful"></RadzenDataGridColumn>
+                    @if (showFnp)
+                    {
+
+                        <RadzenDataGridColumn Property="@nameof(MultiFightStats.WoundsInflicted)"
+                                              Title="Damage Before FNP"></RadzenDataGridColumn>
+                        <RadzenDataGridColumn Property="@nameof(MultiFightStats.FeelNoPainMade)"
+                                              Title="FNP Successful"></RadzenDataGridColumn>
+                    }
                     <RadzenDataGridColumn Property="@nameof(MultiFightStats.DamageNumber)"
-                                          class="@ConditionalClassList(MultiFightStats.DamageNumber, MultiFightStats.PerWeaponStats.Select(s => s.DamageNumber))"
                                           Title="Total Damage"></RadzenDataGridColumn>
                     @if (comparison.Simulation1.Rounds > 1)
                     {
 
                         <RadzenDataGridColumn Property="@nameof(MultiFightStats.UnitDamaged)"
-                                              class="@ConditionalClassList(MultiFightStats.UnitDamaged, MultiFightStats.PerWeaponStats.Select(s => s.UnitDamaged))"
                                               Title="Times unit was damaged"></RadzenDataGridColumn>
                         <RadzenDataGridColumn Property="@nameof(MultiFightStats.LostAModel)"
-                                              class="@ConditionalClassList(MultiFightStats.LostAModel, MultiFightStats.PerWeaponStats.Select(s => s.LostAModel))"
                                               Title="Times 1 or more models lost"></RadzenDataGridColumn>
                         <RadzenDataGridColumn Property="@nameof(MultiFightStats.LessThanHalf)"
-                                              class="@ConditionalClassList(MultiFightStats.LessThanHalf, MultiFightStats.PerWeaponStats.Select(s => s.LessThanHalf))"
                                               Title="Times Unit left below half"></RadzenDataGridColumn>
                         <RadzenDataGridColumn Property="@nameof(MultiFightStats.UnitEntirelyDestroyed)"
-                                              class="@ConditionalClassList(MultiFightStats.UnitEntirelyDestroyed, MultiFightStats.PerWeaponStats.Select(s => s.UnitEntirelyDestroyed))"
                                               Title="Times unit was destroyed"></RadzenDataGridColumn>
                     }
                 </Columns>
             </RadzenDataGrid>
-        </Template> *@
+        </Template>
         <Columns>
             <RadzenDataGridColumn Property="@nameof(MultiFightStats.ColumnName)" Title="Name"></RadzenDataGridColumn>
             @if (showMultiAttack)
