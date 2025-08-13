@@ -534,6 +534,7 @@ namespace Snorehammer.Web.Services
 
         private void SetDamageStatsAfterWound(WeaponSimulation weaponSim)
         {
+            weaponSim.Stats.ColumnName = weaponSim.Weapon.Name;
             if (weaponSim.Stats.ModelsDestroyed >= weaponSim.Defender.ModelCount)
             {
                 weaponSim.Stats.UnitEntirelyDestroyed = true;
