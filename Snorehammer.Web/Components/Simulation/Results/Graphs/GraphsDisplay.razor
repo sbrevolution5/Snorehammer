@@ -5,7 +5,7 @@
 <RadzenStack>
 
     <RadzenText>Compare Units</RadzenText>
-    <ComparisonGraph comparison="@comparison"></ComparisonGraph>
+    <ComparisonGraph comparison="@comparison" TotalSims="comparison.Simulation1.Rounds"></ComparisonGraph>
 </RadzenStack>
 <RadzenStack>
 
@@ -14,7 +14,7 @@
         <RadzenLabel>Weapon 1</RadzenLabel>
         <RadzenDropDown @bind-Value=@weapon1Dropdown Data=@WeaponChoices/>
     </RadzenRow>
-    <ComparisonGraph comparison="@comparison"></ComparisonGraph>
+    <ComparisonGraph comparison="@comparison" TotalSims="comparison.Simulation1.Rounds"></ComparisonGraph>
 </RadzenStack>
 @code {
     [Parameter]
