@@ -114,7 +114,12 @@
         //if we compare defenders, we should show data from one weapon against two different defenders
         else if (comparison.ComparingDefenders)
         {
-
+            graphData.dataA = comparison.Simulation1.FightSimulations.SelectMany(f => f.WeaponSimulations.Select(w => w.Stats)).Where(s => s.ColumnName == weapon1Dropdown.AttackName).ToList();
+            graphData.titleA = graphData.dataA.FirstOrDefault().ColumnName;
+            graphData.multiA = comparison.Simulation1.Stats.PerWeaponStats.First(s => s.ColumnName == weapon1Dropdown.AttackName);
+            graphData.dataB = comparison.AlternateDefenseSimulation.FightSimulations.SelectMany(f => f.WeaponSimulations.Select(w => w.Stats)).Where(s => s.ColumnName == weapon2Dropdown.AttackName).ToList();
+            graphData.titleB = graphData.dataB.FirstOrDefault().ColumnName;
+            graphData.multiB = comparison.AlternateDefenseSimulation.Stats.PerWeaponStats.First(s => s.ColumnName == weapon2Dropdown.AttackName);
         }
         else
         {
