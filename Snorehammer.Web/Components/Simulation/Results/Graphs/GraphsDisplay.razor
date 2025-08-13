@@ -5,16 +5,22 @@
 <RadzenStack>
 
     <RadzenText>Compare Units</RadzenText>
-    <ComparisonGraph comparison="@comparison" TotalSims="comparison.Simulation1.Rounds"></ComparisonGraph>
+    <ComparisonGraph graphData="unitGraphData"></ComparisonGraph>
 </RadzenStack>
 <RadzenStack>
 
     <RadzenText>Compare Weapons</RadzenText>
     <RadzenRow>
         <RadzenLabel>Weapon 1</RadzenLabel>
-        <RadzenDropDown @bind-Value=@weapon1Dropdown Data=@WeaponChoices/>
+        <RadzenDropDown @bind-Value=@weapon1Dropdown Data=@GroupedWeapons>
+            <Template>
+                <span style="display:inline-block; font-weight: @(context.CompanyName != null ? "bold" : "normal");">
+                    @(context.CompanyName ?? $"OrderID: {context.OrderID}, Order date: {string.Format("{0:d}", context.OrderDate)}")
+                </span>
+            </Template>
+        </RadzenDropDown>
     </RadzenRow>
-    <ComparisonGraph comparison="@comparison" TotalSims="comparison.Simulation1.Rounds"></ComparisonGraph>
+    <ComparisonGraph graphData="weaponGraphData"></ComparisonGraph>
 </RadzenStack>
 @code {
     [Parameter]
@@ -23,7 +29,7 @@
     public GraphData weaponGraphData { get; set; }
     public Comparison WeaponComparison { get; set; }
     public string weapon1Dropdown { get; set; }
-    public IEnumerable<AttackProfile> WeaponChoices { get; set; }
+    public IEnumerable<AttackProfile> GroupedWeapons { get; set; }
     protected override Task OnInitializedAsync()
     {
         unitGraphData = DataFromComparison();
@@ -68,8 +74,14 @@
     }
     protected override Task OnParametersSetAsync()
     {
-        WeaponChoices = comparison.Simulation1.Attacker.Attacks;
+        GroupWeapons();
         return base.OnParametersSetAsync();
+    }
+    private void GroupWeapons()
+    {
+        //for each simulation, get a list of the attacker's weapons
+        //group by unit name
+
     }
 }
 
