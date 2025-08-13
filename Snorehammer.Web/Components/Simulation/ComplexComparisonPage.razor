@@ -76,20 +76,14 @@
     <RadzenCardGroup>
         @if (comparison.ComparingDefenders)
         {
-            <RadzenCard Variant="Variant.Text">
                 <UnitInput @bind-Unit="comparison.Simulation1.Defender" Attacker=false />
                 <RadzenButton Click=@(() => SetDefender(comparison.AlternateDefenseSimulation.Defender, comparison.Simulation1)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Defender 2 </span></RadzenButton>
-            </RadzenCard>
-            <RadzenCard Variant="Variant.Text">
                 <UnitInput @bind-Unit="comparison.AlternateDefenseSimulation.Defender" Attacker=false />
                 <RadzenButton Click=@(() => SetDefender(comparison.Simulation1.Defender, comparison.AlternateDefenseSimulation)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Defender 1 </span></RadzenButton>
-            </RadzenCard>
         }
         else
         {
-            <RadzenCard Variant="Variant.Text">
                 <UnitInput @bind-Unit="comparison.Simulation1.Defender" Attacker=false />
-            </RadzenCard>
         }
     </RadzenCardGroup>
 </RadzenCard>
