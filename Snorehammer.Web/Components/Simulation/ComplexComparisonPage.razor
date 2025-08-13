@@ -60,22 +60,16 @@
         <RadzenCardGroup>
             @if (comparison.ComparingAttackers)
             {
-                <RadzenCard Variant="Variant.Text">
                     <UnitInput @bind-Unit="comparison.Simulation1.Attacker" Attacker=true />
 
                     <RadzenButton Click=@(() => SetAttacker(comparison.AlternateAttackSimulation.Attacker.Attacks[0], comparison.Simulation1)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Attacker 2 </span></RadzenButton>
-                </RadzenCard>
-                <RadzenCard Variant="Variant.Text">
 
                     <UnitInput @bind-Unit="comparison.AlternateAttackSimulation.Attacker" Attacker=true />
                     <RadzenButton Click=@(() => SetAttacker(comparison.Simulation1.Attacker.Attacks[0], comparison.AlternateAttackSimulation)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Attacker 1 </span></RadzenButton>
-                </RadzenCard>
             }
             else
             {
-                <RadzenCard Variant="Variant.Text">
                     <UnitInput @bind-Unit="comparison.Simulation1.Attacker" Attacker=true />
-                </RadzenCard>
             }
         </RadzenCardGroup>
         <RadzenText TextStyle="TextStyle.DisplayH3" id="defender">Defender</RadzenText>
