@@ -11,15 +11,28 @@
     <RadzenText>Compare Weapons </RadzenText>
     <RadzenRow>
         <RadzenLabel>Weapon 1</RadzenLabel>
-        <RadzenDropDown @bind-Value=@weapon1Dropdown Data=@GroupedWeapons>
+        <RadzenDropDown @bind-Value=@weapon1Dropdown SelectedItemChanged=@(() => WeaponGraphChanged()) Data=@GroupedWeapons>
             <Template>
                 <span style="display:inline-block; font-weight: @(context.UnitName != null ? "bold" : "normal");">
                     @(context.UnitName ?? $"{context.AttackName}")
                 </span>
             </Template>
         </RadzenDropDown>
+        <RadzenLabel>Weapon 2</RadzenLabel>
+        <RadzenDropDown @bind-Value=@weapon2Dropdown SelectedItemChanged=@(() => WeaponGraphChanged()) Data=@GroupedWeapons>
+            <Template>
+                <span style="display:inline-block; font-weight: @(context.UnitName != null ? "bold" : "normal");">
+                    @(context.UnitName ?? $"{context.AttackName}")
+                </span>
+            </Template>
+        </RadzenDropDown>
+
     </RadzenRow>
-    @* <ComparisonGraph graphData="weaponGraphData"></ComparisonGraph> *@
+    @if (weaponGraphData is not null)
+    {
+
+        <ComparisonGraph graphData="weaponGraphData"></ComparisonGraph>
+    }
 </RadzenStack>
 @code {
     [Parameter]
@@ -27,12 +40,23 @@
     public GraphData unitGraphData { get; set; }
     public GraphData weaponGraphData { get; set; }
     private GroupData weapon1Dropdown { get; set; }
+    private GroupData weapon2Dropdown { get; set; }
     private IEnumerable<GroupData> GroupedWeapons { get; set; }
     protected override Task OnInitializedAsync()
     {
         unitGraphData = DataFromComparison();
-        // weaponGraphData = DataFromWeapons();
+
         return base.OnInitializedAsync();
+    }
+    protected void WeaponGraphChanged()
+    {
+        if (weapon1Dropdown is not null && weapon2Dropdown is not null)
+        {
+            if (!string.IsNullOrEmpty(weapon1Dropdown.AttackName) && !string.IsNullOrEmpty(weapon2Dropdown.AttackName))
+            {
+                weaponGraphData = DataFromWeapons();
+            }
+        }
     }
     private GraphData DataFromComparison()
     {
@@ -71,43 +95,33 @@
         }
         return graphData;
     }
-    // private GraphData DataFromWeapons()
-    // {
-    //     var graphData = new GraphData();
-    //     graphData.dataA = comparison.Simulation1.PerWeaponStats.Where(s => s.ColumnName == wea).FightSimulations.Select(f => f.Stats).ToList();
-    //     graphData.titleA = comparison.Simulation1.Stats.ColumnName;
-    //     graphData.multiA = comparison.Simulation1.Stats;
-    //     graphData.showFnp = comparison.Simulation1.Defender.FeelNoPain;
-    //     graphData.isMultiAttack = comparison.Simulation1.Attacker.Attacks.Any(a => a.IsVariableAttacks);
-    //     if (comparison.ComparingAttackers)
-    //     {
-    //         graphData.dataB = comparison.AlternateAttackSimulation.FightSimulations.Select(f => f.Stats).ToList();
-    //         graphData.titleB = comparison.AlternateAttackSimulation.Stats.ColumnName;
-    //         graphData.multiB = comparison.AlternateAttackSimulation.Stats;
-    //         graphData.isMultiAttack = comparison.AlternateAttackSimulation.Attacker.Attacks.Any(a => a.IsVariableAttacks);
-    //     }
-    //     else if (comparison.ComparingDefenders)
-    //     {
-    //         graphData.dataB = comparison.AlternateDefenseSimulation.FightSimulations.Select(f => f.Stats).ToList();
-    //         graphData.titleB = comparison.AlternateDefenseSimulation.Stats.ColumnName;
-    //         graphData.multiB = comparison.AlternateDefenseSimulation.Stats;
-    //         graphData.showFnp = comparison.AlternateDefenseSimulation.Defender.FeelNoPain;
+    private GraphData DataFromWeapons()
+    {
+        //if we aren't comparing, we should show the data between two different weapons on the same unit.
+        var graphData = new GraphData();
+        graphData.showFnp = comparison.Simulation1.Defender.FeelNoPain;
+        graphData.isMultiAttack = comparison.Simulation1.Attacker.Attacks.Any(a => a.IsVariableAttacks);
+        //if we compare attackers, we should show the data from separate simulations
+        if (comparison.ComparingAttackers)
+        {
 
-    //     }
-    //     else
-    //     {
-    //         graphData.titleB = "";
-    //         graphData.dataB = new List<FightStats>();
-    //         graphData.multiB = new MultiFightStats()
-    //         {
-    //             LessThanHalf = -1,
-    //             LostAModel = -1,
-    //             UnitDamaged = -1,
-    //             UnitEntirelyDestroyed = -1
-    //         };
-    //     }
-    //     return graphData;
-    // }
+        }
+        //if we compare defenders, we should show data from one weapon against two different defenders
+        else if (comparison.ComparingDefenders)
+        {
+
+        }
+        else
+        {
+            graphData.dataA = comparison.Simulation1.FightSimulations.SelectMany(f => f.WeaponSimulations.Select(w => w.Stats)).Where(s => s.ColumnName == weapon1Dropdown.AttackName).ToList();
+            graphData.titleA = graphData.dataA.FirstOrDefault().ColumnName;
+            graphData.multiA = comparison.Simulation1.Stats.PerWeaponStats.First(s => s.ColumnName == weapon1Dropdown.AttackName);
+            graphData.dataB = comparison.Simulation1.FightSimulations.SelectMany(f => f.WeaponSimulations.Select(w => w.Stats)).Where(s => s.ColumnName == weapon2Dropdown.AttackName).ToList();
+            graphData.titleB = graphData.dataB.FirstOrDefault().ColumnName;
+            graphData.multiB = comparison.Simulation1.Stats.PerWeaponStats.First(s => s.ColumnName == weapon2Dropdown.AttackName);
+        }
+        return graphData;
+    }
     protected override Task OnParametersSetAsync()
     {
         GroupWeapons();

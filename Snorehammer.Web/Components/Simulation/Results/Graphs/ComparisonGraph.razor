@@ -106,5 +106,10 @@
 @code {
     [Parameter]
     public GraphData graphData { get; set; }
-       
+    protected override void OnParametersSet()
+    {
+        StateHasChanged();
+        base.OnParametersSet();
+    }
+
 }
