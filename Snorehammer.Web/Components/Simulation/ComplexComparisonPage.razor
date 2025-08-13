@@ -8,6 +8,12 @@
 @using Snorehammer.Web.FrontendModels.Simulations
 @using Snorehammer.Web.Services
 @rendermode InteractiveServer
+<RadzenToc Selector=".tocBody" Orientation=Orientation.Horizontal style="position: sticky; top: 0; right: 0;">
+    <RadzenTocItem Text="Attacker Input" Selector="#attackerInput"></RadzenTocItem>
+    <RadzenTocItem Text="Defender Input" Selector="#defenderInput"></RadzenTocItem>
+    <RadzenTocItem Text="Fight results" Selector="#fightResults"></RadzenTocItem>
+    <RadzenTocItem Text="Fight Stats" Selector="#fightStats"></RadzenTocItem>
+</RadzenToc>
 <RadzenCard>
     <RadzenText TextStyle="TextStyle.H3">
         Don't know warhammer?  No Problem!
@@ -20,6 +26,8 @@
         <RadzenButton Click="@(() => SetupDemo3())" Text="Comparison of Space marines or blood claws (light infantry) vs. Genestealers (Melee bugs)" ButtonStyle="ButtonStyle.Primary"></RadzenButton>
     </RadzenRow>
 </RadzenCard>
+<RadzenBody class="tocBody">
+
 <h3>ComplexComparison</h3>
 
 <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap">
@@ -51,7 +59,7 @@
         </RadzenColumn>
 </RadzenStack>
 
-<RadzenCard Variant="Variant.Text">
+<RadzenCard Variant="Variant.Text" Anchor="toc#attackerInput">
     <h1>Attacker</h1>
     <RadzenCardGroup>
         @if (comparison.ComparingAttackers)
@@ -113,6 +121,7 @@
     <GraphsDisplay comparison="comparison"></GraphsDisplay>
 
 }
+</RadzenBody>
 @code {
 
     public Comparison comparison { get; set; }
