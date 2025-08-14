@@ -203,8 +203,8 @@
                 Attacker = (UnitProfile)comparison.Simulation1.Attacker.Clone()
             };
         AssignMultiSims(1000);
-        await JsRuntime.InvokeVoidAsync("ScrollElementIntoView",resultsSection);
         await FightUnits();
+        await JsRuntime.InvokeVoidAsync("ScrollElementIntoView",resultsSection);
     }
     public async Task SetupDemo2()
     {
@@ -307,6 +307,8 @@
         };
         AssignMultiSims(1000);
         await FightUnits();
+        await JsRuntime.InvokeVoidAsync("ScrollElementIntoView", resultsSection);
+
 
     }
     public async Task SetupDemo3()
@@ -425,7 +427,7 @@
         };
         AssignMultiSims(1000);
         await FightUnits();
-        StateHasChanged();
+        await JsRuntime.InvokeVoidAsync("ScrollElementIntoView", resultsSection);
     }
     private async Task FightUnits()
     {
