@@ -263,6 +263,13 @@
                                         <RadzenCheckBox @bind-Value=@attack.AntiBeast Name="AntiBeast" />
                                         <RadzenLabel Text="Anti-Beast" Component="AntiBeast" class="rz-ms-2" />
                                     </RadzenColumn>
+                                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                                        <RadzenFormField Visible=attack.AntiPsyker Style="width: 100%;">
+                                            <RadzenNumeric @bind-Value="@attack.AntiPsykerValue" />
+                                        </RadzenFormField>
+                                        <RadzenCheckBox @bind-Value=@attack.AntiPsyker Name="AntiPsyker" />
+                                        <RadzenLabel Text="Anti-Psyker" Component="AntiPsyker" class="rz-ms-2" />
+                                    </RadzenColumn>
                                 </ChildContent>
                                 <SummaryTemplate>
                                     @AntiSummary()
