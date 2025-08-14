@@ -61,12 +61,18 @@
     <RadzenCardGroup>
         @if (comparison.ComparingAttackers)
         {
-            <UnitInput @bind-Unit="comparison.Simulation1.Attacker" Attacker=true />
+            <RadzenCard>
 
-            <RadzenButton Click=@(() => SetAttacker(comparison.AlternateAttackSimulation.Attacker.Attacks[0], comparison.Simulation1)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Attacker 2 </span></RadzenButton>
+                <UnitInput @bind-Unit="comparison.Simulation1.Attacker" Attacker=true />
 
-            <UnitInput @bind-Unit="comparison.AlternateAttackSimulation.Attacker" Attacker=true />
-            <RadzenButton Click=@(() => SetAttacker(comparison.Simulation1.Attacker.Attacks[0], comparison.AlternateAttackSimulation)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Attacker 1 </span></RadzenButton>
+                <RadzenButton Click=@(() => SetAttacker(comparison.AlternateAttackSimulation.Attacker.Attacks[0], comparison.Simulation1)) ButtonStyle="ButtonStyle.Primary" class="rz-mt-2" Style="width: stretch"><RadzenIcon Icon="content_copy" /><span> Copy from Attacker 2 </span></RadzenButton>
+
+            </RadzenCard>
+            <RadzenCard>
+
+                <UnitInput @bind-Unit="comparison.AlternateAttackSimulation.Attacker" Attacker=true />
+                <RadzenButton Click=@(() => SetAttacker(comparison.Simulation1.Attacker.Attacks[0], comparison.AlternateAttackSimulation)) ButtonStyle="ButtonStyle.Primary" class="rz-mt-2" Style="width: stretch"><RadzenIcon Icon="content_copy" /><span> Copy from Attacker 1 </span></RadzenButton>
+            </RadzenCard>
         }
         else
         {
@@ -77,10 +83,14 @@
     <RadzenCardGroup>
         @if (comparison.ComparingDefenders)
         {
-            <UnitInput @bind-Unit="comparison.Simulation1.Defender" Attacker=false />
-            <RadzenButton Click=@(() => SetDefender(comparison.AlternateDefenseSimulation.Defender, comparison.Simulation1)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Defender 2 </span></RadzenButton>
-            <UnitInput @bind-Unit="comparison.AlternateDefenseSimulation.Defender" Attacker=false />
-            <RadzenButton Click=@(() => SetDefender(comparison.Simulation1.Defender, comparison.AlternateDefenseSimulation)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Defender 1 </span></RadzenButton>
+            <RadzenCard>
+                <UnitInput @bind-Unit="comparison.Simulation1.Defender" Attacker=false />
+                <RadzenButton Click=@(() => SetDefender(comparison.AlternateDefenseSimulation.Defender, comparison.Simulation1)) ButtonStyle="ButtonStyle.Primary" class="rz-mt-2" Style="width: stretch"><RadzenIcon Icon="content_copy" /><span> Copy from Defender 2 </span></RadzenButton>
+            </RadzenCard>
+            <RadzenCard>
+                <UnitInput @bind-Unit="comparison.AlternateDefenseSimulation.Defender" Attacker=false />
+                <RadzenButton Click=@(() => SetDefender(comparison.Simulation1.Defender, comparison.AlternateDefenseSimulation)) ButtonStyle="ButtonStyle.Primary" class="rz-mt-2" Style="width: stretch"><RadzenIcon Icon="content_copy" /><span> Copy from Defender 1 </span></RadzenButton>
+            </RadzenCard>
         }
         else
         {
@@ -99,7 +109,7 @@
         <RadzenCard class="rz-my-1" Variant="Variant.Outlined">
 
             <FightResult sim="ViewSim1"></FightResult>
-            </RadzenCard>
+        </RadzenCard>
         @if (comparison.ComparingAttackers)
         {
             <RadzenCard class="rz-my-1" Variant="Variant.Outlined">
