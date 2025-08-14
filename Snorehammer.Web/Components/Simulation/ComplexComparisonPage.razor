@@ -94,15 +94,25 @@
 
             <RadzenText TextStyle="TextStyle.DisplayH3" id="fightResults">Fight Results</RadzenText>
         </RadzenRow>
-        <FightResult sim="ViewSim1"></FightResult>
-        @if (comparison.ComparingAttackers)
-        {
-            <FightResult sim="ViewSim2"></FightResult>
-        }
-        @if (comparison.ComparingDefenders)
-        {
-            <FightResult sim="ViewSim2"></FightResult>
-        }
+        <RadzenRow>
+            <RadzenColumn Size="12" SizeMD="6">
+                <FightResult sim="ViewSim1"></FightResult>
+            </RadzenColumn>
+            @if (comparison.ComparingAttackers)
+            {
+                <RadzenColumn Size="12" SizeMD="6">
+
+                    <FightResult sim="ViewSim2"></FightResult>
+                </RadzenColumn>
+            }
+            @if (comparison.ComparingDefenders)
+            {
+                <RadzenColumn Size="12" SizeMD="6">
+
+                    <FightResult sim="ViewSim2"></FightResult>
+                </RadzenColumn>
+            }
+        </RadzenRow>
     </RadzenCardGroup>
 </div>
 <RadzenButton Click=@(() => FightUnits()) Text="Fight all Units" ButtonStyle="ButtonStyle.Primary" />
