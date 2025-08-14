@@ -8,9 +8,18 @@
     </HeaderTemplate>
     <ChildContent>
         <EditForm Model="@attack">
+            <RadzenRow>
+
             <RadzenLabel>Ranged</RadzenLabel>
             <RadzenSwitch @bind-Value=@attack.Melee />
             <RadzenLabel>Melee</RadzenLabel>
+            </RadzenRow>
+            <RadzenRow>
+                <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                    <RadzenCheckBox @bind-Value=@attack.Psychic Name="Psychic" />
+                    <RadzenLabel Text="Psychic tag" Component="Psychic" class=@($"rz-ms-2 {MeleeLabel(false)}") />
+                </RadzenColumn>
+            </RadzenRow>
             <RadzenRow AlignItems="AlignItems.End" Wrap="FlexWrap.Wrap" Gap="1rem">
                 <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
                     <RadzenStack>
