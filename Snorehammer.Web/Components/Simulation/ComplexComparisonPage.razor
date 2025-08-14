@@ -26,100 +26,88 @@
         <RadzenButton Click="@(() => SetupDemo3())" Text="Comparison of Space marines or blood claws (light infantry) vs. Genestealers (Melee bugs)" ButtonStyle="ButtonStyle.Primary"></RadzenButton>
     </RadzenRow>
 </RadzenCard>
-    <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap">
-        <RadzenColumn Size="6" SizeMD="3" SizeLG="2">
+<RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap">
+    <RadzenColumn Size="6" SizeMD="3" SizeLG="2">
 
-            <RadzenSwitch Disabled=@comparison.ComparingDefenders @bind-Value=@comparison.ComparingAttackers />
-            <RadzenLabel>Compare Attackers</RadzenLabel>
-        </RadzenColumn>
-        <RadzenColumn Size="6" SizeMD="3" SizeLG="2">
+        <RadzenSwitch Disabled=@comparison.ComparingDefenders @bind-Value=@comparison.ComparingAttackers />
+        <RadzenLabel>Compare Attackers</RadzenLabel>
+    </RadzenColumn>
+    <RadzenColumn Size="6" SizeMD="3" SizeLG="2">
 
-            <RadzenSwitch Disabled=@comparison.ComparingAttackers @bind-Value=@comparison.ComparingDefenders />
-            <RadzenLabel>Compare Defenders</RadzenLabel>
-        </RadzenColumn>
-        <RadzenColumn Size="12" SizeMD="6" SizeLG="6">
-            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
-                <EditForm Model="SelectedNumberOfSimulations">
+        <RadzenSwitch Disabled=@comparison.ComparingAttackers @bind-Value=@comparison.ComparingDefenders />
+        <RadzenLabel>Compare Defenders</RadzenLabel>
+    </RadzenColumn>
+    <RadzenColumn Size="12" SizeMD="6" SizeLG="6">
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
+            <EditForm Model="SelectedNumberOfSimulations">
 
-                    <RadzenSelectBar TValue="int" Size="ButtonSize.Small" @bind-Value="SelectedNumberOfSimulations" Change="x => AssignMultiSims(x)">
-                        <Items>
-                            <RadzenSelectBarItem Value="1" Text="x1" />
-                            <RadzenSelectBarItem Value="5" Text="x5" />
-                            <RadzenSelectBarItem Value="10" Text="x10" />
-                            <RadzenSelectBarItem Value="100" Text="x100" />
-                            <RadzenSelectBarItem Value="1000" Text="x1000" />
-                        </Items>
-                    </RadzenSelectBar>
-                </EditForm>
-            </RadzenStack>
-        </RadzenColumn>
-    </RadzenStack>
+                <RadzenSelectBar TValue="int" Size="ButtonSize.Small" @bind-Value="SelectedNumberOfSimulations" Change="x => AssignMultiSims(x)">
+                    <Items>
+                        <RadzenSelectBarItem Value="1" Text="x1" />
+                        <RadzenSelectBarItem Value="5" Text="x5" />
+                        <RadzenSelectBarItem Value="10" Text="x10" />
+                        <RadzenSelectBarItem Value="100" Text="x100" />
+                        <RadzenSelectBarItem Value="1000" Text="x1000" />
+                    </Items>
+                </RadzenSelectBar>
+            </EditForm>
+        </RadzenStack>
+    </RadzenColumn>
+</RadzenStack>
 
-    <RadzenCard Variant="Variant.Text">
-        <RadzenText TextStyle="TextStyle.DisplayH3" id="attacker">Attacker</RadzenText>
-        <RadzenCardGroup>
-            @if (comparison.ComparingAttackers)
-            {
-                <RadzenCard Variant="Variant.Text">
-                    <UnitInput @bind-Unit="comparison.Simulation1.Attacker" Attacker=true />
-
-                    <RadzenButton Click=@(() => SetAttacker(comparison.AlternateAttackSimulation.Attacker.Attacks[0], comparison.Simulation1)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Attacker 2 </span></RadzenButton>
-                </RadzenCard>
-                <RadzenCard Variant="Variant.Text">
-
-                    <UnitInput @bind-Unit="comparison.AlternateAttackSimulation.Attacker" Attacker=true />
-                    <RadzenButton Click=@(() => SetAttacker(comparison.Simulation1.Attacker.Attacks[0], comparison.AlternateAttackSimulation)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Attacker 1 </span></RadzenButton>
-                </RadzenCard>
-            }
-            else
-            {
-                <RadzenCard Variant="Variant.Text">
-                    <UnitInput @bind-Unit="comparison.Simulation1.Attacker" Attacker=true />
-                </RadzenCard>
-            }
-        </RadzenCardGroup>
-        <RadzenText TextStyle="TextStyle.DisplayH3" id="defender">Defender</RadzenText>
-        <RadzenCardGroup>
-            @if (comparison.ComparingDefenders)
-            {
-                <RadzenCard Variant="Variant.Text">
-                    <UnitInput @bind-Unit="comparison.Simulation1.Defender" Attacker=false />
-                    <RadzenButton Click=@(() => SetDefender(comparison.AlternateDefenseSimulation.Defender, comparison.Simulation1)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Defender 2 </span></RadzenButton>
-                </RadzenCard>
-                <RadzenCard Variant="Variant.Text">
-                    <UnitInput @bind-Unit="comparison.AlternateDefenseSimulation.Defender" Attacker=false />
-                    <RadzenButton Click=@(() => SetDefender(comparison.Simulation1.Defender, comparison.AlternateDefenseSimulation)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Defender 1 </span></RadzenButton>
-                </RadzenCard>
-            }
-            else
-            {
-                <RadzenCard Variant="Variant.Text">
-                    <UnitInput @bind-Unit="comparison.Simulation1.Defender" Attacker=false />
-                </RadzenCard>
-            }
-        </RadzenCardGroup>
-    </RadzenCard>
+<RadzenCard Variant="Variant.Text">
+    <RadzenText TextStyle="TextStyle.DisplayH3" id="attacker">Attacker</RadzenText>
     <RadzenCardGroup>
-        <RadzenText TextStyle="TextStyle.DisplayH3" id="fightResults">Fight Results</RadzenText>
-        <FightResult sim="ViewSim1"></FightResult>
         @if (comparison.ComparingAttackers)
         {
-            <FightResult sim="ViewSim2"></FightResult>
+            <UnitInput @bind-Unit="comparison.Simulation1.Attacker" Attacker=true />
+
+            <RadzenButton Click=@(() => SetAttacker(comparison.AlternateAttackSimulation.Attacker.Attacks[0], comparison.Simulation1)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Attacker 2 </span></RadzenButton>
+
+            <UnitInput @bind-Unit="comparison.AlternateAttackSimulation.Attacker" Attacker=true />
+            <RadzenButton Click=@(() => SetAttacker(comparison.Simulation1.Attacker.Attacks[0], comparison.AlternateAttackSimulation)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Attacker 1 </span></RadzenButton>
         }
-        @if (comparison.ComparingDefenders)
+        else
         {
-            <FightResult sim="ViewSim2"></FightResult>
+            <UnitInput @bind-Unit="comparison.Simulation1.Attacker" Attacker=true />
         }
     </RadzenCardGroup>
-    <RadzenButton Click=@(() => FightUnits()) Text="Fight all Units" ButtonStyle="ButtonStyle.Primary" />
-    <RadzenText TextStyle="TextStyle.DisplayH3" id="fightStats">Fight Stats</RadzenText>
-
-    @if (comparison.Simulation1.Stats.ColumnName != "")
+    <RadzenText TextStyle="TextStyle.DisplayH3" id="defender">Defender</RadzenText>
+    <RadzenCardGroup>
+        @if (comparison.ComparingDefenders)
+        {
+                <UnitInput @bind-Unit="comparison.Simulation1.Defender" Attacker=false />
+                <RadzenButton Click=@(() => SetDefender(comparison.AlternateDefenseSimulation.Defender, comparison.Simulation1)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Defender 2 </span></RadzenButton>
+                <UnitInput @bind-Unit="comparison.AlternateDefenseSimulation.Defender" Attacker=false />
+                <RadzenButton Click=@(() => SetDefender(comparison.Simulation1.Defender, comparison.AlternateDefenseSimulation)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Defender 1 </span></RadzenButton>
+        }
+        else
+        {
+                <UnitInput @bind-Unit="comparison.Simulation1.Defender" Attacker=false />
+        }
+    </RadzenCardGroup>
+</RadzenCard>
+<RadzenCardGroup>
+    <RadzenText TextStyle="TextStyle.DisplayH3" id="fightResults">Fight Results</RadzenText>
+    <FightResult sim="ViewSim1"></FightResult>
+    @if (comparison.ComparingAttackers)
     {
-        <DataGrid comparison="comparison"></DataGrid>
-        <GraphsDisplay comparison="comparison"></GraphsDisplay>
-
+        <FightResult sim="ViewSim2"></FightResult>
     }
+    @if (comparison.ComparingDefenders)
+    {
+        <FightResult sim="ViewSim2"></FightResult>
+    }
+</RadzenCardGroup>
+<RadzenButton Click=@(() => FightUnits()) Text="Fight all Units" ButtonStyle="ButtonStyle.Primary" />
+<RadzenText TextStyle="TextStyle.DisplayH3" id="fightStats">Fight Stats</RadzenText>
+
+@if (comparison.Simulation1.Stats.ColumnName != "")
+{
+    <DataGrid comparison="comparison"></DataGrid>
+    <GraphsDisplay comparison="comparison"></GraphsDisplay>
+
+}
 @code {
 
     public Comparison comparison { get; set; }
