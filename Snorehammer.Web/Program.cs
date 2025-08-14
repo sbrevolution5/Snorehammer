@@ -1,3 +1,4 @@
+using Microsoft.JSInterop;
 using Radzen;
 using Snorehammer.Web.Components;
 
@@ -11,6 +12,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddRadzenComponents();
 builder.Services.AddOutputCache();
+
 
 var app = builder.Build();
 if (!app.Environment.IsDevelopment())

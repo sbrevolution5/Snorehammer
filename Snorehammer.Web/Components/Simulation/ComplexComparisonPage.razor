@@ -101,7 +101,7 @@
     }
 </RadzenCardGroup>
 <RadzenButton Click=@(() => FightUnits()) Text="Fight all Units" ButtonStyle="ButtonStyle.Primary" />
-<div @ref="resultsSection">
+<div @ref="resultsSection" id="resultsSection">
 
     <RadzenText TextStyle="TextStyle.DisplayH3" id="fightStats">Fight Stats</RadzenText>
 </div>
@@ -112,13 +112,18 @@
     <GraphsDisplay comparison="comparison"></GraphsDisplay>
 
 }
+<script type="text/javascript">
+    ScrollElementIntoView = element => {
+        var target = document.getElementById(element.id);
+        target.scrollIntoView({behavior:'smooth'});
+    }
+</script>
 @code {
 
     public Comparison comparison { get; set; }
     public bool ShowTable { get; set; } = true;
     private int SelectedNumberOfSimulations = 1;
-    // private ElementReference resultsSection { get; set; }
-    // List<Func<Task>> AfterRenderAsyncJobs = new();
+    private ElementReference resultsSection { get; set; }
     private FightSimulationService fightSimulationService = new FightSimulationService();
     private FightSimulation ViewSim1;
     private FightSimulation ViewSim2;
@@ -144,42 +149,24 @@
         comparison.AlternateAttackSimulation.SetSimNumber(x);
 
     }
-    // private void AddScrollJob()
-    // {
-    //     AfterRenderAsyncJobs.Add(ScrollToAddSection);
-    //     StateHasChanged();
-    // }
-    // private async Task ScrollToAddSection()
-    // {
-    //     await JsRuntime.InvokeVoidAsync("ScrollElementIntoView", resultsSection);
-    // }
-    // protected override async Task OnAfterRenderAsync(bool firstRender)
-    // {
-    //     while (AfterRenderAsyncJobs.Any())
-    //     {
-    //         var job = AfterRenderAsyncJobs.First();
-    //         AfterRenderAsyncJobs.Remove(job);
-    //         await job.Invoke();
-    //     }
-    // }
     public async Task SetupDemo1()
     {
         comparison = new Comparison();
         comparison.Simulation1 = new MultiFightSimulation()
-        {
+            {
 
-            Defender = new UnitProfile()
-            {
-                InvulnerableSave = 0,
-                MinimumSave = 3,
-                Toughness = 4,
-                Wounds = 2,
-                ModelCount = 10,
-                Name = "Intercessors"
-            },
-            Attacker = new UnitProfile()
-            {
-                Attacks = new List<AttackProfile>()
+                Defender = new UnitProfile()
+                {
+                    InvulnerableSave = 0,
+                    MinimumSave = 3,
+                    Toughness = 4,
+                    Wounds = 2,
+                    ModelCount = 10,
+                    Name = "Intercessors"
+                },
+                Attacker = new UnitProfile()
+                {
+                    Attacks = new List<AttackProfile>()
                 {
                     new AttackProfile()
                     {
@@ -197,25 +184,26 @@
                         RerollWound = true
                     }
                 },
-                InvulnerableSave = 0,
-                MinimumSave = 5,
-                Toughness = 3,
-                Wounds = 1,
-                ModelCount = 10,
-                Name = "Termagants"
-            }
-        };
+                    InvulnerableSave = 0,
+                    MinimumSave = 5,
+                    Toughness = 3,
+                    Wounds = 1,
+                    ModelCount = 10,
+                    Name = "Termagants"
+                }
+            };
         comparison.AlternateAttackSimulation = new MultiFightSimulation()
-        {
-            Defender = (UnitProfile)comparison.Simulation1.Defender.Clone(),
-            Attacker = (UnitProfile)comparison.Simulation1.Attacker.Clone()
-        };
+            {
+                Defender = (UnitProfile)comparison.Simulation1.Defender.Clone(),
+                Attacker = (UnitProfile)comparison.Simulation1.Attacker.Clone()
+            };
         comparison.AlternateDefenseSimulation = new MultiFightSimulation()
-        {
-            Defender = (UnitProfile)comparison.Simulation1.Defender.Clone(),
-            Attacker = (UnitProfile)comparison.Simulation1.Attacker.Clone()
-        };
+            {
+                Defender = (UnitProfile)comparison.Simulation1.Defender.Clone(),
+                Attacker = (UnitProfile)comparison.Simulation1.Attacker.Clone()
+            };
         AssignMultiSims(1000);
+        await JsRuntime.InvokeVoidAsync("ScrollElementIntoView",resultsSection);
         await FightUnits();
     }
     public async Task SetupDemo2()
@@ -525,5 +513,9 @@
         comparison.AlternateAttackSimulation.Attacker.Attacks[0].Name = comparison.Simulation1.Attacker.Attacks[0].Name + "(1)";
         AssignMultiSims(1000);
         return base.OnInitializedAsync();
+    }
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        return base.OnAfterRenderAsync(firstRender);
     }
 }
