@@ -55,6 +55,7 @@
         public int AntiPsykerValue { get; set; } = 2;
         public bool RapidFire { get; set; } = false;
         public int RapidFireBonus { get; set; } = 1;
+        public bool Psychic { get; set; } = false;
         //Overwatch should only be set based on the unit class
         public bool Overwatch { get; set; } = false;
         public object Clone()
