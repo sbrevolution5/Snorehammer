@@ -95,24 +95,24 @@
         </RadzenColumn>
     </RadzenRow>
     <RadzenCardGroup Style="justify-content:space-evenly">
-        <RadzenColumn Size="12" SizeMD="6">
 
+        <RadzenCard class="rz-my-1" Variant="Variant.Outlined">
 
             <FightResult sim="ViewSim1"></FightResult>
-        </RadzenColumn>
+            </RadzenCard>
         @if (comparison.ComparingAttackers)
         {
-            <RadzenColumn Size="12" SizeMD="6">
-
+            <RadzenCard class="rz-my-1" Variant="Variant.Outlined">
                 <FightResult sim="ViewSim2"></FightResult>
-            </RadzenColumn>
+            </RadzenCard>
+
         }
         @if (comparison.ComparingDefenders)
         {
-            <RadzenColumn Size="12" SizeMD="6">
-
+            <RadzenCard class="rz-my-1" Variant="Variant.Outlined">
                 <FightResult sim="ViewSim2"></FightResult>
-            </RadzenColumn>
+            </RadzenCard>
+
         }
 
     </RadzenCardGroup>
