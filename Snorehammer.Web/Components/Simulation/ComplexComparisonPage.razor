@@ -117,8 +117,8 @@
     public Comparison comparison { get; set; }
     public bool ShowTable { get; set; } = true;
     private int SelectedNumberOfSimulations = 1;
-    private ElementReference resultsSection { get; set; }
-    List<Func<Task>> AfterRenderAsyncJobs = new();
+    // private ElementReference resultsSection { get; set; }
+    // List<Func<Task>> AfterRenderAsyncJobs = new();
     private FightSimulationService fightSimulationService = new FightSimulationService();
     private FightSimulation ViewSim1;
     private FightSimulation ViewSim2;
@@ -144,24 +144,24 @@
         comparison.AlternateAttackSimulation.SetSimNumber(x);
 
     }
-    private void AddScrollJob()
-    {
-        AfterRenderAsyncJobs.Add(ScrollToAddSection);
-        StateHasChanged();
-    }
-    private async Task ScrollToAddSection()
-    {
-        await JsRuntime.InvokeVoidAsync("ScrollElementIntoView", resultsSection);
-    }
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        while (AfterRenderAsyncJobs.Any())
-        {
-            var job = AfterRenderAsyncJobs.First();
-            AfterRenderAsyncJobs.Remove(job);
-            await job.Invoke();
-        }
-    }
+    // private void AddScrollJob()
+    // {
+    //     AfterRenderAsyncJobs.Add(ScrollToAddSection);
+    //     StateHasChanged();
+    // }
+    // private async Task ScrollToAddSection()
+    // {
+    //     await JsRuntime.InvokeVoidAsync("ScrollElementIntoView", resultsSection);
+    // }
+    // protected override async Task OnAfterRenderAsync(bool firstRender)
+    // {
+    //     while (AfterRenderAsyncJobs.Any())
+    //     {
+    //         var job = AfterRenderAsyncJobs.First();
+    //         AfterRenderAsyncJobs.Remove(job);
+    //         await job.Invoke();
+    //     }
+    // }
     public async Task SetupDemo1()
     {
         comparison = new Comparison();
@@ -216,7 +216,6 @@
             Attacker = (UnitProfile)comparison.Simulation1.Attacker.Clone()
         };
         AssignMultiSims(1000);
-        AddScrollJob();
         await FightUnits();
     }
     public async Task SetupDemo2()
@@ -319,7 +318,6 @@
             Attacker = (UnitProfile)comparison.Simulation1.Attacker.Clone()
         };
         AssignMultiSims(1000);
-        AddScrollJob();
         await FightUnits();
 
     }
@@ -438,7 +436,6 @@
             Attacker = (UnitProfile)comparison.Simulation1.Attacker.Clone()
         };
         AssignMultiSims(1000);
-        AddScrollJob();
         await FightUnits();
         StateHasChanged();
     }
