@@ -262,6 +262,10 @@ namespace Snorehammer.Web.Services
             {
                 sim.ModdedWoundTarget = sim.Weapon.AntiMountedValue;
             }
+            else if (sim.Defender.Psyker && sim.Weapon.AntiPsyker && sim.ModdedWoundTarget > sim.Weapon.AntiPsykerValue)
+            {
+                sim.ModdedWoundTarget = sim.Weapon.AntiPsykerValue;
+            }
         }
 
         public void RollStrengthStep(WeaponSimulation sim)

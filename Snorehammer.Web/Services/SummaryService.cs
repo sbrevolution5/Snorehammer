@@ -297,6 +297,10 @@ namespace Snorehammer.Web.Services
             {
                 sb.Append($"Anti-Swarm {attack.AntiSwarmValue}  ");
             }
+            if (attack.AntiPsyker)
+            {
+                sb.Append($"Anti-Psyker {attack.AntiPsykerValue}  ");
+            }
             var res = sb.ToString();
             if (string.IsNullOrEmpty(res))
             {
