@@ -51,6 +51,8 @@
         public int AntiVehicleValue { get; set; } = 2;
         public bool AntiMonster { get; set; } = false;
         public int AntiMonsterValue { get; set; } = 2;
+        public bool AntiPsyker { get; set; } = false;
+        public int AntiPsykerValue { get; set; } = 2;
         public bool RapidFire { get; set; } = false;
         public int RapidFireBonus { get; set; } = 1;
         //Overwatch should only be set based on the unit class
