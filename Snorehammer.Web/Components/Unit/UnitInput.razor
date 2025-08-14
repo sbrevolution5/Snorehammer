@@ -161,6 +161,10 @@
                             <RadzenCheckBox @bind-Value=@Unit.TakesHalfDamage Name="TakesHalfDamage" />
                             <RadzenLabel Text="Takes Half Damage" Component="TakesHalfDamage" class="rz-ms-2" />
                         </RadzenColumn>
+                        <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                            <RadzenCheckBox @bind-Value=@Unit.Psyker Name="Psyker" />
+                            <RadzenLabel Text="Psyker keyword" Component="Psyker" class="rz-ms-2" />
+                        </RadzenColumn>
 
                     </RadzenRow>
                 </ChildContent>
