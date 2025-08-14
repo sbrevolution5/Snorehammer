@@ -7,6 +7,7 @@
 @using Snorehammer.Web.FrontendModels.Profiles
 @using Snorehammer.Web.FrontendModels.Simulations
 @using Snorehammer.Web.Services
+@inject IJSRuntime JsRuntime;
 @rendermode InteractiveServer
 <RadzenToc Orientation=Orientation.Horizontal style="position: sticky; top: 0; right: 0; z-index:1;" class="rz-display-none rz-display-md-flex">
     <RadzenTocItem Text="Attacker Input" Selector="#attacker"></RadzenTocItem>
@@ -76,30 +77,48 @@
     <RadzenCardGroup>
         @if (comparison.ComparingDefenders)
         {
-                <UnitInput @bind-Unit="comparison.Simulation1.Defender" Attacker=false />
-                <RadzenButton Click=@(() => SetDefender(comparison.AlternateDefenseSimulation.Defender, comparison.Simulation1)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Defender 2 </span></RadzenButton>
-                <UnitInput @bind-Unit="comparison.AlternateDefenseSimulation.Defender" Attacker=false />
-                <RadzenButton Click=@(() => SetDefender(comparison.Simulation1.Defender, comparison.AlternateDefenseSimulation)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Defender 1 </span></RadzenButton>
+            <UnitInput @bind-Unit="comparison.Simulation1.Defender" Attacker=false />
+            <RadzenButton Click=@(() => SetDefender(comparison.AlternateDefenseSimulation.Defender, comparison.Simulation1)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Defender 2 </span></RadzenButton>
+            <UnitInput @bind-Unit="comparison.AlternateDefenseSimulation.Defender" Attacker=false />
+            <RadzenButton Click=@(() => SetDefender(comparison.Simulation1.Defender, comparison.AlternateDefenseSimulation)) ButtonStyle="ButtonStyle.Primary"><RadzenIcon Icon="content_copy" /><span> Copy from Defender 1 </span></RadzenButton>
         }
         else
         {
-                <UnitInput @bind-Unit="comparison.Simulation1.Defender" Attacker=false />
+            <UnitInput @bind-Unit="comparison.Simulation1.Defender" Attacker=false />
         }
     </RadzenCardGroup>
 </RadzenCard>
-<RadzenCardGroup>
-    <RadzenText TextStyle="TextStyle.DisplayH3" id="fightResults">Fight Results</RadzenText>
-    <FightResult sim="ViewSim1"></FightResult>
-    @if (comparison.ComparingAttackers)
-    {
-        <FightResult sim="ViewSim2"></FightResult>
-    }
-    @if (comparison.ComparingDefenders)
-    {
-        <FightResult sim="ViewSim2"></FightResult>
-    }
-</RadzenCardGroup>
-<RadzenButton Click=@(() => FightUnits()) Text="Fight all Units" ButtonStyle="ButtonStyle.Primary" />
+<div @ref="resultsSection" id="resultsSection">
+    <RadzenRow>
+        <RadzenColumn Size="12">
+            <RadzenText TextStyle="TextStyle.DisplayH3" id="fightResults">Fight Results</RadzenText>
+        </RadzenColumn>
+    </RadzenRow>
+    <RadzenCardGroup Style="justify-content:space-evenly">
+        <RadzenColumn Size="12" SizeMD="6">
+
+
+            <FightResult sim="ViewSim1"></FightResult>
+        </RadzenColumn>
+        @if (comparison.ComparingAttackers)
+        {
+            <RadzenColumn Size="12" SizeMD="6">
+
+                <FightResult sim="ViewSim2"></FightResult>
+            </RadzenColumn>
+        }
+        @if (comparison.ComparingDefenders)
+        {
+            <RadzenColumn Size="12" SizeMD="6">
+
+                <FightResult sim="ViewSim2"></FightResult>
+            </RadzenColumn>
+        }
+
+    </RadzenCardGroup>
+</div>
+<RadzenButton Click=@(() => FightUnits()) Text="Fight all Units" class="rz-mt-2" Style="width:stretch" ButtonStyle="ButtonStyle.Primary" />
+
 <RadzenText TextStyle="TextStyle.DisplayH3" id="fightStats">Fight Stats</RadzenText>
 
 @if (comparison.Simulation1.Stats.ColumnName != "")
@@ -108,11 +127,18 @@
     <GraphsDisplay comparison="comparison"></GraphsDisplay>
 
 }
+<script type="text/javascript">
+    ScrollElementIntoView = element => {
+        var target = document.getElementById(element.id);
+        target.scrollIntoView({behavior:'smooth'});
+    }
+</script>
 @code {
 
     public Comparison comparison { get; set; }
     public bool ShowTable { get; set; } = true;
     private int SelectedNumberOfSimulations = 1;
+    private ElementReference resultsSection { get; set; }
     private FightSimulationService fightSimulationService = new FightSimulationService();
     private FightSimulation ViewSim1;
     private FightSimulation ViewSim2;
@@ -193,6 +219,7 @@
         };
         AssignMultiSims(1000);
         await FightUnits();
+        await JsRuntime.InvokeVoidAsync("ScrollElementIntoView", resultsSection);
     }
     public async Task SetupDemo2()
     {
@@ -295,6 +322,8 @@
         };
         AssignMultiSims(1000);
         await FightUnits();
+        await JsRuntime.InvokeVoidAsync("ScrollElementIntoView", resultsSection);
+
 
     }
     public async Task SetupDemo3()
@@ -413,7 +442,7 @@
         };
         AssignMultiSims(1000);
         await FightUnits();
-        StateHasChanged();
+        await JsRuntime.InvokeVoidAsync("ScrollElementIntoView", resultsSection);
     }
     private async Task FightUnits()
     {
@@ -501,5 +530,9 @@
         comparison.AlternateAttackSimulation.Attacker.Attacks[0].Name = comparison.Simulation1.Attacker.Attacks[0].Name + "(1)";
         AssignMultiSims(1000);
         return base.OnInitializedAsync();
+    }
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        return base.OnAfterRenderAsync(firstRender);
     }
 }
