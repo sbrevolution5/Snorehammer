@@ -88,23 +88,26 @@
         }
     </RadzenCardGroup>
 </RadzenCard>
-<RadzenCardGroup>
-    <RadzenText TextStyle="TextStyle.DisplayH3" id="fightResults">Fight Results</RadzenText>
-    <FightResult sim="ViewSim1"></FightResult>
-    @if (comparison.ComparingAttackers)
-    {
-        <FightResult sim="ViewSim2"></FightResult>
-    }
-    @if (comparison.ComparingDefenders)
-    {
-        <FightResult sim="ViewSim2"></FightResult>
-    }
-</RadzenCardGroup>
-<RadzenButton Click=@(() => FightUnits()) Text="Fight all Units" ButtonStyle="ButtonStyle.Primary" />
 <div @ref="resultsSection" id="resultsSection">
+    <RadzenCardGroup>
+        <RadzenRow>
 
-    <RadzenText TextStyle="TextStyle.DisplayH3" id="fightStats">Fight Stats</RadzenText>
+            <RadzenText TextStyle="TextStyle.DisplayH3" id="fightResults">Fight Results</RadzenText>
+        </RadzenRow>
+        <FightResult sim="ViewSim1"></FightResult>
+        @if (comparison.ComparingAttackers)
+        {
+            <FightResult sim="ViewSim2"></FightResult>
+        }
+        @if (comparison.ComparingDefenders)
+        {
+            <FightResult sim="ViewSim2"></FightResult>
+        }
+    </RadzenCardGroup>
 </div>
+<RadzenButton Click=@(() => FightUnits()) Text="Fight all Units" ButtonStyle="ButtonStyle.Primary" />
+
+<RadzenText TextStyle="TextStyle.DisplayH3" id="fightStats">Fight Stats</RadzenText>
 
 @if (comparison.Simulation1.Stats.ColumnName != "")
 {
@@ -153,20 +156,20 @@
     {
         comparison = new Comparison();
         comparison.Simulation1 = new MultiFightSimulation()
-            {
+        {
 
-                Defender = new UnitProfile()
-                {
-                    InvulnerableSave = 0,
-                    MinimumSave = 3,
-                    Toughness = 4,
-                    Wounds = 2,
-                    ModelCount = 10,
-                    Name = "Intercessors"
-                },
-                Attacker = new UnitProfile()
-                {
-                    Attacks = new List<AttackProfile>()
+            Defender = new UnitProfile()
+            {
+                InvulnerableSave = 0,
+                MinimumSave = 3,
+                Toughness = 4,
+                Wounds = 2,
+                ModelCount = 10,
+                Name = "Intercessors"
+            },
+            Attacker = new UnitProfile()
+            {
+                Attacks = new List<AttackProfile>()
                 {
                     new AttackProfile()
                     {
@@ -184,27 +187,27 @@
                         RerollWound = true
                     }
                 },
-                    InvulnerableSave = 0,
-                    MinimumSave = 5,
-                    Toughness = 3,
-                    Wounds = 1,
-                    ModelCount = 10,
-                    Name = "Termagants"
-                }
-            };
+                InvulnerableSave = 0,
+                MinimumSave = 5,
+                Toughness = 3,
+                Wounds = 1,
+                ModelCount = 10,
+                Name = "Termagants"
+            }
+        };
         comparison.AlternateAttackSimulation = new MultiFightSimulation()
-            {
-                Defender = (UnitProfile)comparison.Simulation1.Defender.Clone(),
-                Attacker = (UnitProfile)comparison.Simulation1.Attacker.Clone()
-            };
+        {
+            Defender = (UnitProfile)comparison.Simulation1.Defender.Clone(),
+            Attacker = (UnitProfile)comparison.Simulation1.Attacker.Clone()
+        };
         comparison.AlternateDefenseSimulation = new MultiFightSimulation()
-            {
-                Defender = (UnitProfile)comparison.Simulation1.Defender.Clone(),
-                Attacker = (UnitProfile)comparison.Simulation1.Attacker.Clone()
-            };
+        {
+            Defender = (UnitProfile)comparison.Simulation1.Defender.Clone(),
+            Attacker = (UnitProfile)comparison.Simulation1.Attacker.Clone()
+        };
         AssignMultiSims(1000);
         await FightUnits();
-        await JsRuntime.InvokeVoidAsync("ScrollElementIntoView",resultsSection);
+        await JsRuntime.InvokeVoidAsync("ScrollElementIntoView", resultsSection);
     }
     public async Task SetupDemo2()
     {
