@@ -23,7 +23,7 @@ namespace Snorehammer.Web.Services
             }
             await Task.Yield();
         }
-        public void SimulateAllFights(MultiFightSimulation multiSim,bool meleeFightBack = false)
+        public void SimulateAllFights(MultiFightSimulation multiSim, bool meleeFightBack = false)
         {
             foreach (var sim in multiSim.FightSimulations)
             {
@@ -38,9 +38,10 @@ namespace Snorehammer.Web.Services
                 }
                 if (meleeFightBack)
                 {
-                    foreach (var weapon in sim.Defender.Attacks.Where(a=>a.Melee))
+                    sim.FightBackSimulation = new FightSimulation(sim.Defender, sim.Attacker);
+                    foreach (var weapon in sim.Defender.Attacks.Where(a => a.Melee))
                     {
-                        sim.FightBackWeaponSimulations.Add(new WeaponSimulation((AttackProfile)weapon.Clone(), (UnitProfile)sim.Attacker.Clone(), i, true));
+                        sim.FightBackSimulation.WeaponSimulations.Add(new WeaponSimulation((AttackProfile)weapon.Clone(), (UnitProfile)sim.Attacker.Clone(), i, true));
                     }
                 }
                 SimulateFight(sim, meleeFightBack);
@@ -75,17 +76,20 @@ namespace Snorehammer.Web.Services
             DealDamage(sim);
             if (fightBack)
             {
-                foreach (var weapon in sim.FightBackWeaponSimulations)
+                sim.FightBackSimulation.RemainingModels -= sim.Stats.ModelsDestroyed;
+                sim.FightBackSimulation.RemainingWoundsOnDamagedModel = sim.Stats.SingleModelRemainingWounds;
+                foreach (var fbweapon in sim.FightBackSimulation.WeaponSimulations)
                 {
-                    SimulateFightWithWeapon(weapon);
+                    SimulateFightWithWeapon(fbweapon);
                 }
+                DealDamage(sim.FightBackSimulation);
             }
             sim.WinnerMessage = GenerateWinnerMessage(sim);
         }
 
         private void SimulateFightWithWeapon(WeaponSimulation weapon)
         {
-            
+
             if (weapon.Weapon.IsVariableAttacks)
             {
                 RollAttackDice(weapon);
@@ -476,7 +480,12 @@ namespace Snorehammer.Web.Services
         public void DealDamage(FightSimulation sim)
         {
             //sets baseline model wounds, which get changed after damage is dealt
-            sim.Stats.SingleModelRemainingWounds = sim.Defender.Wounds;
+            //if we aren't in fightback mode, this has already been set
+            if (!sim.FightBack)
+            {
+                sim.RemainingModels = sim.Defender.ModelCount;
+                sim.Stats.SingleModelRemainingWounds = sim.Defender.Wounds;
+            }
             foreach (var weaponSim in sim.WeaponSimulations)
             {
                 //weaponsim has current remaining wounds
@@ -501,7 +510,7 @@ namespace Snorehammer.Web.Services
                 }
                 int fnpUnused = weaponSim.Stats.FeelNoPainMade;
                 //loops through models
-                while (weaponSim.Stats.ModelsDestroyed < weaponSim.Defender.ModelCount && AttacksApplied < weaponSim.Stats.ArmorSavesFailed)
+                while (sim.Stats.ModelsDestroyed < sim.RemainingModels && AttacksApplied < weaponSim.Stats.ArmorSavesFailed)
                 {
                     //loops through damage on individual model
                     while (weaponSim.Stats.SingleModelRemainingWounds > 0 && AttacksApplied < weaponSim.Stats.ArmorSavesFailed)
@@ -548,13 +557,13 @@ namespace Snorehammer.Web.Services
                         if (weaponSim.Stats.SingleModelRemainingWounds <= 0)
                         {
                             weaponSim.Stats.ModelsDestroyed++;
+                            sim.Stats.ModelsDestroyed++;
                         }
                     }
                     if (AttacksApplied != weaponSim.Stats.ArmorSavesFailed)
                     {
                         weaponSim.Stats.SingleModelRemainingWounds = weaponSim.Defender.Wounds;
                     }
-
                 }
             }
             SetDamageStatsAfterWound(weaponSim);
@@ -611,7 +620,7 @@ namespace Snorehammer.Web.Services
                 throw new InvalidProgramException("Lost a model is true but 0 models were destroyed");
             }
         }
-        public string GenerateWinnerMessage(FightSimulation sim)
+        public string GenerateWinnerMessage(FightSimulation sim, bool fightsBack = false)
         {
             ValidateResult(sim);
             var res = new StringBuilder();
@@ -635,7 +644,12 @@ namespace Snorehammer.Web.Services
                 }
                 if (sim.Stats.ModelsDestroyed >= sim.Defender.ModelCount)
                 {
-                    res.Append("The entire unit was destroyed.\n");
+                    res.Append("The entire unit was destroyed");
+                    if (sim.FightBack)
+                    {
+                        res.Append(" and therefore couldn't fight back.");
+                    }
+                    res.Append(".\n");
                     return res.ToString();
                 }
                 if (sim.Defender.ModelCount > 1)
@@ -646,9 +660,17 @@ namespace Snorehammer.Web.Services
                     {
                         res.Append($"A remaining model was inflicted {sim.Defender.Wounds - sim.Stats.SingleModelRemainingWounds} wounds, leaving it with {sim.Stats.SingleModelRemainingWounds} remaining.\n");
                     }
-                    return res.ToString();
                 }
-                res.Append($"The model has {sim.Defender.Wounds - sim.Stats.SingleModelRemainingWounds} wound(s) remaining.\n");
+                else
+                {
+                    res.Append($"The model has {sim.Defender.Wounds - sim.Stats.SingleModelRemainingWounds} wound(s) remaining.\n");
+                }
+            }
+            if (sim.FightBack)
+            {
+                res.Append($"Then Defender fought back with {sim.FightBackSimulation.RemainingModels} remaining models");
+                //run this method again, but fightback variable is false.
+                res.Append(GenerateWinnerMessage(sim));
             }
             return res.ToString();
         }
