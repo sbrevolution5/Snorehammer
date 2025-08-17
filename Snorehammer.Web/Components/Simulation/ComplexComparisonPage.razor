@@ -137,13 +137,13 @@
 
 @if (comparison.Simulation1.Stats.ColumnName != "")
 {
-    <DataGrid comparison="comparison"></DataGrid>
+    <DataGridContainer comparison="comparison"></DataGridContainer>
     <GraphsDisplay comparison="comparison"></GraphsDisplay>
 
 }
 @if (comparison.MeleeFightBack)
 {
-    <RadzenText>FIGHT BACK STATS HERE!</RadzenText>
+    
 }
 <script type="text/javascript">
     ScrollElementIntoView = element => {
