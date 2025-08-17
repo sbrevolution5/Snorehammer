@@ -3,6 +3,7 @@
 @using Snorehammer.Web.Components.Simulation.Results.Graphs
 @using Snorehammer.Web.Components.Simulation.Results.Grid
 @using Snorehammer.Web.Components.Unit
+@using Snorehammer.Web.Components.Utility
 @using Snorehammer.Web.FrontendModels
 @using Snorehammer.Web.FrontendModels.Profiles
 @using Snorehammer.Web.FrontendModels.Simulations
@@ -54,11 +55,13 @@
             </EditForm>
         </RadzenStack>
     </RadzenColumn>
-        <RadzenColumn Size="6" SizeMD="3" SizeLG="2">
+    <RadzenColumn Size="6" SizeMD="3" SizeLG="2">
 
-            <RadzenSwitch @bind-Value=@comparison.MeleeFightBack/>
-            <RadzenLabel>Melee fights back</RadzenLabel>
-        </RadzenColumn>
+        <RadzenSwitch @bind-Value=@comparison.MeleeFightBack />
+        <RadzenLabel>Melee fights back</RadzenLabel>
+        <Tooltip tooltip="Attacker will always fight first"></Tooltip>
+
+    </RadzenColumn>
 </RadzenStack>
 
 <RadzenCard Variant="Variant.Text">
@@ -143,7 +146,7 @@
 }
 @if (comparison.MeleeFightBack)
 {
-    
+
 }
 <script type="text/javascript">
     ScrollElementIntoView = element => {
