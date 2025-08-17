@@ -14,7 +14,7 @@ namespace Snorehammer.Web.FrontendModels.Simulations
         public UnitProfile Defender { get; set; }
         public string WinnerMessage { get; set; } = "";
         public List<WeaponSimulation> WeaponSimulations { get; set; } = new List<WeaponSimulation>();
-        public bool FightBack = false;
+        public bool HasFightBack = false;
         public FightSimulation FightBackSimulation { get; set; }
         public int RemainingModels { get; set; }
         public int RemainingWoundsOnDamagedModel { get; set; }

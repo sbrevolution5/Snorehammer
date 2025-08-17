@@ -38,7 +38,7 @@ namespace Snorehammer.Web.Services
                 }
                 if (meleeFightBack)
                 {
-                    sim.FightBack = true;
+                    sim.HasFightBack = true;
                     sim.FightBackSimulation = new FightSimulation(sim.Defender, sim.Attacker);
                     DetermineWeaponsRemaining(sim);
                     foreach (var weapon in sim.Defender.Attacks.Where(a => a.Melee))
@@ -99,7 +99,7 @@ namespace Snorehammer.Web.Services
             DealDamage(sim);
             if (fightBack)
             {
-                sim.FightBackSimulation.RemainingModels -= sim.Stats.ModelsDestroyed;
+                sim.FightBackSimulation.RemainingModels = sim.Defender.ModelCount-sim.Stats.ModelsDestroyed;
                 sim.FightBackSimulation.RemainingWoundsOnDamagedModel = sim.Stats.SingleModelRemainingWounds;
                 foreach (var fbweapon in sim.FightBackSimulation.WeaponSimulations)
                 {
@@ -504,9 +504,9 @@ namespace Snorehammer.Web.Services
         {
             //sets baseline model wounds, which get changed after damage is dealt
             //if we aren't in fightback mode, this has already been set
-            sim.RemainingModels = sim.Defender.ModelCount;
-            if (!sim.FightBack)
+            if (!sim.HasFightBack)
             {
+                //This means we are doing the fightback
                 sim.Stats.SingleModelRemainingWounds = sim.Defender.Wounds;
             }
             foreach (var weaponSim in sim.WeaponSimulations)
@@ -668,7 +668,7 @@ namespace Snorehammer.Web.Services
                 if (sim.Stats.ModelsDestroyed >= sim.Defender.ModelCount)
                 {
                     res.Append("The entire unit was destroyed");
-                    if (sim.FightBack)
+                    if (sim.HasFightBack)
                     {
                         res.Append(" and therefore couldn't fight back.");
                     }
@@ -689,7 +689,7 @@ namespace Snorehammer.Web.Services
                     res.Append($"The model has {sim.Defender.Wounds - sim.Stats.SingleModelRemainingWounds} wound(s) remaining.\n");
                 }
             }
-            if (sim.FightBack)
+            if (sim.HasFightBack)
             {
                 res.Append($"Then Defender fought back with {sim.FightBackSimulation.RemainingModels} remaining models.\n");
                 //run this method again, but fightback variable is false.
