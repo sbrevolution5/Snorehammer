@@ -69,7 +69,6 @@
             <RadzenCard>
 
                 <UnitInput @bind-Unit="comparison.Simulation1.Attacker" Attacker=true />
-
                 <RadzenButton Click=@(() => SetAttacker(comparison.AlternateAttackSimulation.Attacker.Attacks[0], comparison.Simulation1)) ButtonStyle="ButtonStyle.Primary" class="rz-mt-2" Style="width: stretch"><RadzenIcon Icon="content_copy" /><span> Copy from Attacker 2 </span></RadzenButton>
 
             </RadzenCard>
@@ -99,7 +98,7 @@
         }
         else
         {
-            <UnitInput @bind-Unit="comparison.Simulation1.Defender" Attacker=false />
+            <UnitInput @bind-Unit="comparison.Simulation1.Defender" Attacker=@comparison.MeleeFightBack />
         }
     </RadzenCardGroup>
 </RadzenCard>
@@ -141,6 +140,10 @@
     <DataGrid comparison="comparison"></DataGrid>
     <GraphsDisplay comparison="comparison"></GraphsDisplay>
 
+}
+@if (comparison.MeleeFightBack)
+{
+    <RadzenText>FIGHT BACK STATS HERE!</RadzenText>
 }
 <script type="text/javascript">
     ScrollElementIntoView = element => {
