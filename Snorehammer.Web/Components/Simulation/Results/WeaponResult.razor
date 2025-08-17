@@ -21,6 +21,7 @@
                                RollString1=@($"Rolling: {sim.Weapon.VariableAttackDiceNumber} d{sim.Weapon.VariableAttackDiceSides} + {sim.Weapon.VariableAttackDiceConstant}" + (sim.BlastBonus > 0 ? "":$" + {@sim.BlastBonus}" ) + $" x {sim.Weapon.WeaponsInUnit}")
                                RollString2=@($"Total: {sim.Stats.AttackNumber}")
                                DiceList="@sim.AttackDice"
+                               IsVariable="@sim.Weapon.IsVariableAttacks"
                                HasConstant="@VariableAttackWithConstant"
                                DiceNum="sim.Weapon.VariableAttackDiceNumber"
                                ConstantValue="sim.Weapon.VariableAttackDiceConstant"
@@ -50,7 +51,8 @@
                                Title="Damage Roll"
                                RollString1=@($"Rolling: {sim.Weapon.VariableDamageDiceNumber} d{sim.Weapon.VariableDamageDiceSides} + {sim.Weapon.VariableDamageDiceConstant}" + (sim.Weapon.Melta ? $" + {@sim.Weapon.MeltaDamage}" : ""))
                                DiceList="@sim.WoundDice"
-                               HasConstant="true"
+                               HasConstant="@VariableDamageWithConstant"
+                               IsVariable="@sim.Weapon.IsVariableDamage"
                                DiceNum="sim.Weapon.VariableDamageDiceNumber"
                                ConstantValue="@TotalDamageConstant"
                                VariableSetCount="sim.Stats.ArmorSavesFailed" />
