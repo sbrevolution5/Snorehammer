@@ -134,7 +134,7 @@ namespace Snorehammer.Web.Services
         public void RollAttackDice(WeaponSimulation sim)
         {
             sim.AttackDice = new List<Dice>();
-            for (int j = 0; j < sim.Weapon.WeaponsInUnit; j++)
+            for (int j = 0; j < sim.Weapon.WeaponsRemaining; j++)
             {
                 for (int i = 0; i < sim.Weapon.VariableAttackDiceNumber; i++)
                 {
@@ -169,23 +169,23 @@ namespace Snorehammer.Web.Services
             {
                 sim.BlastBonus = sim.Defender.ModelCount / 5;
             }
-            sim.Stats.AttackNumber = sim.Weapon.Attacks * sim.Weapon.WeaponsInUnit;
+            sim.Stats.AttackNumber = sim.Weapon.Attacks * sim.Weapon.WeaponsRemaining;
 
             if (sim.AttackDice.Count != 0)
             {
-                sim.Stats.AttackNumber = sim.AttackDice.Sum(d => d.Result) + (sim.Weapon.VariableAttackDiceConstant * sim.Weapon.WeaponsInUnit);
+                sim.Stats.AttackNumber = sim.AttackDice.Sum(d => d.Result) + (sim.Weapon.VariableAttackDiceConstant * sim.Weapon.WeaponsRemaining);
                 if (sim.Weapon.Blast && !sim.Weapon.Melee)
                 {
-                    sim.Stats.AttackNumber += sim.BlastBonus * sim.Weapon.WeaponsInUnit;
+                    sim.Stats.AttackNumber += sim.BlastBonus * sim.Weapon.WeaponsRemaining;
                 }
             }
             if (sim.Weapon.RapidFire && !sim.Weapon.Melee)
             {
-                sim.Stats.AttackNumber += sim.Weapon.RapidFireBonus * sim.Weapon.WeaponsInUnit;
+                sim.Stats.AttackNumber += sim.Weapon.RapidFireBonus * sim.Weapon.WeaponsRemaining;
             }
             if (sim.Weapon.Torrent && !sim.Weapon.Melee)
             {
-                for (int j = 0; j < sim.Weapon.WeaponsInUnit; j++)
+                for (int j = 0; j < sim.Weapon.WeaponsRemaining; j++)
                 {
                     for (int i = 0; i < sim.Stats.AttackNumber; i++)
                     {
