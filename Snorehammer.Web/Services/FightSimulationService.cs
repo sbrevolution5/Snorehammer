@@ -89,6 +89,10 @@ namespace Snorehammer.Web.Services
                 }
             }
             DealDamage(sim);
+            if (fightBack)
+            {
+
+            }
             sim.WinnerMessage = GenerateWinnerMessage(sim);
         }
         public void RollAttackDice(WeaponSimulation sim)

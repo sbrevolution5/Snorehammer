@@ -9,9 +9,14 @@ namespace Snorehammer.Web.FrontendModels.Simulations
         public UnitProfile Defender { get; set; }
         public string WinnerMessage { get; set; } = "";
         public List<WeaponSimulation> WeaponSimulations { get; set; } = new List<WeaponSimulation>();
+        public List<WeaponSimulation> FightBackWeaponSimulations { get; set; } = new List<WeaponSimulation>();
         public FightStats Stats { get; set; } = new FightStats();
         public void Reset() {
             foreach (var sim in WeaponSimulations)
+            {
+                sim.ClearDiceLists();
+            }
+            foreach (var sim in FightBackWeaponSimulations)
             {
                 sim.ClearDiceLists();
             }
