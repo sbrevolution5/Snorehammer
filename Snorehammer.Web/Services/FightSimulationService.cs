@@ -178,7 +178,7 @@ namespace Snorehammer.Web.Services
             {
                 sim.HitTarget--;
             }
-            if (sim.Defender.Stealth || sim.Defender.Minus1Hit || sim.Weapon.Minus1Hit || sim.Weapon.BigGuns)
+            if ((sim.Defender.Stealth && !sim.Weapon.Melee) || sim.Defender.Minus1Hit || sim.Weapon.Minus1Hit || sim.Weapon.BigGuns)
             {
                 sim.HitTarget++;
             }
