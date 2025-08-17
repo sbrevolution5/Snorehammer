@@ -529,7 +529,7 @@ namespace Snorehammer.Web.Services
                 }
                 int fnpUnused = weaponSim.Stats.FeelNoPainMade;
                 //loops through models
-                while (sim.Stats.ModelsDestroyed < sim.RemainingAttackingModels && AttacksApplied < weaponSim.Stats.ArmorSavesFailed)
+                while (sim.Stats.ModelsDestroyed < sim.Defender.ModelCount && AttacksApplied < weaponSim.Stats.ArmorSavesFailed)
                 {
                     //loops through damage on individual model
                     while (weaponSim.Stats.SingleModelRemainingWounds > 0 && AttacksApplied < weaponSim.Stats.ArmorSavesFailed)
