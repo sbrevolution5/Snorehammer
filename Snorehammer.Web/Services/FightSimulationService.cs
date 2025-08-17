@@ -38,6 +38,7 @@ namespace Snorehammer.Web.Services
                 }
                 if (meleeFightBack)
                 {
+                    sim.FightBack = true;
                     sim.FightBackSimulation = new FightSimulation(sim.Defender, sim.Attacker);
                     DetermineWeaponsRemaining(sim);
                     foreach (var weapon in sim.Defender.Attacks.Where(a => a.Melee))
@@ -69,6 +70,7 @@ namespace Snorehammer.Web.Services
         private void DetermineWeaponsRemaining(FightSimulation sim)
         {
             //order by descending number in unit
+            sim.Defender.Attacks.ForEach(a => a.WeaponsRemaining = a.WeaponsInUnit);
             var atkList = sim.Defender.Attacks.Where(a=>a.Melee);
             atkList.OrderByDescending(a => a.WeaponsInUnit);
             //start removing weapons remaining from most common, unless that weapon is empty
@@ -661,7 +663,7 @@ namespace Snorehammer.Web.Services
                 res.Append($"{sim.Stats.WoundsInflicted} wounds inflicted to defender.\n");
                 if (sim.Defender.TakesHalfDamage)
                 {
-                    res.Append("Damage was halved. \n");
+                    res.Append("Damage was halved.\n");
                 }
                 if (sim.Stats.ModelsDestroyed >= sim.Defender.ModelCount)
                 {
@@ -691,7 +693,7 @@ namespace Snorehammer.Web.Services
             {
                 res.Append($"Then Defender fought back with {sim.FightBackSimulation.RemainingModels} remaining models");
                 //run this method again, but fightback variable is false.
-                res.Append(GenerateWinnerMessage(sim));
+                res.Append(GenerateWinnerMessage(sim.FightBackSimulation));
             }
             return res.ToString();
         }
