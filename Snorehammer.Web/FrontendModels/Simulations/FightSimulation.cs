@@ -17,7 +17,6 @@ namespace Snorehammer.Web.FrontendModels.Simulations
         public bool HasFightBack = false;
         public FightSimulation FightBackSimulation { get; set; }
         public int RemainingModels { get; set; }
-        public int RemainingWoundsOnDamagedModel { get; set; }
         public FightStats Stats { get; set; } = new FightStats();
         public void Reset() {
             foreach (var sim in WeaponSimulations)

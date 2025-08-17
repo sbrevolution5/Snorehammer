@@ -100,7 +100,6 @@ namespace Snorehammer.Web.Services
             if (fightBack)
             {
                 sim.FightBackSimulation.RemainingModels = sim.Defender.ModelCount-sim.Stats.ModelsDestroyed;
-                sim.FightBackSimulation.RemainingWoundsOnDamagedModel = sim.Stats.SingleModelRemainingWounds;
                 foreach (var fbweapon in sim.FightBackSimulation.WeaponSimulations)
                 {
                     SimulateFightWithWeapon(fbweapon);
@@ -502,13 +501,10 @@ namespace Snorehammer.Web.Services
         }
         public void DealDamage(FightSimulation sim)
         {
-            //sets baseline model wounds, which get changed after damage is dealt
-            //if we aren't in fightback mode, this has already been set
-            if (!sim.HasFightBack)
-            {
-                //This means we are doing the fightback
-                sim.Stats.SingleModelRemainingWounds = sim.Defender.Wounds;
-            }
+            //sets baseline model wounds, which get changed after damage is 
+            //This means we are before fightback, set wounds normally
+            sim.Stats.SingleModelRemainingWounds = sim.Defender.Wounds;
+
             foreach (var weaponSim in sim.WeaponSimulations)
             {
                 //weaponsim has current remaining wounds
@@ -619,18 +615,18 @@ namespace Snorehammer.Web.Services
 
         private void CompileStatsFromWeapons(FightSimulation sim)
         {
-            sim.Stats.AttackNumber = sim.WeaponSimulations.Select(s => s.Stats.AttackNumber).Sum();
-            sim.Stats.DamageNumber = sim.WeaponSimulations.Select(s => s.Stats.DamageNumber).Sum();
-            sim.Stats.ModelsDestroyed = sim.WeaponSimulations.Select(s => s.Stats.ModelsDestroyed).Sum();
-            sim.Stats.PreFNPDamage = sim.WeaponSimulations.Select(s => s.Stats.PreFNPDamage).Sum();
-            sim.Stats.FeelNoPainMade = sim.WeaponSimulations.Select(s => s.Stats.FeelNoPainMade).Sum();
-            sim.Stats.ArmorSavesFailed = sim.WeaponSimulations.Select(s => s.Stats.ArmorSavesFailed).Sum();
-            sim.Stats.AttacksHit = sim.WeaponSimulations.Select(s => s.Stats.AttacksHit).Sum();
-            sim.Stats.WoundsSuccessful = sim.WeaponSimulations.Select(s => s.Stats.WoundsSuccessful).Sum();
-            sim.Stats.WoundsInflicted = sim.WeaponSimulations.Select(s => s.Stats.WoundsInflicted).Sum();
-            sim.Stats.LostAModel = sim.WeaponSimulations.Where(s => s.Stats.LostAModel).Any();
-            sim.Stats.UnitDamaged = sim.WeaponSimulations.Where(s => s.Stats.UnitDamaged).Any();
-            sim.Stats.UnitEntirelyDestroyed = sim.WeaponSimulations.Where(s => s.Stats.UnitEntirelyDestroyed).Any();
+            sim.Stats.AttackNumber = sim.WeaponSimulations.Select(w => w.Stats.AttackNumber).Sum();
+            sim.Stats.DamageNumber = sim.WeaponSimulations.Select(w => w.Stats.DamageNumber).Sum();
+            sim.Stats.ModelsDestroyed = sim.WeaponSimulations.Select(w => w.Stats.ModelsDestroyed).Sum();
+            sim.Stats.PreFNPDamage = sim.WeaponSimulations.Select(w => w.Stats.PreFNPDamage).Sum();
+            sim.Stats.FeelNoPainMade = sim.WeaponSimulations.Select(w => w.Stats.FeelNoPainMade).Sum();
+            sim.Stats.ArmorSavesFailed = sim.WeaponSimulations.Select(w => w.Stats.ArmorSavesFailed).Sum();
+            sim.Stats.AttacksHit = sim.WeaponSimulations.Select(w => w.Stats.AttacksHit).Sum();
+            sim.Stats.WoundsSuccessful = sim.WeaponSimulations.Select(w => w.Stats.WoundsSuccessful).Sum();
+            sim.Stats.WoundsInflicted = sim.WeaponSimulations.Select(w => w.Stats.WoundsInflicted).Sum();
+            sim.Stats.LostAModel = sim.WeaponSimulations.Where(w => w.Stats.LostAModel).Any();
+            sim.Stats.UnitDamaged = sim.WeaponSimulations.Where(w => w.Stats.UnitDamaged).Any();
+            sim.Stats.UnitEntirelyDestroyed = sim.WeaponSimulations.Where(w => w.Stats.UnitEntirelyDestroyed).Any();
         }
         public void ValidateResult(FightSimulation sim)
         {
