@@ -47,6 +47,15 @@ namespace Snorehammer.Web.Services
                 sb.Append("+1 to hit");
                 first = false;
             }
+            if (attack.Heavy)
+            {
+                if (!first)
+                {
+                    sb.Append(" | ");
+                }
+                sb.Append("Heavy");
+                first = false;
+            }
             if (attack.Minus1Hit)
             {
                 if (!first)
