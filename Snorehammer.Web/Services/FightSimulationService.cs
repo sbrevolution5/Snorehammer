@@ -99,7 +99,7 @@ namespace Snorehammer.Web.Services
             DealDamage(sim);
             if (fightBack)
             {
-                sim.FightBackSimulation.RemainingModels = sim.Defender.ModelCount-sim.Stats.ModelsDestroyed;
+                sim.FightBackSimulation.RemainingAttackingModels = sim.Defender.ModelCount-sim.Stats.ModelsDestroyed;
                 foreach (var fbweapon in sim.FightBackSimulation.WeaponSimulations)
                 {
                     SimulateFightWithWeapon(fbweapon);
@@ -529,7 +529,7 @@ namespace Snorehammer.Web.Services
                 }
                 int fnpUnused = weaponSim.Stats.FeelNoPainMade;
                 //loops through models
-                while (sim.Stats.ModelsDestroyed < sim.RemainingModels && AttacksApplied < weaponSim.Stats.ArmorSavesFailed)
+                while (sim.Stats.ModelsDestroyed < sim.RemainingAttackingModels && AttacksApplied < weaponSim.Stats.ArmorSavesFailed)
                 {
                     //loops through damage on individual model
                     while (weaponSim.Stats.SingleModelRemainingWounds > 0 && AttacksApplied < weaponSim.Stats.ArmorSavesFailed)
@@ -687,7 +687,7 @@ namespace Snorehammer.Web.Services
             }
             if (sim.HasFightBack)
             {
-                res.Append($"Then Defender fought back with {sim.FightBackSimulation.RemainingModels} remaining models.\n");
+                res.Append($"Then Defender fought back with {sim.FightBackSimulation.RemainingAttackingModels} remaining models.\n");
                 //run this method again, but fightback variable is false.
                 res.Append(GenerateWinnerMessage(sim.FightBackSimulation));
             }
