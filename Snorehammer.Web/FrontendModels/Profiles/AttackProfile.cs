@@ -5,6 +5,7 @@
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string UnitName { get; set; } = string.Empty;
+        public int WeaponsRemaining { get; set; }
         public int WeaponsInUnit { get; set; }
         public int Attacks { get; set; }
         public int Skill { get; set; }

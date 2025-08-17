@@ -23,7 +23,7 @@ namespace Snorehammer.Web.Services
             }
             await Task.Yield();
         }
-        public void SimulateAllFights(MultiFightSimulation multiSim)
+        public void SimulateAllFights(MultiFightSimulation multiSim, bool meleeFightBack = false)
         {
             foreach (var sim in multiSim.FightSimulations)
             {
@@ -36,26 +36,71 @@ namespace Snorehammer.Web.Services
                         new WeaponSimulation((AttackProfile)weapon.Clone(), (UnitProfile)sim.Defender.Clone(), i));
                     i++;
                 }
-                SimulateFight(sim);
+                if (meleeFightBack)
+                {
+                    sim.HasFightBack = true;
+                    sim.FightBackSimulation = new FightSimulation(sim.Defender, sim.Attacker);
+                }
+                SimulateFight(sim, meleeFightBack);
             }
+            CreateStats(multiSim, meleeFightBack);
+        }
+
+        private static void CreateStats(MultiFightSimulation multiSim,bool fightBack)
+        {
             multiSim.Stats.SetAverages(multiSim.FightSimulations);
-            //should call set averages on a list of each weapon fight
             multiSim.Stats.PerWeaponStats.Clear();
-            List<List<WeaponSimulation>> listPerWeapon = new List<List<WeaponSimulation>>();
             foreach (var weapon in multiSim.Attacker.Attacks)
             {
                 weapon.UnitName = multiSim.Attacker.Name;
                 //need to combine the fights per weapon into a list with only that weapon.  
                 var singleWeaponList = multiSim.FightSimulations.SelectMany(f => f.WeaponSimulations.Where(w => w.Id == weapon.Id)).ToList();
-                listPerWeapon.Add(singleWeaponList);
                 //then add a per weapon stats object for each weapon
                 var multiStats = new MultiFightStats();
                 //then run set averages on each list and add to overall simulation
                 multiStats.SetAverages(singleWeaponList);
                 multiSim.Stats.PerWeaponStats.Add(multiStats);
             }
+            if (fightBack)
+            {
+                multiSim.FightBackStats.SetAverages(multiSim.FightSimulations.Select(f => f.FightBackSimulation));
+                multiSim.FightBackStats.PerWeaponStats.Clear();
+                multiSim.FightBackStats.ColumnName = $"{multiSim.Defender.Name} vs {multiSim.Attacker.Name}";
+                List<List<WeaponSimulation>> fblistPerWeapon = new List<List<WeaponSimulation>>();
+                foreach (var weapon in multiSim.Defender.Attacks)
+                {
+                    weapon.UnitName = multiSim.Defender.Name;
+                    //need to combine the fights per weapon into a list with only that weapon.  
+                    var singleWeaponList = multiSim.FightSimulations.SelectMany(f => f.FightBackSimulation.WeaponSimulations.Where(w => w.Id == weapon.Id)).ToList();
+                    //then add a per weapon stats object for each weapon
+                    var multiStats = new MultiFightStats();
+                    //then run set averages on each list and add to overall simulation
+                    multiStats.SetAverages(singleWeaponList);
+                    multiSim.FightBackStats.PerWeaponStats.Add(multiStats);
+                }
+            }
         }
-        public void SimulateFight(FightSimulation sim)
+
+        private void DetermineWeaponsRemaining(FightSimulation sim)
+        {
+            sim.FightBackSimulation.Attacker.Attacks.ForEach(a => a.WeaponsRemaining = a.WeaponsInUnit);
+            //order by descending number in unit
+            var atkList = sim.FightBackSimulation.Attacker.Attacks.Where(a => a.Melee);
+            atkList.OrderByDescending(a => a.WeaponsInUnit);
+            //start removing weapons remaining from most common, unless that weapon is empty
+            var mostCommon = atkList.First(a => a.WeaponsRemaining > 0);
+            for (int i = 0; i < sim.Stats.ModelsDestroyed; i++)
+            {
+                var currentWeapon = sim.FightBackSimulation.Attacker.Attacks.Where(a => a.Name == mostCommon.Name).First();
+                currentWeapon.WeaponsRemaining--;
+                if (mostCommon.WeaponsRemaining == 0)
+                {
+                    mostCommon = atkList.First(a => a.WeaponsRemaining > 0);
+                }
+            }
+        }
+
+        public void SimulateFight(FightSimulation sim, bool fightBack)
         {
             sim.Reset();
             foreach (var weapon in sim.WeaponSimulations)
@@ -64,31 +109,61 @@ namespace Snorehammer.Web.Services
                 {
                     weapon.Weapon.Overwatch = true;
                 }
-                if (weapon.Weapon.IsVariableAttacks)
-                {
-                    RollAttackDice(weapon);
-                }
-                DetermineHitTarget(weapon);
-                RollToHit(weapon);
-                RollStrengthStep(weapon);
-                RollArmorSaves(weapon);
-
-                if (sim.Attacker.Attacks[0].IsVariableDamage)
-                {
-                    RollDamageDice(weapon);
-                }
-                if (sim.Defender.FeelNoPain)
-                {
-                    RollFeelNoPain(weapon);
-                }
+                SimulateFightWithWeapon(weapon);
             }
             DealDamage(sim);
+            if (fightBack)
+            {
+                SetupFightback(sim);
+                foreach (var fbweapon in sim.FightBackSimulation.WeaponSimulations)
+                {
+                    //copy from defender's weapons remaining, which were set in the determine method, 
+                    SimulateFightWithWeapon(fbweapon);
+                }
+                DealDamage(sim.FightBackSimulation);
+            }
             sim.WinnerMessage = GenerateWinnerMessage(sim);
         }
+
+        private void SetupFightback(FightSimulation sim)
+        {
+            DetermineWeaponsRemaining(sim);
+            var i = 0;
+            foreach (var weapon in sim.Defender.Attacks.Where(a => a.Melee))
+            {
+                var weaponSim = new WeaponSimulation((AttackProfile)weapon.Clone(), (UnitProfile)sim.Attacker.Clone(), i, true,weapon.WeaponsRemaining);
+                sim.FightBackSimulation.WeaponSimulations.Add(weaponSim);
+                i++;
+            }
+            sim.FightBackSimulation.RemainingAttackingModels = sim.Defender.ModelCount - sim.Stats.ModelsDestroyed;
+        }
+
+        private void SimulateFightWithWeapon(WeaponSimulation weapon)
+        {
+
+            if (weapon.Weapon.IsVariableAttacks)
+            {
+                RollAttackDice(weapon);
+            }
+            DetermineHitTarget(weapon);
+            RollToHit(weapon);
+            RollStrengthStep(weapon);
+            RollArmorSaves(weapon);
+
+            if (weapon.Weapon.IsVariableDamage)
+            {
+                RollDamageDice(weapon);
+            }
+            if (weapon.Defender.FeelNoPain)
+            {
+                RollFeelNoPain(weapon);
+            }
+        }
+
         public void RollAttackDice(WeaponSimulation sim)
         {
             sim.AttackDice = new List<Dice>();
-            for (int j = 0; j < sim.Weapon.WeaponsInUnit; j++)
+            for (int j = 0; j < sim.Weapon.WeaponsRemaining; j++)
             {
                 for (int i = 0; i < sim.Weapon.VariableAttackDiceNumber; i++)
                 {
@@ -123,23 +198,23 @@ namespace Snorehammer.Web.Services
             {
                 sim.BlastBonus = sim.Defender.ModelCount / 5;
             }
-            sim.Stats.AttackNumber = sim.Weapon.Attacks * sim.Weapon.WeaponsInUnit;
+            sim.Stats.AttackNumber = sim.Weapon.Attacks * sim.WeaponsRemaining;
 
             if (sim.AttackDice.Count != 0)
             {
-                sim.Stats.AttackNumber = sim.AttackDice.Sum(d => d.Result) + (sim.Weapon.VariableAttackDiceConstant * sim.Weapon.WeaponsInUnit);
+                sim.Stats.AttackNumber = sim.AttackDice.Sum(d => d.Result) + (sim.Weapon.VariableAttackDiceConstant * sim.Weapon.WeaponsRemaining);
                 if (sim.Weapon.Blast && !sim.Weapon.Melee)
                 {
-                    sim.Stats.AttackNumber += sim.BlastBonus * sim.Weapon.WeaponsInUnit;
+                    sim.Stats.AttackNumber += sim.BlastBonus * sim.Weapon.WeaponsRemaining;
                 }
             }
             if (sim.Weapon.RapidFire && !sim.Weapon.Melee)
             {
-                sim.Stats.AttackNumber += sim.Weapon.RapidFireBonus * sim.Weapon.WeaponsInUnit;
+                sim.Stats.AttackNumber += sim.Weapon.RapidFireBonus * sim.Weapon.WeaponsRemaining;
             }
             if (sim.Weapon.Torrent && !sim.Weapon.Melee)
             {
-                for (int j = 0; j < sim.Weapon.WeaponsInUnit; j++)
+                for (int j = 0; j < sim.Weapon.WeaponsRemaining; j++)
                 {
                     for (int i = 0; i < sim.Stats.AttackNumber; i++)
                     {
@@ -455,8 +530,10 @@ namespace Snorehammer.Web.Services
         }
         public void DealDamage(FightSimulation sim)
         {
-            //sets baseline model wounds, which get changed after damage is dealt
+            //sets baseline model wounds, which get changed after damage is 
+            //This means we are before fightback, set wounds normally
             sim.Stats.SingleModelRemainingWounds = sim.Defender.Wounds;
+
             foreach (var weaponSim in sim.WeaponSimulations)
             {
                 //weaponsim has current remaining wounds
@@ -481,7 +558,7 @@ namespace Snorehammer.Web.Services
                 }
                 int fnpUnused = weaponSim.Stats.FeelNoPainMade;
                 //loops through models
-                while (weaponSim.Stats.ModelsDestroyed < weaponSim.Defender.ModelCount && AttacksApplied < weaponSim.Stats.ArmorSavesFailed)
+                while (sim.Stats.ModelsDestroyed < sim.Defender.ModelCount && AttacksApplied < weaponSim.Stats.ArmorSavesFailed)
                 {
                     //loops through damage on individual model
                     while (weaponSim.Stats.SingleModelRemainingWounds > 0 && AttacksApplied < weaponSim.Stats.ArmorSavesFailed)
@@ -528,13 +605,13 @@ namespace Snorehammer.Web.Services
                         if (weaponSim.Stats.SingleModelRemainingWounds <= 0)
                         {
                             weaponSim.Stats.ModelsDestroyed++;
+                            sim.Stats.ModelsDestroyed++;
                         }
                     }
                     if (AttacksApplied != weaponSim.Stats.ArmorSavesFailed)
                     {
                         weaponSim.Stats.SingleModelRemainingWounds = weaponSim.Defender.Wounds;
                     }
-
                 }
             }
             SetDamageStatsAfterWound(weaponSim);
@@ -567,18 +644,18 @@ namespace Snorehammer.Web.Services
 
         private void CompileStatsFromWeapons(FightSimulation sim)
         {
-            sim.Stats.AttackNumber = sim.WeaponSimulations.Select(s => s.Stats.AttackNumber).Sum();
-            sim.Stats.DamageNumber = sim.WeaponSimulations.Select(s => s.Stats.DamageNumber).Sum();
-            sim.Stats.ModelsDestroyed = sim.WeaponSimulations.Select(s => s.Stats.ModelsDestroyed).Sum();
-            sim.Stats.PreFNPDamage = sim.WeaponSimulations.Select(s => s.Stats.PreFNPDamage).Sum();
-            sim.Stats.FeelNoPainMade = sim.WeaponSimulations.Select(s => s.Stats.FeelNoPainMade).Sum();
-            sim.Stats.ArmorSavesFailed = sim.WeaponSimulations.Select(s => s.Stats.ArmorSavesFailed).Sum();
-            sim.Stats.AttacksHit = sim.WeaponSimulations.Select(s => s.Stats.AttacksHit).Sum();
-            sim.Stats.WoundsSuccessful = sim.WeaponSimulations.Select(s => s.Stats.WoundsSuccessful).Sum();
-            sim.Stats.WoundsInflicted = sim.WeaponSimulations.Select(s => s.Stats.WoundsInflicted).Sum();
-            sim.Stats.LostAModel = sim.WeaponSimulations.Where(s => s.Stats.LostAModel).Any();
-            sim.Stats.UnitDamaged = sim.WeaponSimulations.Where(s => s.Stats.UnitDamaged).Any();
-            sim.Stats.UnitEntirelyDestroyed = sim.WeaponSimulations.Where(s => s.Stats.UnitEntirelyDestroyed).Any();
+            sim.Stats.AttackNumber = sim.WeaponSimulations.Select(w => w.Stats.AttackNumber).Sum();
+            sim.Stats.DamageNumber = sim.WeaponSimulations.Select(w => w.Stats.DamageNumber).Sum();
+            sim.Stats.ModelsDestroyed = sim.WeaponSimulations.Select(w => w.Stats.ModelsDestroyed).Sum();
+            sim.Stats.PreFNPDamage = sim.WeaponSimulations.Select(w => w.Stats.PreFNPDamage).Sum();
+            sim.Stats.FeelNoPainMade = sim.WeaponSimulations.Select(w => w.Stats.FeelNoPainMade).Sum();
+            sim.Stats.ArmorSavesFailed = sim.WeaponSimulations.Select(w => w.Stats.ArmorSavesFailed).Sum();
+            sim.Stats.AttacksHit = sim.WeaponSimulations.Select(w => w.Stats.AttacksHit).Sum();
+            sim.Stats.WoundsSuccessful = sim.WeaponSimulations.Select(w => w.Stats.WoundsSuccessful).Sum();
+            sim.Stats.WoundsInflicted = sim.WeaponSimulations.Select(w => w.Stats.WoundsInflicted).Sum();
+            sim.Stats.LostAModel = sim.WeaponSimulations.Where(w => w.Stats.LostAModel).Any();
+            sim.Stats.UnitDamaged = sim.WeaponSimulations.Where(w => w.Stats.UnitDamaged).Any();
+            sim.Stats.UnitEntirelyDestroyed = sim.WeaponSimulations.Where(w => w.Stats.UnitEntirelyDestroyed).Any();
         }
         public void ValidateResult(FightSimulation sim)
         {
@@ -591,7 +668,7 @@ namespace Snorehammer.Web.Services
                 throw new InvalidProgramException("Lost a model is true but 0 models were destroyed");
             }
         }
-        public string GenerateWinnerMessage(FightSimulation sim)
+        public string GenerateWinnerMessage(FightSimulation sim, bool fightsBack = false)
         {
             ValidateResult(sim);
             var res = new StringBuilder();
@@ -611,11 +688,16 @@ namespace Snorehammer.Web.Services
                 res.Append($"{sim.Stats.WoundsInflicted} wounds inflicted to defender.\n");
                 if (sim.Defender.TakesHalfDamage)
                 {
-                    res.Append("Damage was halved. \n");
+                    res.Append("Damage was halved.\n");
                 }
                 if (sim.Stats.ModelsDestroyed >= sim.Defender.ModelCount)
                 {
-                    res.Append("The entire unit was destroyed.\n");
+                    res.Append("The entire unit was destroyed");
+                    if (sim.HasFightBack)
+                    {
+                        res.Append(" and therefore couldn't fight back.");
+                    }
+                    res.Append(".\n");
                     return res.ToString();
                 }
                 if (sim.Defender.ModelCount > 1)
@@ -626,9 +708,17 @@ namespace Snorehammer.Web.Services
                     {
                         res.Append($"A remaining model was inflicted {sim.Defender.Wounds - sim.Stats.SingleModelRemainingWounds} wounds, leaving it with {sim.Stats.SingleModelRemainingWounds} remaining.\n");
                     }
-                    return res.ToString();
                 }
-                res.Append($"The model has {sim.Defender.Wounds - sim.Stats.SingleModelRemainingWounds} wound(s) remaining.\n");
+                else
+                {
+                    res.Append($"The model has {sim.Defender.Wounds - sim.Stats.SingleModelRemainingWounds} wound(s) remaining.\n");
+                }
+            }
+            if (sim.HasFightBack)
+            {
+                res.Append($"Then Defender fought back with {sim.FightBackSimulation.RemainingAttackingModels} remaining models.\n");
+                //run this method again, but fightback variable is false.
+                res.Append(GenerateWinnerMessage(sim.FightBackSimulation));
             }
             return res.ToString();
         }

@@ -9,5 +9,6 @@ namespace Snorehammer.Web.FrontendModels
         public MultiFightSimulation Simulation1 { get; set; }
         public MultiFightSimulation AlternateAttackSimulation { get; set; }
         public MultiFightSimulation AlternateDefenseSimulation { get; set; }
+        public bool MeleeFightBack { get; set; }
     }
 }

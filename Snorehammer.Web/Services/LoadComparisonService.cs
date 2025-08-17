@@ -161,7 +161,7 @@ namespace Snorehammer.Web.Services
                 Defender = (UnitProfile)comparison.Simulation1.Defender.Clone(),
                 Attacker = (UnitProfile)comparison.Simulation1.Attacker.Clone()
             };
-            return comparison;  
+            return comparison;
 
 
         }
@@ -169,56 +169,77 @@ namespace Snorehammer.Web.Services
         {
             var comparison = new Comparison()
             {
-                ComparingAttackers = true
+                ComparingAttackers = true,
+                MeleeFightBack = true
             };
             comparison.Simulation1 = new MultiFightSimulation()
             {
 
                 Defender = new UnitProfile()
                 {
+                    HasInvulnerableSave = true,
                     InvulnerableSave = 5,
                     MinimumSave = 5,
                     Toughness = 4,
                     Wounds = 2,
                     ModelCount = 10,
-                    Name = "Genestealers"
+                    Name = "Genestealers",
+                    Attacks = new List<AttackProfile>()
+                    {
+                        new AttackProfile()
+                        {
+                            Name = "Genestealer Claws And Talons",
+                            WeaponsInUnit = 10,
+                            ArmorPenetration = 2,
+                            Attacks = 4,
+                            Damage = 1,
+                            Skill = 2,
+                            Strength = 4,
+                            VariableAttackDiceConstant = 1,
+                            VariableAttackDiceNumber = 2,
+                            VariableDamageDiceConstant = 1,
+                            VariableDamageDiceNumber = 1,
+                            Reroll1Hit = true,
+                            Melee=true
+                        },
+                    }
                 },
                 Attacker = new UnitProfile()
                 {
                     Attacks = new List<AttackProfile>()
-                {
-                    new AttackProfile()
                     {
-                        Name = "Astartes chainsword",
-                        WeaponsInUnit = 9,
-                        ArmorPenetration = 1,
-                        Attacks = 4,
-                        Damage = 1,
-                        Skill = 3,
-                        Strength = 4,
-                        VariableAttackDiceConstant = 1,
-                        VariableAttackDiceNumber = 2,
-                        VariableDamageDiceConstant = 1,
-                        VariableDamageDiceNumber = 1,
-                        Melee=true
-                    },
-                    new AttackProfile()
-                    {
-                        Name = "Power weapon",
-                        WeaponsInUnit = 1,
-                        ArmorPenetration = 2,
-                        Attacks = 4,
-                        Damage = 1,
-                        Skill = 3,
-                        Strength = 5,
-                        VariableAttackDiceConstant = 1,
-                        VariableAttackDiceNumber = 2,
-                        VariableDamageDiceConstant = 1,
-                        VariableDamageDiceNumber = 1,
-                        Melee=true
+                        new AttackProfile()
+                        {
+                            Name = "Astartes chainsword",
+                            WeaponsInUnit = 9,
+                            ArmorPenetration = 1,
+                            Attacks = 4,
+                            Damage = 1,
+                            Skill = 3,
+                            Strength = 4,
+                            VariableAttackDiceConstant = 1,
+                            VariableAttackDiceNumber = 2,
+                            VariableDamageDiceConstant = 1,
+                            VariableDamageDiceNumber = 1,
+                            Melee=true
+                        },
+                        new AttackProfile()
+                        {
+                            Name = "Power weapon",
+                            WeaponsInUnit = 1,
+                            ArmorPenetration = 2,
+                            Attacks = 4,
+                            Damage = 1,
+                            Skill = 3,
+                            Strength = 5,
+                            VariableAttackDiceConstant = 1,
+                            VariableAttackDiceNumber = 2,
+                            VariableDamageDiceConstant = 1,
+                            VariableDamageDiceNumber = 1,
+                            Melee=true
 
-                    }
-                },
+                        }
+                    },
                     InvulnerableSave = 0,
                     MinimumSave = 3,
                     Toughness = 4,

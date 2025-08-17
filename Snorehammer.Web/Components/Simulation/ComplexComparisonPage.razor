@@ -15,7 +15,7 @@
     <RadzenTocItem Text="Fight results" Selector="#fightResults"></RadzenTocItem>
     <RadzenTocItem Text="Fight Stats" Selector="#fightStats"></RadzenTocItem>
 </RadzenToc>
-<RadzenCard>
+<RadzenCard id="DemoCard">
     <RadzenText TextStyle="TextStyle.H3">
         Don't know warhammer?  No Problem!
     </RadzenText>
@@ -54,6 +54,11 @@
             </EditForm>
         </RadzenStack>
     </RadzenColumn>
+        <RadzenColumn Size="6" SizeMD="3" SizeLG="2">
+
+            <RadzenSwitch @bind-Value=@comparison.MeleeFightBack/>
+            <RadzenLabel>Melee fights back</RadzenLabel>
+        </RadzenColumn>
 </RadzenStack>
 
 <RadzenCard Variant="Variant.Text">
@@ -64,7 +69,6 @@
             <RadzenCard>
 
                 <UnitInput @bind-Unit="comparison.Simulation1.Attacker" Attacker=true />
-
                 <RadzenButton Click=@(() => SetAttacker(comparison.AlternateAttackSimulation.Attacker.Attacks[0], comparison.Simulation1)) ButtonStyle="ButtonStyle.Primary" class="rz-mt-2" Style="width: stretch"><RadzenIcon Icon="content_copy" /><span> Copy from Attacker 2 </span></RadzenButton>
 
             </RadzenCard>
@@ -84,17 +88,17 @@
         @if (comparison.ComparingDefenders)
         {
             <RadzenCard>
-                <UnitInput @bind-Unit="comparison.Simulation1.Defender" Attacker=false />
+                <UnitInput @bind-Unit="comparison.Simulation1.Defender" Attacker=@comparison.MeleeFightBack />
                 <RadzenButton Click=@(() => SetDefender(comparison.AlternateDefenseSimulation.Defender, comparison.Simulation1)) ButtonStyle="ButtonStyle.Primary" class="rz-mt-2" Style="width: stretch"><RadzenIcon Icon="content_copy" /><span> Copy from Defender 2 </span></RadzenButton>
             </RadzenCard>
             <RadzenCard>
-                <UnitInput @bind-Unit="comparison.AlternateDefenseSimulation.Defender" Attacker=false />
+                <UnitInput @bind-Unit="comparison.AlternateDefenseSimulation.Defender" Attacker=@comparison.MeleeFightBack />
                 <RadzenButton Click=@(() => SetDefender(comparison.Simulation1.Defender, comparison.AlternateDefenseSimulation)) ButtonStyle="ButtonStyle.Primary" class="rz-mt-2" Style="width: stretch"><RadzenIcon Icon="content_copy" /><span> Copy from Defender 1 </span></RadzenButton>
             </RadzenCard>
         }
         else
         {
-            <UnitInput @bind-Unit="comparison.Simulation1.Defender" Attacker=false />
+            <UnitInput @bind-Unit="comparison.Simulation1.Defender" Attacker=@comparison.MeleeFightBack />
         }
     </RadzenCardGroup>
 </RadzenCard>
@@ -136,6 +140,10 @@
     <DataGrid comparison="comparison"></DataGrid>
     <GraphsDisplay comparison="comparison"></GraphsDisplay>
 
+}
+@if (comparison.MeleeFightBack)
+{
+    
 }
 <script type="text/javascript">
     ScrollElementIntoView = element => {
@@ -200,14 +208,14 @@
     {
         await fightSimulationService.ResetDice(comparison.Simulation1);
         StateHasChanged();
-        fightSimulationService.SimulateAllFights(comparison.Simulation1);
+        fightSimulationService.SimulateAllFights(comparison.Simulation1, comparison.MeleeFightBack);
         ViewSim1 = comparison.Simulation1.FightSimulations.First();
         //if only a single sim, show attacker as column name
         comparison.Simulation1.Stats.ColumnName = comparison.Simulation1.Attacker.Name;
         if (comparison.ComparingAttackers)
         {
             await fightSimulationService.ResetDice(comparison.AlternateAttackSimulation);
-            fightSimulationService.SimulateAllFights(comparison.AlternateAttackSimulation);
+            fightSimulationService.SimulateAllFights(comparison.AlternateAttackSimulation, comparison.MeleeFightBack);
             ViewSim2 = comparison.AlternateAttackSimulation.FightSimulations.First();
             comparison.AlternateAttackSimulation.Stats.ColumnName = comparison.AlternateAttackSimulation.Attacker.Name;
 
@@ -215,7 +223,7 @@
         else if (comparison.ComparingDefenders)
         {
             await fightSimulationService.ResetDice(comparison.AlternateDefenseSimulation);
-            fightSimulationService.SimulateAllFights(comparison.AlternateDefenseSimulation);
+            fightSimulationService.SimulateAllFights(comparison.AlternateDefenseSimulation, comparison.MeleeFightBack);
             ViewSim2 = comparison.AlternateDefenseSimulation.FightSimulations.First();
             //reassign to defender's name since we are comparing them
             comparison.Simulation1.Stats.ColumnName = comparison.Simulation1.Defender.Name;
