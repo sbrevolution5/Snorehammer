@@ -40,7 +40,7 @@ namespace Snorehammer.Web.Services
                 {
                     foreach (var weapon in sim.Defender.Attacks)
                     {
-                        sim.WeaponSimulations.Add(new WeaponSimulation((AttackProfile)weapon.Clone(), (UnitProfile)sim.Defender.Clone(), i, true));
+                        sim.FightBackWeaponSimulations.Add(new WeaponSimulation((AttackProfile)weapon.Clone(), (UnitProfile)sim.Attacker.Clone(), i, true));
                     }
                 }
                 SimulateFight(sim, meleeFightBack);
