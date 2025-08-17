@@ -22,22 +22,29 @@
             </RadzenColumn>
         </RadzenRow>
         <RadzenRow>
-            @if (HasConstant)
+            @if (IsVariable)
             {
-                for (int i = 0; i < VariableSetCount; i++)
-                {
-                    //display the next x dice, where x is dice num, then the constant
-                    var perRoll = DiceList.Skip(i*DiceNum).Take(DiceNum);
-                    foreach (var die in perRoll)
+                <RadzenCardGroup Style="flex-wrap:wrap; justify-content:space-evenly" >
+
+                    @for (int i = 0; i < VariableSetCount; i++)
                     {
-                        <RadzenColumn>
-                            <DieDisplay die=@die CriticalMatters=@CriticalMatters></DieDisplay>
-                        </RadzenColumn>
+                        //display the next x dice, where x is dice num, then the constant
+                        var perRoll = DiceList.Skip(i * DiceNum).Take(DiceNum);
+                        <RadzenCard class="rz-m-1 rz-shadow-4">
+                            <RadzenRow Style="flex-wrap:nowrap">
+
+                                @foreach (var die in perRoll)
+                                {
+                                        <DieDisplay die=@die CriticalMatters=@CriticalMatters></DieDisplay>
+                                }
+                                @if (HasConstant)
+                                {
+                                        <DieDisplay die=@ConstantDie></DieDisplay>
+                                }
+                            </RadzenRow>
+                        </RadzenCard>
                     }
-                    <RadzenColumn>
-                        <DieDisplay die=@ConstantDie></DieDisplay>
-                    </RadzenColumn>
-                }
+                </RadzenCardGroup>
             }
             else
             {
@@ -80,13 +87,15 @@
     [Parameter]
     public bool CriticalMatters { get; set; } = false;
     [Parameter]
-    public bool HasConstant { get; set; } = false;
+    public bool HasConstant { get; set; }
     [Parameter]
     public int DiceNum { get; set; } = 0;
     [Parameter]
     public int ConstantValue { get; set; } = 0;
     [Parameter]
     public int VariableSetCount { get; set; } = 0;
+    [Parameter]
+    public bool IsVariable { get; set; } = false;
     public Dice ConstantDie { get; set; }
     protected override Task OnParametersSetAsync()
     {
