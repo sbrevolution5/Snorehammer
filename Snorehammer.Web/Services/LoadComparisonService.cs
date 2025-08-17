@@ -177,6 +177,7 @@ namespace Snorehammer.Web.Services
 
                 Defender = new UnitProfile()
                 {
+                    HasInvulnerableSave = true,
                     InvulnerableSave = 5,
                     MinimumSave = 5,
                     Toughness = 4,
