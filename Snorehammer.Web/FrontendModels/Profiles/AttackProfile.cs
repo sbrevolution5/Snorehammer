@@ -26,6 +26,7 @@
         public bool Blast { get; set; } = false;
         public bool IsVariableAttacks { get; set; } = false;
         public bool Plus1Hit { get; set; } = false;
+        public bool Heavy { get; set; } = false;
         public bool Minus1Hit { get; set; } = false;
         public bool Plus1Wound { get; set; } = false;
         public bool Lance { get; set; } = false;

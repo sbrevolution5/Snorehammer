@@ -178,7 +178,23 @@ namespace Snorehammer.Web.Services
             {
                 sim.HitTarget--;
             }
-            if (sim.Defender.Stealth || sim.Defender.Minus1Hit || sim.Weapon.Minus1Hit || sim.Weapon.BigGuns)
+            if (sim.Weapon.Heavy)
+            {
+                sim.HitTarget--;
+            }
+            if ((sim.Defender.Stealth && !sim.Weapon.Melee))
+            {
+                sim.HitTarget++;
+            }
+            if(sim.Defender.Minus1Hit)
+            {
+                sim.HitTarget++;
+            }
+            if(sim.Weapon.Minus1Hit)
+            {
+                sim.HitTarget++;
+            }
+            if(sim.Weapon.BigGuns && !sim.Weapon.Melee)
             {
                 sim.HitTarget++;
             }
@@ -189,6 +205,14 @@ namespace Snorehammer.Web.Services
             if (sim.HitTarget > 6 || sim.Weapon.Overwatch)
             {
                 sim.HitTarget = 6;
+            }
+            if (sim.HitTarget > sim.Weapon.Skill && sim.HitTarget - sim.Weapon.Skill != 1)
+            {
+                sim.HitTarget = sim.Weapon.Skill + 1;
+            }
+            if (sim.HitTarget < sim.Weapon.Skill && sim.Weapon.Skill - sim.HitTarget != 1)
+            {
+                sim.HitTarget = sim.Weapon.Skill - 1;
             }
         }
         public void RollToHit(WeaponSimulation sim)

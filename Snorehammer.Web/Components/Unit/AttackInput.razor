@@ -114,6 +114,11 @@
                                         <RadzenLabel Text="Reroll Hit" Component="RerollHit" class="rz-ms-2" />
                                     </RadzenColumn>
                                     <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                                        <RadzenCheckBox @bind-Value=@attack.Heavy Name="Heavy" Disabled=attack.Melee />
+                                        <RadzenLabel Text="Heavy" Component="Heavy" class="rz-ms-2" />
+                                        <Tooltip tooltip="Heavy only works on ranged weapons and if unit did not move since last turn"></Tooltip>
+                                    </RadzenColumn>
+                                    <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                                         <RadzenCheckBox @bind-Value=@attack.Plus1Hit Name="Plus1Hit" />
                                         <RadzenLabel Text="Plus 1 to Hit" Component="Plus1Hit" class="rz-ms-2" />
                                     </RadzenColumn>
