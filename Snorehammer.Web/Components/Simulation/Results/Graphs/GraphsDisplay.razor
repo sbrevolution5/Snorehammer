@@ -6,6 +6,10 @@
 
     <RadzenText>Compare Units</RadzenText>
     <ComparisonGraph graphData="unitGraphData"></ComparisonGraph>
+    @if (comparison.MeleeFightBack)
+    {
+        <ComparisonGraph graphData="unitFightBackData"></ComparisonGraph>
+    }
 </RadzenStack>
 <RadzenStack>
     <RadzenText>Compare Weapons </RadzenText>
@@ -38,6 +42,7 @@
     [Parameter]
     public Comparison comparison { get; set; }
     public GraphData unitGraphData { get; set; }
+    public GraphData unitFightBackData { get; set; }
     public GraphData weaponGraphData { get; set; }
     private GroupData weapon1Dropdown { get; set; }
     private GroupData weapon2Dropdown { get; set; }
@@ -45,6 +50,10 @@
     protected override Task OnInitializedAsync()
     {
         unitGraphData = DataFromComparison();
+        if (comparison.MeleeFightBack)
+        {
+            unitFightBackData = DataFromFightBack();
+        }
 
         return base.OnInitializedAsync();
     }
@@ -57,6 +66,43 @@
                 weaponGraphData = DataFromWeapons();
             }
         }
+    }
+    private GraphData DataFromFightBack()
+    {
+        var graphData = new GraphData();
+        graphData.dataA = comparison.Simulation1.FightSimulations.Select(f => f.FightBackSimulation.Stats).ToList();
+        graphData.titleA = comparison.Simulation1.FightBackStats.ColumnName;
+        graphData.multiA = comparison.Simulation1.FightBackStats;
+        graphData.showFnp = comparison.Simulation1.Attacker.FeelNoPain;
+        graphData.isMultiAttack = comparison.Simulation1.Defender.Attacks.Any(a => a.IsVariableAttacks);
+        if (comparison.ComparingAttackers)
+        {
+            graphData.dataB = comparison.AlternateAttackSimulation.FightSimulations.Select(f => f.FightBackSimulation.Stats).ToList();
+            graphData.titleB = comparison.AlternateAttackSimulation.FightBackStats.ColumnName;
+            graphData.multiB = comparison.AlternateAttackSimulation.FightBackStats;
+            graphData.showFnp = comparison.AlternateAttackSimulation.Attacker.FeelNoPain;
+        }
+        else if (comparison.ComparingDefenders)
+        {
+            graphData.dataB = comparison.AlternateDefenseSimulation.FightSimulations.Select(f => f.Stats).ToList();
+            graphData.titleB = comparison.AlternateDefenseSimulation.Stats.ColumnName;
+            graphData.multiB = comparison.AlternateDefenseSimulation.Stats;
+            graphData.isMultiAttack = comparison.AlternateDefenseSimulation.Defender.Attacks.Any(a => a.IsVariableAttacks);
+
+        }
+        else
+        {
+            graphData.titleB = "";
+            graphData.dataB = new List<FightStats>();
+            graphData.multiB = new MultiFightStats()
+            {
+                LessThanHalf = -1,
+                LostAModel = -1,
+                UnitDamaged = -1,
+                UnitEntirelyDestroyed = -1
+            };
+        }
+        return graphData;
     }
     private GraphData DataFromComparison()
     {
