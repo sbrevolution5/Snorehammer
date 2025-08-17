@@ -36,7 +36,14 @@ namespace Snorehammer.Web.Services
                         new WeaponSimulation((AttackProfile)weapon.Clone(), (UnitProfile)sim.Defender.Clone(), i));
                     i++;
                 }
-                SimulateFight(sim);
+                if (meleeFightBack)
+                {
+                    foreach (var weapon in sim.Defender.Attacks)
+                    {
+                        sim.WeaponSimulations.Add(new WeaponSimulation((AttackProfile)weapon.Clone(), (UnitProfile)sim.Defender.Clone(), i, true));
+                    }
+                }
+                SimulateFight(sim, meleeFightBack);
             }
             multiSim.Stats.SetAverages(multiSim.FightSimulations);
             multiSim.Stats.PerWeaponStats.Clear();
@@ -54,7 +61,7 @@ namespace Snorehammer.Web.Services
                 multiSim.Stats.PerWeaponStats.Add(multiStats);
             }
         }
-        public void SimulateFight(FightSimulation sim)
+        public void SimulateFight(FightSimulation sim, bool fightBack)
         {
             sim.Reset();
             foreach (var weapon in sim.WeaponSimulations)
