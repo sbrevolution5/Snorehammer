@@ -71,7 +71,7 @@ namespace Snorehammer.Web.Services
         {
             //order by descending number in unit
             sim.Defender.Attacks.ForEach(a => a.WeaponsRemaining = a.WeaponsInUnit);
-            var atkList = sim.Defender.Attacks.Where(a=>a.Melee);
+            var atkList = sim.Defender.Attacks.Where(a => a.Melee);
             atkList.OrderByDescending(a => a.WeaponsInUnit);
             //start removing weapons remaining from most common, unless that weapon is empty
             var mostCommon = atkList.First(a => a.WeaponsRemaining > 0);
@@ -504,9 +504,9 @@ namespace Snorehammer.Web.Services
         {
             //sets baseline model wounds, which get changed after damage is dealt
             //if we aren't in fightback mode, this has already been set
+            sim.RemainingModels = sim.Defender.ModelCount;
             if (!sim.FightBack)
             {
-                sim.RemainingModels = sim.Defender.ModelCount;
                 sim.Stats.SingleModelRemainingWounds = sim.Defender.Wounds;
             }
             foreach (var weaponSim in sim.WeaponSimulations)
