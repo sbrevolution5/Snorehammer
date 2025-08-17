@@ -38,7 +38,7 @@ namespace Snorehammer.Web.Services
                 }
                 if (meleeFightBack)
                 {
-                    foreach (var weapon in sim.Defender.Attacks)
+                    foreach (var weapon in sim.Defender.Attacks.Where(a=>a.Melee))
                     {
                         sim.FightBackWeaponSimulations.Add(new WeaponSimulation((AttackProfile)weapon.Clone(), (UnitProfile)sim.Attacker.Clone(), i, true));
                     }
