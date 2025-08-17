@@ -1,4 +1,5 @@
-﻿@using Snorehammer.Web.FrontendModels
+﻿@using Snorehammer.Web.Components.Utility
+@using Snorehammer.Web.FrontendModels
 @using Snorehammer.Web.FrontendModels.Profiles
 @using System.Text
 @using Snorehammer.Web.Services
@@ -179,7 +180,8 @@
                                     </RadzenColumn>
                                     <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                                         <RadzenCheckBox Disabled=!attack.Melee @bind-Value=@attack.Lance Name="Lance" />
-                                        <RadzenLabel Text="Lance (assumes unit charged)" Component="Lance" class=@($"rz-ms-2 {MeleeLabel(true)}") />
+                                        <RadzenLabel Text="Lance" Component="Lance" class=@($"rz-ms-2 {MeleeLabel(true)}") />
+                                        <Tooltip tooltip="Assumes that unit charged, if unit did not charge please disable lance"></Tooltip>
                                     </RadzenColumn>
                                     <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                                         <RadzenCheckBox @bind-Value=@attack.Devastating Name="Devastating" />
