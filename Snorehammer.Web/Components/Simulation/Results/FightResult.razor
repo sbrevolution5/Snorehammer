@@ -7,7 +7,7 @@
 @rendermode InteractiveServer
 @if (sim is not null)
 {
-    <RadzenPanel  AllowCollapse="true">
+    <RadzenPanel AllowCollapse="true">
         <HeaderTemplate>
             <RadzenText>Dice Display</RadzenText>
         </HeaderTemplate>
@@ -17,6 +17,21 @@
                 @foreach (var weapon in sim.WeaponSimulations)
                 {
                     <WeaponResult sim="weapon"></WeaponResult>
+                }
+                @if (sim.FightBack)
+                {
+                    <RadzenPanel AllowCollapse="true">
+                        <HeaderTemplate>
+                            Defender Fights Back
+                        </HeaderTemplate>
+                        <ChildContent>
+
+                            @foreach (var weapon in sim.FightBackSimulation.WeaponSimulations)
+                            {
+                                <WeaponResult sim="weapon"></WeaponResult>
+                            }
+                        </ChildContent>
+                    </RadzenPanel>
                 }
                 <RadzenCard>
                     <h1>Winner:</h1>
