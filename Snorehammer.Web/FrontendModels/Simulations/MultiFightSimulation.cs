@@ -10,18 +10,16 @@ namespace Snorehammer.Web.FrontendModels.Simulations
         public List<FightSimulation> FightSimulations { get; set; } = new List<FightSimulation>();
         public int Rounds { get; set; }
         public MultiFightStats Stats { get; set; } = new MultiFightStats();
+        public MultiFightStats FightBackStats { get; set; }= new MultiFightStats();
         public List<MultiFightStats> PerWeaponStats { get; set; } = new List<MultiFightStats>();
+        public List<MultiFightStats> FightBackPerWeaponStats { get; set; } = new List<MultiFightStats>();
         public void SetSimNumber(int number)
         {
             Rounds = number;
             FightSimulations = new List<FightSimulation>();
             for (int i = 0; i < number; i++)
             {
-                FightSimulations.Add(new FightSimulation()
-                {
-                    Attacker = Attacker,
-                    Defender = Defender,
-                });
+                FightSimulations.Add(new FightSimulation(Attacker, Defender));
             }
         }
 
