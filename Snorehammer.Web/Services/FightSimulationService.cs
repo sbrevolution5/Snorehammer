@@ -231,27 +231,36 @@ namespace Snorehammer.Web.Services
             }
             if (sim.Weapon.RerollHit)
             {
-
-                var failed = sim.ToHitDice.Where(d => !d.Success);
-                sim.ToHitDice = sim.ToHitDice.Where(d => d.Success).ToList();
-                foreach (var die in failed)
-                {
-                    die.Reroll(_random);
-                    sim.ToHitDice.Add(die);
-                }
+                RerollDice(sim.ToHitDice);
             }
             else if (sim.Weapon.Reroll1Hit)
             {
-                var failed = sim.ToHitDice.Where(d => d.Result == 1);
-                sim.ToHitDice = sim.ToHitDice.Where(d => d.Result >= 1).ToList();
-                foreach (var die in failed)
-                {
-                    die.Reroll(_random);
-                    sim.ToHitDice.Add(die);
-                }
+                Reroll1s(sim.ToHitDice);
             }
 
         }
+
+        private void Reroll1s(List<Dice> dice)
+        {
+            var failed = dice.Where(d => d.Result == 1);
+            dice = dice.Where(d => d.Result >= 1).ToList();
+            foreach (var die in failed)
+            {
+                die.Reroll(_random);
+                dice.Add(die);
+            }
+        }
+        private void RerollDice(List<Dice> dice)
+        {
+            var failed = dice.Where(d => !d.Success);
+            dice = dice.Where(d => d.Success).ToList();
+            foreach (var die in failed)
+            {
+                die.Reroll(_random);
+                dice.Add(die);
+            }
+        }
+
         public void DetermineWoundTarget(WeaponSimulation sim)
         {
             var strength = sim.Weapon.Strength;
@@ -375,23 +384,11 @@ namespace Snorehammer.Web.Services
             }
             if (sim.Weapon.RerollWound)
             {
-                var failed = sim.StrengthDice.Where(d => !d.Success);
-                sim.StrengthDice = sim.StrengthDice.Where(d => d.Success).ToList();
-                foreach (var die in failed)
-                {
-                    die.Reroll(_random);
-                    sim.StrengthDice.Add(die);
-                }
+                RerollDice(sim.StrengthDice);
             }
             else if (sim.Weapon.Reroll1Wound)
             {
-                var failed = sim.StrengthDice.Where(d => d.Result == 1);
-                sim.StrengthDice = sim.StrengthDice.Where(d => d.Result >= 1).ToList();
-                foreach (var die in failed)
-                {
-                    die.Reroll(_random);
-                    sim.StrengthDice.Add(die);
-                }
+                Reroll1s(sim.StrengthDice);
             }
             sim.Stats.AttacksHit = sim.StrengthDice.Count();
         }
