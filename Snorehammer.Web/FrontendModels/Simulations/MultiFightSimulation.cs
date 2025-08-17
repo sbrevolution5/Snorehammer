@@ -11,8 +11,6 @@ namespace Snorehammer.Web.FrontendModels.Simulations
         public int Rounds { get; set; }
         public MultiFightStats Stats { get; set; } = new MultiFightStats();
         public MultiFightStats FightBackStats { get; set; }= new MultiFightStats();
-        public List<MultiFightStats> PerWeaponStats { get; set; } = new List<MultiFightStats>();
-        public List<MultiFightStats> FightBackPerWeaponStats { get; set; } = new List<MultiFightStats>();
         public void SetSimNumber(int number)
         {
             Rounds = number;

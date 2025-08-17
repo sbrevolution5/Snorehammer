@@ -1,4 +1,5 @@
 ﻿@using Snorehammer.Web.FrontendModels;
+@using Snorehammer.Web.FrontendModels.Simulations
 @using Snorehammer.Web.FrontendModels.Stats
 @if (comparisonStats is not null)
 {
@@ -74,27 +75,35 @@
 @code {
     [Parameter]
     public Comparison comparison { get; set; }
-    public List<MultiFightStats>? comparisonStats { get; set; }
+    public List<MultiFightStats> comparisonStats { get; set; } = new List<MultiFightStats>();
     public bool showFnp { get; set; } = false;
     public bool showMultiAttack { get; set; } = false;
     protected override async Task OnInitializedAsync()
     {
-        comparisonStats = new List<MultiFightStats>();
+        comparisonStats.Clear();
         @if (comparison.Simulation1.Rounds >= 1)
         {
-            comparisonStats.Add(comparison.Simulation1.Stats);
-            showFnp = comparison.Simulation1.Defender.FeelNoPain;
-            showMultiAttack = comparison.Simulation1.Attacker.Attacks.Any(a => a.IsVariableAttacks);
+            StatsFromComparisonSim(comparison.Simulation1);
             @if (comparison.ComparingAttackers)
             {
-                comparisonStats.Add(comparison.AlternateAttackSimulation.Stats);
-                showMultiAttack = comparison.AlternateAttackSimulation.Attacker.Attacks.Any(a => a.IsVariableAttacks);
+                StatsFromComparisonSim(comparison.AlternateAttackSimulation);
             }
             else if (comparison.ComparingDefenders)
             {
-                comparisonStats.Add(comparison.AlternateDefenseSimulation.Stats);
-                showFnp = comparison.AlternateDefenseSimulation.Defender.FeelNoPain;
+                StatsFromComparisonSim(comparison.AlternateDefenseSimulation);
             }
+        }
+    }
+    public void StatsFromComparisonSim(MultiFightSimulation sim)
+    {
+        comparisonStats.Add(sim.Stats);
+        showFnp = sim.Defender.FeelNoPain;
+        showMultiAttack = sim.Attacker.Attacks.Any(a => a.IsVariableAttacks);
+        if (comparison.MeleeFightBack)
+        {
+            comparisonStats.Add(sim.FightBackStats);
+            showFnp = sim.Attacker.FeelNoPain;
+            showMultiAttack = sim.Defender.Attacks.Any(a => a.IsVariableAttacks);
         }
     }
     void CellRender(DataGridCellRenderEventArgs<MultiFightStats> args)

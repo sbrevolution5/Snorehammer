@@ -43,20 +43,40 @@ namespace Snorehammer.Web.Services
                 }
                 SimulateFight(sim, meleeFightBack);
             }
+            CreateStats(multiSim, meleeFightBack);
+        }
+
+        private static void CreateStats(MultiFightSimulation multiSim,bool fightBack)
+        {
             multiSim.Stats.SetAverages(multiSim.FightSimulations);
             multiSim.Stats.PerWeaponStats.Clear();
-            List<List<WeaponSimulation>> listPerWeapon = new List<List<WeaponSimulation>>();
             foreach (var weapon in multiSim.Attacker.Attacks)
             {
                 weapon.UnitName = multiSim.Attacker.Name;
                 //need to combine the fights per weapon into a list with only that weapon.  
                 var singleWeaponList = multiSim.FightSimulations.SelectMany(f => f.WeaponSimulations.Where(w => w.Id == weapon.Id)).ToList();
-                listPerWeapon.Add(singleWeaponList);
                 //then add a per weapon stats object for each weapon
                 var multiStats = new MultiFightStats();
                 //then run set averages on each list and add to overall simulation
                 multiStats.SetAverages(singleWeaponList);
                 multiSim.Stats.PerWeaponStats.Add(multiStats);
+            }
+            if (fightBack)
+            {
+                multiSim.FightBackStats.SetAverages(multiSim.FightSimulations.Select(f => f.FightBackSimulation));
+                multiSim.FightBackStats.PerWeaponStats.Clear();
+                List<List<WeaponSimulation>> fblistPerWeapon = new List<List<WeaponSimulation>>();
+                foreach (var weapon in multiSim.Defender.Attacks)
+                {
+                    weapon.UnitName = multiSim.Defender.Name;
+                    //need to combine the fights per weapon into a list with only that weapon.  
+                    var singleWeaponList = multiSim.FightSimulations.SelectMany(f => f.FightBackSimulation.WeaponSimulations.Where(w => w.Id == weapon.Id)).ToList();
+                    //then add a per weapon stats object for each weapon
+                    var multiStats = new MultiFightStats();
+                    //then run set averages on each list and add to overall simulation
+                    multiStats.SetAverages(singleWeaponList);
+                    multiSim.FightBackStats.PerWeaponStats.Add(multiStats);
+                }
             }
         }
 
