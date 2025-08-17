@@ -70,31 +70,41 @@ namespace Snorehammer.Web.Services
                 {
                     weapon.Weapon.Overwatch = true;
                 }
-                if (weapon.Weapon.IsVariableAttacks)
-                {
-                    RollAttackDice(weapon);
-                }
-                DetermineHitTarget(weapon);
-                RollToHit(weapon);
-                RollStrengthStep(weapon);
-                RollArmorSaves(weapon);
-
-                if (sim.Attacker.Attacks[0].IsVariableDamage)
-                {
-                    RollDamageDice(weapon);
-                }
-                if (sim.Defender.FeelNoPain)
-                {
-                    RollFeelNoPain(weapon);
-                }
+                SimulateFightWithWeapon(weapon);
             }
             DealDamage(sim);
             if (fightBack)
             {
-
+                foreach (var weapon in sim.FightBackWeaponSimulations)
+                {
+                    SimulateFightWithWeapon(weapon);
+                }
             }
             sim.WinnerMessage = GenerateWinnerMessage(sim);
         }
+
+        private void SimulateFightWithWeapon(WeaponSimulation weapon)
+        {
+            
+            if (weapon.Weapon.IsVariableAttacks)
+            {
+                RollAttackDice(weapon);
+            }
+            DetermineHitTarget(weapon);
+            RollToHit(weapon);
+            RollStrengthStep(weapon);
+            RollArmorSaves(weapon);
+
+            if (weapon.Weapon.IsVariableDamage)
+            {
+                RollDamageDice(weapon);
+            }
+            if (weapon.Defender.FeelNoPain)
+            {
+                RollFeelNoPain(weapon);
+            }
+        }
+
         public void RollAttackDice(WeaponSimulation sim)
         {
             sim.AttackDice = new List<Dice>();
