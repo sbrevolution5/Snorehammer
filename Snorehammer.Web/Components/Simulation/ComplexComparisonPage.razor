@@ -463,7 +463,7 @@
     {
         await fightSimulationService.ResetDice(comparison.Simulation1);
         StateHasChanged();
-        fightSimulationService.SimulateAllFights(comparison.Simulation1);
+        fightSimulationService.SimulateAllFights(comparison.Simulation1,comparison.MeleeFightBack);
         ViewSim1 = comparison.Simulation1.FightSimulations.First();
         //if only a single sim, show attacker as column name
         comparison.Simulation1.Stats.ColumnName = comparison.Simulation1.Attacker.Name;

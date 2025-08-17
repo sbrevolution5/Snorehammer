@@ -23,7 +23,7 @@ namespace Snorehammer.Web.Services
             }
             await Task.Yield();
         }
-        public void SimulateAllFights(MultiFightSimulation multiSim)
+        public void SimulateAllFights(MultiFightSimulation multiSim,bool meleeFightBack = false)
         {
             foreach (var sim in multiSim.FightSimulations)
             {
@@ -39,7 +39,6 @@ namespace Snorehammer.Web.Services
                 SimulateFight(sim);
             }
             multiSim.Stats.SetAverages(multiSim.FightSimulations);
-            //should call set averages on a list of each weapon fight
             multiSim.Stats.PerWeaponStats.Clear();
             List<List<WeaponSimulation>> listPerWeapon = new List<List<WeaponSimulation>>();
             foreach (var weapon in multiSim.Attacker.Attacks)
