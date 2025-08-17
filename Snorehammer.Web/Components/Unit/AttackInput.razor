@@ -8,11 +8,11 @@
     </HeaderTemplate>
     <ChildContent>
         <EditForm Model="@attack">
-            <RadzenRow>
+            <RadzenRow class="rz-p-2 rz-align-items-center">
 
-            <RadzenLabel>Ranged</RadzenLabel>
-            <RadzenSwitch @bind-Value=@attack.Melee />
-            <RadzenLabel>Melee</RadzenLabel>
+                <RadzenLabel>Ranged</RadzenLabel>
+                <RadzenSwitch @bind-Value=@attack.Melee />
+                <RadzenLabel>Melee</RadzenLabel>
             </RadzenRow>
             <RadzenRow>
                 <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
