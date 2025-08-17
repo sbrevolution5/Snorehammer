@@ -418,23 +418,11 @@ namespace Snorehammer.Web.Services
             }
             if (sim.Defender.ArmorReroll)
             {
-                var failed = sim.ArmorDice.Where(d => !d.Success);
-                sim.ArmorDice = sim.ArmorDice.Where(d => d.Success).ToList();
-                foreach (var die in failed)
-                {
-                    die.Reroll(_random);
-                    sim.ArmorDice.Add(die);
-                }
+                RerollDice(sim.ArmorDice);
             }
             else if (sim.Defender.Reroll1Save)
             {
-                var failed = sim.ArmorDice.Where(d => d.Result == 1);
-                sim.ArmorDice = sim.ArmorDice.Where(d => d.Result >= 1).ToList();
-                foreach (var die in failed)
-                {
-                    die.Reroll(_random);
-                    sim.ArmorDice.Add(die);
-                }
+                Reroll1s(sim.ArmorDice);
             }
             if (!sim.Weapon.IsVariableDamage)
             {
