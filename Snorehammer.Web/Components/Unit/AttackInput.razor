@@ -11,9 +11,9 @@
         <EditForm Model="@attack">
             <RadzenRow>
 
-            <RadzenLabel>Ranged</RadzenLabel>
-            <RadzenSwitch @bind-Value=@attack.Melee />
-            <RadzenLabel>Melee</RadzenLabel>
+                <RadzenLabel>Ranged</RadzenLabel>
+                <RadzenSwitch @bind-Value=@attack.Melee />
+                <RadzenLabel>Melee</RadzenLabel>
             </RadzenRow>
             <RadzenRow>
                 <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
@@ -152,6 +152,7 @@
                                         <RadzenRow>
                                             <RadzenCheckBox @bind-Value=@attack.RapidFire Name="Rapid Fire" />
                                             <RadzenLabel Text="Rapid Fire" Component="Rapid Fire" class="rz-ms-2" />
+                                            <Tooltip tooltip="Assumes that unit is in rapidFire range"></Tooltip>
                                         </RadzenRow>
                                         <RadzenFormField Style="width: 100%">
                                             <RadzenNumeric @bind-Value="attack.RapidFireBonus" Disabled=!attack.RapidFire />
@@ -213,8 +214,11 @@
                                         <RadzenLabel Text="Reroll 1s for Damage" Component="Reroll1Damage" class="rz-ms-2" />
                                     </RadzenColumn>
                                     <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
-                                        <RadzenCheckBox Disabled=attack.Melee @bind-Value=@attack.Melta Name="Melta" />
-                                        <RadzenLabel Text="Melta " Component="Melta" class=@($"rz-ms-2 {MeleeLabel(false)}") />
+                                        <RadzenRow>
+                                            <RadzenCheckBox Disabled=attack.Melee @bind-Value=@attack.Melta Name="Melta" />
+                                            <RadzenLabel Text="Melta " Component="Melta" class=@($"rz-ms-2 {MeleeLabel(false)}") />
+                                            <Tooltip tooltip="only for ranged attacks"></Tooltip>
+                                        </RadzenRow>
                                         <RadzenFormField Text="Assumes attacker is within melta range" Style="width: 100%;">
                                             <RadzenNumeric @bind-Value="@attack.MeltaDamage" Disabled=!attack.Melta />
                                         </RadzenFormField>
