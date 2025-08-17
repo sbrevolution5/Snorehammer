@@ -5,13 +5,14 @@ namespace Snorehammer.Web.FrontendModels.Simulations
 {
     public class WeaponSimulation : ISimulationForStats
     {
-        public WeaponSimulation(AttackProfile weapon, UnitProfile defender,int id, bool isFightBack=false)
+        public WeaponSimulation(AttackProfile weapon, UnitProfile defender,int id, bool isFightBack=false, int weaponsRemaining=-1)
         {
             Stats = new FightStats();
             Weapon = weapon;
             Defender = defender;
             Id = id;
             IsFightBack = isFightBack;
+            WeaponsRemaining = weaponsRemaining;
         }
         public int Id { get; set; }
         public AttackProfile Weapon { get; set; }
@@ -32,6 +33,8 @@ namespace Snorehammer.Web.FrontendModels.Simulations
         public bool CoverIgnored { get; set; } = false;
         public FightStats Stats { get; set; } = new FightStats();
         public bool IsFightBack { get; set; } = false;
+        //Set to -1 if all remaining
+        public int WeaponsRemaining { get; set; } = -1;
         public void ClearDiceLists()
         {
             AttackDice.Clear();

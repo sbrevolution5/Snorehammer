@@ -39,9 +39,12 @@ namespace Snorehammer.Web.Services
                 if (meleeFightBack)
                 {
                     sim.FightBackSimulation = new FightSimulation(sim.Defender, sim.Attacker);
+                    DetermineWeaponsRemaining(sim);
                     foreach (var weapon in sim.Defender.Attacks.Where(a => a.Melee))
                     {
-                        sim.FightBackSimulation.WeaponSimulations.Add(new WeaponSimulation((AttackProfile)weapon.Clone(), (UnitProfile)sim.Attacker.Clone(), i, true));
+                        var weaponSim = new WeaponSimulation((AttackProfile)weapon.Clone(), (UnitProfile)sim.Attacker.Clone(), i, true);
+                        weaponSim.WeaponsRemaining = weapon.WeaponsRemaining;
+                        sim.FightBackSimulation.WeaponSimulations.Add(weaponSim);
                     }
                 }
                 SimulateFight(sim, meleeFightBack);
@@ -62,6 +65,24 @@ namespace Snorehammer.Web.Services
                 multiSim.Stats.PerWeaponStats.Add(multiStats);
             }
         }
+
+        private void DetermineWeaponsRemaining(FightSimulation sim)
+        {
+            //order by descending number in unit
+            var atkList = sim.Defender.Attacks.Where(a=>a.Melee);
+            atkList.OrderByDescending(a => a.WeaponsInUnit);
+            //start removing weapons remaining from most common, unless that weapon is empty
+            var mostCommon = atkList.First(a => a.WeaponsRemaining > 0);
+            for (int i = 0; i < sim.Stats.ModelsDestroyed; i++)
+            {
+                mostCommon.WeaponsRemaining--;
+                if (mostCommon.WeaponsRemaining == 0)
+                {
+                    mostCommon = atkList.First(a => a.WeaponsRemaining > 0);
+                }
+            }
+        }
+
         public void SimulateFight(FightSimulation sim, bool fightBack)
         {
             sim.Reset();
