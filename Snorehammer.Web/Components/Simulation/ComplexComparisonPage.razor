@@ -15,7 +15,7 @@
     <RadzenTocItem Text="Fight results" Selector="#fightResults"></RadzenTocItem>
     <RadzenTocItem Text="Fight Stats" Selector="#fightStats"></RadzenTocItem>
 </RadzenToc>
-<RadzenCard>
+<RadzenCard id="DemoCard">
     <RadzenText TextStyle="TextStyle.H3">
         Don't know warhammer?  No Problem!
     </RadzenText>
@@ -54,6 +54,11 @@
             </EditForm>
         </RadzenStack>
     </RadzenColumn>
+        <RadzenColumn Size="6" SizeMD="3" SizeLG="2">
+
+            <RadzenSwitch @bind-Value=@comparison.MeleeFightBack/>
+            <RadzenLabel>Melee fights back</RadzenLabel>
+        </RadzenColumn>
 </RadzenStack>
 
 <RadzenCard Variant="Variant.Text">
