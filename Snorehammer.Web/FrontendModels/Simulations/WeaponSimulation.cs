@@ -12,7 +12,7 @@ namespace Snorehammer.Web.FrontendModels.Simulations
             Defender = defender;
             Id = id;
             IsFightBack = isFightBack;
-            WeaponsRemaining = weapon.WeaponsInUnit;
+            WeaponsRemaining = weaponsRemaining == -1 ? weapon.WeaponsInUnit : weaponsRemaining;
             Weapon.WeaponsRemaining = weaponsRemaining;
         }
         public int Id { get; set; }
