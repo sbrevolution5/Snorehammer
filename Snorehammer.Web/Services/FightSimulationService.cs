@@ -691,7 +691,7 @@ namespace Snorehammer.Web.Services
             }
             if (sim.FightBack)
             {
-                res.Append($"Then Defender fought back with {sim.FightBackSimulation.RemainingModels} remaining models");
+                res.Append($"Then Defender fought back with {sim.FightBackSimulation.RemainingModels} remaining models.\n");
                 //run this method again, but fightback variable is false.
                 res.Append(GenerateWinnerMessage(sim.FightBackSimulation));
             }
