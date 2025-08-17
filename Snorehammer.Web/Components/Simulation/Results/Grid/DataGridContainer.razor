@@ -10,13 +10,25 @@
     {
         var res = new List<MultiFightStats>();
         res.Add(comparison.Simulation1.Stats);
-        @if (comparison.ComparingAttackers)
+        if (comparison.MeleeFightBack)
+        {
+            res.Add(comparison.Simulation1.FightBackStats);
+        }
+        if (comparison.ComparingAttackers)
         {
             res.Add(comparison.AlternateAttackSimulation.Stats);
+            if (comparison.MeleeFightBack)
+            {
+                res.Add(comparison.AlternateAttackSimulation.FightBackStats);
+            }
         }
         else if (comparison.ComparingDefenders)
         {
             res.Add(comparison.AlternateDefenseSimulation.Stats);
+            if (comparison.MeleeFightBack)
+            {
+                res.Add(comparison.AlternateDefenseSimulation.FightBackStats);
+            }
         }
         return res;
     }
