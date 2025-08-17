@@ -13,6 +13,7 @@ namespace Snorehammer.Web.FrontendModels.Simulations
             Id = id;
             IsFightBack = isFightBack;
             WeaponsRemaining = weapon.WeaponsInUnit;
+            Weapon.WeaponsRemaining = weaponsRemaining;
         }
         public int Id { get; set; }
         public AttackProfile Weapon { get; set; }

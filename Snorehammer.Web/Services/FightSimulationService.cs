@@ -40,11 +40,10 @@ namespace Snorehammer.Web.Services
                 {
                     sim.HasFightBack = true;
                     sim.FightBackSimulation = new FightSimulation(sim.Defender, sim.Attacker);
-                    DetermineWeaponsRemaining(sim);
+                    //we can't determine remaining weapons here, the fight hasn't happened yet
                     foreach (var weapon in sim.Defender.Attacks.Where(a => a.Melee))
                     {
                         var weaponSim = new WeaponSimulation((AttackProfile)weapon.Clone(), (UnitProfile)sim.Attacker.Clone(), i, true);
-                        weaponSim.WeaponsRemaining = weapon.WeaponsRemaining;
                         sim.FightBackSimulation.WeaponSimulations.Add(weaponSim);
                     }
                 }
@@ -69,8 +68,8 @@ namespace Snorehammer.Web.Services
 
         private void DetermineWeaponsRemaining(FightSimulation sim)
         {
-            //order by descending number in unit
             sim.Defender.Attacks.ForEach(a => a.WeaponsRemaining = a.WeaponsInUnit);
+            //order by descending number in unit
             var atkList = sim.Defender.Attacks.Where(a => a.Melee);
             atkList.OrderByDescending(a => a.WeaponsInUnit);
             //start removing weapons remaining from most common, unless that weapon is empty
@@ -78,6 +77,8 @@ namespace Snorehammer.Web.Services
             for (int i = 0; i < sim.Stats.ModelsDestroyed; i++)
             {
                 mostCommon.WeaponsRemaining--;
+                var currentWeapon = sim.FightBackSimulation.Defender.Attacks.Where(a => a.Name == mostCommon.Name).First();
+                currentWeapon.WeaponsRemaining--;
                 if (mostCommon.WeaponsRemaining == 0)
                 {
                     mostCommon = atkList.First(a => a.WeaponsRemaining > 0);
@@ -99,9 +100,11 @@ namespace Snorehammer.Web.Services
             DealDamage(sim);
             if (fightBack)
             {
+                DetermineWeaponsRemaining(sim);
                 sim.FightBackSimulation.RemainingAttackingModels = sim.Defender.ModelCount-sim.Stats.ModelsDestroyed;
                 foreach (var fbweapon in sim.FightBackSimulation.WeaponSimulations)
                 {
+                    //copy from defender's weapons remaining, which were set in the determine method, 
                     SimulateFightWithWeapon(fbweapon);
                 }
                 DealDamage(sim.FightBackSimulation);
@@ -169,7 +172,7 @@ namespace Snorehammer.Web.Services
             {
                 sim.BlastBonus = sim.Defender.ModelCount / 5;
             }
-            sim.Stats.AttackNumber = sim.Weapon.Attacks * sim.Weapon.WeaponsRemaining;
+            sim.Stats.AttackNumber = sim.Weapon.Attacks * sim.WeaponsRemaining;
 
             if (sim.AttackDice.Count != 0)
             {
