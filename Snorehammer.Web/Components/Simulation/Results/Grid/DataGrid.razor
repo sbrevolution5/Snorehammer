@@ -4,83 +4,22 @@
 @if (comparisonStats is not null)
 {
 
-    <RadzenDataGrid Data="comparisonStats" GridLines="DataGridGridLines.Both" AllowSorting="true" CellRender="@CellRender">
-        <Template Context="MultiFightStats">
-            <RadzenDataGrid Data="MultiFightStats.PerWeaponStats" GridLines="DataGridGridLines.Both" AllowSorting="true" CellRender="@CellRender">
-                <Columns>
-                    <RadzenDataGridColumn Property="@nameof(MultiFightStats.ColumnName)" Title="Name"></RadzenDataGridColumn>
-                    @if (showMultiAttack)
-                    {
-                        <RadzenDataGridColumn Property="@nameof(MultiFightStats.AttackNumber)"
-                                              Title="Attacks Made"></RadzenDataGridColumn>
-                    }
-                    <RadzenDataGridColumn Property="@nameof(MultiFightStats.AttacksHit)"
-                                          Title="Attacks Hit"></RadzenDataGridColumn>
-                    <RadzenDataGridColumn Property="@nameof(MultiFightStats.WoundsSuccessful)"
-                                          Title="Wounds Rolls Successful"></RadzenDataGridColumn>
-                    <RadzenDataGridColumn Property="@nameof(MultiFightStats.ArmorSavesFailed)"
-                                          Title="Armor Saves Failed"></RadzenDataGridColumn>
-                    @if (showFnp)
-                    {
-
-                        <RadzenDataGridColumn Property="@nameof(MultiFightStats.WoundsInflicted)"
-                                              Title="Damage Before FNP"></RadzenDataGridColumn>
-                        <RadzenDataGridColumn Property="@nameof(MultiFightStats.FeelNoPainMade)"
-                                              Title="FNP Successful"></RadzenDataGridColumn>
-                    }
-                    <RadzenDataGridColumn Property="@nameof(MultiFightStats.DamageNumber)"
-                                          Title="Total Damage"></RadzenDataGridColumn>
-                    @if (comparison.Simulation1.Rounds > 1)
-                    {
-
-                        <RadzenDataGridColumn Property="@nameof(MultiFightStats.UnitDamaged)"
-                                              Title="Times unit was damaged"></RadzenDataGridColumn>
-                        <RadzenDataGridColumn Property="@nameof(MultiFightStats.LostAModel)"
-                                              Title="Times 1 or more models lost"></RadzenDataGridColumn>
-                        <RadzenDataGridColumn Property="@nameof(MultiFightStats.LessThanHalf)"
-                                              Title="Times Unit left below half"></RadzenDataGridColumn>
-                        <RadzenDataGridColumn Property="@nameof(MultiFightStats.UnitEntirelyDestroyed)"
-                                              Title="Times unit was destroyed"></RadzenDataGridColumn>
-                    }
-                </Columns>
-            </RadzenDataGrid>
-        </Template>
-        <Columns>
-            <RadzenDataGridColumn Property="@nameof(MultiFightStats.ColumnName)" Title="Name"></RadzenDataGridColumn>
-            @if (showMultiAttack)
-            {
-                <RadzenDataGridColumn Property="@nameof(MultiFightStats.AttackNumber)" Title="Attacks Made"></RadzenDataGridColumn>
-            }
-            <RadzenDataGridColumn Property="@nameof(MultiFightStats.AttacksHit)" Title="Attacks Hit"></RadzenDataGridColumn>
-            <RadzenDataGridColumn Property="@nameof(MultiFightStats.WoundsSuccessful)" Title="Wounds Rolls Successful"></RadzenDataGridColumn>
-            <RadzenDataGridColumn Property="@nameof(MultiFightStats.ArmorSavesFailed)" Title="Armor Saves Failed"></RadzenDataGridColumn>
-            @if (showFnp)
-            {
-                <RadzenDataGridColumn Property="@nameof(MultiFightStats.WoundsInflicted)" Title="Damage Before FNP"></RadzenDataGridColumn>
-                <RadzenDataGridColumn Property="@nameof(MultiFightStats.FeelNoPainMade)" Title="Feel No Pain Successful"></RadzenDataGridColumn>
-            }
-            <RadzenDataGridColumn Property="@nameof(MultiFightStats.DamageNumber)" Title="Total Damage"></RadzenDataGridColumn>
-            @if (comparison.Simulation1.Rounds > 1)
-            {
-
-                <RadzenDataGridColumn Property="@nameof(MultiFightStats.UnitDamaged)" Title="Times unit was damaged"></RadzenDataGridColumn>
-                <RadzenDataGridColumn Property="@nameof(MultiFightStats.LostAModel)" Title="Times 1 or more models lost"></RadzenDataGridColumn>
-                <RadzenDataGridColumn Property="@nameof(MultiFightStats.LessThanHalf)" Title="Times Unit left below half"></RadzenDataGridColumn>
-                <RadzenDataGridColumn Property="@nameof(MultiFightStats.UnitEntirelyDestroyed)" Title="Times unit was destroyed"></RadzenDataGridColumn>
-            }
-        </Columns>
-    </RadzenDataGrid>
+    <StatsDataGrid stats="@comparisonStats" />
+    if (comparison.MeleeFightBack)
+    {
+        <StatsDataGrid stats="@fightBackComparisonStats"/> 
+    }
 }
 
 @code {
     [Parameter]
     public Comparison comparison { get; set; }
-    public List<MultiFightStats> comparisonStats { get; set; } = new List<MultiFightStats>();
-    public bool showFnp { get; set; } = false;
-    public bool showMultiAttack { get; set; } = false;
+    public DataGridStats comparisonStats { get; set; } = new DataGridStats();
+    public DataGridStats fightBackComparisonStats { get; set; } = new DataGridStats();
     protected override async Task OnInitializedAsync()
     {
-        comparisonStats.Clear();
+        comparisonStats.List.Clear();
+        fightBackComparisonStats.List.Clear();
         @if (comparison.Simulation1.Rounds >= 1)
         {
             StatsFromComparisonSim(comparison.Simulation1);
@@ -96,90 +35,18 @@
     }
     public void StatsFromComparisonSim(MultiFightSimulation sim)
     {
-        comparisonStats.Add(sim.Stats);
-        showFnp = sim.Defender.FeelNoPain;
-        showMultiAttack = sim.Attacker.Attacks.Any(a => a.IsVariableAttacks);
+        comparisonStats.List.Add(sim.Stats);
+        comparisonStats.ShowFnp = sim.Defender.FeelNoPain;
+        comparisonStats.ShowMultiAttack = sim.Attacker.Attacks.Any(a => a.IsVariableAttacks);
+        comparisonStats.MultiRound = comparison.Simulation1.Rounds > 1;
         if (comparison.MeleeFightBack)
         {
-            comparisonStats.Add(sim.FightBackStats);
-            showFnp = sim.Attacker.FeelNoPain;
-            showMultiAttack = sim.Defender.Attacks.Any(a => a.IsVariableAttacks);
+            sim.FightBackStats.ColumnName = $"{sim.Defender.Name} vs. {sim.Attacker.Name}";
+            fightBackComparisonStats.List.Add(sim.FightBackStats);
+            fightBackComparisonStats.ShowFnp = sim.Attacker.FeelNoPain;
+            fightBackComparisonStats.ShowMultiAttack = sim.Defender.Attacks.Any(a => a.IsVariableAttacks);
+            fightBackComparisonStats.MultiRound = comparison.Simulation1.Rounds > 1;
         }
     }
-    void CellRender(DataGridCellRenderEventArgs<MultiFightStats> args)
-    {
-        var statsList = new List<MultiFightStats>();
-        if (args.Data.PerWeaponStats is not null)
-        {
-            statsList = comparisonStats;
-        }
-        else
-        {
-            statsList = comparisonStats.SelectMany(s => s.PerWeaponStats).ToList();
-        }
-
-        if (args.Column.Property != "ColumnName")
-        {
-            if (args.Column.Property == nameof(MultiFightStats.AttackNumber))
-            {
-                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.AttackNumber, statsList.Select(s => s.AttackNumber))}");
-            }
-            else if (args.Column.Property == nameof(MultiFightStats.AttacksHit))
-            {
-                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.AttacksHit, statsList.Select(s => s.AttacksHit))}");
-            }
-            else if (args.Column.Property == nameof(MultiFightStats.WoundsSuccessful))
-            {
-                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.WoundsSuccessful, statsList.Select(s => s.WoundsSuccessful))}");
-            }
-            else if (args.Column.Property == nameof(MultiFightStats.ArmorSavesFailed))
-            {
-                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.ArmorSavesFailed, statsList.Select(s => s.ArmorSavesFailed))}");
-            }
-            else if (args.Column.Property == nameof(MultiFightStats.WoundsInflicted))
-            {
-                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.WoundsInflicted, statsList.Select(s => s.WoundsInflicted))}");
-            }
-            else if (args.Column.Property == nameof(MultiFightStats.FeelNoPainMade))
-            {
-                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.FeelNoPainMade, statsList.Select(s => s.FeelNoPainMade))}");
-            }
-            else if (args.Column.Property == nameof(MultiFightStats.DamageNumber))
-            {
-                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.DamageNumber, statsList.Select(s => s.DamageNumber))}");
-            }
-            else if (args.Column.Property == nameof(MultiFightStats.UnitDamaged))
-            {
-                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.UnitDamaged, statsList.Select(s => s.UnitDamaged))}");
-            }
-            else if (args.Column.Property == nameof(MultiFightStats.LostAModel))
-            {
-                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.LostAModel, statsList.Select(s => s.LostAModel))}");
-            }
-            else if (args.Column.Property == nameof(MultiFightStats.LessThanHalf))
-            {
-                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.LessThanHalf, statsList.Select(s => s.LessThanHalf))}");
-            }
-            else if (args.Column.Property == nameof(MultiFightStats.UnitEntirelyDestroyed))
-            {
-                args.Attributes.Add("style", $"background-color: {ConditionalClassList(args.Data.UnitEntirelyDestroyed, statsList.Select(s => s.UnitEntirelyDestroyed))}");
-            }
-        }
-    }
-
-    private string ConditionalClassList(float thisSim, IEnumerable<float> allSims)
-    {
-        if (thisSim == allSims.Max())
-        {
-            return "var(--rz-success)";
-        }
-        else if (thisSim == allSims.Min())
-        {
-            return "var(--rz-danger)";
-        }
-        else
-        {
-            return "var(--rz-base-background-color)";
-        }
-    }
+    
 }
