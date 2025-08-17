@@ -1,0 +1,11 @@
+﻿@inject TooltipService tooltipService
+
+<div class="rz-p-12 rz-text-align-center">
+    <RadzenButton Icon="info" MouseEnter="@(args => ShowTooltip(args))" />
+</div>
+
+@code {
+    [Parameter]
+    public string tooltip { get; set; }
+    void ShowTooltip(ElementReference elementReference, TooltipOptions options = null) => tooltipService.Open(elementReference, tooltip, options);
+}
