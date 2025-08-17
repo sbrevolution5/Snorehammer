@@ -65,6 +65,7 @@ namespace Snorehammer.Web.Services
             {
                 multiSim.FightBackStats.SetAverages(multiSim.FightSimulations.Select(f => f.FightBackSimulation));
                 multiSim.FightBackStats.PerWeaponStats.Clear();
+                multiSim.FightBackStats.ColumnName = $"{multiSim.Defender.Name} vs {multiSim.Attacker.Name}";
                 List<List<WeaponSimulation>> fblistPerWeapon = new List<List<WeaponSimulation>>();
                 foreach (var weapon in multiSim.Defender.Attacks)
                 {
