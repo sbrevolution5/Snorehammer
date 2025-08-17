@@ -115,7 +115,7 @@
                                     </RadzenColumn>
                                     <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                                         <RadzenCheckBox @bind-Value=@attack.Heavy Name="Heavy" Disabled=attack.Melee />
-                                        <RadzenLabel Text="Heavy" Component="Heavy" class="rz-ms-2" />
+                                        <RadzenLabel Text="Heavy" Component="Heavy" class=@($"rz-ms-2 {MeleeLabel(true)}") />
                                         <Tooltip tooltip="Heavy only works on ranged weapons and if unit did not move since last turn"></Tooltip>
                                     </RadzenColumn>
                                     <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
@@ -128,7 +128,7 @@
                                     </RadzenColumn>
                                     <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                                         <RadzenCheckBox Disabled=attack.Melee @bind-Value=@attack.Torrent Name="Torrent" />
-                                        <RadzenLabel Text="Torrent" Component="Torrent" class=@($"rz-ms-2 {MeleeLabel(false)}") />
+                                        <RadzenLabel Text="Torrent" Component="Torrent" class=@($"rz-ms-2 {MeleeLabel(true)}") />
                                     </RadzenColumn>
                                     <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                                         <RadzenCheckBox @bind-Value=@attack.Reroll1Hit Name="Reroll1Hit" />
@@ -136,7 +136,7 @@
                                     </RadzenColumn>
                                     <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                                         <RadzenCheckBox Disabled=attack.Melee @bind-Value=@attack.BigGuns Name="BigGuns" />
-                                        <RadzenLabel Text="Big Guns Never Tire" Component="BigGuns" class=@($"rz-ms-2 {MeleeLabel(false)}") />
+                                        <RadzenLabel Text="Big Guns Never Tire" Component="BigGuns" class=@($"rz-ms-2 {MeleeLabel(true)}") />
                                     </RadzenColumn>
                                     <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                                         <RadzenCheckBox @bind-Value=@attack.Sustained Name="Sustained" />
@@ -147,7 +147,7 @@
                                     </RadzenColumn>
                                     <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                                         <RadzenCheckBox Disabled=attack.Melee @bind-Value=@attack.Blast Name="Blast" />
-                                        <RadzenLabel Text="Blast" Component="Blast" class=@($"rz-ms-2 {MeleeLabel(false)}") />
+                                        <RadzenLabel Text="Blast" Component="Blast" class=@($"rz-ms-2 {MeleeLabel(true)}") />
                                     </RadzenColumn>
                                     <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                                         <RadzenCheckBox @bind-Value=@attack.Lethal Name="Lethal" />
@@ -155,8 +155,8 @@
                                     </RadzenColumn>
                                     <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                                         <RadzenRow>
-                                            <RadzenCheckBox @bind-Value=@attack.RapidFire Name="Rapid Fire" />
-                                            <RadzenLabel Text="Rapid Fire" Component="Rapid Fire" class="rz-ms-2" />
+                                            <RadzenCheckBox @bind-Value=@attack.RapidFire Name="Rapid Fire" Disabled=attack.Melee/>
+                                            <RadzenLabel Text="Rapid Fire" Component="Rapid Fire" class=@($"rz-ms-2 {MeleeLabel(true)}") />
                                             <Tooltip tooltip="Assumes that unit is in rapidFire range"></Tooltip>
                                         </RadzenRow>
                                         <RadzenFormField Style="width: 100%">
@@ -186,7 +186,7 @@
                                     </RadzenColumn>
                                     <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                                         <RadzenCheckBox Disabled=!attack.Melee @bind-Value=@attack.Lance Name="Lance" />
-                                        <RadzenLabel Text="Lance" Component="Lance" class=@($"rz-ms-2 {MeleeLabel(true)}") />
+                                        <RadzenLabel Text="Lance" Component="Lance" class=@($"rz-ms-2 {MeleeLabel(false)}") />
                                         <Tooltip tooltip="Assumes that unit charged, if unit did not charge please disable lance"></Tooltip>
                                     </RadzenColumn>
                                     <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
@@ -221,7 +221,7 @@
                                     <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                                         <RadzenRow>
                                             <RadzenCheckBox Disabled=attack.Melee @bind-Value=@attack.Melta Name="Melta" />
-                                            <RadzenLabel Text="Melta " Component="Melta" class=@($"rz-ms-2 {MeleeLabel(false)}") />
+                                            <RadzenLabel Text="Melta " Component="Melta" class=@($"rz-ms-2 {MeleeLabel(true)}") />
                                             <Tooltip tooltip="only for ranged attacks"></Tooltip>
                                         </RadzenRow>
                                         <RadzenFormField Text="Assumes attacker is within melta range" Style="width: 100%;">
