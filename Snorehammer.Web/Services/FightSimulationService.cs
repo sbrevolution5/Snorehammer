@@ -85,8 +85,7 @@ namespace Snorehammer.Web.Services
         {
             sim.FightBackSimulation.Attacker.Attacks.ForEach(a => a.WeaponsRemaining = a.WeaponsInUnit);
             //order by descending number in unit
-            var atkList = sim.FightBackSimulation.Attacker.Attacks.Where(a => a.Melee);
-            atkList.OrderByDescending(a => a.WeaponsInUnit);
+            var atkList = sim.FightBackSimulation.Attacker.Attacks.Where(a => a.Melee).OrderByDescending(a => a.WeaponsInUnit);
             //start removing weapons remaining from most common, unless that weapon is empty
             var mostCommon = atkList.First(a => a.WeaponsRemaining > 0);
             for (int i = 0; i < sim.Stats.ModelsDestroyed; i++)
