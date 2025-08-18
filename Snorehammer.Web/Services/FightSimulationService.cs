@@ -172,47 +172,31 @@ namespace Snorehammer.Web.Services
         }
         public void DetermineHitTarget(WeaponSimulation sim)
         {
-            sim.HitTarget = sim.Weapon.Skill;
-            if (sim.Weapon.Plus1Hit)
-            {
-                sim.HitTarget--;
-            }
-            if (sim.Weapon.Heavy)
-            {
-                sim.HitTarget--;
-            }
-            if ((sim.Defender.Stealth && !sim.Weapon.Melee))
-            {
-                sim.HitTarget++;
-            }
-            if (sim.Defender.Minus1Hit)
-            {
-                sim.HitTarget++;
-            }
-            if (sim.Weapon.Minus1Hit)
-            {
-                sim.HitTarget++;
-            }
-            if (sim.Weapon.BigGuns && !sim.Weapon.Melee)
-            {
-                sim.HitTarget++;
-            }
-            if (sim.HitTarget < 2)
-            {
-                sim.HitTarget = 2;
-            }
-            if (sim.HitTarget > 6 || sim.Weapon.Overwatch)
+            if (sim.Weapon.Overwatch)
             {
                 sim.HitTarget = 6;
+                return;
             }
-            if (sim.HitTarget > sim.Weapon.Skill && sim.HitTarget - sim.Weapon.Skill != 1)
+            int target = sim.Weapon.Skill;
+            int mod = 0;
+            sim.HitTarget = sim.Weapon.Skill;
+            if (sim.Weapon.Plus1Hit) mod--;
+            if (sim.Weapon.Heavy) mod--;
+            if (sim.Defender.Stealth && !sim.Weapon.Melee) mod++;
+            if (sim.Defender.Minus1Hit) mod++;
+            if (sim.Weapon.Minus1Hit) mod++;
+            if (sim.Weapon.BigGuns && !sim.Weapon.Melee) mod++;
+            target += mod;
+            if (target > sim.Weapon.Skill)
             {
-                sim.HitTarget = sim.Weapon.Skill + 1;
+                target = Math.Min(target, sim.Weapon.Skill + 1);
             }
-            if (sim.HitTarget < sim.Weapon.Skill && sim.Weapon.Skill - sim.HitTarget != 1)
+            if (target < sim.Weapon.Skill)
             {
-                sim.HitTarget = sim.Weapon.Skill - 1;
+                target = Math.Max(target, sim.Weapon.Skill -1);
             }
+            target = Math.Clamp(target, 2, 6);
+            sim.HitTarget = target;            
         }
         public void RollToHit(WeaponSimulation sim)
         {
