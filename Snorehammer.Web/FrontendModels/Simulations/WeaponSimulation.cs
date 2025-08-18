@@ -24,7 +24,6 @@ namespace Snorehammer.Web.FrontendModels.Simulations
         public List<Dice> ArmorDice { get; set; } = new List<Dice>();
         public List<Dice> WoundDice { get; set; } = new List<Dice>();
         public List<Dice> FeelNoPainDice { get; set; } = new List<Dice>();
-        public List<Dice> FightAfterDeathDice { get; set; } = new List<Dice>();
         public int HitTarget = 0;
         public int WoundTarget = 0;
         public int ModdedWoundTarget = 0;

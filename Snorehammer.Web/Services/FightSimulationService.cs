@@ -42,6 +42,12 @@ namespace Snorehammer.Web.Services
                     if (sim.Defender.FightAfterDeath)
                     {
 
+                        //only use the models that died.
+                        var afterDeathDefender = (UnitProfile)sim.Defender.Clone();
+                        afterDeathDefender.ModelCount = sim.FightAfterDeathDice.Where(d => d.Success).Count();
+                        //change weapons, so that the weapons are equal to the number of units fighting after death, only taking the most common weapon first
+                        SetWeaponsForFightAfterDeath();
+                        sim.FightAfterDeathSimulation = new FightSimulation(sim.Defender, sim.Attacker);
                     }
                     sim.HasFightBack = true;
                     sim.FightBackSimulation = new FightSimulation(sim.Defender, sim.Attacker);
@@ -49,6 +55,11 @@ namespace Snorehammer.Web.Services
                 SimulateFight(sim, meleeFightBack);
             }
             CreateStats(multiSim, meleeFightBack);
+        }
+
+        private void SetWeaponsForFightAfterDeath()
+        {
+            throw new NotImplementedException();
         }
 
         private static void CreateStats(MultiFightSimulation multiSim,bool fightBack)
@@ -91,7 +102,7 @@ namespace Snorehammer.Web.Services
             sim.FightBackSimulation.Attacker.Attacks.ForEach(a => a.WeaponsRemaining = a.WeaponsInUnit);
             //order by descending number in unit
             var atkList = sim.FightBackSimulation.Attacker.Attacks.Where(a => a.Melee);
-            atkList.OrderByDescending(a => a.WeaponsInUnit);
+            atkList = atkList.OrderByDescending(a => a.WeaponsInUnit);
             //start removing weapons remaining from most common, unless that weapon is empty
             var mostCommon = atkList.First(a => a.WeaponsRemaining > 0);
             for (int i = 0; i < sim.Stats.ModelsDestroyed; i++)
