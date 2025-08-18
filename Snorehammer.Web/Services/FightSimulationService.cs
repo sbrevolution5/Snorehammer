@@ -48,6 +48,7 @@ namespace Snorehammer.Web.Services
                         //change weapons, so that the weapons are equal to the number of units fighting after death, only taking the most common weapon first
                         SetWeaponsForFightAfterDeath(afterDeathDefender,sim.Defender);
                         sim.FightAfterDeathSimulation = new FightSimulation(afterDeathDefender, sim.Attacker);
+                        SimulateFight(sim.FightAfterDeathSimulation);
                     }
                     sim.HasFightBack = true;
                     sim.FightBackSimulation = new FightSimulation(sim.Defender, sim.Attacker);
@@ -132,7 +133,7 @@ namespace Snorehammer.Web.Services
             }
         }
 
-        public void SimulateFight(FightSimulation sim, bool fightBack)
+        public void SimulateFight(FightSimulation sim, bool fightBack = false)
         {
             sim.Reset();
             foreach (var weapon in sim.WeaponSimulations)
@@ -649,7 +650,7 @@ namespace Snorehammer.Web.Services
                             sim.Stats.ModelsDestroyed++;
                             if (sim.Defender.FightAfterDeath)
                             {
-                                CheckFightAfterDeath(weaponSim);
+                                CheckFightAfterDeath(sim);
                             }
                         }
                     }
@@ -662,7 +663,7 @@ namespace Snorehammer.Web.Services
             SetDamageStatsAfterWound(weaponSim);
         }
 
-        private void CheckFightAfterDeath(WeaponSimulation sim)
+        private void CheckFightAfterDeath(FightSimulation sim)
         {
             sim.FightAfterDeathDice.Add(new Dice(sim.Defender.FightAfterDeathValue, _random));
         }
