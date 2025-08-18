@@ -41,7 +41,7 @@ namespace Snorehammer.Web.Services
                     //if we have fight after death
                     if (sim.Defender.FightAfterDeath)
                     {
-
+                        sim.HasFightAfterDeath = true;
                         //only use the models that died.
                         var afterDeathDefender = (UnitProfile)sim.Defender.Clone();
                         afterDeathDefender.ModelCount = sim.FightAfterDeathDice.Where(d => d.Success).Count();

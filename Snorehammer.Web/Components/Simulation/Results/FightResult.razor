@@ -18,6 +18,21 @@
                 {
                     <WeaponResult sim="weapon"></WeaponResult>
                 }
+                @if (sim.HasFightAfterDeath)
+            {
+                    <RadzenPanel AllowCollapse="true">
+                        <HeaderTemplate>
+                            Fight After Death for Defender
+                        </HeaderTemplate>
+                        <ChildContent>
+
+                            @foreach (var weapon in sim.FightAfterDeathSimulation.WeaponSimulations)
+                            {
+                                <WeaponResult sim="weapon"></WeaponResult>
+                            }
+                        </ChildContent>
+                    </RadzenPanel>
+            }
                 @if (sim.HasFightBack)
                 {
                     <RadzenPanel AllowCollapse="true">
