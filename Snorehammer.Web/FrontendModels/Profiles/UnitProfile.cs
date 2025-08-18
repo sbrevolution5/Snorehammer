@@ -28,7 +28,7 @@ namespace Snorehammer.Web.FrontendModels.Profiles
         public bool MinusOneToWoundAgainstStronger { get; set; } = false;
         public bool TakesHalfDamage { get; set; } = false;
         public bool Psyker { get; set; } = false;
-        public bool FightAfterDeath { get; set; } = true;
+        public bool FightAfterDeath { get; set; } = false;
         public int FightAfterDeathValue { get; set; }
         public object Clone()
         {

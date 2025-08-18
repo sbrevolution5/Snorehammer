@@ -42,16 +42,21 @@ namespace Snorehammer.Web.Services
                     if (sim.Defender.FightAfterDeath)
                     {
                         sim.HasFightAfterDeath = true;
-                        //only use the models that died.
-                        var afterDeathDefender = (UnitProfile)sim.Defender.Clone();
-                        afterDeathDefender.ModelCount = sim.FightAfterDeathDice.Where(d => d.Success).Count();
-                        //change weapons, so that the weapons are equal to the number of units fighting after death, only taking the most common weapon first
-                        SetWeaponsForFightAfterDeath(afterDeathDefender,sim.Defender);
-                        sim.FightAfterDeathSimulation = new FightSimulation(afterDeathDefender, sim.Attacker);
-                        SimulateFight(sim.FightAfterDeathSimulation);
+                        var modelsFighting = sim.FightAfterDeathDice.Where(d => d.Success).Count();
+                        if (modelsFighting > 0)
+                        {
+
+                            //only use the models that died.
+                            var afterDeathDefender = (UnitProfile)sim.Defender.Clone();
+                            afterDeathDefender.ModelCount = modelsFighting;
+                            //change weapons, so that the weapons are equal to the number of units fighting after death, only taking the most common weapon first
+                            SetWeaponsForFightAfterDeath(afterDeathDefender, sim.Defender);
+                            sim.FightAfterDeathSimulation = new FightSimulation(afterDeathDefender, (UnitProfile)sim.Attacker.Clone());
+                            SimulateFight(sim.FightAfterDeathSimulation);
+                        }
                     }
                     sim.HasFightBack = true;
-                    sim.FightBackSimulation = new FightSimulation(sim.Defender, sim.Attacker);
+                    sim.FightBackSimulation = new FightSimulation((UnitProfile)sim.Defender.Clone(), (UnitProfile)sim.Attacker.Clone());
                 }
                 SimulateFight(sim, meleeFightBack);
             }
@@ -71,7 +76,7 @@ namespace Snorehammer.Web.Services
             {
                 //add most common weapon to count until at max, then next most common until we hit proper number of units
                 def.Attacks.Where(a => a.Name == mostCommon.Name).First().WeaponsInUnit++;
-                if(def.Attacks.Where(a => a.Name == mostCommon.Name).First().WeaponsInUnit == originalWeaponCount)
+                if (def.Attacks.Where(a => a.Name == mostCommon.Name).First().WeaponsInUnit == originalWeaponCount)
                 {
                     mostCommon = atkList.First(a => a.WeaponsRemaining > 0);
                     originalWeaponCount = baseUnit.Attacks.Where(a => mostCommon.Name == a.Name).First().WeaponsInUnit;
@@ -79,7 +84,7 @@ namespace Snorehammer.Web.Services
             }
         }
 
-        private static void CreateStats(MultiFightSimulation multiSim,bool fightBack)
+        private static void CreateStats(MultiFightSimulation multiSim, bool fightBack)
         {
             multiSim.Stats.SetAverages(multiSim.FightSimulations);
             multiSim.Stats.PerWeaponStats.Clear();
@@ -164,7 +169,7 @@ namespace Snorehammer.Web.Services
             var i = 0;
             foreach (var weapon in sim.Defender.Attacks.Where(a => a.Melee))
             {
-                var weaponSim = new WeaponSimulation((AttackProfile)weapon.Clone(), (UnitProfile)sim.Attacker.Clone(), i, true,weapon.WeaponsRemaining);
+                var weaponSim = new WeaponSimulation((AttackProfile)weapon.Clone(), (UnitProfile)sim.Attacker.Clone(), i, true, weapon.WeaponsRemaining);
                 sim.FightBackSimulation.WeaponSimulations.Add(weaponSim);
                 i++;
             }
@@ -219,15 +224,15 @@ namespace Snorehammer.Web.Services
             {
                 sim.HitTarget++;
             }
-            if(sim.Defender.Minus1Hit)
+            if (sim.Defender.Minus1Hit)
             {
                 sim.HitTarget++;
             }
-            if(sim.Weapon.Minus1Hit)
+            if (sim.Weapon.Minus1Hit)
             {
                 sim.HitTarget++;
             }
-            if(sim.Weapon.BigGuns && !sim.Weapon.Melee)
+            if (sim.Weapon.BigGuns && !sim.Weapon.Melee)
             {
                 sim.HitTarget++;
             }
@@ -767,6 +772,11 @@ namespace Snorehammer.Web.Services
             }
             if (sim.HasFightBack)
             {
+                if (sim.HasFightAfterDeath)
+                {
+                    res.Append($"Defender fought after death with {sim.FightAfterDeathDice.Where(d => d.Success).Count()} models of the {sim.Stats.ModelsDestroyed} destroyed models");
+                    res.Append(GenerateWinnerMessage(sim.FightAfterDeathSimulation));
+                }
                 res.Append($"Then Defender fought back with {sim.FightBackSimulation.RemainingAttackingModels} remaining models.\n");
                 //run this method again, but fightback variable is false.
                 res.Append(GenerateWinnerMessage(sim.FightBackSimulation));
