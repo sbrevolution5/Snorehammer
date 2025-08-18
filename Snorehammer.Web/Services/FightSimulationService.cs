@@ -38,6 +38,11 @@ namespace Snorehammer.Web.Services
                 }
                 if (meleeFightBack)
                 {
+                    //if we have fight after death
+                    if (sim.Defender.FightAfterDeath)
+                    {
+
+                    }
                     sim.HasFightBack = true;
                     sim.FightBackSimulation = new FightSimulation(sim.Defender, sim.Attacker);
                 }
