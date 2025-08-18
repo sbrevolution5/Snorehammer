@@ -46,8 +46,8 @@ namespace Snorehammer.Web.Services
                         var afterDeathDefender = (UnitProfile)sim.Defender.Clone();
                         afterDeathDefender.ModelCount = sim.FightAfterDeathDice.Where(d => d.Success).Count();
                         //change weapons, so that the weapons are equal to the number of units fighting after death, only taking the most common weapon first
-                        SetWeaponsForFightAfterDeath();
-                        sim.FightAfterDeathSimulation = new FightSimulation(sim.Defender, sim.Attacker);
+                        SetWeaponsForFightAfterDeath(afterDeathDefender,sim.Defender);
+                        sim.FightAfterDeathSimulation = new FightSimulation(afterDeathDefender, sim.Attacker);
                     }
                     sim.HasFightBack = true;
                     sim.FightBackSimulation = new FightSimulation(sim.Defender, sim.Attacker);
@@ -57,9 +57,25 @@ namespace Snorehammer.Web.Services
             CreateStats(multiSim, meleeFightBack);
         }
 
-        private void SetWeaponsForFightAfterDeath()
+        private void SetWeaponsForFightAfterDeath(UnitProfile def, UnitProfile baseUnit)
         {
-            throw new NotImplementedException();
+            def.Attacks.ForEach(a => a.WeaponsRemaining = 0);
+            //order by descending number in unit
+            var atkList = baseUnit.Attacks.Where(a => a.Melee);
+            atkList = atkList.OrderByDescending(a => a.WeaponsInUnit);
+            //start removing weapons remaining from most common, unless that weapon is empty
+            var mostCommon = atkList.First(a => a.WeaponsRemaining > 0);
+            var originalWeaponCount = baseUnit.Attacks.Where(a => mostCommon.Name == a.Name).First().WeaponsInUnit;
+            for (int i = 0; i < def.ModelCount; i++)
+            {
+                //add most common weapon to count until at max, then next most common until we hit proper number of units
+                def.Attacks.Where(a => a.Name == mostCommon.Name).First().WeaponsInUnit++;
+                if(def.Attacks.Where(a => a.Name == mostCommon.Name).First().WeaponsInUnit == originalWeaponCount)
+                {
+                    mostCommon = atkList.First(a => a.WeaponsRemaining > 0);
+                    originalWeaponCount = baseUnit.Attacks.Where(a => mostCommon.Name == a.Name).First().WeaponsInUnit;
+                }
+            }
         }
 
         private static void CreateStats(MultiFightSimulation multiSim,bool fightBack)
