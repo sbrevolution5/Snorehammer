@@ -148,6 +148,14 @@
                             <RadzenLabel Text="Fights First" Component="FightsFirst" class="rz-ms-2" />
                         </RadzenColumn>
                         <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
+                            <RadzenCheckBox @bind-Value=@Unit.FightAfterDeath Name="FightAfterDeath" />
+                            <RadzenLabel Text="Fight After Death" Component="FightAfterDeath" class="rz-ms-2" />
+                            <Tooltip tooltip="Will only be used when in fightback mode, and only used for unit that fights first"></Tooltip>
+                            <RadzenFormField Text="Fight After Death Value" Style="width: 100%;">
+                                <RadzenNumeric @bind-Value="@Unit.FightAfterDeathValue" Disabled=!Unit.FightAfterDeath/>
+                            </RadzenFormField>
+                        </RadzenColumn>
+                        <RadzenColumn Size="6" SizeMD="3" SizeLG="2" class="rz-p-3 rz-text-align-center">
                             <RadzenCheckBox @bind-Value=@Unit.FeelNoPain Name="FeelNoPain" />
                             <RadzenLabel Text="Feel No Pain" Component="FeelNoPain" class="rz-ms-2" />
                             <RadzenFormField Text="FNP minimum" Style="width: 100%;">

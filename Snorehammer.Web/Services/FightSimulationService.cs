@@ -615,6 +615,10 @@ namespace Snorehammer.Web.Services
                         {
                             weaponSim.Stats.ModelsDestroyed++;
                             sim.Stats.ModelsDestroyed++;
+                            if (sim.Defender.FightAfterDeath)
+                            {
+                                CheckFightAfterDeath(weaponSim);
+                            }
                         }
                     }
                     if (AttacksApplied != weaponSim.Stats.ArmorSavesFailed)
@@ -624,6 +628,11 @@ namespace Snorehammer.Web.Services
                 }
             }
             SetDamageStatsAfterWound(weaponSim);
+        }
+
+        private void CheckFightAfterDeath(WeaponSimulation sim)
+        {
+            sim.FightAfterDeathDice.Add(new Dice(sim.Defender.FightAfterDeathValue, _random));
         }
 
         private void SetDamageStatsAfterWound(WeaponSimulation weaponSim)

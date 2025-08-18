@@ -29,7 +29,7 @@ namespace Snorehammer.Web.FrontendModels.Profiles
         public bool TakesHalfDamage { get; set; } = false;
         public bool Psyker { get; set; } = false;
         public bool FightAfterDeath { get; set; } = true;
-        public bool FightAfterDeathValue { get; set; }
+        public int FightAfterDeathValue { get; set; }
         public object Clone()
         {
             UnitProfile res = (UnitProfile)this.MemberwiseClone();
