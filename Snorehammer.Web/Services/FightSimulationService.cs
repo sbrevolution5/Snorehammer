@@ -46,7 +46,7 @@ namespace Snorehammer.Web.Services
             CreateStats(multiSim, meleeFightBack);
         }
 
-        private static void CreateStats(MultiFightSimulation multiSim,bool fightBack)
+        private static void CreateStats(MultiFightSimulation multiSim, bool fightBack)
         {
             multiSim.Stats.SetAverages(multiSim.FightSimulations);
             multiSim.Stats.PerWeaponStats.Clear();
@@ -130,7 +130,7 @@ namespace Snorehammer.Web.Services
             var i = 0;
             foreach (var weapon in sim.Defender.Attacks.Where(a => a.Melee))
             {
-                var weaponSim = new WeaponSimulation((AttackProfile)weapon.Clone(), (UnitProfile)sim.Attacker.Clone(), i, true,weapon.WeaponsRemaining);
+                var weaponSim = new WeaponSimulation((AttackProfile)weapon.Clone(), (UnitProfile)sim.Attacker.Clone(), i, true, weapon.WeaponsRemaining);
                 sim.FightBackSimulation.WeaponSimulations.Add(weaponSim);
                 i++;
             }
@@ -185,15 +185,15 @@ namespace Snorehammer.Web.Services
             {
                 sim.HitTarget++;
             }
-            if(sim.Defender.Minus1Hit)
+            if (sim.Defender.Minus1Hit)
             {
                 sim.HitTarget++;
             }
-            if(sim.Weapon.Minus1Hit)
+            if (sim.Weapon.Minus1Hit)
             {
                 sim.HitTarget++;
             }
-            if(sim.Weapon.BigGuns && !sim.Weapon.Melee)
+            if (sim.Weapon.BigGuns && !sim.Weapon.Melee)
             {
                 sim.HitTarget++;
             }
@@ -262,26 +262,24 @@ namespace Snorehammer.Web.Services
             }
 
         }
+        private void RerollInPlace(List<Dice> dice, Func<Dice, bool> shouldReroll)
+        {
+            foreach (Dice d in dice)
+            {
+                if (shouldReroll(d))
+                {
+                    d.Reroll(_random);
+                }
+            }
+        }
 
         private void Reroll1s(List<Dice> dice)
         {
-            var failed = dice.Where(d => d.Result == 1);
-            dice = dice.Where(d => d.Result >= 1).ToList();
-            foreach (var die in failed)
-            {
-                die.Reroll(_random);
-                dice.Add(die);
-            }
+            RerollInPlace(dice, d => !d.Success);
         }
         private void RerollDice(List<Dice> dice)
         {
-            var failed = dice.Where(d => !d.Success);
-            dice = dice.Where(d => d.Success).ToList();
-            foreach (var die in failed)
-            {
-                die.Reroll(_random);
-                dice.Add(die);
-            }
+            RerollInPlace(dice, d => d.Result == 1);
         }
 
         public void DetermineWoundTarget(WeaponSimulation sim)
